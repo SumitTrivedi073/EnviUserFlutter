@@ -1,10 +1,9 @@
-import 'package:envi/Utils/cardbanner.dart';
+import 'package:envi/UiWidget/cardbanner.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Utils/appbar.dart';
-import 'Utils/color.dart';
+import 'UiWidget/appbar.dart';
 import 'login/login.dart';
 
 void main() {

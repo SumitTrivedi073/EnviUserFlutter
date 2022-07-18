@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'color.dart';
 
 class CardBanner extends StatefulWidget{
   @override

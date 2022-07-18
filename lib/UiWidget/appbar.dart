@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-import 'color.dart';
+import '../theme/color.dart';
+
 
 class AppBarWidget extends StatefulWidget{
   @override
