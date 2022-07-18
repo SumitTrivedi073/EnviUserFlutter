@@ -1,11 +1,6 @@
-import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../theme/responsive.dart';
 import '../web_service/Constant.dart';
-import 'model/LoginModel.dart';
-
 
 class Loginpage extends StatefulWidget {
   const Loginpage({Key? key}) : super(key: key);
@@ -30,7 +25,6 @@ class _LoginpageState extends State<Loginpage> {
     setState(() {
       isLoading = true;
     });
-    //signIn(emailController.text, passwordController.text);
   }
 
   @override
@@ -74,7 +68,7 @@ class _LoginpageState extends State<Loginpage> {
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
                               style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Please enter email address",
                                   hintStyle: TextStyle(color: Colors.black38),
                                   icon: Icon(Icons.email)),
@@ -95,10 +89,8 @@ class _LoginpageState extends State<Loginpage> {
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter Password';
-                                } /*else if (value.length < 8) {
-                                  return 'Enter a valid password!';
-                                }*/
-                                return null;
+                                }
+                                   return null;
                               },
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
@@ -135,9 +127,8 @@ class _LoginpageState extends State<Loginpage> {
                                 },
                                 color: Colors.green,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(30)),
-                                child: Text(
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: const Text(
                                   "Sign In",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -145,28 +136,21 @@ class _LoginpageState extends State<Loginpage> {
                                       color: Colors.white),
                                 ),
                               ),
-
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 20.0),
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
-                                  child: Text(
+                                  style: TextButton.styleFrom(
+                                    primary: Colors.teal,
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
                                     'Forgot Password',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.teal,
-                                  ),
-                                  onPressed: () {
-                                    // Navigator.of(context).pushAndRemoveUntil(
-                                    //     MaterialPageRoute(
-                                    //         builder: (BuildContext context) =>
-                                    //             ForgotPasswordPage()),
-                                    //     (Route<dynamic> route) => true);
-                                  },
                                 ),
                               ),
                             ),
@@ -180,6 +164,4 @@ class _LoginpageState extends State<Loginpage> {
       ),
     );
   }
-
-
 }

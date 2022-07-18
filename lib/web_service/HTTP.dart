@@ -8,17 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Response? AccessPermissionHandler(response) {
   if (response.statusCode == 401) {
-    // Fluttertoast.showToast(
-    //     msg: 'ACCESS DENIED',
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 10,
-    //     fontSize: 16.0,
-    //     webShowClose: true);
-
-    // showToast(
-    //         'ACCESS DENIED', Color.fromARGB(255, 3, 87, 24), "#b80419", 'left');
-
     Fluttertoast.showToast(
         msg: 'ACCESS DENIED',
         toastLength: Toast.LENGTH_SHORT,
@@ -147,13 +136,9 @@ Future<Object> postDataWithMutipleFiles(url, data, files, fieldName,
 }
 Future<Object?> getwithoutHeader(url) async {
   try {
-   // Map<String, String> requestHeaders = await setRequestHeaders(headers);
-    const contentType = 'application/json';
-   // header("Access-Control-Allow-Origin: *");
+     const contentType = 'application/json';
     Map<String, String> headerstemp = {'Access-Control-Allow-Origin': "*"};
-//print("======= ${Uri.parse('https://api-beta.malbork.in/api-vmt/fetchVehicleInfo?num=KA03AK1656&from_date=2022-06-13&to_date=2022-06-14')}");
     var response = await http.get(url,headers: headerstemp);
-   // print(response.body.toString());
     return AccessPermissionHandler(response);
   } catch (error) {
     print('Something went wrong in HTTP Get $error');
