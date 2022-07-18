@@ -1,6 +1,9 @@
+import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Utils/color.dart';
+import 'login/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,9 +54,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late SharedPreferences sharedPreferences;
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString(LoginID) == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Loginpage()),
+              (Route<dynamic> route) => false);
+    } else {
+      //firestoreConnAlerts();
 
+      // Navigator.of(context).pushAndRemoveUntil(
+      //   // MaterialPageRoute(builder: (BuildContext context) => MainPage()),
+      //     MaterialPageRoute(
+      //         builder: (BuildContext context) => HomeMasterPage()),
+      //         (Route<dynamic> route) => false);
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    // firestoreConn(setLiveDataStream);
+
+    checkLoginStatus();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
