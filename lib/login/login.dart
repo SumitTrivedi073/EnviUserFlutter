@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 import '../theme/responsive.dart';
 import '../web_service/Constant.dart';
 
@@ -16,7 +18,7 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -25,6 +27,12 @@ class _LoginpageState extends State<Loginpage> {
     setState(() {
       isLoading = true;
     });
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(LoginID, "1");
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (BuildContext context) => MainEntryPoint()),
+            (Route<dynamic> route) => false);
   }
 
   @override
