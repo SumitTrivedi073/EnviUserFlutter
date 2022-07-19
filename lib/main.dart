@@ -1,11 +1,13 @@
 import 'package:envi/UiWidget/cardbanner.dart';
-import 'package:envi/UiWidget/frombookschedule.dart';
-import 'package:envi/UiWidget/fromtowidget.dart';
+import 'package:envi/theme/Theme.dart';
+import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:envi/UiWidget/pageRoutes.dart';
 
 import 'UiWidget/appbar.dart';
+import 'controller/home/homePage.dart';
 import 'login/login.dart';
 
 void main() {
@@ -33,14 +35,24 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Envi'),
+      home: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Malbork',
+        theme: appTheme(),
+        home: MainEntryPoint(),
+        routes: {
+
+          pageRoutes.login: (context) => Loginpage(),
+          pageRoutes.setting: (context) => HomePage(title: "title"),
+
+
+        },
+      )
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
+class MainEntryPoint extends StatefulWidget {
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -50,27 +62,58 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainEntryPoint> createState() => _MainEntryPointState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainEntryPointState extends State<MainEntryPoint> {
+  late SharedPreferences sharedPreferences;
+
+  @override
+  void initState() {
+    super.initState();
+    // firestoreConn(setLiveDataStream);
+
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString(LoginID) == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => Loginpage()),
+              (Route<dynamic> route) => false);
+    } else {
+      //firestoreConnAlerts();
+
+      Navigator.of(context).pushAndRemoveUntil(
+        // MaterialPageRoute(builder: (BuildContext context) => MainPage()),
+          MaterialPageRoute(
+              builder: (BuildContext context) => HomePage(title: "title")),
+              (Route<dynamic> route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Column(
-            children: [
-              AppBarWidget(),
-              CardBanner(),
-              Expanded(child: Center(
-                child: FromToWidget(),
-              ))
-            ],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: Responsive.isXS(context)
+                ? AssetImage(mobileLoginBackGround)
+                : AssetImage(loginPageBackgroundImage),
+            fit: BoxFit.fill,
           ),
+        ),
+      ),
     );
   }
 }
+
+
+
 //https://github.com/humazed/google_map_location_picker
 

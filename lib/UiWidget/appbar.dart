@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
+import 'navigationdrawer.dart';
 
 
 class AppBarWidget extends StatefulWidget{
@@ -41,6 +42,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                       ),
                       onPressed: () {
                         print("your menu action here");
+                        NavigationDrawer();
                         _scaffoldKey.currentState?.openDrawer();
                       },
                     ),
