@@ -1,4 +1,6 @@
 import 'package:envi/UiWidget/cardbanner.dart';
+import 'package:envi/UiWidget/frombookschedule.dart';
+import 'package:envi/UiWidget/fromtowidget.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               AppBarWidget(),
               CardBanner(),
+              Expanded(child: Center(
+                child: FromToWidget(),
+              ))
             ],
           ),
     );

@@ -20,10 +20,16 @@ class _CardBannerPageState extends State<CardBanner> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         elevation: 5,
-        child: Image.asset(
+        child: Column(children: [
+         const Padding(padding: EdgeInsets.only(top: 10),
+         child: Text("Connecting Driver...",style: TextStyle(color: Colors.black,
+             fontFamily: 'Roboto',fontWeight: FontWeight.w800,
+             fontSize: 18),),),
+          Image.asset(
             'assets/images/connecting_driver_img.png',
             fit: BoxFit.fill,
           ),
+        ],)
 
       ),
     );
