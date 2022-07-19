@@ -32,7 +32,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     },
                     child: Container(
                       height: 50,
-                      margin: EdgeInsets.only(left: 10),
+                      margin: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
                           Image.asset(
@@ -64,13 +64,12 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     height: 1,
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 50,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FlatButton(
-                        color: isButtonPressed ? Colors.white : Colors.white,
+                      TextButton(
                         child: const Text(
                           'Book Now',
                           style: TextStyle(
