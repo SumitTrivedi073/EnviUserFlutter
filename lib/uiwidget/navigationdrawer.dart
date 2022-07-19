@@ -34,10 +34,10 @@ class _NavigationPageState extends State<NavigationDrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("Admin", style: TextStyle(color: Colors.white)),
+            accountName: const Text("Admin", style: TextStyle(color: Colors.white)),
             accountEmail:
-                Text(email ?? "", style: TextStyle(color: Colors.white)),
-            currentAccountPicture: CircleAvatar(
+                Text(email ?? "", style: const TextStyle(color: Colors.white)),
+            currentAccountPicture: const CircleAvatar(
               backgroundColor: Colors.white,
               child: Text(
                 "A",
@@ -46,35 +46,35 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
+            leading: const Icon(Icons.home),
             title: Text(MenuBookaRide),
             onTap: () {
               Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
             },
           ),
            ListTile(
-             leading: Icon(Icons.volume_up),
+             leading: const Icon(Icons.volume_up),
              title: Text(MenuScheduleaRide),
              onTap: () {
                Navigator.pushReplacementNamed(context, pageRoutes.promotion);
              },
            ),
           ListTile(
-            leading: Icon(Icons.directions_car),
+            leading: const Icon(Icons.directions_car),
             title: Text(MenuUpcomingRide),
             onTap: () {
               Navigator.pushReplacementNamed(context, pageRoutes.cars);
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
+            leading: const Icon(Icons.person),
             title: Text(MenuRideHistory),
             onTap: () {
               Navigator.pushReplacementNamed(context, pageRoutes.drivers);
             },
           ),
           ListTile(
-            leading: Icon(Icons.directions_car),
+            leading: const Icon(Icons.directions_car),
             title: Text(MenuSafety),
             onTap: () {
               Navigator.pushReplacementNamed(
@@ -82,7 +82,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.ev_station),
+            leading: const Icon(Icons.ev_station),
             title: Text(MenuFareCharges),
             onTap: () {
               Navigator.pushReplacementNamed(
@@ -90,7 +90,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: const Icon(Icons.settings),
             title: Text(MenuFavoritePlaces),
             onTap: () {
               Navigator.pushReplacementNamed(
@@ -98,14 +98,14 @@ class _NavigationPageState extends State<NavigationDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.add_card_sharp),
+            leading: const Icon(Icons.add_card_sharp),
             title: Text(MenuCustomerCare),
             onTap: () {
               Navigator.pushReplacementNamed(context, pageRoutes.manual_trip);
             },
           ),
           ListTile(
-            leading: Icon(Icons.add_card_sharp),
+            leading: const Icon(Icons.add_card_sharp),
             title: Text(MenuSettings),
             onTap: () {
               Navigator.pushReplacementNamed(context, pageRoutes.manual_trip);
