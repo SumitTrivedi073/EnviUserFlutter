@@ -1,5 +1,10 @@
 import 'package:envi/theme/color.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../theme/string.dart';
+import '../web_service/Constant.dart';
 
 class FromToWidget extends StatefulWidget {
   @override
@@ -32,53 +37,53 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     },
                     child: Container(
                       height: 50,
-                      margin: EdgeInsets.only(left: 10),
+                      margin: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
-                          Image.asset(
-                            'assets/images/from_location.png',
-                            height: 20,
+                          SvgPicture.asset(
+                            "assets/svg/from-location-img.svg",
                             width: 20,
+                            height: 20,
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text(
-                            "Phoenix Mall, Nagar Road",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w200,
-                                fontSize: 18),
+                          robotoTextWidget(
+                            textval: FromLocationHint,
+                            colorval: AppColor.black,
+                            sizeval: 18,
+                            fontWeight: FontWeight.w200,
                           ),
                         ],
                       ),
                     )),
-
                 Stack(alignment: Alignment.centerRight, children: <Widget>[
-                  Container(
+                  const SizedBox(
                     height: 2,
                     child: Divider(
-                      color: Colors.grey,
+                      color: AppColor.grey,
                       height: 2,
                     ),
                   ),
                   Container(
                     height: 40,
-                    width: 60,
+                    width: 70,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: Color(lightwhite),
-                        border: Border.all(
-                            color: Color(grey), // Set border color
-                            width: 1.0),   // Set border width
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0)), // Set rounded corner radius
+                      color: AppColor.lightwhite,
+                      border: Border.all(
+                          color: AppColor.grey, // Set border color
+                          width: 1.0), // Set border width
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0)), // Set rounded corner radius
                     ),
-                    child: const Text("5 Km",style: TextStyle(color: Colors.black,
-                    fontFamily: 'Roboto',fontWeight: FontWeight.normal),),
+                    child: robotoTextWidget(
+                      textval: kmHint,
+                      colorval: AppColor.black,
+                      sizeval: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-
                 ]),
                 GestureDetector(
                     onTap: () {
@@ -86,24 +91,22 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     },
                     child: Container(
                       height: 50,
-                      margin: EdgeInsets.only(left: 10),
+                      margin: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
-                          Image.asset(
-                            'assets/images/to_location.png',
-                            height: 20,
+                          SvgPicture.asset(
+                            "assets/svg/to-location-img.svg",
                             width: 20,
+                            height: 20,
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text(
-                            "35 - Sesame Street",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w200,
-                                fontSize: 18),
+                          robotoTextWidget(
+                            textval: ToLocationHint,
+                            colorval: AppColor.black,
+                            sizeval: 18,
+                            fontWeight: FontWeight.w200,
                           ),
                         ],
                       ),

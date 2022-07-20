@@ -1,7 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../web_service/Constant.dart';
 import 'package:envi/UiWidget/pageRoutes.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../theme/color.dart';
+import '../theme/string.dart';
+import '../web_service/Constant.dart';
 
 class NavigationDrawer extends StatefulWidget {
   @override
@@ -11,6 +16,7 @@ class NavigationDrawer extends StatefulWidget {
 class _NavigationPageState extends State<NavigationDrawer> {
   late SharedPreferences sharedPreferences;
   String? email;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,12 +35,15 @@ class _NavigationPageState extends State<NavigationDrawer> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Drawer(
+        child: Container(
+      color: AppColor.c1,
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: const Text("Admin", style: TextStyle(color: Colors.white)),
+            accountName:
+                const Text("Admin", style: TextStyle(color: Colors.white)),
             accountEmail:
                 Text(email ?? "", style: const TextStyle(color: Colors.white)),
             currentAccountPicture: const CircleAvatar(
@@ -46,32 +55,90 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
-            title: Text(MenuBookaRide),
+            leading: SvgPicture.asset(
+              "assets/svg/book-ride.svg",
+              width: 22,
+              height: 24,
+            ),
+            title: robotoTextWidget(
+              textval: MenuBookaRide,
+              colorval: AppColor.lightwhite,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            // Text(MenuBookaRide,style: TextStyle(fontSize: 20.0, color: Colors.white, fontFamily: 'Roboto'),),
             onTap: () {
               Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
             },
           ),
-           ListTile(
-             leading: const Icon(Icons.volume_up),
-             title: Text(MenuScheduleaRide),
-             onTap: () {
-               Navigator.pushReplacementNamed(context, pageRoutes.promotion);
-             },
-           ),
           ListTile(
-            leading: const Icon(Icons.directions_car),
-            title: Text(MenuUpcomingRide),
+            leading: SvgPicture.asset(
+              "assets/svg/schedule-ride.svg",
+              width: 22,
+              height: 24,
+            ),
+            title: robotoTextWidget(
+              textval: MenuScheduleaRide,
+              colorval: AppColor.lightwhite,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            // Text(MenuBookaRide,style: TextStyle(fontSize: 20.0, color: Colors.white, fontFamily: 'Roboto'),),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.cars);
+              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+            },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Padding(
+              padding: EdgeInsets.only(left: 70),
+              child: Divider(color: Colors.white)),
+          const SizedBox(
+            height: 10,
+          ),
+          ListTile(
+            leading: SvgPicture.asset(
+              "assets/svg/upcoming-rides.svg",
+              width: 22,
+              height: 24,
+            ),
+            title: robotoTextWidget(
+              textval: MenuUpcomingRide,
+              colorval: AppColor.lightwhite,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            // Text(MenuBookaRide,style: TextStyle(fontSize: 20.0, color: Colors.white, fontFamily: 'Roboto'),),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person),
-            title: Text(MenuRideHistory),
+            leading: SvgPicture.asset(
+              "assets/svg/ride-history.svg",
+              width: 22,
+              height: 24,
+            ),
+            title: robotoTextWidget(
+              textval: MenuRideHistory,
+              colorval: AppColor.lightwhite,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            // Text(MenuBookaRide,style: TextStyle(fontSize: 20.0, color: Colors.white, fontFamily: 'Roboto'),),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.drivers);
+              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
             },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Padding(
+              padding: EdgeInsets.only(left: 70),
+              child: Divider(color: Colors.white)),
+          const SizedBox(
+            height: 10,
           ),
           ListTile(
             leading: const Icon(Icons.directions_car),
@@ -113,6 +180,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
