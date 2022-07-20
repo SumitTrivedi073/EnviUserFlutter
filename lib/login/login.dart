@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../main.dart';
+import '../theme/color.dart';
 import '../theme/responsive.dart';
 import '../web_service/Constant.dart';
 
@@ -30,9 +32,8 @@ class _LoginpageState extends State<Loginpage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(LoginID, "1");
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (BuildContext context) => MainEntryPoint()),
-            (Route<dynamic> route) => false);
+        MaterialPageRoute(builder: (BuildContext context) => MainEntryPoint()),
+        (Route<dynamic> route) => false);
   }
 
   @override
@@ -75,10 +76,11 @@ class _LoginpageState extends State<Loginpage> {
                             TextFormField(
                               controller: phoneController,
                               keyboardType: TextInputType.phone,
-                              style: const TextStyle(color: Colors.black),
+                              maxLength: 10,
+                              style: const TextStyle(color: AppColor.black),
                               decoration: const InputDecoration(
                                   hintText: "Please enter phone number",
-                                  hintStyle: TextStyle(color: Colors.black38),
+                                  hintStyle: TextStyle(color: Colors.black45),
                                   icon: Icon(Icons.phone_android)),
                               validator: (value) {
                                 if (value!.isEmpty ||
@@ -92,18 +94,19 @@ class _LoginpageState extends State<Loginpage> {
                             TextFormField(
                               controller: passwordController,
                               keyboardType: TextInputType.visiblePassword,
-                              style: const TextStyle(color: Colors.black),
+                              style: const TextStyle(color: AppColor.black),
                               obscureText: _passwordVisible,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter Password';
                                 }
-                                   return null;
+                                return null;
                               },
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
                                 hintText: "Please enter Password",
-                                hintStyle: const TextStyle(color: Colors.black38),
+                                hintStyle:
+                                    const TextStyle(color: Colors.black45),
                                 icon: const Icon(Icons.lock),
                                 suffixIcon: IconButton(
                                   icon: Icon(
@@ -125,7 +128,8 @@ class _LoginpageState extends State<Loginpage> {
                             Container(
                               width: MediaQuery.of(context).size.width,
                               height: 40.0,
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               margin: const EdgeInsets.only(top: 30.0),
                               child: MaterialButton(
                                 minWidth: double.infinity,
@@ -146,7 +150,8 @@ class _LoginpageState extends State<Loginpage> {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(

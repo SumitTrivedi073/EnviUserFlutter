@@ -1,5 +1,10 @@
 import 'package:envi/theme/color.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../theme/string.dart';
+import '../web_service/Constant.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
   @override
@@ -35,21 +40,19 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                       margin: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
-                          Image.asset(
-                            'assets/images/from_location.png',
-                            height: 20,
+                          SvgPicture.asset(
+                            "assets/svg/from-location-img.svg",
                             width: 20,
+                            height: 20,
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text(
-                            "Phoenix Mall, Nagar Road",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w200,
-                                fontSize: 18),
+                          robotoTextWidget(
+                            textval: FromLocationHint,
+                            colorval: AppColor.black,
+                            sizeval: 18,
+                            fontWeight: FontWeight.w200,
                           ),
                         ],
                       ),
@@ -70,31 +73,29 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        child: const Text(
-                          'Book Now',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w800,
-                              fontSize: 18),
+                        child:  robotoTextWidget(
+                          textval: BookNow,
+                          colorval: AppColor.black,
+                          sizeval: 18.0,
+                          fontWeight: FontWeight.w800,
                         ),
                         onPressed: () {},
                       ),
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          primary: Color(yellow),
+                          primary: AppColor.yellow,
                           shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.circular(12), // <-- Radius
                           ),
                         ),
-                        child: const Text('Book for later?',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12)),
+                        child: robotoTextWidget(
+                          textval: BookForLater,
+                          colorval: AppColor.white,
+                          sizeval: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       )
                     ],
                   ),

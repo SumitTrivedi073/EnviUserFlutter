@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
+import '../theme/string.dart';
 
 class TimerButton extends StatefulWidget {
   @override
@@ -12,13 +14,15 @@ class TimerButton extends StatefulWidget {
 
 class _TimerButtonState extends State<TimerButton>
     with TickerProviderStateMixin {
-  int _state = 0;
+  int state = 0;
+  late Timer timer;
+  int counter = 60;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (_state == 0) {
+    if (state == 0) {
       animateButton();
     }
   }
@@ -36,7 +40,7 @@ class _TimerButtonState extends State<TimerButton>
               elevation: 4.0,
               minWidth: double.infinity,
               height: 48.0,
-              color: Color(red),
+              color: AppColor.red,
               child: setUpButtonChild(),
             ),
           )
@@ -46,20 +50,31 @@ class _TimerButtonState extends State<TimerButton>
   }
 
   Widget setUpButtonChild() {
-    if (_state == 0) {
-      return const Text(
-        "CANCEL BOOKING",
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w800),
-      );
-    } else if (_state == 1) {
-      return const LinearProgressIndicator(
-        backgroundColor: Color(red),
-        valueColor: AlwaysStoppedAnimation(Color(0xFFda3a00)),
-        minHeight: 25,
+    if (state == 0) {
+      return cancelBookingText();
+    } else if (state == 1) {
+      return SizedBox(
+        width: double.infinity,
+        child: MaterialButton(
+            onPressed: () => {},
+            textColor: Colors.white,
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: <Widget>[
+                Text(
+                  '0:$counter',
+                  style: const TextStyle(
+                    color: AppColor.white,
+                    fontSize: 16.0,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Center(
+                  child: cancelBookingText(),
+                ),
+              ],
+            )),
       );
     } else {
       return SizedBox(
@@ -72,7 +87,7 @@ class _TimerButtonState extends State<TimerButton>
               children: <Widget>[
                 const Icon(
                   Icons.info_outline,
-                  color: Colors.white,
+                  color: AppColor.white,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +95,7 @@ class _TimerButtonState extends State<TimerButton>
                     Text(
                       "CANCEL BOOKING -" + "₹50",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColor.white,
                         fontSize: 16.0,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w800,
@@ -96,13 +111,38 @@ class _TimerButtonState extends State<TimerButton>
 
   void animateButton() {
     setState(() {
-      _state = 1;
+      state = 1;
     });
 
-    Timer(const Duration(milliseconds: 5000), () {
-      setState(() {
-        _state = 2;
-      });
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (counter > 1) {
+        setState(() {
+          counter--;
+        });
+      } else {
+        setState(() {
+          state = 2;
+        });
+        timer.cancel();
+      }
     });
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (timer.isActive) {
+      timer.cancel();
+    }
+  }
 }
+
+Widget cancelBookingText() {
+  return robotoTextWidget(
+    textval: CancelBooking,
+    colorval: AppColor.white,
+    sizeval: 16,
+    fontWeight: FontWeight.w800,
+  );
+}
+//https://protocoderspoint.com/count-down-timer-flutter-dart/

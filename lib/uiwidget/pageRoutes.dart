@@ -1,4 +1,3 @@
-
 class pageRoutes {
   static const String mainEntry = '/MainEntry';
   static const String homeMaster = '/HomeMasterPage';
@@ -15,8 +14,6 @@ class pageRoutes {
   static const String login = '/login';
   static const String setting = '/setting';
   static const String mappage = '/Map';
-
-  static const String chatsupport ="/chatsupport";
-
-  static const String Map ='/map';
+  static const String chatsupport = "/chatsupport";
+  static const String Map = '/map';
 }
