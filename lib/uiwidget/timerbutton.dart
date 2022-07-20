@@ -61,14 +61,11 @@ class _TimerButtonState extends State<TimerButton>
             child: Stack(
               alignment: Alignment.centerRight,
               children: <Widget>[
-                Text(
-                  '0:$counter',
-                  style: const TextStyle(
-                    color: AppColor.white,
-                    fontSize: 16.0,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w800,
-                  ),
+                robotoTextWidget(
+                  textval: '0:$counter',
+                  colorval: AppColor.white,
+                  sizeval: 16,
+                  fontWeight: FontWeight.w800,
                 ),
                 Center(
                   child: cancelBookingText(CancelBooking),
@@ -91,7 +88,7 @@ class _TimerButtonState extends State<TimerButton>
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:  <Widget>[
+                  children: <Widget>[
                     cancelBookingText("$CancelBooking- ₹50"),
                   ],
                 ),
