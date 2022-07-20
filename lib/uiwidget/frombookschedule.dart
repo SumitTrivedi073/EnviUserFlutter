@@ -69,7 +69,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FlatButton(
+                      MaterialButton(
                         color: isButtonPressed ? Colors.white : Colors.white,
                         child: const Text(
                           'Book Now',
