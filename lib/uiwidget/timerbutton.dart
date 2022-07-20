@@ -51,7 +51,7 @@ class _TimerButtonState extends State<TimerButton>
 
   Widget setUpButtonChild() {
     if (state == 0) {
-      return cancelBookingText();
+      return cancelBookingText(CancelBooking);
     } else if (state == 1) {
       return SizedBox(
         width: double.infinity,
@@ -71,7 +71,7 @@ class _TimerButtonState extends State<TimerButton>
                   ),
                 ),
                 Center(
-                  child: cancelBookingText(),
+                  child: cancelBookingText(CancelBooking),
                 ),
               ],
             )),
@@ -91,16 +91,8 @@ class _TimerButtonState extends State<TimerButton>
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Text(
-                      "CANCEL BOOKING -" + "₹50",
-                      style: TextStyle(
-                        color: AppColor.white,
-                        fontSize: 16.0,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                  children:  <Widget>[
+                    cancelBookingText("$CancelBooking- ₹50"),
                   ],
                 ),
               ],
@@ -137,9 +129,9 @@ class _TimerButtonState extends State<TimerButton>
   }
 }
 
-Widget cancelBookingText() {
+Widget cancelBookingText(String cancelBooking) {
   return robotoTextWidget(
-    textval: CancelBooking,
+    textval: cancelBooking,
     colorval: AppColor.white,
     sizeval: 16,
     fontWeight: FontWeight.w800,
