@@ -15,7 +15,7 @@ class _LoginpageState extends State<Loginpage> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _passwordVisible = true;
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController phoneController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
   Future<void> _submit() async {
@@ -55,7 +55,7 @@ class _LoginpageState extends State<Loginpage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(left: 30, right: 30),
+              margin: const EdgeInsets.only(left: 30, right: 30),
               width: MediaQuery.of(context).size.width > 400
                   ? 400
                   : MediaQuery.of(context).size.width,
@@ -66,25 +66,25 @@ class _LoginpageState extends State<Loginpage> {
                 )
               ]),
               child: isLoading
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: const CircularProgressIndicator())
                   : Form(
                       key: _formKey,
                       child: Center(
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                              controller: emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(color: Colors.black),
+                              controller: phoneController,
+                              keyboardType: TextInputType.phone,
+                              style: const TextStyle(color: Colors.black),
                               decoration: const InputDecoration(
-                                  hintText: "Please enter email address",
+                                  hintText: "Please enter phone number",
                                   hintStyle: TextStyle(color: Colors.black38),
-                                  icon: Icon(Icons.email)),
+                                  icon: Icon(Icons.phone_android)),
                               validator: (value) {
                                 if (value!.isEmpty ||
-                                    !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
                                         .hasMatch(value)) {
-                                  return 'Please enter valid email!';
+                                  return 'Please enter valid phone number!';
                                 }
                                 return null;
                               },
@@ -92,7 +92,7 @@ class _LoginpageState extends State<Loginpage> {
                             TextFormField(
                               controller: passwordController,
                               keyboardType: TextInputType.visiblePassword,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               obscureText: _passwordVisible,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -103,8 +103,8 @@ class _LoginpageState extends State<Loginpage> {
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
                                 hintText: "Please enter Password",
-                                hintStyle: TextStyle(color: Colors.black38),
-                                icon: Icon(Icons.lock),
+                                hintStyle: const TextStyle(color: Colors.black38),
+                                icon: const Icon(Icons.lock),
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     _passwordVisible
@@ -125,8 +125,8 @@ class _LoginpageState extends State<Loginpage> {
                             Container(
                               width: MediaQuery.of(context).size.width,
                               height: 40.0,
-                              padding: EdgeInsets.symmetric(horizontal: 20.0),
-                              margin: EdgeInsets.only(top: 30.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              margin: const EdgeInsets.only(top: 30.0),
                               child: MaterialButton(
                                 minWidth: double.infinity,
                                 height: 45,
@@ -146,7 +146,7 @@ class _LoginpageState extends State<Loginpage> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
