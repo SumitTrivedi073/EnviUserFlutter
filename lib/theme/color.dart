@@ -9,6 +9,10 @@ class AppColor {
   static const lightwhite = Color(0xFFF8F8F8);
   static const grey = Color(0xFFBCBCBC);
   static const drawercontainer = Color(0xFF0D261B);
+static const drawertop = Color(0xFF0D3624);
+  static const red = Color(0xFFF75600);
+
+  static const lightText = Color.fromRGBO(255, 255, 255, 0.45);
 }
 var greyblack = 0xFF393939;
 var baigni = 0xFFC581FF;

@@ -1,4 +1,5 @@
 import 'package:envi/UiWidget/cardbanner.dart';
+import 'package:envi/controller/ridehistory/ridehistoryPage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/Constant.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Envi',
       debugShowCheckedModeBanner: false,
@@ -32,7 +34,8 @@ class MyApp extends StatelessWidget {
         home: MainEntryPoint(),
         routes: {
           pageRoutes.login: (context) => Loginpage(),
-          pageRoutes.setting: (context) => HomePage(title: "title"),
+          pageRoutes.homeMaster: (context) => HomePage(title: "title"),
+          pageRoutes.ridehistories:(context) => RideHistoryPage(),
         },
       )
     );

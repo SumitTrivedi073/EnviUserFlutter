@@ -1,14 +1,14 @@
 const defaultPadding = 5.0;
 
-var MenuBookaRide = "Book a Ride";
-var MenuScheduleaRide = "Schedule a Ride";
-var MenuUpcomingRide = "Upcoming Rides";
-var MenuRideHistory = "Ride History";
-var MenuSafety = "Safety";
-var MenuFareCharges = "Fare & Charges";
-var MenuFavoritePlaces = "Favorite Places";
-var MenuCustomerCare = "Customer Care";
-var MenuSettings = "Settings";
+var menuBookaRide = "Book a Ride";
+var menuScheduleaRide = "Schedule a Ride";
+var menuUpcomingRide = "Upcoming Rides";
+var menuRideHistory = "Ride History";
+var menuSafety = "Safety";
+var menuFareCharges = "Fare & Charges";
+var menuFavoritePlaces = "Favorite Places";
+var menuCustomerCare = "Customer Care";
+var menuSettings = "Settings";
 
 var mobileLoginBackGround = "assets/images/mobileLoginBackgroundImage.png";
 var loginPageBackgroundImage = "assets/images/loginBackgroundImage.png";
