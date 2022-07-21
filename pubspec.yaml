@@ -62,8 +62,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/icons/
     - assets/svg/
+    - assets/font/
 
   fonts:
   - family: SFCompactText

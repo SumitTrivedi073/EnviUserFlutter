@@ -6,9 +6,7 @@ import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:envi/UiWidget/pageRoutes.dart';
-
-import 'UiWidget/appbar.dart';
-import 'controller/home/homePage.dart';
+import 'home/homePage.dart';
 import 'login/login.dart';
 
 void main() {
@@ -60,12 +58,12 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(LoginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => Loginpage()),
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) => HomePage(title: "title")),
+              builder: (BuildContext context) => const HomePage(title: "title")),
               (Route<dynamic> route) => false);
     }
   }

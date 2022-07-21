@@ -26,7 +26,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                 right: 0.0,
                 child: Card(
                   elevation: 4,
-                  color: Color(greyblack),
+                  color: AppColor.greyblack,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Row(
@@ -55,7 +55,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                                     fontWeight: FontWeight.w200,
                                     fontSize: 18),),
                               Text(" PRIME",
-                                style: TextStyle(color: Color(baigni),
+                                style: TextStyle(color: AppColor.baigni,
                                   fontFamily: 'SFCompactText',
                                   fontWeight: FontWeight.w800, ),),
                             ],

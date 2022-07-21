@@ -1,4 +1,3 @@
-
 class pageRoutes {
   static const String mainEntry = '/MainEntry';
   static const String homeMaster = '/HomeMasterPage';
