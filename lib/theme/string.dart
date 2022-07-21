@@ -13,3 +13,4 @@ var FromLocationHint = "Phoenix Mall, Nagar Road";
 var ToLocationHint = "35 - Sesame Street";
 var kmHint = "5 Km";
 var CancelBooking = "CANCEL BOOKING";
+var PickUp = "Pick up";

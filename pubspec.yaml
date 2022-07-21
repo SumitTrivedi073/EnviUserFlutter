@@ -38,6 +38,10 @@ dependencies:
   fluttertoast: ^8.0.9
   http: any
   flutter_svg: ^0.23.0+1
+  permission_handler: ^10.0.0
+  google_maps_flutter: ^2.1.8
+  geolocator: ^9.0.1
+  geocoding: ^2.0.4
 
 dev_dependencies:
   flutter_test:

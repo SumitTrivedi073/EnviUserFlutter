@@ -17,6 +17,8 @@ class robotoTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       textval,
+      textAlign: TextAlign.justify,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: sizeval,
           color: colorval,
