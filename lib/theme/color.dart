@@ -1,8 +1,6 @@
-
-
 import 'dart:ui';
-class AppColor {
 
+class AppColor {
   static const greyblack = Color(0xFF393939);
   static const black = Color(0xFF000000);
   static const baigni = Color(0xFFC581FF);
@@ -11,8 +9,11 @@ class AppColor {
   static const white = Color(0xFFFFFFFF);
   static const grey = Color(0xFFBCBCBC);
   static const drawercontainer = Color(0xFF0D261B);
-  static const red =  Color(0xFFFA4300);
-  static const darkred = Color (0xFFda3a00);
-  static const c1 =  Color(0xFF0D261B);
+  static const lightgreen = Color(0xFF008B4E);
+  static const red = Color(0xFFFA4300);
+  static const darkred = Color(0xFFda3a00);
+  static const c1 = Color(0xFF0D261B);
   static const verylightwhite = Color(0xFFFFFFFF74);
+  static const drawertop = Color(0xFF0D3624);
+  static const lightText = Color.fromRGBO(255, 255, 255, 0.45);
 }
