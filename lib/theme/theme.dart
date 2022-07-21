@@ -5,7 +5,7 @@ import 'color.dart';
 
 ThemeData appTheme() {
   return ThemeData(
-    iconTheme: new IconThemeData(color: Colors.green),
+    iconTheme: const IconThemeData(color: Colors.green),
     primarySwatch: Colors.green,
   );
 }
@@ -18,14 +18,14 @@ getsmallNetworkImage(context, path) {
     return CircleAvatar(radius: 18,foregroundImage:NetworkImage(path) ) ;//Image.network(path,height: 40, fit: BoxFit.cover);
   } else {
     return Container(
-      color: colorThemeData['backgroundColor'],
+      color: AppColor.white,
       alignment: Alignment.center,
-      child: Text(
+      child: const Text(
         'No Image Uploaded',
         style: TextStyle(
             fontSize: 5,
             fontWeight: FontWeight.bold,
-            color: colorThemeData['secondaryTextColor']),
+            color: AppColor.black),
       ),
     );
   }

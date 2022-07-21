@@ -25,7 +25,7 @@ class AppBarInsideWidget extends StatelessWidget{
             right: 0.0,
             child: Card(
               elevation: 4,
-              color: Color(greyblack),
+              color: AppColor.greyblack,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
