@@ -6,6 +6,6 @@ class pageRoutes {
   static const String setting = '/setting';
   static const String mappage = '/Map';
   static const String chatsupport ="/chatsupport";
-
+static const String rideupcoming = "/UpcomingRides";
   static const String map ='/map';
 }
