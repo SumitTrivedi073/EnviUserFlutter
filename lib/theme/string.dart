@@ -13,4 +13,5 @@ var FromLocationHint = "Phoenix Mall, Nagar Road";
 var ToLocationHint = "35 - Sesame Street";
 var kmHint = "5 Km";
 var CancelBooking = "CANCEL BOOKING";
-var selectepaymentmode = "Please Select your payment mode:";
+var TitelRideHistory = "Ride History";
+var TitelUpcomingRides = "Upcoming Rides";

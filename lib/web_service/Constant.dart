@@ -1,6 +1,6 @@
 const defaultPadding = 5.0;
 var mobileLoginBackGround = "assets/images/mobileLoginBackgroundImage.png";
-var loginPageBackgroundImage = "assets/images/loginBackgroundImage.png";
+var loginPageBackgroundImage = "assets/images/background.png";
 var LoginID = "LoginID";
 var LoginToken = "token";
 var LoginEmail = "email";
