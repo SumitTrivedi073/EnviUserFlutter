@@ -16,4 +16,10 @@ class AppColor {
   static const verylightwhite = Color(0xFFFFFFFF74);
   static const drawertop = Color(0xFF0D3624);
   static const lightText = Color.fromRGBO(255, 255, 255, 0.45);
+  static const border = Color(0xFFCECECE);
+  static const cellheader = Color.fromRGBO(229, 229, 229, 0.46);
+  static const butgreen = Color(0xFF00AD00);
+  static const detailheader = Color(0xFF108058);
+  static const lightorange = Color.fromRGBO(255, 193, 0, 0.15);
+  static const alfaorange = Color.fromRGBO(245, 238, 218, 1);
 }
