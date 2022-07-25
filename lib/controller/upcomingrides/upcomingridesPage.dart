@@ -3,6 +3,7 @@ import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/string.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 
@@ -29,7 +30,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         ),
         child:  Column(
           children:  [
-            const AppBarInsideWidget(title: "Upcoming Rides",),
+             AppBarInsideWidget(title: TitelUpcomingRides,),
 
             Expanded(
               child:  Container(
