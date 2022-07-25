@@ -129,7 +129,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              Navigator.pushReplacementNamed(context, pageRoutes.rideupcoming);
             },
           ),
           ListTile(
