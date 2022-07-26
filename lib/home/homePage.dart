@@ -1,4 +1,4 @@
-import 'package:envi/UiWidget/fromtowidget.dart';
+import 'package:envi/UiWidget/frombookschedule.dart';
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/uiwidget/paymentModeOptionWidget.dart';
 import 'package:envi/uiwidget/timerbutton.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
+import '../uiwidget/mappagescreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -21,7 +22,27 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavigationDrawer(),
-      body: Column(
+      body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+        MyMap(),
+        Column(
+          children: [
+            AppBarWidget(),
+            CardBanner(),
+            Expanded(
+                child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: FromBookScheduleWidget(),
+              ),
+            )),
+            /*PaymentModeOptionWidget(
+              strpaymentOptions: "qr_code,online,cash",
+              selectedOption: "qr_code",
+            )*/
+          ],
+        ),
+      ]), /*Column(
         children: [
           AppBarWidget(),
           CardBanner(),
@@ -35,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           ),
           TimerButton(),
         ],
-      ),
+      ),*/
     );
   }
 }

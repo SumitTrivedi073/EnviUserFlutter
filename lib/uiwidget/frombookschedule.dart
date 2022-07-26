@@ -2,11 +2,10 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../theme/string.dart';
-import '../web_service/Constant.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _FromBookScheduleWidgetPageState();
@@ -14,6 +13,14 @@ class FromBookScheduleWidget extends StatefulWidget {
 
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {

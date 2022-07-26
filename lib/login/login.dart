@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -35,6 +37,24 @@ class _LoginpageState extends State<Loginpage> {
         MaterialPageRoute(builder: (BuildContext context) => MainEntryPoint()),
         (Route<dynamic> route) => false);
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkPermission();
+  }
+
+  Future checkPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission != PermissionStatus.granted) {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission != PermissionStatus.granted) {
+        print("permission Approved");
+      }
+      return;
+    }
+   }
 
   @override
   Widget build(BuildContext context) {
