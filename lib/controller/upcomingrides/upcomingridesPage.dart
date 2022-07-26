@@ -120,7 +120,7 @@ color: Colors.transparent,
       ),);
   }
   Container CellRow2(){
-    return  Container(color: AppColor.alfaorange,
+    return Container(color: AppColor.alfaorange.withOpacity(0.1),
       height: 94,
       padding: const EdgeInsets.only(top: 10,bottom: 10,left: 15,right:
       15),
@@ -195,7 +195,7 @@ color: Colors.transparent,
   Container CellRow3(){
     return Container(color: AppColor.white,
       height: 38,
-      padding: EdgeInsets.only(left: 15,right:
+      padding: const EdgeInsets.only(left: 15,right:
       15),
       foregroundDecoration: BoxDecoration(
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),

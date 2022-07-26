@@ -1,6 +1,6 @@
-import 'package:envi/UiWidget/frombookschedule.dart';
 import 'package:envi/UiWidget/fromtowidget.dart';
 import 'package:envi/UiWidget/navigationdrawer.dart';
+import 'package:envi/uiwidget/paymentModeOptionWidget.dart';
 import 'package:envi/uiwidget/timerbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +17,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavigationDrawer(),
-      body:  Column(
+      body: Column(
         children: [
           AppBarWidget(),
           CardBanner(),
-          Expanded(child: Center(
+          Expanded(
+              child: Center(
             child: FromToWidget(),
           )),
-           TimerButton(),
+          PaymentModeOptionWidget(
+            strpaymentOptions: "qr_code,online,cash",
+            selectedOption: "qr_code",
+          ),
+          TimerButton(),
         ],
       ),
     );

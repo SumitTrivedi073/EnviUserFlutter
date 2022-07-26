@@ -10,6 +10,7 @@ class AppColor {
   static const grey = Color(0xFFBCBCBC);
   static const drawercontainer = Color(0xFF0D261B);
   static const lightgreen = Color(0xFF008B4E);
+  static const darkGreen = Color(0xFF00A701);
   static const red = Color(0xFFFA4300);
   static const darkred = Color(0xFFda3a00);
   static const c1 = Color(0xFF0D261B);
@@ -21,5 +22,5 @@ class AppColor {
   static const butgreen = Color(0xFF00AD00);
   static const detailheader = Color(0xFF108058);
   static const lightorange = Color.fromRGBO(255, 193, 0, 0.15);
-  static const alfaorange = Color.fromRGBO(245, 238, 218, 1);
+  static const alfaorange = Color(0xFFFFC100);
 }
