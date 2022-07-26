@@ -1,6 +1,7 @@
 import 'package:envi/UiWidget/frombookschedule.dart';
 import 'package:envi/UiWidget/navigationdrawer.dart';
-import 'package:envi/uiwidget/mappagescreen.dart';
+import 'package:envi/uiwidget/paymentModeOptionWidget.dart';
+import 'package:envi/uiwidget/timerbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -40,10 +41,15 @@ class _HomePageState extends State<HomePage> {
         children: [
           AppBarWidget(),
           CardBanner(),
-          Expanded(child: Center(
+          Expanded(
+              child: Center(
             child: FromToWidget(),
           )),
-           TimerButton(),
+          PaymentModeOptionWidget(
+            strpaymentOptions: "qr_code,online,cash",
+            selectedOption: "qr_code",
+          ),
+          TimerButton(),
         ],
       ),*/
     );
