@@ -84,17 +84,20 @@ class MyMapState extends State {
         )),
         Align(
           alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: FloatingActionButton(
-              // isExtended: true,
-              child: const Icon(Icons.my_location_outlined),
-              backgroundColor: Colors.green,
-              onPressed: () {
-                setState(() {
-                  getCurrentLocation();
-                });
-              },
+          child: Container(
+            margin: EdgeInsets.only(bottom: 140),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: FloatingActionButton(
+                // isExtended: true,
+                child: const Icon(Icons.my_location_outlined),
+                backgroundColor: Colors.green,
+                onPressed: () {
+                  setState(() {
+                    getCurrentLocation();
+                  });
+                },
+              ),
             ),
           ),
         ),

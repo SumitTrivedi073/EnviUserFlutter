@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
                 child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                margin: const EdgeInsets.only(bottom: 80),
+                margin: const EdgeInsets.only(bottom: 10),
                 child: FromBookScheduleWidget(),
               ),
             )),
