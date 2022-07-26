@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
+import '../uiwidget/mappagescreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -29,12 +30,16 @@ class _HomePageState extends State<HomePage> {
             CardBanner(),
             Expanded(
                 child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 80),
-                    child: FromBookScheduleWidget(),
-                  ),
-                ))
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 80),
+                child: FromBookScheduleWidget(),
+              ),
+            )),
+            /*PaymentModeOptionWidget(
+              strpaymentOptions: "qr_code,online,cash",
+              selectedOption: "qr_code",
+            )*/
           ],
         ),
       ]), /*Column(

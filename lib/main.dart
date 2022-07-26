@@ -1,5 +1,5 @@
 import 'package:envi/UiWidget/cardbanner.dart';
-import 'package:envi/controller/ridehistory/ridehistoryPage.dart';
+import 'package:envi/ridehistory/ridehistoryPage.dart';
 import 'package:envi/controller/upcomingrides/upcomingridesPage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
