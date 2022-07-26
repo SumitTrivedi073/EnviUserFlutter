@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
             child: FromToWidget(),
           )),
 
-           PaymentModeOptionWidget(strpayment: "qr_code,online,cash"),
+           PaymentModeOptionWidget(strpaymentOptions: "qr_code,online,cash",selectedOption: "qr_code",),
            TimerButton(),
         ],
       ),
