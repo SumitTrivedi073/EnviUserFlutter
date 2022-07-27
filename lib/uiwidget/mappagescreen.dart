@@ -9,29 +9,31 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../theme/string.dart';
 
-void main() {
-  runApp(MaterialApp(home: MyHomePage()));
-}
+// void main() {
+//   runApp(MaterialApp(home: MyHomePage()));
+// }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  State createState() {
-    // TODO: implement createState
-    return MyHomePageState();
-  }
-}
+// class MyHomePage extends StatefulWidget {
+//   @override
+//   State createState() {
+//     // TODO: implement createState
+//     return MyHomePageState();
+//   }
+// }
 
-class MyHomePageState extends State {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      body: MyMap(),
-    );
-  }
-}
+// class MyHomePageState extends State {
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     return Scaffold(
+//       body: MyMap(),
+//     );
+//   }
+// }
 
 class MyMap extends StatefulWidget {
+  final void Function(String) onlocatioChanged;
+const MyMap({ required this.onlocatioChanged});
   @override
   State createState() {
     // TODO: implement createState
@@ -39,7 +41,7 @@ class MyMap extends StatefulWidget {
   }
 }
 
-class MyMapState extends State {
+class MyMapState extends State<MyMap> {
   LatLng? latlong = null;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
@@ -145,6 +147,7 @@ class MyMapState extends State {
     Placemark place = placemarks[0];
     Address =
         '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    widget.onlocatioChanged(Address);
   }
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address

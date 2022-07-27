@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: NavigationDrawer(),
       body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-        MyMap(),
+        MyMap(onlocatioChanged: uploadlocatio,),
         Column(
           children: [
             AppBarWidget(),
@@ -58,5 +58,8 @@ class _HomePageState extends State<HomePage> {
         ],
       ),*/
     );
+  }
+  void uploadlocatio(String newlocation) async {
+print(newlocation);
   }
 }

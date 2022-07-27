@@ -5,6 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import '../theme/string.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
+  // final String fromAddress;
+  // final String toAddress;
+
+  // const FromBookScheduleWidget(
+  //     {super.key, required this.fromAddress, required this.toAddress});
 
   @override
   // TODO: implement createState
@@ -14,11 +19,15 @@ class FromBookScheduleWidget extends StatefulWidget {
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
 
+   late String fromAddress;
+   late String toAddress;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+fromAddress = "";//widget.fromAddress;
+toAddress = "";//widget.toAddress;
 
   }
 
@@ -56,7 +65,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                             width: 10,
                           ),
                           robotoTextWidget(
-                            textval: FromLocationHint,
+                            textval: fromAddress != ""?fromAddress:FromLocationHint,
                             colorval: AppColor.black,
                             sizeval: 18,
                             fontWeight: FontWeight.w200,
@@ -98,7 +107,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           ),
                         ),
                         child: robotoTextWidget(
-                          textval: BookForLater,
+                          textval: toAddress != ""?toAddress :BookForLater,
                           colorval: AppColor.white,
                           sizeval: 12,
                           fontWeight: FontWeight.w600,
