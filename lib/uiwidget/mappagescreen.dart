@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:envi/theme/mapStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -64,7 +68,9 @@ class MyMapState extends State {
                 mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
+                  controller.setMapStyle(MapStyle.mapStyles);
                   _controller = (controller);
+
                   _controller?.animateCamera(
                       CameraUpdate.newCameraPosition(_cameraPosition!));
                 },
@@ -80,7 +86,7 @@ class MyMapState extends State {
                 onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                })
+                },)
             : Container(),
         Center(
             child: SvgPicture.asset(
@@ -129,13 +135,15 @@ class MyMapState extends State {
       _cameraPosition = CameraPosition(
         bearing: 0,
         target: LatLng(position.latitude, position.longitude),
-        zoom: 16.0,
+        zoom: 14.0,
       );
       if (_controller != null) {
         _controller
             ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
       }
+
     });
+
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
