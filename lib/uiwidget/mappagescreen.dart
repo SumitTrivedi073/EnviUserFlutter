@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../theme/string.dart';
+import 'frombookschedule.dart';
 
 void main() {
   runApp(MaterialApp(home: MyHomePage()));
@@ -113,6 +114,14 @@ class MyMapState extends State {
             ),
           ),
         ),
+        Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: FromBookScheduleWidget(address: Address,),
+              ),
+            ))
       ],
     ));
   }
@@ -151,9 +160,10 @@ class MyMapState extends State {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
+    setState(() {
     Address =
         '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-  }
+    });  }
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address
 //https://stackoverflow.com/questions/52591556/custom-markers-with-flutter-google-maps-plugin

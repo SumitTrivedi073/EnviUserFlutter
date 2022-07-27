@@ -2,9 +2,14 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../theme/string.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
+  final String  address;
+
+  FromBookScheduleWidget({required this.address});
 
   @override
   // TODO: implement createState
@@ -13,7 +18,7 @@ class FromBookScheduleWidget extends StatefulWidget {
 
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
-
+  String Address = PickUp;
 
   @override
   void initState() {
@@ -55,12 +60,16 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           const SizedBox(
                             width: 10,
                           ),
-                          robotoTextWidget(
-                            textval: FromLocationHint,
-                            colorval: AppColor.black,
-                            sizeval: 18,
-                            fontWeight: FontWeight.w200,
+                          Container(
+                            margin: EdgeInsets.only(right: 10),
+                            child: robotoTextWidget(
+                              textval: widget.address,
+                              colorval: AppColor.black,
+                              sizeval: 18,
+                              fontWeight: FontWeight.w200,
+                            ),
                           ),
+
                         ],
                       ),
                     )),
@@ -112,4 +121,6 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
           )),
     );
   }
+
+
 }
