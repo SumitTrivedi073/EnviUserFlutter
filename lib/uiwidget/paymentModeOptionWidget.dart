@@ -48,7 +48,7 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
                   textval: selectepaymentmode,
                   colorval: const Color(0xFF1DCA1D),
                   sizeval: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
                 Container(
                   margin: const EdgeInsets.only(
@@ -138,7 +138,7 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
                             textval: getpaymentTitle(arroption[index]),
                             colorval: AppColor.black,
                             sizeval: 16.0,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w600,
                           ),
                         ],
                       ),

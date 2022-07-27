@@ -18,7 +18,7 @@ var TitelRideHistory = "Ride History";
 var TitelUpcomingRides = "Upcoming Rides";
 var selectepaymentmode = "please select your payment mode:";
 
-var qrtitel = "QR Code on Car";
+var qrtitel = "QR Code";
 var qrDecription = "Driver will help you locate the code";
 var cashtitel = "Cash";
 var cashDecription = "Hand over the cash to driver";

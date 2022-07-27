@@ -74,7 +74,13 @@ class MyMapState extends State {
                 zoomGesturesEnabled: true,
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
-              )
+                onCameraIdle: () {
+                  GetAddressFromLatLong(latlong!);
+                },
+                onCameraMove: (CameraPosition position) {
+                  latlong = LatLng(
+                      position.target.latitude, position.target.longitude);
+                })
             : Container(),
         Center(
             child: SvgPicture.asset(
@@ -118,8 +124,6 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-
-    GetAddressFromLatLong(position);
     setState(() {
       latlong = LatLng(position.latitude, position.longitude);
       _cameraPosition = CameraPosition(
@@ -134,7 +138,7 @@ class MyMapState extends State {
     });
   }
 
-  Future<void> GetAddressFromLatLong(Position position) async {
+  Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
