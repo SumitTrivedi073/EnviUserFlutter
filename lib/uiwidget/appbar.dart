@@ -48,17 +48,13 @@ class _AppBarPageState extends State<AppBarWidget> {
                         Container(
                           alignment: Alignment.center,
                           child: Row(
-                            children: [
-                              const Text("ENVI",
+                            children: const [
+                              Text("ENVI",
                                 style: TextStyle(color: Colors.white,
                                     fontFamily: 'SFCompactText',
                                     fontWeight: FontWeight.w200,
                                     fontSize: 18),),
-                              Text(" PRIME",
-                                style: TextStyle(color: AppColor.baigni,
-                                  fontFamily: 'SFCompactText',
-                                  fontWeight: FontWeight.w800, ),),
-                            ],
+                             ],
                           ),
                         ),
 
