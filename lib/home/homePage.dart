@@ -28,14 +28,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             AppBarWidget(),
             CardBanner(),
-            Expanded(
-                child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: FromBookScheduleWidget(),
-              ),
-            )),
+
             /*PaymentModeOptionWidget(
               strpaymentOptions: "qr_code,online,cash",
               selectedOption: "qr_code",

@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:envi/theme/mapStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../theme/string.dart';
+import 'frombookschedule.dart';
 
 void main() {
   runApp(MaterialApp(home: MyHomePage()));
@@ -64,7 +69,9 @@ class MyMapState extends State {
                 mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
+                  controller.setMapStyle(MapStyle.mapStyles);
                   _controller = (controller);
+
                   _controller?.animateCamera(
                       CameraUpdate.newCameraPosition(_cameraPosition!));
                 },
@@ -80,7 +87,7 @@ class MyMapState extends State {
                 onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                })
+                },)
             : Container(),
         Center(
             child: SvgPicture.asset(
@@ -107,6 +114,14 @@ class MyMapState extends State {
             ),
           ),
         ),
+        Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: FromBookScheduleWidget(address: Address,),
+              ),
+            ))
       ],
     ));
   }
@@ -129,13 +144,15 @@ class MyMapState extends State {
       _cameraPosition = CameraPosition(
         bearing: 0,
         target: LatLng(position.latitude, position.longitude),
-        zoom: 16.0,
+        zoom: 14.0,
       );
       if (_controller != null) {
         _controller
             ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
       }
+
     });
+
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
@@ -143,9 +160,10 @@ class MyMapState extends State {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
+    setState(() {
     Address =
         '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-  }
+    });  }
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address
 //https://stackoverflow.com/questions/52591556/custom-markers-with-flutter-google-maps-plugin

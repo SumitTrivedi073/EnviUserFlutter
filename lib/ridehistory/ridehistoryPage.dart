@@ -8,7 +8,6 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 
 class RideHistoryPage extends StatefulWidget {
-
   @override
   State<RideHistoryPage> createState() => _RideHistoryPageState();
 }
@@ -19,78 +18,67 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Container(
-
         decoration: BoxDecoration(
           image: DecorationImage(
-            image:  AssetImage(loginPageBackgroundImage),
+            image: AssetImage(loginPageBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),
-        child:  Column(
-          children:  [
-             AppBarInsideWidget(title: TitelRideHistory,),
+        child: Column(
+          children: [
+            AppBarInsideWidget(
+              title: TitelRideHistory,
+            ),
             totalTripHeader(),
             Expanded(
-              child:  Container(
+              child: Container(
                   margin: const EdgeInsets.only(right: 10.0),
                   child: _buildPosts(context)),
             ),
           ],
         ),
       ),
-
-
     );
   }
+
   InkWell _buildPosts(BuildContext context) {
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
         },
-        child: Container(
-          child: ListView.builder(
-            //controller: _controller,
+        child: ListView.builder(
+          //controller: _controller,
 
-            itemBuilder: (context, index) {
-             return ListItem();
-            },
-            itemCount: 2,
-            padding: EdgeInsets.all(8),
-          ),
+          itemBuilder: (context, index) {
+            return ListItem();
+          },
+          itemCount: 2,
+          padding: const EdgeInsets.all(8),
         ));
   }
 
-
-  Card ListItem(){
+  Card ListItem() {
     return Card(
-        elevation:1,
-
-        child: Container(
-
-
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CellRow1(),
-                  CellRow2(),
-                  CellRow3(),
-                ])));
-
+        elevation: 1,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CellRow1(),
+              CellRow2(),
+              CellRow3(),
+            ]));
   }
-  Container CellRow1(){
-    return Container(color: AppColor.cellheader,
+
+  Container CellRow1() {
+    return Container(
+      color: AppColor.cellheader,
       height: 38,
-      padding: const EdgeInsets.only(top: 10,bottom: 10,left: 15,right:
-      15),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
       foregroundDecoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-          border: Border.all(
-              color: AppColor.border,
-              width: 1.0
-          )
-      ),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+          border: Border.all(color: AppColor.border, width: 1.0)),
       //
 
       child: Row(
@@ -98,7 +86,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         children: [
           Row(children: const [
             Icon(
-              Icons.nightlife,color: AppColor.black,
+              Icons.nightlife,
+              color: AppColor.black,
             ),
             robotoTextWidget(
               textval: "Yesterday 8:15 PM",
@@ -107,225 +96,211 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               fontWeight: FontWeight.bold,
             ),
           ]),
-
           const robotoTextWidget(
             textval: "₹ 130",
             colorval: AppColor.black,
             sizeval: 18.0,
             fontWeight: FontWeight.bold,
           ),
-
-
         ],
-      ),);
+      ),
+    );
   }
-  Container CellRow2(){
-    return  Container(color: AppColor.lightwhite,
+
+  Container CellRow2() {
+    return Container(
+      color: AppColor.lightwhite,
       height: 94,
-      padding: const EdgeInsets.only(top: 10,bottom: 10,left: 15,right:
-      15),
-      // decoration: BoxDecoration(
-      //     border: Border.all( color: const
-      //     Color(0xFFCECECE), width: 3.0,strokeAlign: StrokeAlign.inside,style: BorderStyle.solid),
-      // ),
-      child: Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
-                Row(children: const [
-
-                  Icon(
-                    Icons.star,color: AppColor.butgreen,
-
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: const [
+                      Icon(
+                        Icons.star,
+                        color: AppColor.butgreen,
+                      ),
+                      robotoTextWidget(
+                        textval: "Kempegowda International Airport",
+                        colorval: AppColor.black,
+                        sizeval: 14.0,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ],
                   ),
-                  robotoTextWidget(
-                    textval: "Kempegowda International Airport",
-                    colorval: AppColor.black,
-                    sizeval: 14.0,
-                    fontWeight: FontWeight.normal,
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(left: 25),
+                      ),
+                      robotoTextWidget(
+                        textval: "From Home",
+                        colorval: AppColor.black,
+                        sizeval: 14.0,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ],
                   ),
                 ],
-
+              ),
+              Image.network(
+                "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                fit: BoxFit.fill,
+                height: 40,
+                width: 40,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(children: const [
+                Padding(
+                  padding: EdgeInsets.only(left: 25),
                 ),
-                const SizedBox(
-                  height: 3,
+                robotoTextWidget(
+                  textval: "18 Kms",
+                  colorval: AppColor.greyblack,
+                  sizeval: 13.0,
+                  fontWeight: FontWeight.bold,
                 ),
-                Row(children: const [
-
-                  Padding(padding: EdgeInsets.only(left: 25),),
-                  robotoTextWidget(
-                    textval: "From Home",
-                    colorval: AppColor.black,
-                    sizeval: 14.0,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ],
-
-                ),
-
-              ],),
-
-            Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
-              fit: BoxFit.fill,height: 40,
-              width: 40,),
-
-          ],
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(children:  const [
-              Padding(padding: EdgeInsets.only(left: 25),),
-              robotoTextWidget(
-                textval: "18 Kms",
+              ]),
+              const robotoTextWidget(
+                textval: "KA03 SS 4928",
                 colorval: AppColor.greyblack,
                 sizeval: 13.0,
                 fontWeight: FontWeight.bold,
               ),
-            ]),
-
-            const robotoTextWidget(
-              textval: "KA03 SS 4928",
-              colorval: AppColor.greyblack,
-              sizeval: 13.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ],
-        ),
-      ],),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  Container CellRow3(){
-    return Container(color: AppColor.white,
+  Container CellRow3() {
+    return Container(
+      color: AppColor.white,
       height: 38,
-      padding: EdgeInsets.only(top: 10,bottom: 10,left: 15,right:
-      15),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
       foregroundDecoration: BoxDecoration(
-          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
-          border: Border.all(
-              color: AppColor.border,
-              width: 1.0
-          )
-      ),
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: const Radius.circular(10)),
+          border: Border.all(color: AppColor.border, width: 1.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
-          Row(
-
-            mainAxisAlignment: MainAxisAlignment.center,
-              children:  [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             MaterialButton(
-              child: robotoTextWidget(textval: "INVOICE", colorval: AppColor.butgreen,sizeval: 14.0,fontWeight: FontWeight.bold,),
-              onPressed: () {
-
-              },
+              child: const robotoTextWidget(
+                textval: "INVOICE",
+                colorval: AppColor.butgreen,
+                sizeval: 14.0,
+                fontWeight: FontWeight.bold,
+              ),
+              onPressed: () {},
             ),
           ]),
-          Row(
-
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:  [
-                MaterialButton(
-                  child: robotoTextWidget(textval: "SUPPORT", colorval: AppColor.butgreen,sizeval: 14.0,fontWeight: FontWeight.bold,),
-                  onPressed: () {
-
-                  },
-                ),
-              ]),
-
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+              child: const robotoTextWidget(
+                textval: "SUPPORT",
+                colorval: AppColor.butgreen,
+                sizeval: 14.0,
+                fontWeight: FontWeight.bold,
+              ),
+              onPressed: () {},
+            ),
+          ]),
         ],
-      ),);
-  }
-  Card totalTripHeader(){
-
-    return Card(
-        elevation: 5,
-        color: AppColor.detailheader,
-        child:Container(color: AppColor.detailheader,
-      height: 56,
-          margin: EdgeInsets.only(
-              left: 5,right:5
-          ),
-      padding: const EdgeInsets.only(top: 9,bottom: 5,right:
-      5),
-      foregroundDecoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-
       ),
-      //
+    );
+  }
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
+  Card totalTripHeader() {
+    return Card(
+      elevation: 5,
+      color: AppColor.detailheader,
+      child: Container(
+        color: AppColor.detailheader,
+        height: 56,
+        margin: const EdgeInsets.only(left: 5, right: 5),
+        padding: const EdgeInsets.only(top: 9, bottom: 5, right: 5),
+        foregroundDecoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        //
 
-              child: Column(
-                children: const [
-                  RotatedBox(
-                      quarterTurns: 3,
-                      child: robotoTextWidget(
-                        textval: "YOUR\nSTATS",
-                        colorval: AppColor.black,
-                        sizeval: 13.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                  )
-
-
-                ],
-              )),
-
-          Expanded(
-            flex: 2,
-              child: Column(
-                children: const [
-                  robotoTextWidget(
-                    textval: "22",
-                    colorval: AppColor.white,
-                    sizeval: 22.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  robotoTextWidget(
-                    textval: "Rides Taken",
-                    colorval: AppColor.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+                child: Column(
+              children: const [
+                RotatedBox(
+                  quarterTurns: 3,
+                  child: robotoTextWidget(
+                    textval: "YOUR\nSTATS",
+                    colorval: AppColor.black,
                     sizeval: 13.0,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                   ),
-                ],
-              )),
-
-
-          Expanded(
-            flex: 2,
-              child: Column(
-                children: const [
-                  robotoTextWidget(
-                    textval: "175 Kg",
-                    colorval: AppColor.white,
-                    sizeval: 22.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  robotoTextWidget(
-                    textval: "CO2 Emission Prevented",
-                    colorval: AppColor.white,
-                    sizeval: 13.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ],
-              )),
-
-
-
-        ],
-      ),),);
+                )
+              ],
+            )),
+            Expanded(
+                flex: 2,
+                child: Column(
+                  children: const [
+                    robotoTextWidget(
+                      textval: "22",
+                      colorval: AppColor.white,
+                      sizeval: 22.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    robotoTextWidget(
+                      textval: "Rides Taken",
+                      colorval: AppColor.white,
+                      sizeval: 13.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ],
+                )),
+            Expanded(
+                flex: 2,
+                child: Column(
+                  children: const [
+                    robotoTextWidget(
+                      textval: "175 Kg",
+                      colorval: AppColor.white,
+                      sizeval: 22.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    robotoTextWidget(
+                      textval: "CO2 Emission Prevented",
+                      colorval: AppColor.white,
+                      sizeval: 13.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }
