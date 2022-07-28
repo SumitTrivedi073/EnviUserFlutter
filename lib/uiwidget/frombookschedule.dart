@@ -62,13 +62,18 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           ),
                           Flexible(
                               child: Wrap(children: [
-                            Container(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: robotoTextWidget(
-                                textval: widget.address,
-                                colorval: AppColor.black,
-                                sizeval: 18,
-                                fontWeight: FontWeight.w200,
+                            InkWell(
+                              onTap: (){
+
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: robotoTextWidget(
+                                  textval: widget.address,
+                                  colorval: AppColor.black,
+                                  sizeval: 18,
+                                  fontWeight: FontWeight.w200,
+                                ),
                               ),
                             ),
                           ]))

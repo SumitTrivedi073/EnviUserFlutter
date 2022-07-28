@@ -1,13 +1,9 @@
-import 'package:envi/UiWidget/cardbanner.dart';
-import 'package:envi/ridehistory/ridehistoryPage.dart';
-import 'package:envi/controller/upcomingrides/upcomingridesPage.dart';
+import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:envi/UiWidget/pageRoutes.dart';
-import 'home/homePage.dart';
 import 'login/login.dart';
 
 void main() {
@@ -31,12 +27,6 @@ class MyApp extends StatelessWidget {
         title: 'Malbork',
         theme: appTheme(),
         home: MainEntryPoint(),
-        routes: {
-          pageRoutes.login: (context) => Loginpage(),
-          pageRoutes.homeMaster: (context) => HomePage(title: "title"),
-          pageRoutes.ridehistories:(context) => RideHistoryPage(),
-          pageRoutes.rideupcoming:(context) => UpcomingRidesPage(),
-        },
       )
     );
   }
