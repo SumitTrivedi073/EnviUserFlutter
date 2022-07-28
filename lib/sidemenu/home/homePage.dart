@@ -1,14 +1,9 @@
-import 'package:envi/UiWidget/frombookschedule.dart';
 import 'package:envi/UiWidget/navigationdrawer.dart';
-import 'package:envi/uiwidget/paymentModeOptionWidget.dart';
-import 'package:envi/uiwidget/timerbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
-import '../uiwidget/mappagescreen.dart';
-
+import '../../uiwidget/mappagescreen.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -35,21 +30,7 @@ class _HomePageState extends State<HomePage> {
             )*/
           ],
         ),
-      ]), /*Column(
-        children: [
-          AppBarWidget(),
-          CardBanner(),
-          Expanded(
-              child: Center(
-            child: FromToWidget(),
-          )),
-          PaymentModeOptionWidget(
-            strpaymentOptions: "qr_code,online,cash",
-            selectedOption: "qr_code",
-          ),
-          TimerButton(),
-        ],
-      ),*/
+      ]),
     );
   }
 }

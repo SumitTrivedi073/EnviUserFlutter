@@ -1,4 +1,6 @@
-import 'package:envi/UiWidget/pageRoutes.dart';
+import 'package:envi/sidemenu/upcomingride/upcomingridesPage.dart';
+import 'package:envi/sidemenu/home/homePage.dart';
+import 'package:envi/sidemenu/ridehistory/ridehistoryPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/uiwidget/sfcompactTextWidget.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +90,12 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(title: 'title')),
+                      (route) => true
+              );
             },
           ),
           ListTile(
@@ -104,7 +111,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
             },
           ),
           const SizedBox(
@@ -129,7 +136,14 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.rideupcoming);
+              closeDrawer();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => UpcomingRidesPage()),
+                      (route) => true
+
+              );
+
             },
           ),
           ListTile(
@@ -145,7 +159,12 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.ridehistories);
+              closeDrawer();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => RideHistoryPage()),
+                      (route) => true
+              );
             },
           ),
           const SizedBox(
@@ -170,7 +189,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
             },
           ),
           const SizedBox(
@@ -189,7 +208,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
             },
           ),
           ListTile(
@@ -205,7 +224,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
             },
           ),
           ListTile(
@@ -221,7 +240,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
             },
           ),
           ListTile(
@@ -237,7 +256,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, pageRoutes.homeMaster);
+              closeDrawer();
             },
           ),
           const SizedBox(
@@ -300,5 +319,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
           ),
         ]);
+  }
+
+  void closeDrawer() {
+    Navigator.pop(context);
   }
 }

@@ -3,8 +3,8 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import '../theme/string.dart';
-import '../web_service/Constant.dart';
 
 class FromToWidget extends StatefulWidget {
   @override
@@ -46,14 +46,30 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                             height: 20,
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
-                          robotoTextWidget(
-                            textval: FromLocationHint,
-                            colorval: AppColor.black,
-                            sizeval: 18,
-                            fontWeight: FontWeight.w200,
-                          ),
+                          Flexible(
+                              child: Wrap(children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SelectPickupDropAddress(
+                                                title: pickUpLocation)),
+                                    (route) => true);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: robotoTextWidget(
+                                  textval: FromLocationHint,
+                                  colorval: AppColor.black,
+                                  sizeval: 18,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ),
+                          ])),
                         ],
                       ),
                     )),
@@ -100,14 +116,30 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                             height: 20,
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
-                          robotoTextWidget(
-                            textval: ToLocationHint,
-                            colorval: AppColor.black,
-                            sizeval: 18,
-                            fontWeight: FontWeight.w200,
-                          ),
+                          Flexible(
+                              child: Wrap(children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SelectPickupDropAddress(
+                                                title: dropLocation)),
+                                    (route) => true);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: robotoTextWidget(
+                                  textval: ToLocationHint,
+                                  colorval: AppColor.black,
+                                  sizeval: 18,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ),
+                          ])),
                         ],
                       ),
                     ))

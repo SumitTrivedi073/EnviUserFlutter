@@ -21,7 +21,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(loginPageBackgroundImage),
+            image: AssetImage(PageBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),
@@ -60,7 +60,15 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
 
   Card ListItem() {
     return Card(
-        elevation: 1,
+        elevation: 4,
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            color: AppColor.border,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -79,14 +87,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      //
-
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(children: const [
             Icon(
-              Icons.nightlife,
+              Icons.nights_stay_sharp,
               color: AppColor.black,
             ),
             robotoTextWidget(
@@ -109,7 +115,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
 
   Container CellRow2() {
     return Container(
-      color: AppColor.lightwhite,
+      color: AppColor.white,
       height: 94,
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
       child: Column(
@@ -126,6 +132,9 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       Icon(
                         Icons.star,
                         color: AppColor.butgreen,
+                      ),
+                      SizedBox(
+                        width: 10,
                       ),
                       robotoTextWidget(
                         textval: "Kempegowda International Airport",
@@ -145,7 +154,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       ),
                       robotoTextWidget(
                         textval: "From Home",
-                        colorval: AppColor.black,
+                        colorval: AppColor.greyblack,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
                       ),
@@ -173,14 +182,14 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 ),
                 robotoTextWidget(
                   textval: "18 Kms",
-                  colorval: AppColor.greyblack,
+                  colorval: AppColor.darkgrey,
                   sizeval: 13.0,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                 ),
               ]),
               const robotoTextWidget(
                 textval: "KA03 SS 4928",
-                colorval: AppColor.greyblack,
+                colorval: AppColor.darkgrey,
                 sizeval: 13.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -201,39 +210,41 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               bottomLeft: Radius.circular(10),
               bottomRight: const Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-              child: const robotoTextWidget(
-                textval: "INVOICE",
-                colorval: AppColor.butgreen,
-                sizeval: 14.0,
-                fontWeight: FontWeight.bold,
-              ),
-              onPressed: () {},
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        Align(
+          alignment: Alignment.center,
+          child: MaterialButton(
+            child: const robotoTextWidget(
+              textval: "INVOICE",
+              colorval: AppColor.butgreen,
+              sizeval: 14.0,
+              fontWeight: FontWeight.bold,
             ),
-          ]),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-              child: const robotoTextWidget(
-                textval: "SUPPORT",
-                colorval: AppColor.butgreen,
-                sizeval: 14.0,
-                fontWeight: FontWeight.bold,
-              ),
-              onPressed: () {},
-            ),
-          ]),
-        ],
-      ),
+            onPressed: () {},
+          ),
+        ),
+        Container(
+          width: 1,
+          color: AppColor.border,
+        ),
+        MaterialButton(
+          child: const robotoTextWidget(
+            textval: "SUPPORT",
+            colorval: AppColor.butgreen,
+            sizeval: 14.0,
+            fontWeight: FontWeight.bold,
+          ),
+          onPressed: () {},
+        ),
+      ]),
     );
   }
 
   Card totalTripHeader() {
     return Card(
       elevation: 5,
+      semanticContainer: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       color: AppColor.detailheader,
       child: Container(
         color: AppColor.detailheader,
@@ -245,60 +256,62 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         ),
         //
 
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-                child: Column(
-              children: const [
-                RotatedBox(
-                  quarterTurns: 3,
-                  child: robotoTextWidget(
-                    textval: "YOUR\nSTATS",
-                    colorval: AppColor.black,
-                    sizeval: 13.0,
-                    fontWeight: FontWeight.normal,
-                  ),
-                )
-              ],
-            )),
-            Expanded(
-                flex: 2,
-                child: Column(
-                  children: const [
-                    robotoTextWidget(
-                      textval: "22",
-                      colorval: AppColor.white,
-                      sizeval: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    robotoTextWidget(
-                      textval: "Rides Taken",
-                      colorval: AppColor.white,
-                      sizeval: 13.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                )),
-            Expanded(
-                flex: 2,
-                child: Column(
-                  children: const [
-                    robotoTextWidget(
-                      textval: "175 Kg",
-                      colorval: AppColor.white,
-                      sizeval: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    robotoTextWidget(
-                      textval: "CO2 Emission Prevented",
-                      colorval: AppColor.white,
-                      sizeval: 13.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                )),
-          ],
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                  child: Column(
+                    children: const [
+                      RotatedBox(
+                        quarterTurns: 3,
+                        child: robotoTextWidget(
+                          textval: "YOUR\nSTATS",
+                          colorval: AppColor.greyblack,
+                          sizeval: 13.0,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      )
+                    ],
+                  )),
+              Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: const [
+                      robotoTextWidget(
+                        textval: "22",
+                        colorval: AppColor.white,
+                        sizeval: 22.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      robotoTextWidget(
+                        textval: "Rides Taken",
+                        colorval: AppColor.lightwhite,
+                        sizeval: 13.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ],
+                  )),
+              Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: const [
+                      robotoTextWidget(
+                        textval: "175 Kg",
+                        colorval: AppColor.white,
+                        sizeval: 22.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      robotoTextWidget(
+                        textval: "CO2 Emission Prevented",
+                        colorval: AppColor.lightwhite,
+                        sizeval: 13.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ],
+                  )),
+            ],
+          ),
         ),
       ),
     );

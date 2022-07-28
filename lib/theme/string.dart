@@ -17,10 +17,11 @@ var PickUp = "Pick up";
 var TitelRideHistory = "Ride History";
 var TitelUpcomingRides = "Upcoming Rides";
 var selectepaymentmode = "please select your payment mode:";
-
 var qrtitel = "QR Code";
 var qrDecription = "Driver will help you locate the code";
-var cashtitel = "Cash";
+var cashTitle = "Cash";
 var cashDecription = "Hand over the cash to driver";
-var onlinetitel = "Pay Online";
+var onlineTitle = "Pay Online";
 var onlineDecription = "UPI, Wallets, and Net Banking";
+var pickUpLocation = "PickUp Location";
+var dropLocation = "Drop Location";

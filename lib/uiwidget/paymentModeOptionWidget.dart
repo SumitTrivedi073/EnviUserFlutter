@@ -190,10 +190,10 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
         title = qrtitel;
         break;
       case "online":
-        title = onlinetitel;
+        title = onlineTitle;
         break;
       case "cash":
-        title = cashtitel;
+        title = cashTitle;
         break;
     }
     return title;
@@ -223,7 +223,7 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
     switch (type) {
       case "qr_code":
         // do something
-        title = "assets/images/qr_code.png";
+        title = "assets/images/payment_qr_code.png";
         break;
       case "online":
         title = "assets/images/payment_online.png";
