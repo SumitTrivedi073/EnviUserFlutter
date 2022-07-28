@@ -58,18 +58,20 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                             height: 20,
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: robotoTextWidget(
-                              textval: widget.address,
-                              colorval: AppColor.black,
-                              sizeval: 18,
-                              fontWeight: FontWeight.w200,
+                          Flexible(
+                              child: Wrap(children: [
+                            Container(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: robotoTextWidget(
+                                textval: widget.address,
+                                colorval: AppColor.black,
+                                sizeval: 18,
+                                fontWeight: FontWeight.w200,
+                              ),
                             ),
-                          ),
-
+                          ]))
                         ],
                       ),
                     )),
