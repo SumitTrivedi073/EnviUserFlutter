@@ -1,13 +1,13 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '../theme/string.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
-  final String  address;
+  final String address;
 
   FromBookScheduleWidget({required this.address});
 
@@ -24,7 +24,6 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -63,8 +62,13 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           Flexible(
                               child: Wrap(children: [
                             InkWell(
-                              onTap: (){
-
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SelectPickupDropAddress(
+                                                title: pickUpLocation)),
+                                    (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.only(right: 8),
@@ -96,7 +100,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        child:  robotoTextWidget(
+                        child: robotoTextWidget(
                           textval: BookNow,
                           colorval: AppColor.black,
                           sizeval: 18.0,
@@ -128,6 +132,4 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
           )),
     );
   }
-
-
 }

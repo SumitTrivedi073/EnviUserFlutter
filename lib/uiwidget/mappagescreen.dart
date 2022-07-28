@@ -114,14 +114,13 @@ class MyMapState extends State {
             ),
           ),
         ),
-        Expanded(
-            child: Align(
+         Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 margin: const EdgeInsets.only(bottom: 10),
                 child: FromBookScheduleWidget(address: Address,),
               ),
-            ))
+            )
       ],
     ));
   }

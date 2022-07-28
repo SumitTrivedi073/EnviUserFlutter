@@ -19,7 +19,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(loginPageBackgroundImage),
+            image: AssetImage(PageBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),
@@ -44,42 +44,57 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         onTap: () {
           //onSelectTripDetailPage(context);
         },
-        child: ListView.builder(
-          //controller: _controller,
-
+        child: ListView.separated(
           itemBuilder: (context, index) {
             return ListItem();
           },
           itemCount: 2,
           padding: const EdgeInsets.all(8),
+          separatorBuilder: (context, index) {
+            return const Divider(
+              thickness: 0.5,
+              indent: 20,
+              endIndent: 20,
+              color: Colors.transparent,
+            );
+          },
         ));
   }
 
   Card ListItem() {
     return Card(
-        elevation: 1,
-        child: Container(
-            color: Colors.transparent,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CellRow1(),
-                  CellRow2(),
-                  CellRow3(),
-                ])));
+      elevation: 4,
+      semanticContainer: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(
+          color: AppColor.border,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CellRow1(),
+            Container(
+              height: 1,
+              color: AppColor.border,
+            ),
+            CellRow2(),
+            Container(
+              height: 1,
+              color: AppColor.border,
+            ),
+            CellRow3(),
+          ]),
+    );
   }
 
   Container CellRow1() {
     return Container(
-      color: AppColor.lightorange,
+      color: AppColor.alfaorange.withOpacity(.3),
       height: 38,
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-      foregroundDecoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          border: Border.all(color: AppColor.border, width: 1.0)),
-      //
-
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -108,62 +123,71 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
 
   Container CellRow2() {
     return Container(
-      color: AppColor.alfaorange.withOpacity(0.1),
-      height: 94,
-      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      robotoTextWidget(
-                        textval: "Kempegowda International Airport",
-                        colorval: AppColor.black,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: const [
-                      robotoTextWidget(
-                        textval: "From Home",
-                        colorval: AppColor.black,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(children: const [
-                robotoTextWidget(
-                  textval: "18 Kms",
-                  colorval: AppColor.greyblack,
-                  sizeval: 13.0,
-                  fontWeight: FontWeight.bold,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(PageBackgroundImage),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        color: AppColor.alfaorange.withOpacity(0.1),
+        height: 94,
+        padding:
+            const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: const [
+                        robotoTextWidget(
+                          textval: "Kempegowda International Airport",
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: const [
+                        robotoTextWidget(
+                          textval: "From Home",
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ]),
-            ],
-          ),
-        ],
+              ],
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children: const [
+                  robotoTextWidget(
+                    textval: "18 Kms",
+                    colorval: AppColor.greyblack,
+                    sizeval: 13.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -173,18 +197,13 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       color: AppColor.white,
       height: 38,
       padding: const EdgeInsets.only(left: 15, right: 15),
-      foregroundDecoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
-          border: Border.all(color: AppColor.border, width: 1.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           MaterialButton(
             child: robotoTextWidget(
               textval: CancelBooking,
-              colorval: AppColor.red,
+              colorval: Color(0xFFED0000),
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),

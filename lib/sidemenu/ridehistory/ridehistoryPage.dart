@@ -21,7 +21,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(loginPageBackgroundImage),
+            image: AssetImage(PageBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),
