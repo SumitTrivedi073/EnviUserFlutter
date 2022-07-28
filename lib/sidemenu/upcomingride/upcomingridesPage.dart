@@ -100,20 +100,22 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         children: [
           Row(children: const [
             Icon(
-              Icons.nightlife,
+              Icons.sunny,
               color: AppColor.black,
+              size: 20.0,
             ),
+            SizedBox(width: 10,),
             robotoTextWidget(
               textval: "Tomorrow, 11:00 AM",
               colorval: AppColor.black,
-              sizeval: 15.0,
+              sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
           ]),
           const robotoTextWidget(
             textval: "₹ ~130",
             colorval: AppColor.black,
-            sizeval: 18.0,
+            sizeval: 14.0,
             fontWeight: FontWeight.bold,
           ),
         ],
