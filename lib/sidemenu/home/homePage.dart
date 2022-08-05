@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: NavigationDrawer(),
       body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-        MyMap(),
+       // MyMap(),
         Column(
           children: [
             AppBarWidget(),

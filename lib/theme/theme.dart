@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'color.dart';
 
@@ -26,6 +27,21 @@ getsmallNetworkImage(context, path) {
             fontSize: 5,
             fontWeight: FontWeight.bold,
             color: AppColor.black),
+      ),
+    );
+  }
+}
+getNetworkImage(context, path) {
+  if (path != null && path != null) {
+    return Image.network(path,height: 100,width: 100, fit: BoxFit.fitWidth);
+  } else {
+    return Container(
+      color: AppColor.white,
+      alignment: Alignment.center,
+      child: SvgPicture.asset(
+        "assets/svg/car-type-sedan.svg",
+width: 100,
+        height: 100,
       ),
     );
   }
