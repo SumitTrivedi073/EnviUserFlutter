@@ -17,17 +17,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavigationDrawer(),
-      body:  Column(
-        children: [
-          AppBarWidget(),
-          CardBanner(),
-          Expanded(child: Center(
-            child: FromToWidget(),
-          )),
-           TimerButton(),
-          DriverDetailWidget()
-        ],
-      ),
       body: Stack(alignment: Alignment.centerRight, children: <Widget>[
         MyMap(),
         Column(
