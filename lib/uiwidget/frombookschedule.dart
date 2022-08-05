@@ -1,12 +1,16 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../theme/string.dart';
-import '../web_service/Constant.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
+  final String address;
+
+  FromBookScheduleWidget({required this.address});
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _FromBookScheduleWidgetPageState();
@@ -14,6 +18,13 @@ class FromBookScheduleWidget extends StatefulWidget {
 
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
+  String Address = PickUp;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +57,30 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                             height: 20,
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
-                          robotoTextWidget(
-                            textval: FromLocationHint,
-                            colorval: AppColor.black,
-                            sizeval: 18,
-                            fontWeight: FontWeight.w200,
-                          ),
+                          Flexible(
+                              child: Wrap(children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SelectPickupDropAddress(
+                                                title: pickUpLocation)),
+                                    (route) => true);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: robotoTextWidget(
+                                  textval: widget.address,
+                                  colorval: AppColor.black,
+                                  sizeval: 18,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ),
+                          ]))
                         ],
                       ),
                     )),
@@ -73,7 +100,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        child:  robotoTextWidget(
+                        child: robotoTextWidget(
                           textval: BookNow,
                           colorval: AppColor.black,
                           sizeval: 18.0,

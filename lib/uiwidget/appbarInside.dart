@@ -48,7 +48,7 @@ class AppBarInsideWidget extends StatelessWidget{
                       alignment: Alignment.center,
                       child: Row(
                         children: [
-                          robotoTextWidget(textval: title,colorval: AppColor.lightwhite,sizeval: 18.0,fontWeight: FontWeight.bold,),
+                          robotoTextWidget(textval: title,colorval: AppColor.lightwhite,sizeval: 18.0,fontWeight: FontWeight.w800,),
                         ],
                       ),
                     ),

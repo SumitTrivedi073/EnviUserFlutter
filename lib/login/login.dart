@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -37,6 +39,24 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkPermission();
+  }
+
+  Future checkPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission != PermissionStatus.granted) {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission != PermissionStatus.granted) {
+        print("permission Approved");
+      }
+      return;
+    }
+   }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       //body
@@ -45,9 +65,7 @@ class _LoginpageState extends State<Loginpage> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: Responsive.isXS(context)
-                ? AssetImage(mobileLoginBackGround)
-                : AssetImage(loginPageBackgroundImage),
+            image: AssetImage(PageBackgroundImage),
             fit: BoxFit.cover,
           ),
         ),
