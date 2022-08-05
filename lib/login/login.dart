@@ -1,11 +1,14 @@
+import 'package:envi/Profile/profilePage.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
+import '../profileAfterlogin/profileAfterloginPage.dart';
 import '../theme/color.dart';
-import '../theme/responsive.dart';
+import '../theme/string.dart';
 import '../web_service/Constant.dart';
 
 class Loginpage extends StatefulWidget {
@@ -18,7 +21,7 @@ class Loginpage extends StatefulWidget {
 class _LoginpageState extends State<Loginpage> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
-  bool _passwordVisible = true;
+  bool _showmobileview = true;
   TextEditingController phoneController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
@@ -86,110 +89,186 @@ class _LoginpageState extends State<Loginpage> {
               ]),
               child: isLoading
                   ? const Center(child: const CircularProgressIndicator())
-                  : Form(
-                      key: _formKey,
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              controller: phoneController,
-                              keyboardType: TextInputType.phone,
-                              maxLength: 10,
-                              style: const TextStyle(color: AppColor.black),
-                              decoration: const InputDecoration(
-                                  hintText: "Please enter phone number",
-                                  hintStyle: TextStyle(color: Colors.black45),
-                                  icon: Icon(Icons.phone_android)),
-                              validator: (value) {
-                                if (value!.isEmpty ||
-                                    !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
-                                        .hasMatch(value)) {
-                                  return 'Please enter valid phone number!';
-                                }
-                                return null;
-                              },
-                            ),
-                            TextFormField(
-                              controller: passwordController,
-                              keyboardType: TextInputType.visiblePassword,
-                              style: const TextStyle(color: AppColor.black),
-                              obscureText: _passwordVisible,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter Password';
-                                }
-                                return null;
-                              },
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                hintText: "Please enter Password",
-                                hintStyle:
-                                    const TextStyle(color: Colors.black45),
-                                icon: const Icon(Icons.lock),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _passwordVisible
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                    //change icon based on boolean value
-                                    color: Theme.of(context).primaryColorDark,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _passwordVisible =
-                                          !_passwordVisible; //change boolean value
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 40.0,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              margin: const EdgeInsets.only(top: 30.0),
-                              child: MaterialButton(
-                                minWidth: double.infinity,
-                                height: 45,
-                                onPressed: () {
-                                  _submit();
-                                },
-                                color: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: const Text(
-                                  "Sign In",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.teal,
-                                  ),
-                                  onPressed: () {},
-                                  child: const Text(
-                                    'Forgot Password',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  : _showmobileview ? loginview() :verifyview(),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+  Form verifyview(){
+    return  Form(
+      key: _formKey,
+      child: Center(
+        child: Column(
+          children: <Widget>[
+robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+            TextFormField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+
+              style: const TextStyle(color: AppColor.black),
+              decoration: const InputDecoration(
+                  hintText: "Please enter OTP",
+                  hintStyle: TextStyle(color: Colors.black45),
+                 ),
+              validator: (value) {
+                if (value!.isEmpty ||
+                    !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
+                        .hasMatch(value)) {
+                  return 'Please enter valid phone number!';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height:15,),
+            Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.teal,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => ProfilePage()),
+                              (Route<dynamic> route) => false);
+                    },
+                    child:  robotoTextWidget(textval: verify, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold)
+                ),
+              ),
+            ),
+            Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.teal,
+                  ),
+                  onPressed: () {},
+                  child:  robotoTextWidget(textval: resend, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold)
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 40.0,
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20.0),
+
+              child: MaterialButton(
+                minWidth: double.infinity,
+                height: 45,
+                onPressed: () {
+
+                    setState(() {
+                      _showmobileview = true;
+                    });
+
+                },
+
+
+                child: robotoTextWidget(textval: numberedit, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Form loginview(){
+    return  Form(
+      key: _formKey,
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            robotoTextWidget(textval: welcome, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.bold),
+            robotoTextWidget(textval: mobilevalidation, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                 Expanded(child:   TextFormField(
+
+readOnly: true,
+                   style: const TextStyle(color: AppColor.black),
+
+                 ),
+                 ),
+
+                SizedBox(width: 5,),
+                 Expanded(
+                   flex:2,child:   TextFormField(
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+
+                  style: const TextStyle(color: AppColor.black),
+                  decoration: const InputDecoration(
+                    hintText: "country code",
+                    hintStyle: TextStyle(color: Colors.black45),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter valid country code!';
+                    }
+                    return null;
+                  },
+                ),
+                ),
+                SizedBox(width: 5,),
+                Expanded(
+                  flex: 5,// wrap your Column in Expanded
+                  child:  TextFormField(
+                    controller: phoneController,
+                    keyboardType: TextInputType.phone,
+
+                    style: const TextStyle(color: AppColor.black),
+                    decoration: const InputDecoration(
+                      hintText: "Please enter phone number",
+                      hintStyle: TextStyle(color: Colors.black45),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty ||
+                          !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
+                              .hasMatch(value)) {
+                        return 'Please enter valid phone number!';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+
+              ],
+            ),
+
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 40.0,
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20.0),
+              margin: const EdgeInsets.only(top: 30.0),
+              child: MaterialButton(
+                minWidth: double.infinity,
+                height: 45,
+                onPressed: () {
+                  if(_showmobileview){
+                    setState(() {
+                      _showmobileview = false;
+                    });
+                  }
+                },
+
+                child:  robotoTextWidget(textval: "Submit", colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold),
+              ),
+            ),
+
           ],
         ),
       ),

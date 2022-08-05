@@ -1,8 +1,6 @@
 import 'package:envi/web_service/ApiConstants.dart' as APICONSTANTS;
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'ApiConfig.dart' as APICONFIG;
-import 'Constant.dart';
 
 const scheme = 'http';
 const host = 'localhost';
