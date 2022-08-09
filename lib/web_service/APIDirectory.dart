@@ -12,9 +12,9 @@ const mobileBaseUrl = '$scheme://$mobileHost:$port';
 
 const deployedLambdaUrl = "";
 
-const qaUrl = 'https://qa-admin-2022.azurewebsites.net';
+const qaUrl = 'https://qausernew.azurewebsites.net';
 
-const productionUrl = 'https://admin22.azurewebsites.net';
+const productionUrl = 'https://envi-user-taxation-v2.azurewebsites.net';
 
 getBaseURL() {
   String baseUrl = deployedLambdaUrl;
@@ -34,4 +34,10 @@ getBaseURL() {
 }
 userLogin() {
   return Uri.parse('${getBaseURL()}/login/adminLogin');
+}
+
+
+
+searchPlace() {
+  return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }

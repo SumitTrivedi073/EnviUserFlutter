@@ -32,7 +32,7 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
 
   var sharedPreferences = await SharedPreferences.getInstance();
 
-  dynamic token = sharedPreferences.getString('token');
+  dynamic token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk3MmEyM2NmLTUxMTktNGNmYi1hMjQ3LWFiMDRiOWZlYjQwMSIsInR5cGVpZCI6MywicGhvbmVOdW1iZXIiOiI4ODg4ODg4ODg4IiwiaWF0IjoxNjU5MzYxODA2fQ.TrOBGvQMsAZtGOPoF_nR2GZw9b35l_WiNpmOqaYcavE';
 
   dynamic extra = additionalHeaders != null ? additionalHeaders : {};
 

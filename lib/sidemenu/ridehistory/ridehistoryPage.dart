@@ -254,8 +254,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         foregroundDecoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
-        //
-
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
