@@ -1,13 +1,11 @@
 import 'dart:convert';
-
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/web_service/APIDirectory.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:envi/web_service/HTTP.dart' as HTTP;
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -27,48 +25,53 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<SearchPlaceModel> searchPlaceList = [];
   bool showTripDetail = false;
   bool _isFirstLoadRunning = false;
+  bool isFrom = false;
+  bool _isVisible = false;
   late SharedPreferences sharedPreferences;
-  String Searchtext = "";
+  String SearchFromLocation = "",SearchToLocation = "";
+  TextEditingController FromLocationText = TextEditingController();
+  TextEditingController ToLocationText = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   void dispose() {
     super.dispose();
-
   }
 
   void _firstLoad() async {
-    sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       _isFirstLoadRunning = true;
     });
-    Map data = {
-      "search": Searchtext.toString(),
-    };
-    dynamic res = await HTTP.post(searchPlace(),data);
-    /*headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        }*/
-    if(res!=null && res.statusCode!=null) {
+    Map data;
+    if(isFrom) {
+      data = {
+        "search": SearchFromLocation.toString(),
+      };
+    }else {
+      data = {
+        "search": SearchToLocation.toString(),
+      };
+    }
+    dynamic res = await HTTP.post(searchPlace(), data);
+    if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
         setState(() {
-          searchPlaceList = (jsonDecode(res.body)['content']  as List)
+          searchPlaceList = (jsonDecode(res.body)['content'] as List)
               .map((i) => SearchPlaceModel.fromJson(i))
-              .toList();});
+              .toList();
+        });
       } else {
         setState(() {
           _isFirstLoadRunning = false;
         });
         throw "Can't get places List";
       }
-    }else {
+    } else {
       setState(() {
         _isFirstLoadRunning = false;
       });
@@ -77,7 +80,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     setState(() {
       _isFirstLoadRunning = false;
     });
-
   }
 
   @override
@@ -102,126 +104,193 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(left: 5, right: 5),
-                          child: driverSearchBox(),
+                          child: EditFromToWidget(),
                         )),
                   ],
                 )),
-        Expanded(
-          child: _isFirstLoadRunning
-              ? const Center(
-            child: CircularProgressIndicator(),
-          )
-              : Container(
-              margin: const EdgeInsets.only(right: 10.0),
-              child: _buildPosts(context))),
-          /*  Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(children: <Widget>[
-                  Container(
-                      margin: const EdgeInsets.only(right: 10.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 5, right: 5),
-                                child: driverSearchBox(),
-                              )),
-                        ],
-                      )),
-                  Expanded(
-                    child: _isFirstLoadRunning
-                        ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                        : Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: RefreshIndicator(
-                            onRefresh: () {
-                              return Future.delayed(const Duration(seconds: 1), () {
-                                pullToRefresh();
-                              });
-                            },
-                            child: _buildPosts(context))),
-                  ),
-                  // when the _loadMore function is running
-                  // When nothing else to load
-                  if (_hasNextPage == false)
-                    Container(
-                      padding: const EdgeInsets.only(top: 30, bottom: 40),
-                      color: Colors.green,
-                      child: const Center(
-                        child: Text(
-                          'You have fetched all of the content',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                ]))*/
+            Expanded(
+                child: _isFirstLoadRunning
+                    ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+                    : Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    child: _buildPosts(context))),
           ],
         ),
       ),
     );
   }
 
-  ListView _buildPosts(BuildContext context) {
-    return ListView.builder(
+  Visibility _buildPosts(BuildContext context) {
+    return
+      Visibility (
+        visible: _isVisible,
+        child:
+        ListView.builder(
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 4,
-          child: ListTile(
-            title: robotoTextWidget(
-              textval: searchPlaceList[index].title,
-              colorval: AppColor.black,
-              sizeval: 14.0,
-              fontWeight: FontWeight.w800,
-            ),
-            subtitle: robotoTextWidget(
-              textval: searchPlaceList[index].address,
-              colorval: AppColor.black,
-              sizeval: 12.0,
-              fontWeight: FontWeight.w400,
-            ),
-            leading:  Container(
-              width: 20,
-              height: 20,
-              child:  SvgPicture.asset(
+        return  Card(
+            elevation: 4,
+            child: Padding(padding: EdgeInsets.all(10),
+            child: ListTile(
+              title: robotoTextWidget(
+                textval: searchPlaceList[index].title,
+                colorval: AppColor.black,
+                sizeval: 14.0,
+                fontWeight: FontWeight.w800,
+              ),
+              subtitle: robotoTextWidget(
+                textval: searchPlaceList[index].address,
+                colorval: AppColor.black,
+                sizeval: 12.0,
+                fontWeight: FontWeight.w400,
+              ),
+              leading: SvgPicture.asset(
                 "assets/svg/to-location-img.svg",
                 width: 20,
                 height: 20,
               ),
-            ),
-            onTap: () {},
-          ),
-        );
+              onTap: () {
+                setState(() {
+                  if(isFrom){
+                    FromLocationText.text =  searchPlaceList[index].address;
+                  }else{
+                    ToLocationText.text =  searchPlaceList[index].address;
+                  }
+                  _isVisible = !_isVisible;
+                });
+
+              },
+            ),),
+          );
+
       },
       itemCount: searchPlaceList.length,
       padding: const EdgeInsets.all(8),
-    );
+    ));
   }
 
-  TextField driverSearchBox() {
-    return TextField(
-      // controller: Tolocation,
-
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-        hintText: "Search",
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey,
-          ),
+  Card EditFromToWidget() {
+    return Card(
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.greenAccent)),
-      ),
-      onChanged: (String? str) {
-        setState(() {
-          Searchtext = str!;
-        });
-        _firstLoad();
-      },
-    );
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              GestureDetector(
+                  onTap: () {
+                    print("Tapped a Container");
+                  },
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/svg/from-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Flexible(
+                            child: Wrap(children: [
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                                  child: FromTextWidget(),
+                                ),
+                              ),
+                            ])),
+                      ],
+                    ),
+                  )),
+              Container(
+                margin: const EdgeInsets.only(left: 10, right: 10),
+                height: 1,
+                color: AppColor.grey,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    print("Tapped a Container");
+                  },
+                  child: Container(
+                    height: 50,
+                    margin: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/svg/to-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Flexible(
+                            child: Wrap(children: [
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                                  child: ToTextWidget(),
+                                ),
+                              ),
+                            ])),
+                      ],
+                    ),
+                  ))
+            ],
+          ),
+        ));
   }
 
+  TextFormField FromTextWidget() {
+    return TextFormField(
+        controller: FromLocationText,
+        decoration: const InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+             hintText: 'Select From Location'),
+        style: const TextStyle(
+            color: AppColor.black, fontSize: 18, fontWeight: FontWeight.w200),
+        onChanged: (String? str) {
+          setState(() {
+            SearchFromLocation = str!;
+          });
+          isFrom = true;
+         _firstLoad();
+          _isVisible = !_isVisible;
+        });
+  }
+
+  TextFormField ToTextWidget() {
+    return TextFormField(
+        controller: ToLocationText,
+        decoration: const InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            hintText: 'Select To Location'),
+        style: const TextStyle(
+            color: AppColor.black, fontSize: 18, fontWeight: FontWeight.w200),
+        onChanged: (String? str) {
+          setState(() {
+            SearchToLocation = str!;
+          });
+          isFrom = false;
+        _firstLoad();
+          _isVisible = !_isVisible;
+        });
+  }
 }

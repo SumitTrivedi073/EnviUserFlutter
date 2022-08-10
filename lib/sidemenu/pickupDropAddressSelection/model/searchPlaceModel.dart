@@ -13,21 +13,19 @@ class SearchPlaceModel {
     required this.id,
     required this.address,
     required this.title,
-    required this.count,
     required this.location,
   });
 
   String id;
   String address;
   String title;
-  int count;
   Location location;
 
   factory SearchPlaceModel.fromJson(Map<String, dynamic> json) => SearchPlaceModel(
     id: json["_id"],
     address: json["address"],
     title: json["title"],
-    count: json["count"],
+
     location: Location.fromJson(json["location"]),
   );
 
@@ -35,7 +33,6 @@ class SearchPlaceModel {
     "_id": id,
     "address": address,
     "title": title,
-    "count": count,
     "location": location.toJson(),
   };
 }

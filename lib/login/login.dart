@@ -6,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
-import '../profileAfterlogin/profileAfterloginPage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../web_service/Constant.dart';
@@ -57,7 +56,7 @@ class _LoginpageState extends State<Loginpage> {
       }
       return;
     }
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,29 +88,35 @@ class _LoginpageState extends State<Loginpage> {
               ]),
               child: isLoading
                   ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview ? loginview() :verifyview(),
+                  : _showmobileview
+                      ? loginview()
+                      : verifyview(),
             ),
           ],
         ),
       ),
     );
   }
-  Form verifyview(){
-    return  Form(
+
+  Form verifyview() {
+    return Form(
       key: _formKey,
       child: Center(
         child: Column(
           children: <Widget>[
-robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+            robotoTextWidget(
+                textval: verifymsg,
+                colorval: AppColor.black,
+                sizeval: 17.0,
+                fontWeight: FontWeight.normal),
             TextFormField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
-                  hintText: "Please enter OTP",
-                  hintStyle: TextStyle(color: Colors.black45),
-                 ),
+                hintText: "Please enter OTP",
+                hintStyle: TextStyle(color: Colors.black45),
+              ),
               validator: (value) {
                 if (value!.isEmpty ||
                     !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
@@ -121,10 +126,11 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
                 return null;
               },
             ),
-            SizedBox(height:15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
@@ -135,45 +141,48 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) => ProfilePage()),
-                              (Route<dynamic> route) => false);
+                          (Route<dynamic> route) => false);
                     },
-                    child:  robotoTextWidget(textval: verify, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold)
-                ),
+                    child: robotoTextWidget(
+                        textval: verify,
+                        colorval: AppColor.butgreen,
+                        sizeval: 17.0,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.teal,
-                  ),
-                  onPressed: () {},
-                  child:  robotoTextWidget(textval: resend, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold)
-                ),
+                    style: TextButton.styleFrom(
+                      primary: Colors.teal,
+                    ),
+                    onPressed: () {},
+                    child: robotoTextWidget(
+                        textval: resend,
+                        colorval: AppColor.butgreen,
+                        sizeval: 17.0,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40.0,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
-
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: MaterialButton(
                 minWidth: double.infinity,
                 height: 45,
                 onPressed: () {
-
-                    setState(() {
-                      _showmobileview = true;
-                    });
-
+                  setState(() {
+                    _showmobileview = true;
+                  });
                 },
-
-
-                child: robotoTextWidget(textval: numberedit, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold),
+                child: robotoTextWidget(
+                    textval: numberedit,
+                    colorval: AppColor.butgreen,
+                    sizeval: 17.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -181,53 +190,62 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
       ),
     );
   }
-  Form loginview(){
-    return  Form(
+
+  Form loginview() {
+    return Form(
       key: _formKey,
       child: Center(
         child: Column(
           children: <Widget>[
-            robotoTextWidget(textval: welcome, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.bold),
-            robotoTextWidget(textval: mobilevalidation, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+            robotoTextWidget(
+                textval: welcome,
+                colorval: AppColor.black,
+                sizeval: 17.0,
+                fontWeight: FontWeight.bold),
+            robotoTextWidget(
+                textval: mobilevalidation,
+                colorval: AppColor.black,
+                sizeval: 17.0,
+                fontWeight: FontWeight.normal),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                 Expanded(child:   TextFormField(
-
-readOnly: true,
-                   style: const TextStyle(color: AppColor.black),
-
-                 ),
-                 ),
-
-                SizedBox(width: 5,),
-                 Expanded(
-                   flex:2,child:   TextFormField(
-                  controller: phoneController,
-                  keyboardType: TextInputType.phone,
-
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: const InputDecoration(
-                    hintText: "country code",
-                    hintStyle: TextStyle(color: Colors.black45),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter valid country code!';
-                    }
-                    return null;
-                  },
-                ),
-                ),
-                SizedBox(width: 5,),
                 Expanded(
-                  flex: 5,// wrap your Column in Expanded
-                  child:  TextFormField(
+                  child: TextFormField(
+                    readOnly: true,
+                    style: const TextStyle(color: AppColor.black),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
-
+                    style: const TextStyle(color: AppColor.black),
+                    decoration: const InputDecoration(
+                      hintText: "country code",
+                      hintStyle: TextStyle(color: Colors.black45),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter valid country code!';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 5, // wrap your Column in Expanded
+                  child: TextFormField(
+                    controller: phoneController,
+                    keyboardType: TextInputType.phone,
                     style: const TextStyle(color: AppColor.black),
                     decoration: const InputDecoration(
                       hintText: "Please enter phone number",
@@ -243,32 +261,30 @@ readOnly: true,
                     },
                   ),
                 ),
-
-
               ],
             ),
-
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40.0,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               margin: const EdgeInsets.only(top: 30.0),
               child: MaterialButton(
                 minWidth: double.infinity,
                 height: 45,
                 onPressed: () {
-                  if(_showmobileview){
+                  if (_showmobileview) {
                     setState(() {
                       _showmobileview = false;
                     });
                   }
                 },
-
-                child:  robotoTextWidget(textval: "Submit", colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold),
+                child: robotoTextWidget(
+                    textval: "Submit",
+                    colorval: AppColor.butgreen,
+                    sizeval: 17.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
-
           ],
         ),
       ),
