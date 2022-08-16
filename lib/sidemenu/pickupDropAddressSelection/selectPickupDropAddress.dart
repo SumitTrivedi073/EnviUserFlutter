@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
+import 'package:envi/theme/string.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
@@ -24,11 +26,9 @@ class SelectPickupDropAddress extends StatefulWidget {
 class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<SearchPlaceModel> searchPlaceList = [];
   bool showTripDetail = false;
-  bool _isFirstLoadRunning = false;
   bool isFrom = false;
-  bool _isVisible = false;
   late SharedPreferences sharedPreferences;
-  String SearchFromLocation = "",SearchToLocation = "";
+  String SearchFromLocation = "", SearchToLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   TextEditingController ToLocationText = TextEditingController();
 
@@ -36,6 +36,16 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    FromLocationText.addListener(() {
+      isFrom = true;
+      _firstLoad();
+    });
+
+    ToLocationText.addListener(() {
+      isFrom = false;
+      _firstLoad();
+    });
   }
 
   @override
@@ -43,20 +53,18 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     super.dispose();
   }
 
-  void _firstLoad() async {
-    setState(() {
-      _isFirstLoadRunning = true;
-    });
+  _firstLoad() async {
     Map data;
-    if(isFrom) {
+    if (isFrom) {
       data = {
-        "search": SearchFromLocation.toString(),
+        "search": FromLocationText.text,
       };
-    }else {
+    } else {
       data = {
-        "search": SearchToLocation.toString(),
+        "search": ToLocationText.text,
       };
     }
+    print(searchPlace());
     dynamic res = await HTTP.post(searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
@@ -66,20 +74,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               .toList();
         });
       } else {
-        setState(() {
-          _isFirstLoadRunning = false;
-        });
-        throw "Can't get places List";
+        throw "can't get places list";
       }
-    } else {
-      setState(() {
-        _isFirstLoadRunning = false;
-      });
-      throw "Can't get places List";
     }
-    setState(() {
-      _isFirstLoadRunning = false;
-    });
+    ;
   }
 
   @override
@@ -98,76 +96,83 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               title: widget.title,
             ),
             Container(
-                margin: const EdgeInsets.only(right: 10.0),
-                child: Row(
+                margin: const EdgeInsets.only(left: 5, right: 5),
+                child: Column(
                   children: [
-                    Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 5, right: 5),
-                          child: EditFromToWidget(),
-                        )),
+                    EditFromToWidget(),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: ListTile(
+                              title: robotoTextWidget(
+                                textval: searchPlaceList[index].title,
+                                colorval: AppColor.black,
+                                sizeval: 14.0,
+                                fontWeight: FontWeight.w800,
+                              ),
+                              subtitle: robotoTextWidget(
+                                textval: searchPlaceList[index].address,
+                                colorval: AppColor.black,
+                                sizeval: 12.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              leading: SvgPicture.asset(
+                                "assets/svg/to-location-img.svg",
+                                width: 20,
+                                height: 20,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  if (isFrom) {
+                                    FromLocationText.text =
+                                        searchPlaceList[index].address;
+                                  } else {
+                                    ToLocationText.text =
+                                        searchPlaceList[index].address;
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: searchPlaceList.length,
+                      padding: const EdgeInsets.all(8),
+                    )
                   ],
                 )),
             Expanded(
-                child: _isFirstLoadRunning
-                    ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-                    : Container(
-                    margin: const EdgeInsets.only(right: 10.0),
-                    child: _buildPosts(context))),
+                child: Align(
+              alignment: Alignment.bottomCenter,
+              child:
+              Container(
+                height: 40,
+                margin: EdgeInsets.all(5),
+                width: double.infinity,
+                child:ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  primary: AppColor.greyblack,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                ),
+                child: const robotoTextWidget(
+                  textval: 'CONTINUE',
+                  colorval: AppColor.white,
+                  sizeval: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              )),
+            )),
           ],
         ),
       ),
     );
-  }
-
-  Visibility _buildPosts(BuildContext context) {
-    return
-      Visibility (
-        visible: _isVisible,
-        child:
-        ListView.builder(
-      itemBuilder: (context, index) {
-        return  Card(
-            elevation: 4,
-            child: Padding(padding: EdgeInsets.all(10),
-            child: ListTile(
-              title: robotoTextWidget(
-                textval: searchPlaceList[index].title,
-                colorval: AppColor.black,
-                sizeval: 14.0,
-                fontWeight: FontWeight.w800,
-              ),
-              subtitle: robotoTextWidget(
-                textval: searchPlaceList[index].address,
-                colorval: AppColor.black,
-                sizeval: 12.0,
-                fontWeight: FontWeight.w400,
-              ),
-              leading: SvgPicture.asset(
-                "assets/svg/to-location-img.svg",
-                width: 20,
-                height: 20,
-              ),
-              onTap: () {
-                setState(() {
-                  if(isFrom){
-                    FromLocationText.text =  searchPlaceList[index].address;
-                  }else{
-                    ToLocationText.text =  searchPlaceList[index].address;
-                  }
-                  _isVisible = !_isVisible;
-                });
-
-              },
-            ),),
-          );
-
-      },
-      itemCount: searchPlaceList.length,
-      padding: const EdgeInsets.all(8),
-    ));
   }
 
   Card EditFromToWidget() {
@@ -201,16 +206,16 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         ),
                         Flexible(
                             child: Wrap(children: [
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  margin:
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.only(right: 8),
+                              margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                                  child: FromTextWidget(),
-                                ),
-                              ),
-                            ])),
+                              child: FromTextWidget(),
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   )),
@@ -238,16 +243,16 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         ),
                         Flexible(
                             child: Wrap(children: [
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  margin:
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.only(right: 8),
+                              margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                                  child: ToTextWidget(),
-                                ),
-                              ),
-                            ])),
+                              child: ToTextWidget(),
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   ))
@@ -256,41 +261,39 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         ));
   }
 
-  TextFormField FromTextWidget() {
-    return TextFormField(
-        controller: FromLocationText,
-        decoration: const InputDecoration(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-             hintText: 'Select From Location'),
-        style: const TextStyle(
-            color: AppColor.black, fontSize: 18, fontWeight: FontWeight.w200),
-        onChanged: (String? str) {
-          setState(() {
-            SearchFromLocation = str!;
-          });
-          isFrom = true;
-         _firstLoad();
-          _isVisible = !_isVisible;
-        });
+  TextField FromTextWidget() {
+    return TextField(
+      controller: FromLocationText,
+      decoration: InputDecoration(
+        hintText: FromLocationHint,
+        border: InputBorder.none,
+        focusColor: Colors.white,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.cancel),
+          onPressed: () {
+            FromLocationText.clear();
+          },
+        ),
+      ),
+    );
   }
 
-  TextFormField ToTextWidget() {
-    return TextFormField(
-        controller: ToLocationText,
-        decoration: const InputDecoration(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            hintText: 'Select To Location'),
-        style: const TextStyle(
-            color: AppColor.black, fontSize: 18, fontWeight: FontWeight.w200),
-        onChanged: (String? str) {
-          setState(() {
-            SearchToLocation = str!;
-          });
-          isFrom = false;
-        _firstLoad();
-          _isVisible = !_isVisible;
-        });
+  TextField ToTextWidget() {
+    return TextField(
+      controller: ToLocationText,
+      decoration: InputDecoration(
+        hintText: ToLocationHint,
+        border: InputBorder.none,
+        focusColor: Colors.white,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.cancel),
+          onPressed: () {
+            ToLocationText.clear();
+          },
+        ),
+      ),
+    );
   }
 }

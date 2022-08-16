@@ -1,4 +1,5 @@
 import 'package:envi/sidemenu/home/homePage.dart';
+import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/Constant.dart';
@@ -48,7 +49,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString(LoginID) == null) {
+   /*if (sharedPreferences.getString(LoginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
@@ -57,7 +58,13 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           MaterialPageRoute(
               builder: (BuildContext context) => const HomePage(title: "title")),
               (Route<dynamic> route) => false);
-    }
+    }*/
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (BuildContext context) =>  PickerDemo()),
+            (Route<dynamic> route) => false);
+
   }
 
   @override
