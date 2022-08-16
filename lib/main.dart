@@ -62,7 +62,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (BuildContext context) =>  PickerDemo()),
+            builder: (BuildContext context) => const HomePage(title: "title")),
             (Route<dynamic> route) => false);
 
   }

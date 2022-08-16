@@ -28,11 +28,6 @@ class PickerDemoState extends State<PickerDemo> {
   }
 
   _onChanged() {
-   /* if (_sessionToken == null) {
-      setState(() {
-        _sessionToken = uuid.v4();
-      });
-    }*/
     getSuggestion(_controller.text);
   }
 

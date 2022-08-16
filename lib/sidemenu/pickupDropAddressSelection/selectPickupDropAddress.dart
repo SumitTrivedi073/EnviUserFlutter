@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/web_service/APIDirectory.dart';
-import 'package:envi/web_service/HTTP.dart' as HTTP;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:uuid/uuid.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -25,18 +26,23 @@ class SelectPickupDropAddress extends StatefulWidget {
 
 class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<SearchPlaceModel> searchPlaceList = [];
+  List<dynamic>_placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
   late SharedPreferences sharedPreferences;
   String SearchFromLocation = "", SearchToLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   TextEditingController ToLocationText = TextEditingController();
+  late String _sessionToken;
+  var uuid = new Uuid();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    setState(() {
+      _sessionToken = uuid.v4();
+    });
     FromLocationText.addListener(() {
       isFrom = true;
       _firstLoad();
@@ -64,20 +70,61 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         "search": ToLocationText.text,
       };
     }
-    print(searchPlace());
     dynamic res = await HTTP.post(searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
+
         setState(() {
-          searchPlaceList = (jsonDecode(res.body)['content'] as List)
-              .map((i) => SearchPlaceModel.fromJson(i))
-              .toList();
+          if((jsonDecode(res.body)['content'] as List).length>0) {
+            print("Response===>" + res.body);
+            searchPlaceList = (jsonDecode(res.body)['content'] as List)
+                .map((i) => SearchPlaceModel.fromJson(i))
+                .toList();
+          }else{
+            googleAPI();
+          }
         });
       } else {
-        throw "can't get places list";
+       googleAPI();
       }
+    } else{
+      googleAPI();
     }
-    ;
+  }
+  void googleAPI() {
+    if (isFrom) {
+      getSuggestion(FromLocationText.text);
+    } else {
+      getSuggestion(ToLocationText.text);
+    }
+  }
+
+  void getSuggestion(String input) async {
+    String kPLACES_API_KEY = "AIzaSyAMnSO4iTYphqjRAnu80OG0FNLt1mvQe3c";
+    String type = '(regions)';
+    String baseURL =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+    String request =
+        '$baseURL?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
+    var url = Uri.parse(request);
+    dynamic response = await HTTP.get(url);
+    if (response != null && response != null) {
+      if (response.statusCode == 200) {
+      setState(() {
+        print(json.decode(response.body));
+        print(json.decode(response.body)['predictions']);
+        _placeList = json.decode(response.body)['predictions'];
+        for (var i = 0; i < _placeList.length; i++) {
+          searchPlaceList.add(SearchPlaceModel(id: _placeList[i]["description"],
+              address: _placeList[i]["description"],
+              title: _placeList[i]["description"]));
+
+        }
+      });
+    } else {
+      throw Exception('Failed to load predictions');
+    }
+  }
   }
 
   @override
@@ -100,75 +147,73 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 child: Column(
                   children: [
                     EditFromToWidget(),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: ListTile(
-                              title: robotoTextWidget(
-                                textval: searchPlaceList[index].title,
-                                colorval: AppColor.black,
-                                sizeval: 14.0,
-                                fontWeight: FontWeight.w800,
-                              ),
-                              subtitle: robotoTextWidget(
-                                textval: searchPlaceList[index].address,
-                                colorval: AppColor.black,
-                                sizeval: 12.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              leading: SvgPicture.asset(
-                                "assets/svg/to-location-img.svg",
-                                width: 20,
-                                height: 20,
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  if (isFrom) {
-                                    FromLocationText.text =
-                                        searchPlaceList[index].address;
-                                  } else {
-                                    ToLocationText.text =
-                                        searchPlaceList[index].address;
-                                  }
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: searchPlaceList.length,
-                      padding: const EdgeInsets.all(8),
-                    )
                   ],
                 )),
-            Expanded(
-                child: Align(
-              alignment: Alignment.bottomCenter,
-              child:
-              Container(
-                height: 40,
-                margin: EdgeInsets.all(5),
-                width: double.infinity,
-                child:ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  primary: AppColor.greyblack,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
-                  ),
-                ),
-                child: const robotoTextWidget(
-                  textval: 'CONTINUE',
-                  colorval: AppColor.white,
-                  sizeval: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+              Expanded(child:  ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ListTile(
+                        title: robotoTextWidget(
+                          textval: searchPlaceList[index].title,
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        subtitle: robotoTextWidget(
+                          textval: searchPlaceList[index].address,
+                          colorval: AppColor.black,
+                          sizeval: 12.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        leading: SvgPicture.asset(
+                          "assets/svg/to-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        onTap: () {
+                          setState(() {
+                            if (isFrom) {
+                              FromLocationText.text =
+                                  searchPlaceList[index].address;
+                            } else {
+                              ToLocationText.text =
+                                  searchPlaceList[index].address;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  );
+                },
+                itemCount: searchPlaceList.length,
+                padding: const EdgeInsets.all(8),
               )),
-            )),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                  height: 40,
+                  margin: EdgeInsets.all(5),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.greyblack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                    ),
+                    child: const robotoTextWidget(
+                      textval: 'CONTINUE',
+                      colorval: AppColor.white,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+            ),
           ],
         ),
       ),
@@ -296,4 +341,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       ),
     );
   }
+
+
 }
