@@ -2,12 +2,18 @@ import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/Constant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login/login.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
+  await Firebase.initializeApp();
+
+// Ideal time to initialize
+ // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 }
 
 class MyApp extends StatelessWidget {

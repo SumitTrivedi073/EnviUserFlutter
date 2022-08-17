@@ -1,12 +1,12 @@
 import 'package:envi/Profile/profilePage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
-import '../profileAfterlogin/profileAfterloginPage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../web_service/Constant.dart';
@@ -22,9 +22,12 @@ class _LoginpageState extends State<Loginpage> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _showmobileview = true;
+  String? verificationId;
   TextEditingController phoneController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
-
+  TextEditingController plushcontroller = new TextEditingController();
+  TextEditingController countrycontroller = new TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
@@ -46,6 +49,8 @@ class _LoginpageState extends State<Loginpage> {
     // TODO: implement initState
     super.initState();
     checkPermission();
+    plushcontroller.text = "+";
+    countrycontroller.text = "91";
   }
 
   Future checkPermission() async {
@@ -195,7 +200,7 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
               children: [
 
                  Expanded(child:   TextFormField(
-
+controller: plushcontroller,
 readOnly: true,
                    style: const TextStyle(color: AppColor.black),
 
@@ -205,7 +210,7 @@ readOnly: true,
                 SizedBox(width: 5,),
                  Expanded(
                    flex:2,child:   TextFormField(
-                  controller: phoneController,
+                  controller: countrycontroller,
                   keyboardType: TextInputType.phone,
 
                   style: const TextStyle(color: AppColor.black),
@@ -260,6 +265,7 @@ readOnly: true,
                 onPressed: () {
                   if(_showmobileview){
                     setState(() {
+                      phoneSignIn(phoneNumber: "+${countrycontroller.text}${plushcontroller.text}");
                       _showmobileview = false;
                     });
                   }
@@ -273,5 +279,78 @@ readOnly: true,
         ),
       ),
     );
+  }
+  Future<void> phoneSignIn({required String phoneNumber}) async {
+    await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: _onVerificationCompleted,
+        verificationFailed: _onVerificationFailed,
+        codeSent: _onCodeSent,
+        codeAutoRetrievalTimeout: _onCodeTimeout);
+  }
+
+  _onVerificationCompleted(PhoneAuthCredential authCredential) async {
+    print("verification completed ${authCredential.smsCode}");
+    User? user = FirebaseAuth.instance.currentUser;
+    setState(() {
+     // this.otpCode.text = authCredential.smsCode!;
+    });
+    if (authCredential.smsCode != null) {
+      try{
+        UserCredential credential =
+        await user!.linkWithCredential(authCredential);
+      }on FirebaseAuthException catch(e){
+        if(e.code == 'provider-already-linked'){
+          await _auth.signInWithCredential(authCredential);
+        }
+      }
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) => ProfilePage()),
+              (Route<dynamic> route) => false);
+    }
+  }
+
+  _onVerificationFailed(FirebaseAuthException exception) {
+    if (exception.code == 'invalid-phone-number') {
+      showMessage("The phone number entered is invalid!");
+    }
+  }
+
+  _onCodeSent(String verificationId, int? forceResendingToken) {
+    this.verificationId = verificationId;
+    print(forceResendingToken);
+    print("code sent");
+  }
+
+  _onCodeTimeout(String timeout) {
+    print(timeout);
+    return null;
+  }
+
+  void showMessage(String errorMessage) {
+    showDialog(
+        context: context,
+        builder: (BuildContext builderContext) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text(errorMessage),
+            actions: [
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () async {
+                  Navigator.of(builderContext).pop();
+                },
+              )
+            ],
+          );
+        }).then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 }
