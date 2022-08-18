@@ -9,11 +9,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login/login.dart';
 
 Future<void> main() async {
-  runApp(const MyApp());
+WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+ //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  runApp(const MyApp());
+
 
 // Ideal time to initialize
- // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
 }
 
 class MyApp extends StatelessWidget {

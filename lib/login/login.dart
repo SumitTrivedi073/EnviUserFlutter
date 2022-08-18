@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:envi/Profile/profilePage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -20,14 +23,17 @@ class Loginpage extends StatefulWidget {
 
 class _LoginpageState extends State<Loginpage> {
   var _formKey = GlobalKey<FormState>();
+  var _formKeyofrverify = GlobalKey<FormState>();
   var isLoading = false;
   bool _showmobileview = true;
-  String? verificationId;
+  String loginverificationId ="";
   TextEditingController phoneController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController otpController = new TextEditingController();
   TextEditingController plushcontroller = new TextEditingController();
   TextEditingController countrycontroller = new TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  late Timer _timer;
+  int _start = 60;
   Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
@@ -45,12 +51,13 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
     super.initState();
     checkPermission();
     plushcontroller.text = "+";
     countrycontroller.text = "91";
+
   }
 
   Future checkPermission() async {
@@ -101,15 +108,20 @@ class _LoginpageState extends State<Loginpage> {
       ),
     );
   }
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
   Form verifyview(){
     return  Form(
-      key: _formKey,
+      key: _formKeyofrverify,
       child: Center(
         child: Column(
           children: <Widget>[
-robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
             TextFormField(
-              controller: phoneController,
+              controller: otpController,
               keyboardType: TextInputType.phone,
 
               style: const TextStyle(color: AppColor.black),
@@ -118,10 +130,8 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
                   hintStyle: TextStyle(color: Colors.black45),
                  ),
               validator: (value) {
-                if (value!.isEmpty ||
-                    !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
-                        .hasMatch(value)) {
-                  return 'Please enter valid phone number!';
+                if (value!.isEmpty) {
+                  return 'Please enter valid OTP!';
                 }
                 return null;
               },
@@ -137,16 +147,18 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
                       primary: Colors.teal,
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => ProfilePage()),
-                              (Route<dynamic> route) => false);
+                      final isValid = _formKeyofrverify.currentState!.validate();
+                      if (!isValid) {
+                        return;
+                      }
+                      _formKeyofrverify.currentState!.save();
+                      verifyotp();
                     },
-                    child:  robotoTextWidget(textval: verify, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold)
+                    child:  robotoTextWidget(textval: verify, colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold)
                 ),
               ),
             ),
-            Container(
+             Container(
               padding:
               const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
@@ -155,20 +167,24 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
                   style: TextButton.styleFrom(
                     primary: Colors.teal,
                   ),
-                  onPressed: () {},
-                  child:  robotoTextWidget(textval: resend, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold)
+                  onPressed: () {
+                    if(_start<0){
+                      fetchotp(phoneNumber: "+${countrycontroller.text}${phoneController.text}");
+                    }
+                  },
+                  child: _start<0? robotoTextWidget(textval: resend, colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold):robotoTextWidget(textval: "00:$_start", colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold)
                 ),
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 40.0,
+              height: 20.0,
               padding:
               const EdgeInsets.symmetric(horizontal: 20.0),
 
               child: MaterialButton(
                 minWidth: double.infinity,
-                height: 45,
+                height: 25,
                 onPressed: () {
 
                     setState(() {
@@ -178,7 +194,7 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
                 },
 
 
-                child: robotoTextWidget(textval: numberedit, colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold),
+                child: robotoTextWidget(textval: numberedit, colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -192,8 +208,8 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 17.0, fo
       child: Center(
         child: Column(
           children: <Widget>[
-            robotoTextWidget(textval: welcome, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.bold),
-            robotoTextWidget(textval: mobilevalidation, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+            robotoTextWidget(textval: welcome, colorval: AppColor.black, sizeval: 20.0, fontWeight: FontWeight.bold),
+            robotoTextWidget(textval: mobilevalidation, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,15 +279,21 @@ readOnly: true,
                 minWidth: double.infinity,
                 height: 45,
                 onPressed: () {
+                  final isValid = _formKey.currentState!.validate();
+                  if (!isValid) {
+                    return;
+                  }
+                  _formKey.currentState!.save();
                   if(_showmobileview){
                     setState(() {
-                      phoneSignIn(phoneNumber: "+${countrycontroller.text}${plushcontroller.text}");
+
+                      fetchotp(phoneNumber: "+${countrycontroller.text}${phoneController.text}");
                       _showmobileview = false;
                     });
                   }
                 },
 
-                child:  robotoTextWidget(textval: "Submit", colorval: AppColor.butgreen, sizeval: 17.0, fontWeight: FontWeight.bold),
+                child:  robotoTextWidget(textval: "Submit", colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold),
               ),
             ),
 
@@ -280,77 +302,74 @@ readOnly: true,
       ),
     );
   }
-  Future<void> phoneSignIn({required String phoneNumber}) async {
-    await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: _onVerificationCompleted,
-        verificationFailed: _onVerificationFailed,
-        codeSent: _onCodeSent,
-        codeAutoRetrievalTimeout: _onCodeTimeout);
-  }
+  Future<void> fetchotp( {required String phoneNumber}) async {
+    print("8*****************");
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+       // print("object");
+        await auth.signInWithCredential(credential);
+      },
 
-  _onVerificationCompleted(PhoneAuthCredential authCredential) async {
-    print("verification completed ${authCredential.smsCode}");
-    User? user = FirebaseAuth.instance.currentUser;
-    setState(() {
-     // this.otpCode.text = authCredential.smsCode!;
-    });
-    if (authCredential.smsCode != null) {
-      try{
-        UserCredential credential =
-        await user!.linkWithCredential(authCredential);
-      }on FirebaseAuthException catch(e){
-        if(e.code == 'provider-already-linked'){
-          await _auth.signInWithCredential(authCredential);
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
         }
+       // print(e.message);
+      },
+
+      codeSent: (String verificationId, int? resendToken) async {
+       // print("object");
+        loginverificationId = verificationId;
+_start = 60;
+        startTimer();
+
+
+      },
+
+      codeAutoRetrievalTimeout: (String verificationId) {
+       // print("object");
+      },
+    );
+  }
+  Future<void> verifyotp() async {
+    PhoneAuthCredential phoneAuthCredential =
+    PhoneAuthProvider.credential(
+        verificationId: loginverificationId, smsCode: otpController.text);
+
+    signInWithPhoneAuthCredential(phoneAuthCredential);
+  }
+
+  void signInWithPhoneAuthCredential(
+      PhoneAuthCredential phoneAuthCredential) async {
+    try {
+      final authCredential =
+      await auth.signInWithCredential(phoneAuthCredential);
+//print(authCredential.user);
+      if (authCredential.user != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfilePage()));
       }
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => ProfilePage()),
-              (Route<dynamic> route) => false);
+    } on FirebaseAuthException catch (e) {
+      print("catch$e");
     }
   }
 
-  _onVerificationFailed(FirebaseAuthException exception) {
-    if (exception.code == 'invalid-phone-number') {
-      showMessage("The phone number entered is invalid!");
-    }
-  }
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = Timer.periodic(
+        oneSec,
+            (Timer timer) => setState(() {
+          if (_start < 0) {
+            timer.cancel();
+          } else {
+            setState(() {
+              print(_start);
+              _start = _start - 1;
 
-  _onCodeSent(String verificationId, int? forceResendingToken) {
-    this.verificationId = verificationId;
-    print(forceResendingToken);
-    print("code sent");
-  }
+            });
 
-  _onCodeTimeout(String timeout) {
-    print(timeout);
-    return null;
-  }
-
-  void showMessage(String errorMessage) {
-    showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          return AlertDialog(
-            title: Text("Error"),
-            content: Text(errorMessage),
-            actions: [
-              TextButton(
-                child: Text("Ok"),
-                onPressed: () async {
-                  Navigator.of(builderContext).pop();
-                },
-              )
-            ],
-          );
-        }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
+          }
+        }));
   }
 }
