@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:envi/sidemenu/pickupDropAddressSelection/confirmDropLocation.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
+import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
@@ -237,7 +238,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                   margin: const EdgeInsets.all(5),
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                              SearchDriver()),
+                              (Route<dynamic> route) => true);
+
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: AppColor.greyblack,
                       shape: RoundedRectangleBorder(

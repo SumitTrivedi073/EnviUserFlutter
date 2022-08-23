@@ -1,3 +1,4 @@
+import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/mapStyle.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -133,16 +134,23 @@ class ConfirmDropLocationState extends State {
                     const SizedBox(
                       width: 5,
                     ),
-                    Align(alignment: Alignment.centerRight,
+                    Align(
+                      alignment: Alignment.centerRight,
                       child: SvgPicture.asset(
                         "assets/svg/to-location-img.svg",
                         width: 40,
                         height: 30,
-                      ),)
+                      ),
+                    )
                   ],
                 )),
-
-          )
+          ),
+          robotoTextWidget(
+            textval: Address,
+            colorval: AppColor.black,
+            sizeval: 18,
+            fontWeight: FontWeight.w200,
+          ),
         ],
       ),
       Align(
@@ -152,7 +160,14 @@ class ConfirmDropLocationState extends State {
             margin: const EdgeInsets.all(5),
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                         SearchDriver()),
+                        (Route<dynamic> route) => true);
+
+              },
               style: ElevatedButton.styleFrom(
                 primary: AppColor.greyblack,
                 shape: RoundedRectangleBorder(

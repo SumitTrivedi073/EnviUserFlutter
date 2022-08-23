@@ -43,6 +43,7 @@ dependencies:
   geolocator: ^9.0.1
   geocoding: ^2.0.4
   uuid: ^3.0.6
+  flutter_rating_bar: ^4.0.1
 
 
 dev_dependencies:

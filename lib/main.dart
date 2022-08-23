@@ -1,5 +1,6 @@
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
+import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/Constant.dart';
@@ -62,7 +63,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (BuildContext context) => const HomePage(title: "title")),
+            builder: (BuildContext context) => SearchDriver()),
             (Route<dynamic> route) => false);
 
   }

@@ -18,9 +18,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      height: 180,
-      child: Card(
+    return Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(
@@ -28,7 +26,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
           ),
           elevation: 5,
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: [
                 GestureDetector(
@@ -36,8 +34,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                       print("Tapped a Container");
                     },
                     child: Container(
-                      height: 50,
-                      margin: const EdgeInsets.only(left: 10),
+                      margin: const EdgeInsets.all(5),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -60,11 +57,11 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     (route) => true);
                               },
                               child: Container(
-                                padding: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.all(5),
                                 child: robotoTextWidget(
                                   textval: FromLocationHint,
                                   colorval: AppColor.black,
-                                  sizeval: 18,
+                                  sizeval: 16,
                                   fontWeight: FontWeight.w200,
                                 ),
                               ),
@@ -75,10 +72,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     )),
                 Stack(alignment: Alignment.centerRight, children: <Widget>[
                   const SizedBox(
-                    height: 2,
+                    height: 1,
                     child: Divider(
                       color: AppColor.grey,
-                      height: 2,
+                      height: 1,
                     ),
                   ),
                   Container(
@@ -106,8 +103,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                       print("Tapped a Container");
                     },
                     child: Container(
-                      height: 50,
-                      margin: const EdgeInsets.only(left: 10),
+                      margin: const EdgeInsets.all(5),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -130,11 +126,11 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     (route) => true);
                               },
                               child: Container(
-                                padding: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.all(5),
                                 child: robotoTextWidget(
                                   textval: ToLocationHint,
                                   colorval: AppColor.black,
-                                  sizeval: 18,
+                                  sizeval: 16,
                                   fontWeight: FontWeight.w200,
                                 ),
                               ),
@@ -145,7 +141,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     ))
               ],
             ),
-          )),
-    );
+          ));
+
   }
 }
