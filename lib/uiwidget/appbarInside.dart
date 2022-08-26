@@ -2,18 +2,40 @@
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
+import '../web_service/Constant.dart';
 
-
-class AppBarInsideWidget extends StatelessWidget{
-  const AppBarInsideWidget({Key? key, required this.title}) : super(key: key);
+class AppBarInsideWidget extends StatefulWidget {
   final String title;
+
+  const AppBarInsideWidget({Key? key, required this.title}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _AppBarInsideWidgetState();
+}
+
+class _AppBarInsideWidgetState extends State<AppBarInsideWidget>{
+
+  late final String title;
   // @override
   // State<StatefulWidget> createState() => _AppBarInsidePageState();
+   late SharedPreferences sharedPreferences ;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+    title = widget.title;
+  }
 
+  init() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+  }
   @override
   Widget build(BuildContext context) {
+
     // TODO: implement build
     return Container(
       height: 150,
@@ -54,7 +76,7 @@ class AppBarInsideWidget extends StatelessWidget{
                     ),
 
                     Card(
-                      child: Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                      child: Image.network("$imageServerurl${(sharedPreferences.getString(Loginpropic) ?? '')}",
                         fit: BoxFit.fill,height: 40,
                         width: 40,),
                     )

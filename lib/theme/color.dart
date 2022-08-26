@@ -24,4 +24,5 @@ class AppColor {
   static const detailheader = Color(0xFF108058);
   static const lightorange = Color.fromRGBO(255, 193, 0, 0.15);
   static const alfaorange = Color(0xFFFFC100);
+  static const textgray = Color(0XFF909090);
 }

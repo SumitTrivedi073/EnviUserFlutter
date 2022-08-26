@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:convert' as convert;
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/Profile/profilePage.dart';
+import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,11 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../web_service/HTTP.dart' as HTTP;
 
 import '../main.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
+import '../web_service/APIDirectory.dart';
 import '../web_service/Constant.dart';
+import 'model/LoginModel.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({Key? key}) : super(key: key);
@@ -34,21 +42,7 @@ class _LoginpageState extends State<Loginpage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   late Timer _timer;
   int _start = 60;
-  Future<void> _submit() async {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    setState(() {
-      isLoading = true;
-    });
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(LoginID, "1");
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => MainEntryPoint()),
-        (Route<dynamic> route) => false);
-  }
+
 
   @override
   void initState()  {
@@ -57,7 +51,7 @@ class _LoginpageState extends State<Loginpage> {
     checkPermission();
     plushcontroller.text = "+";
     countrycontroller.text = "91";
-
+print("============login");
   }
 
   Future checkPermission() async {
@@ -119,6 +113,8 @@ class _LoginpageState extends State<Loginpage> {
       child: Center(
         child: Column(
           children: <Widget>[
+            Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
+            SizedBox(height:15,),
 robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
             TextFormField(
               controller: otpController,
@@ -208,6 +204,8 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
       child: Center(
         child: Column(
           children: <Widget>[
+            Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
+            SizedBox(height:15,),
             robotoTextWidget(textval: welcome, colorval: AppColor.black, sizeval: 20.0, fontWeight: FontWeight.bold),
             robotoTextWidget(textval: mobilevalidation, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
             Row(
@@ -284,6 +282,7 @@ readOnly: true,
                     return;
                   }
                   _formKey.currentState!.save();
+
                   if(_showmobileview){
                     setState(() {
 
@@ -347,8 +346,9 @@ _start = 60;
       await auth.signInWithCredential(phoneAuthCredential);
 //print(authCredential.user);
       if (authCredential.user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        signIn();
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => ProfilePage()));
       }
     } on FirebaseAuthException catch (e) {
       print("catch$e");
@@ -371,5 +371,42 @@ _start = 60;
 
           }
         }));
+  }
+  _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) { // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // Unique ID on iOS
+    } else {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id; // Unique ID on Android
+    }
+  }
+  void signIn() async {
+    String? deviceId = await _getId();
+    Map data = {"countrycode": countrycontroller.text.toString(), "phone": phoneController.text.toString(),"FcmToken":"","deviceId":deviceId};
+    var jsonData = null;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    dynamic response = await HTTP.post(userLogin(), data);
+    if (response != null && response.statusCode == 200) {
+      isLoading = false;
+      jsonData = convert.jsonDecode(response.body);
+print(jsonData);
+      setState(() {
+        LoginModel users = new LoginModel.fromJson(jsonData['content']);
+        if(users.id == ""){
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        }else{
+           Navigator.push(
+               context, MaterialPageRoute(builder: (context) => ProfileAfterloginPage(profiledata: users.toJson(),)));
+        }
+      });
+
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

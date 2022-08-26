@@ -12,9 +12,9 @@ const mobileBaseUrl = '$scheme://$mobileHost:$port';
 
 const deployedLambdaUrl = "";
 
-const qaUrl = 'https://qausernew.azurewebsites.net';
+const qaUrl = 'https://qausernew.azurewebsites.net/';
 
-const productionUrl = 'https://envi-user-taxation-v2.azurewebsites.net';
+const productionUrl = 'https://envi-user-taxation-v2.azurewebsites.net/';
 
 getBaseURL() {
   String baseUrl = deployedLambdaUrl;
@@ -33,11 +33,15 @@ getBaseURL() {
   return baseUrl;
 }
 userLogin() {
-  return Uri.parse('${getBaseURL()}/login/adminLogin');
+  return Uri.parse('${getBaseURL()}/login/userLogin');
 }
-
-
-
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
+}
+getfetchLandingPageSettings(){
+
+  return Uri.parse('${getBaseURL()}/login/fetchLandingPageSettings');
+}
+getUserTripHistory(String userid, int pagecount, int limit){
+  return Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
 }
