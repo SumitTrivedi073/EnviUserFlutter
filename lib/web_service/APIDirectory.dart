@@ -21,13 +21,18 @@ getBaseURL() {
   String apiType = APICONFIG.releaseType;
   if (apiType == APICONSTANTS.localhost) {
     if (kIsWeb) {
+      print("1");
       baseUrl = webBaseUrl;
     } else {
+
+      print("2");
       baseUrl = mobileBaseUrl;
     }
   } else if (apiType == APICONSTANTS.production) {
+    print("3");
     baseUrl = productionUrl;
   } else if (apiType == APICONSTANTS.qa) {
+    print("4");
     baseUrl = qaUrl;
   }
   return baseUrl;
@@ -43,5 +48,6 @@ getfetchLandingPageSettings(){
   return Uri.parse('${getBaseURL()}/login/fetchLandingPageSettings');
 }
 getUserTripHistory(String userid, int pagecount, int limit){
+  print(Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
   return Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
 }

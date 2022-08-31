@@ -1,7 +1,7 @@
 class RideHistoryModel {
   late String fromAddress;
   late String passengerTripMasterId,name,driverPhoto,toAddress,status,start_time;
-double distance=0.0;
+String distance="0.0";
  late PriceDetails price;
  late vehicleDetails vehicle;
   RideHistoryModel(this.fromAddress, this.passengerTripMasterId, this.name, this.driverPhoto, this.toAddress, this.distance, this.status,this.start_time,
@@ -14,7 +14,7 @@ double distance=0.0;
     name = json['name'];
     driverPhoto = json["driverPhoto"];
     toAddress = json["toAddress"];
-    distance = json["distance"];
+    distance = json["distance"].toString();
     status= json["status"];
     start_time = json["start_time"];
     price = (json["price"] != null)
@@ -37,7 +37,7 @@ double distance=0.0;
 }
 class PriceDetails {
   late String? tollAmount;
-int totalFare = 0;
+  String totalFare = "0";
   PriceDetails({
     required this.tollAmount,
     required this.totalFare,
@@ -45,11 +45,11 @@ int totalFare = 0;
 
   factory PriceDetails.fromJson(Map<String, dynamic> json) =>
       PriceDetails(
-        tollAmount: json["tollAmount"] != null
-            ? json["tollAmount"]
-            : "NA",
+        tollAmount: json["tollAmount"] != 0
+            ? json["tollAmount"].toString()
+            : "0.0",
         totalFare:
-        json["totalFare"] != 0 ? json["totalFare"] : 0,
+        json["totalFare"] != 0 ? json["totalFare"].toString() : "0",
       );
 
   Map<String, dynamic> toJson() => {

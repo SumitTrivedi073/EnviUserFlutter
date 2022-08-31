@@ -184,6 +184,8 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
                 onPressed: () {
 
                     setState(() {
+
+                      _timer.cancel();
                       _showmobileview = true;
                     });
 
@@ -387,12 +389,15 @@ _start = 60;
     Map data = {"countrycode": countrycontroller.text.toString(), "phone": phoneController.text.toString(),"FcmToken":"","deviceId":deviceId};
     var jsonData = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    print(userLogin());
     dynamic response = await HTTP.post(userLogin(), data);
+
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
 print(jsonData);
       setState(() {
+        _timer.cancel();
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
         if(users.id == ""){
           Navigator.push(
