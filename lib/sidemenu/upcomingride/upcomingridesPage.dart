@@ -1,18 +1,120 @@
+import 'dart:convert';
+
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../theme/string.dart';
 import '../../../uiwidget/robotoTextWidget.dart';
 import '../../../web_service/Constant.dart';
 
+import 'dart:convert' as convert;
+import '../../../../web_service/HTTP.dart' as HTTP;
+import '../../theme/theme.dart';
+import '../../web_service/APIDirectory.dart';
+import '../ridehistory/model/rideHistoryModel.dart';
+import 'model/ScheduleTripModel.dart';
 class UpcomingRidesPage extends StatefulWidget {
   @override
   State<UpcomingRidesPage> createState() => _UpcomingRidesPageState();
 }
 
 class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
+  bool _isFirstLoadRunning = false;
+  int pagecount = 1;
+  late ScrollController _controller;
+  bool _hasNextPage = true;
+  bool _isLoadMoreRunning = false;
+  int _limit = 20;
+  late SharedPreferences sharedPreferences;
+  late dynamic userId;
+  List<ScheduleTripModel> arrtrip = [];
+  @override
+  void initState()  {
+    super.initState();
+
+
+    _firstLoad();
+    _controller = new ScrollController()..addListener(_loadMore);
+  }
+  @override
+  void dispose() {
+    _controller.removeListener(_loadMore);
+    super.dispose();
+  }
+  void _firstLoad() async {
+    setState(() {
+      _isFirstLoadRunning = true;
+    });
+    sharedPreferences = await SharedPreferences.getInstance();
+
+
+    userId = sharedPreferences.getString(LoginID) ;
+print(userId);
+    dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+    print(jsonDecode(res.body)['schedule_trip_list']);
+    if (res.statusCode == 200) {
+      setState(() {
+        arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
+            .map((i) => ScheduleTripModel.fromJson(i))
+            .toList();
+      });
+    } else {
+      setState(() {
+        _isFirstLoadRunning = false;
+      });
+      throw "Can't get subjects.";
+    }
+    setState(() {
+      _isFirstLoadRunning = false;
+    });
+  }
+
+  void _loadMore() async {
+    if (_hasNextPage == true &&
+        _isFirstLoadRunning == false &&
+        _isLoadMoreRunning == false &&
+        _controller.position.extentAfter < 300) {
+      setState(() {
+        _isLoadMoreRunning = true;
+      });
+      pagecount += 1;
+      dynamic res =
+      await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+
+      if (res.statusCode == 200) {
+        final List<ScheduleTripModel> fetchedPosts =
+        (jsonDecode(res.body)['content']['schedule_trip_list'] as List)
+            .map((i) => ScheduleTripModel.fromJson(i))
+            .toList();
+        if (fetchedPosts.length > 0) {
+          setState(() {
+            if (fetchedPosts.length != _limit) {
+              _hasNextPage = false;
+            }
+            arrtrip.addAll(fetchedPosts);
+          });
+        } else {
+          // This means there is no more data
+          // and therefore, we will not send another GET request
+          setState(() {
+            _hasNextPage = false;
+          });
+        }
+      } else {
+        setState(() {
+          _isLoadMoreRunning = false;
+        });
+        throw "Can't get subjects.";
+      }
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,10 +131,34 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               title: TitelUpcomingRides,
             ),
             Expanded(
-              child: Container(
+              child:_isFirstLoadRunning
+                  ? Center(
+                child: CircularProgressIndicator(),
+              )
+                  : Container(
                   margin: const EdgeInsets.only(right: 10.0),
                   child: _buildPosts(context)),
             ),
+            if (_isLoadMoreRunning == true)
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 40),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            // When nothing else to load
+            if (_hasNextPage == false)
+              Container(
+                padding: const EdgeInsets.only(top: 30, bottom: 40),
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    'You have fetched all of the content',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -46,9 +172,9 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         },
         child: ListView.separated(
           itemBuilder: (context, index) {
-            return ListItem();
+            return ListItem(index);
           },
-          itemCount: 2,
+          itemCount: arrtrip.length,
           padding: const EdgeInsets.all(8),
           separatorBuilder: (context, index) {
             return const Divider(
@@ -61,7 +187,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         ));
   }
 
-  Card ListItem() {
+  Card ListItem(int index) {
     return Card(
       elevation: 4,
       semanticContainer: true,
@@ -75,12 +201,12 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            CellRow1(),
+            CellRow1(index),
             Container(
               height: 1,
               color: AppColor.border,
             ),
-            CellRow2(),
+            CellRow2(index),
             Container(
               height: 1,
               color: AppColor.border,
@@ -90,7 +216,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     );
   }
 
-  Container CellRow1() {
+  Container CellRow1(int index) {
     return Container(
       color: AppColor.alfaorange.withOpacity(.3),
       height: 38,
@@ -98,7 +224,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children: const [
+          Row(children:  [
             Icon(
               Icons.sunny,
               color: AppColor.black,
@@ -106,14 +232,14 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             ),
             SizedBox(width: 10,),
             robotoTextWidget(
-              textval: "Tomorrow, 11:00 AM",
+              textval: "${getdayTodayTomarrowYesterday(arrtrip[index].scheduledAt)}",
               colorval: AppColor.black,
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
           ]),
-          const robotoTextWidget(
-            textval: "₹ ~130",
+           robotoTextWidget(
+            textval: "₹ ~${arrtrip[index].estimatedPrice.toString()}",
             colorval: AppColor.black,
             sizeval: 14.0,
             fontWeight: FontWeight.bold,
@@ -123,7 +249,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     );
   }
 
-  Container CellRow2() {
+  Container CellRow2(int index) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -146,9 +272,9 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: const [
+                      children:  [
                         robotoTextWidget(
-                          textval: "Kempegowda International Airport",
+                          textval: arrtrip[index].toAddress.length > 30 ? arrtrip[index].toAddress.substring(0, 30) : arrtrip[index].toAddress,
                           colorval: AppColor.black,
                           sizeval: 14.0,
                           fontWeight: FontWeight.normal,
@@ -159,9 +285,9 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                       height: 3,
                     ),
                     Row(
-                      children: const [
+                      children:  [
                         robotoTextWidget(
-                          textval: "From Home",
+                          textval: arrtrip[index].fromAddress.length > 30 ? arrtrip[index].fromAddress.substring(0, 30) : arrtrip[index].fromAddress,
                           colorval: AppColor.black,
                           sizeval: 14.0,
                           fontWeight: FontWeight.normal,

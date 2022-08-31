@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Constant.dart';
+
 
 Response? AccessPermissionHandler(response) {
   if (response.statusCode == 401) {
@@ -32,8 +34,8 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
 
   var sharedPreferences = await SharedPreferences.getInstance();
 
-  dynamic token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk3MmEyM2NmLTUxMTktNGNmYi1hMjQ3LWFiMDRiOWZlYjQwMSIsInR5cGVpZCI6MywicGhvbmVOdW1iZXIiOiI4ODg4ODg4ODg4IiwiaWF0IjoxNjU5MzYxODA2fQ.TrOBGvQMsAZtGOPoF_nR2GZw9b35l_WiNpmOqaYcavE';
-
+  dynamic token = sharedPreferences.getString(LoginToken);
+//print("token$token");
   dynamic extra = additionalHeaders != null ? additionalHeaders : {};
 
   return headers = {

@@ -5,14 +5,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../login/model/LoginModel.dart';
 import '../main.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../web_service/Constant.dart';
 
 class ProfileAfterloginPage extends StatefulWidget {
-  const ProfileAfterloginPage({Key? key}) : super(key: key);
 
+  var profiledata;
+  ProfileAfterloginPage({required this.profiledata});
   @override
   State<ProfileAfterloginPage> createState() => _profileAfterloginPageState();
 }
@@ -21,7 +23,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _showmobileview = true;
-
+  late LoginModel profiledata;
   Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
@@ -42,6 +44,8 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+profiledata = new LoginModel.fromJson(widget.profiledata);
 
   }
 
@@ -71,7 +75,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                   : MediaQuery.of(context).size.width,
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(.5),
+                  color: AppColor.white,
                   blurRadius: 20.0, // soften the shadow
                 )
               ]),
@@ -85,81 +89,125 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
     );
   }
   Form profileContinue(){
+    String gender = "";
+     if(profiledata.gender.toString() == "m"){
+
+gender = "Male";
+    }else if(profiledata.gender.toString() == "f"){
+
+       gender = "Female";
+     }
+     else{
+       gender = "";
+     }
     return  Form(
       key: _formKey,
       child: Center(
         child: Column(
           children: <Widget>[
-            const robotoTextWidget(textval: "Wellcome back, Nitesh!", colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.bold),
-            robotoTextWidget(textval: reviewprofile, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.normal),
+            Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
+            SizedBox(height:15,),
+             robotoTextWidget(textval: "Wellcome back, ${profiledata.name}!", colorval: AppColor.black, sizeval: 20.0, fontWeight: FontWeight.bold),
+            robotoTextWidget(textval: reviewprofile, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
 SizedBox(height: 20,),
-            Container(
-              color: AppColor.white,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    SizedBox(height: 20,),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(55.0),
-                        child: Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
-                          fit: BoxFit.fill,height: 55,
-                          width: 55,)
-                    ),
-                    SizedBox(height: 5,),
-                    robotoTextWidget(textval: "Nitesh Gupta", colorval: AppColor.greyblack, sizeval: 13.0, fontWeight: FontWeight.bold),
-                    SizedBox(height: 5,),
-                    robotoTextWidget(textval: "Male", colorval: AppColor.greyblack, sizeval: 13.0, fontWeight: FontWeight.normal),
-                    SizedBox(height: 5,),
-                    robotoTextWidget(textval: "+9424880582", colorval: AppColor.greyblack, sizeval: 13.0, fontWeight: FontWeight.normal),
-                    SizedBox(height: 5,),
-                    robotoTextWidget(textval: "niteshgupta@hotmail.com", colorval: AppColor.greyblack, sizeval: 13.0, fontWeight: FontWeight.normal),
-                    SizedBox(height: 20,),
-                  ],
-                )
-              ),
-            ),
-            SizedBox(height: 20,),
-            Container(
-              color: AppColor.greyblack,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child:  robotoTextWidget(textval: continuebut, colorval: AppColor.white, sizeval: 17.0, fontWeight: FontWeight.bold)
+            Card(
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              ),
-            ),
+                elevation: 5,
+                child:  Container(
+                  color: AppColor.white,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child:
+                      Column(
+                        children: [
+                          SizedBox(height: 20,),
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(55.0),
+                              child: Image.network("$imageServerurl${profiledata.propic}",
+                                fit: BoxFit.fill,height: 80,
+                                width: 80,)
+                          ),
+                          SizedBox(height: 5,),
+                          robotoTextWidget(textval: profiledata.name, colorval: AppColor.black, sizeval: 18.0, fontWeight: FontWeight.normal),
+                          SizedBox(height: 5,),
+                          robotoTextWidget(textval: gender, colorval: AppColor.textgray, sizeval: 14.0, fontWeight: FontWeight.normal),
+                          SizedBox(height: 5,),
+                          robotoTextWidget(textval: profiledata.phone, colorval: AppColor.textgray, sizeval: 14.0, fontWeight: FontWeight.normal),
+                          SizedBox(height: 5,),
+                          robotoTextWidget(textval: profiledata.mailid, colorval: AppColor.textgray, sizeval: 14.0, fontWeight: FontWeight.normal),
+                          SizedBox(height: 20,),
+                        ],
+                      )
+                  ),
+                ),),
+
             SizedBox(height: 20,),
-            Container(
-              color: AppColor.lightwhite,
-              width: MediaQuery.of(context).size.width,
-              height: 40.0,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
-
-              child: MaterialButton(
-                minWidth: double.infinity,
-                height: 45,
-                onPressed: () {
-
-                  setState(() {
-                    _showmobileview = true;
-                  });
-
-                },
-
-
-                child: robotoTextWidget(textval: loginwithdeffrentnumber, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.bold),
+        Card(
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          elevation: 5,
+          child:Container(
+            color: AppColor.greyblack,
+            padding:
+            const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Align(
+              alignment: Alignment.center,
+              child: TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                  ),
+                  onPressed: () async {
+                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                    sharedPreferences.setString(LoginEmail, profiledata.mailid);
+                    sharedPreferences.setString(LoginToken, profiledata.token);
+                    sharedPreferences.setString(LoginID, profiledata.id);
+                    sharedPreferences.setString(Loginpropic, profiledata.propic);
+                    sharedPreferences.setString(Logingender, profiledata.gender);
+                    sharedPreferences.setString(Loginphone, profiledata.phone);
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => MainEntryPoint()));
+                  },
+                  child:  robotoTextWidget(textval: continuebut, colorval: AppColor.white, sizeval: 17.0, fontWeight: FontWeight.bold)
               ),
             ),
+          )),
+            SizedBox(height: 20,),
+        Card(
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          elevation: 5,
+          child:Container(
+            color: AppColor.white,
+            width: MediaQuery.of(context).size.width,
+            height: 40.0,
+            padding:
+            const EdgeInsets.symmetric(horizontal: 20.0),
+
+            child: MaterialButton(
+              minWidth: double.infinity,
+              height: 45,
+              onPressed: () {
+
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => MainEntryPoint()));
+
+              },
+
+              child: robotoTextWidget(textval: loginwithdeffrentnumber, colorval: AppColor.black, sizeval: 17.0, fontWeight: FontWeight.bold),
+            ),
+          )),
           ],
         ),
       ),

@@ -1,12 +1,20 @@
+import 'dart:convert';
+
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/string.dart';
+import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
 
+import 'dart:convert' as convert;
+import '../../../../web_service/HTTP.dart' as HTTP;
+import 'model/rideHistoryModel.dart';
 class RideHistoryPage extends StatefulWidget {
   @override
   State<RideHistoryPage> createState() => _RideHistoryPageState();
@@ -14,6 +22,103 @@ class RideHistoryPage extends StatefulWidget {
 
 class _RideHistoryPageState extends State<RideHistoryPage> {
   bool _isFirstLoadRunning = false;
+  int pagecount = 1;
+  late ScrollController _controller;
+  bool _hasNextPage = true;
+  bool _isLoadMoreRunning = false;
+  int _limit = 20;
+  late SharedPreferences sharedPreferences;
+  late dynamic userId;
+  List<RideHistoryModel> arrtrip = [];
+  @override
+  void initState()  {
+    super.initState();
+
+   init();
+    _firstLoad();
+    _controller = new ScrollController()..addListener(_loadMore);
+  }
+  @override
+  void dispose() {
+    _controller.removeListener(_loadMore);
+    super.dispose();
+  }
+  init() async {
+
+  }
+
+  void _firstLoad() async {
+    setState(() {
+      _isFirstLoadRunning = true;
+    });
+    sharedPreferences = await SharedPreferences.getInstance();
+
+
+    userId = sharedPreferences.getString(LoginID) ;
+
+    dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+    print(res.body);
+    if (res.statusCode == 200) {
+      setState(() {
+
+
+        arrtrip = (jsonDecode(res.body)['content']['result'] as List)
+            .map((i) => RideHistoryModel.fromJson(i))
+            .toList();
+      });
+    } else {
+      setState(() {
+        _isFirstLoadRunning = false;
+      });
+      throw "Can't get subjects.";
+    }
+    setState(() {
+      _isFirstLoadRunning = false;
+    });
+  }
+
+  void _loadMore() async {
+    if (_hasNextPage == true &&
+        _isFirstLoadRunning == false &&
+        _isLoadMoreRunning == false &&
+        _controller.position.extentAfter < 300) {
+      setState(() {
+        _isLoadMoreRunning = true;
+      });
+      pagecount += 1;
+      dynamic res =
+      await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+
+      if (res.statusCode == 200) {
+        final List<RideHistoryModel> fetchedPosts =
+        (jsonDecode(res.body)['content']['result'] as List)
+            .map((i) => RideHistoryModel.fromJson(i))
+            .toList();
+        if (fetchedPosts.length > 0) {
+          setState(() {
+            if (fetchedPosts.length != _limit) {
+              _hasNextPage = false;
+            }
+            arrtrip.addAll(fetchedPosts);
+          });
+        } else {
+          // This means there is no more data
+          // and therefore, we will not send another GET request
+          setState(() {
+            _hasNextPage = false;
+          });
+        }
+      } else {
+        setState(() {
+          _isLoadMoreRunning = false;
+        });
+        throw "Can't get subjects.";
+      }
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +136,42 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               title: TitelRideHistory,
             ),
             totalTripHeader(),
+            // Expanded(
+            //   child: Container(
+            //       margin: const EdgeInsets.only(right: 10.0),
+            //       child: _buildPosts(context)),
+            // ),
             Expanded(
-              child: Container(
+              child: _isFirstLoadRunning
+                  ? Center(
+                child: CircularProgressIndicator(),
+              )
+                  : Container(
                   margin: const EdgeInsets.only(right: 10.0),
                   child: _buildPosts(context)),
             ),
+            // when the _loadMore function is running
+            if (_isLoadMoreRunning == true)
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 40),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+
+            // When nothing else to load
+            if (_hasNextPage == false)
+              Container(
+                padding: const EdgeInsets.only(top: 30, bottom: 40),
+                color: Colors.green,
+                child: Center(
+                  child: Text(
+                    'You have fetched all of the content',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -48,17 +184,17 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           //onSelectTripDetailPage(context);
         },
         child: ListView.builder(
-          //controller: _controller,
+          controller: _controller,
 
           itemBuilder: (context, index) {
-            return ListItem();
+            return ListItem(index);
           },
-          itemCount: 2,
+          itemCount: arrtrip.length,
           padding: const EdgeInsets.all(8),
         ));
   }
 
-  Card ListItem() {
+  Card ListItem(int index) {
     return Card(
         elevation: 4,
         semanticContainer: true,
@@ -72,13 +208,13 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              CellRow1(),
-              CellRow2(),
-              CellRow3(),
+              CellRow1(index),
+              CellRow2(index),
+              CellRow3(index),
             ]));
   }
 
-  Container CellRow1() {
+  Container CellRow1(int index) {
     return Container(
       color: AppColor.cellheader,
       height: 38,
@@ -90,20 +226,20 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children: const [
+          Row(children:  [
             Icon(
               Icons.nights_stay_sharp,
               color: AppColor.black,
             ),
             robotoTextWidget(
-              textval: "Yesterday 8:15 PM",
+              textval: "${getdayTodayTomarrowYesterday(arrtrip[index].start_time)}",
               colorval: AppColor.black,
               sizeval: 15.0,
               fontWeight: FontWeight.bold,
             ),
           ]),
-          const robotoTextWidget(
-            textval: "₹ 130",
+           robotoTextWidget(
+            textval: "₹ ${arrtrip[index].price.totalFare}",
             colorval: AppColor.black,
             sizeval: 18.0,
             fontWeight: FontWeight.bold,
@@ -113,7 +249,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     );
   }
 
-  Container CellRow2() {
+  Container CellRow2(int index) {
     return Container(
       color: AppColor.white,
       height: 94,
@@ -128,16 +264,16 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children: const [
-                      Icon(
+                    children:  [
+                      const Icon(
                         Icons.star,
                         color: AppColor.butgreen,
                       ),
                       SizedBox(
-                        width: 10,
+                        width: 5,
                       ),
                       robotoTextWidget(
-                        textval: "Kempegowda International Airport",
+                        textval: arrtrip[index].toAddress.length > 30 ? arrtrip[index].toAddress.substring(0, 30) : arrtrip[index].toAddress,
                         colorval: AppColor.black,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
@@ -148,12 +284,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                     height: 3,
                   ),
                   Row(
-                    children: const [
+                    children:  [
                       Padding(
                         padding: EdgeInsets.only(left: 25),
                       ),
                       robotoTextWidget(
-                        textval: "From Home",
+                        textval: arrtrip[index].fromAddress.length > 30 ? arrtrip[index].fromAddress.substring(0, 30) : arrtrip[index].fromAddress,
                         colorval: AppColor.greyblack,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
@@ -163,7 +299,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 ],
               ),
               Image.network(
-                "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                arrtrip[index].driverPhoto,
                 fit: BoxFit.fill,
                 height: 40,
                 width: 40,
@@ -176,19 +312,19 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(children: const [
-                Padding(
+              Row(children:  [
+                const Padding(
                   padding: EdgeInsets.only(left: 25),
                 ),
                 robotoTextWidget(
-                  textval: "18 Kms",
+                  textval: "${arrtrip[index].distance} Km",
                   colorval: AppColor.darkgrey,
                   sizeval: 13.0,
                   fontWeight: FontWeight.w800,
                 ),
               ]),
-              const robotoTextWidget(
-                textval: "KA03 SS 4928",
+               robotoTextWidget(
+                textval: arrtrip[index].vehicle.Vnumber,
                 colorval: AppColor.darkgrey,
                 sizeval: 13.0,
                 fontWeight: FontWeight.bold,
@@ -200,7 +336,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     );
   }
 
-  Container CellRow3() {
+  Container CellRow3(int index) {
     return Container(
       color: AppColor.white,
       height: 38,

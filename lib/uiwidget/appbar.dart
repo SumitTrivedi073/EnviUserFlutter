@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
 import 'navigationdrawer.dart';
@@ -11,7 +12,19 @@ class AppBarWidget extends StatefulWidget{
   }
 
 class _AppBarPageState extends State<AppBarWidget> {
+  late SharedPreferences sharedPreferences ;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
 
+  }
+
+  init() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+  }
 
   @override
   Widget build(BuildContext context) {
