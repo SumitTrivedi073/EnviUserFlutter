@@ -63,7 +63,7 @@ print("============login");
       }
       return;
     }
-  }
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +95,7 @@ print("============login");
               ]),
               child: isLoading
                   ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview
-                      ? loginview()
-                      : verifyview(),
+                  : _showmobileview ? loginview() :verifyview(),
             ),
           ],
         ),
@@ -121,11 +119,12 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
             TextFormField(
               controller: otpController,
               keyboardType: TextInputType.phone,
+
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
-                hintText: "Please enter OTP",
-                hintStyle: TextStyle(color: Colors.black45),
-              ),
+                  hintText: "Please enter OTP",
+                  hintStyle: TextStyle(color: Colors.black45),
+                 ),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter valid OTP!';
@@ -133,11 +132,10 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
                 return null;
               },
             ),
-            SizedBox(
-              height: 15,
-            ),
+            SizedBox(height:15,),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
@@ -202,9 +200,8 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
       ),
     );
   }
-
-  Form loginview() {
-    return Form(
+  Form loginview(){
+    return  Form(
       key: _formKey,
       child: Center(
         child: Column(
@@ -244,14 +241,14 @@ readOnly: true,
                     return null;
                   },
                 ),
-                SizedBox(
-                  width: 5,
                 ),
+                SizedBox(width: 5,),
                 Expanded(
-                  flex: 5, // wrap your Column in Expanded
-                  child: TextFormField(
+                  flex: 5,// wrap your Column in Expanded
+                  child:  TextFormField(
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
+
                     style: const TextStyle(color: AppColor.black),
                     decoration: const InputDecoration(
                       hintText: "Please enter phone number",
@@ -267,12 +264,16 @@ readOnly: true,
                     },
                   ),
                 ),
+
+
               ],
             ),
+
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40.0,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20.0),
               margin: const EdgeInsets.only(top: 30.0),
               child: MaterialButton(
                 minWidth: double.infinity,
@@ -296,6 +297,7 @@ readOnly: true,
                 child:  robotoTextWidget(textval: "Submit", colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold),
               ),
             ),
+
           ],
         ),
       ),

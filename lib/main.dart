@@ -60,23 +60,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     checkLoginStatus();
     print("================_MainEntryPointState");
   }
-
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-   /*if (sharedPreferences.getString(LoginID) == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
-    } else {
-
-      getLandingPageSettings();
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(
-      //         builder: (BuildContext context) => const HomePage(title: "title")),
-      //         (Route<dynamic> route) => false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,10 +73,23 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ),
         ),
         child: Center(child:  Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
-          ),
+        ),
       ),
     );
   }
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+   if (sharedPreferences.getString(LoginID) == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+              (Route<dynamic> route) => false);
+    } else {
+      getLandingPageSettings();
+
+    }
+  }
+
+
   void getLandingPageSettings() async {
 
     dynamic response = await HTTP.get(getfetchLandingPageSettings());
@@ -117,4 +113,5 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
 
 //https://github.com/humazed/google_map_location_picker
+
 
