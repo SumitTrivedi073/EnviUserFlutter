@@ -43,3 +43,6 @@ String firstname = "First Name";
 var lname = "Last Name";
 var fnishbut = "Finish";
 var email = "Email";
+String maleText = "Male";
+String femaleText = "Female";
+String ratherNotSayText = "I'd rather not say";
