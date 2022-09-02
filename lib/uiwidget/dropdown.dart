@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme/styles.dart';
 
-
 class DropDownWidget extends StatelessWidget {
   final double? width;
   final EdgeInsetsGeometry? margin;
@@ -11,6 +10,8 @@ class DropDownWidget extends StatelessWidget {
   final Color? backGroundColor;
   final BorderRadius? borderRadius;
   final TextStyle? style;
+  final TextStyle? hintStyle;
+
   final String? selectedValue;
   final String? hintText;
   final String? label;
@@ -21,7 +22,7 @@ class DropDownWidget extends StatelessWidget {
   final bool isMandate;
   final Color? dropdownColor;
   final double? iconSize;
- 
+
   final AlignmentGeometry? dropDownAlignment;
 
   /// default value to show in the dropdown when selectedValue
@@ -30,7 +31,7 @@ class DropDownWidget extends StatelessWidget {
 
   DropDownWidget(
       {Key? key,
-       this.width,
+      this.width,
       this.margin,
       this.padding,
       this.onChange,
@@ -46,9 +47,10 @@ class DropDownWidget extends StatelessWidget {
       this.label,
       this.dropDownAlignment,
       this.isMandate = false,
-    
       this.iconSize,
-      this.endWidget, this.dropdownColor})
+      this.endWidget,
+      this.dropdownColor,
+      this.hintStyle})
       : super(key: key);
 
   @override
@@ -75,7 +77,7 @@ class DropDownWidget extends StatelessWidget {
                         style: const TextStyle(color: Colors.red),
                       ),
                     ],
-                    style: style ?? robotoRegular18,
+                    style: style ?? AppTextStyle.robotoRegular18,
                   ),
                 ),
               ),
@@ -97,29 +99,21 @@ class DropDownWidget extends StatelessWidget {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 child: DropdownButton<String>(
-                    dropdownColor:  dropdownColor,
+                    dropdownColor: dropdownColor,
                     icon: endWidget ??
                         RotatedBox(
                           quarterTurns: 1,
                           child: Icon(
                             Icons.arrow_forward_ios,
                             size: iconSize ?? 18,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           // onPressed: () {},
                           // ),
                         ),
                     iconSize: 18,
-                    hint: Text(
-                      hintText ?? 'Select',
-                      style: style ??
-                          const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Roboto',
-                            color: Colors.black,
-                          ),
-                    ),
+                    hint: Text(hintText ?? 'Select',
+                        style: hintStyle ?? AppTextStyle.robotoRegular18Gray),
                     isExpanded: true,
                     underline: const SizedBox(),
                     value: selectedValue,
@@ -130,7 +124,7 @@ class DropDownWidget extends StatelessWidget {
                         value: value,
                         child: Text(
                           value,
-                          style: style,
+                          style: style ?? AppTextStyle.robotoRegular18,
                         ),
                       );
                     }).toList()
