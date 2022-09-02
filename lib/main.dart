@@ -1,3 +1,4 @@
+import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
@@ -6,6 +7,7 @@ import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login/login.dart';
 import 'dart:convert' as convert;
@@ -28,7 +30,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 print("==============MyApp");
-    return MaterialApp(
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
+
+        ],
+     child: MaterialApp(
       title: 'Envi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -40,7 +47,7 @@ print("==============MyApp");
         theme: appTheme(),
         home: MainEntryPoint(),
       )
-    );
+    ));
   }
 }
 
@@ -68,10 +75,11 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     } else {
 
       getLandingPageSettings();
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(
-      //         builder: (BuildContext context) => const HomePage(title: "title")),
-      //         (Route<dynamic> route) => false);
+      context
+          .read<firestoreLiveTripDataNotifier>()
+          .listenToLiveUpdateStream();
+
+
     }
   }
 
@@ -98,7 +106,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     if (response != null && response.statusCode == 200) {
 
     var  jsonData = convert.jsonDecode(response.body);
-      print(jsonData);
+     // print(jsonData);
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

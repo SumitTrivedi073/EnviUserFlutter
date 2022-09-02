@@ -45,7 +45,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
     // TODO: implement initState
     super.initState();
 
-profiledata = new LoginModel.fromJson(widget.profiledata);
+profiledata = LoginModel.fromJson(widget.profiledata);
 
   }
 
