@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:date_format/date_format.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 import 'color.dart';
 
@@ -47,4 +50,38 @@ getNetworkImage(context, path) {
       ),
     );
   }
+}
+
+int calculateDifference(DateTime date) {
+  DateTime now = DateTime.now();
+  return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+}
+getdayTodayTomarrowYesterday(String strdate){
+  DateTime parseDt = DateTime.parse(strdate).toLocal();
+  if(calculateDifference(parseDt) == -1){
+return "Yesterday ${convertTimeFromString(strdate)}";
+  }
+ else if(calculateDifference(parseDt) == 0){
+    return "Today ${convertTimeFromString(strdate)}";
+  }
+  else if(calculateDifference(parseDt) == 1){
+    return "Tomorrow ${convertTimeFromString(strdate)}";
+  }
+
+  else {
+    return "${convertDateFromString(strdate)} ${convertTimeFromString(strdate)}";
+  }
+}
+String convertDateFromString(String strDate) {
+  DateTime parseDt = DateTime.parse(strDate).toLocal();
+  var date1 = formatDate(parseDt, [dd, ' ', M, ',', yyyy]);
+  return date1;
+}
+String convertTimeFromString(String strDate) {
+  var timeFormatter = DateFormat('hh:mm');
+  DateTime parseDt = DateTime.parse(strDate).toLocal();
+  var hourMinString = timeFormatter.format(parseDt);
+  var temp = DateFormat.yMEd().add_jms().format(parseDt);
+  var timeString = hourMinString + ' ' + temp.split(' ')[3];
+  return timeString;
 }

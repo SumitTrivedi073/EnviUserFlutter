@@ -2,16 +2,17 @@
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
+import '../web_service/Constant.dart';
 
-
-class AppBarInsideWidget extends StatelessWidget{
-  const AppBarInsideWidget({Key? key, required this.title}) : super(key: key);
+class AppBarInsideWidget extends StatefulWidget {
   final String title;
 
   @override
   Widget build(BuildContext context) {
+
     // TODO: implement build
     return Container(
       margin: EdgeInsets.only(top: 30),
@@ -48,7 +49,7 @@ class AppBarInsideWidget extends StatelessWidget{
                     ),
 
                     Card(
-                      child: Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                      child: Image.network("$imageServerurl${(sharedPreferences.getString(Loginpropic) ?? '')}",
                         fit: BoxFit.fill,height: 40,
                         width: 40,),
                     )

@@ -1,13 +1,26 @@
 class LoginModel {
   late String token;
-  late String id;
-  late String role;
+  late String id,name,propic,gender,phone,mailid;
 
-  LoginModel(this.token, this.id, this.role);
+
+  LoginModel(this.token, this.id, this.name, this.propic, this.gender, this.phone, this.mailid);
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];
-    id = json['id'];
-    role = json['role'];
+    id = json['userid'];
+    name = json['name'];
+    propic = json["propic"];
+    gender = json["gender"];
+    phone = json["phone"];
+    mailid= json["mailid"];
   }
+  Map<String, dynamic> toJson() => {
+    "token": token,
+    "userid": id,
+    "name": name,
+    "propic": propic,
+    "gender": gender,
+    "phone": phone,
+    "mailid": mailid,
+  };
 }
