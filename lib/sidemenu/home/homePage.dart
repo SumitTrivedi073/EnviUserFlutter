@@ -6,6 +6,7 @@ import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../uiwidget/mappagescreen.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -29,7 +30,7 @@ print(value.liveTripData);
     return Scaffold(
       drawer: NavigationDrawer(),
       body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-       // MyMap(),
+        MyMap(),
         Column(
           children: [
             AppBarWidget(),

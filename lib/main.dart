@@ -1,5 +1,7 @@
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
+import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
+import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
 import 'package:envi/web_service/APIDirectory.dart';
@@ -63,7 +65,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   void initState() {
     super.initState();
     checkLoginStatus();
-    print("================_MainEntryPointState");
   }
 
   checkLoginStatus() async {
@@ -96,10 +97,23 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ),
         ),
         child: Center(child:  Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
-          ),
+        ),
       ),
     );
   }
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+   if (sharedPreferences.getString(LoginID) == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+              (Route<dynamic> route) => false);
+    } else {
+      getLandingPageSettings();
+
+    }
+  }
+
+
   void getLandingPageSettings() async {
 
     dynamic response = await HTTP.get(getfetchLandingPageSettings());
@@ -123,4 +137,5 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
 
 //https://github.com/humazed/google_map_location_picker
+
 
