@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:envi/theme/mapStyle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -87,7 +84,8 @@ class MyMapState extends State {
                 onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                },)
+                },
+              )
             : Container(),
         Center(
             child: SvgPicture.asset(
@@ -114,13 +112,15 @@ class MyMapState extends State {
             ),
           ),
         ),
-         Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: FromBookScheduleWidget(address: Address,),
-              ),
-            )
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: FromBookScheduleWidget(
+              address: Address,
+            ),
+          ),
+        )
       ],
     ));
   }
@@ -149,9 +149,7 @@ class MyMapState extends State {
         _controller
             ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
       }
-
     });
-
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
@@ -160,9 +158,10 @@ class MyMapState extends State {
     print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
-    Address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    });  }
+      Address =
+          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    });
+  }
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address
 //https://stackoverflow.com/questions/52591556/custom-markers-with-flutter-google-maps-plugin

@@ -7,17 +7,14 @@ import 'package:envi/Profile/profilePage.dart';
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../web_service/HTTP.dart' as HTTP;
 
-import '../main.dart';
+import '../../../../web_service/HTTP.dart' as HTTP;
 import '../theme/color.dart';
 import '../theme/string.dart';
-import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 import '../web_service/Constant.dart';
 import 'model/LoginModel.dart';
@@ -34,7 +31,7 @@ class _LoginpageState extends State<Loginpage> {
   var _formKeyofrverify = GlobalKey<FormState>();
   var isLoading = false;
   bool _showmobileview = true;
-  String loginverificationId ="";
+  String loginverificationId = "";
   TextEditingController phoneController = new TextEditingController();
   TextEditingController otpController = new TextEditingController();
   TextEditingController plushcontroller = new TextEditingController();
@@ -43,15 +40,13 @@ class _LoginpageState extends State<Loginpage> {
   late Timer _timer;
   int _start = 60;
 
-
   @override
-  void initState()  {
+  void initState() {
     // TODO: implement initState
     super.initState();
     checkPermission();
     plushcontroller.text = "+";
     countrycontroller.text = "91";
-print("============login");
   }
 
   Future checkPermission() async {
@@ -63,7 +58,7 @@ print("============login");
       }
       return;
     }
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,36 +90,49 @@ print("============login");
               ]),
               child: isLoading
                   ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview ? loginview() :verifyview(),
+                  : _showmobileview
+                      ? loginview()
+                      : verifyview(),
             ),
           ],
         ),
       ),
     );
   }
+
   @override
   void dispose() {
     _timer.cancel();
     super.dispose();
   }
-  Form verifyview(){
-    return  Form(
+
+  Form verifyview() {
+    return Form(
       key: _formKeyofrverify,
       child: Center(
         child: Column(
           children: <Widget>[
-            Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
-            SizedBox(height:15,),
-robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
+            Image.asset(
+              "assets/images/logo.png",
+              width: 276,
+              fit: BoxFit.fill,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            robotoTextWidget(
+                textval: verifymsg,
+                colorval: AppColor.black,
+                sizeval: 16.0,
+                fontWeight: FontWeight.normal),
             TextFormField(
               controller: otpController,
               keyboardType: TextInputType.phone,
-
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
-                  hintText: "Please enter OTP",
-                  hintStyle: TextStyle(color: Colors.black45),
-                 ),
+                hintText: "Please enter OTP",
+                hintStyle: TextStyle(color: Colors.black45),
+              ),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter valid OTP!';
@@ -132,10 +140,11 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
                 return null;
               },
             ),
-            SizedBox(height:15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
@@ -143,56 +152,67 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
                       primary: Colors.teal,
                     ),
                     onPressed: () {
-                      final isValid = _formKeyofrverify.currentState!.validate();
+                      final isValid =
+                          _formKeyofrverify.currentState!.validate();
                       if (!isValid) {
                         return;
                       }
                       _formKeyofrverify.currentState!.save();
                       verifyotp();
                     },
-                    child:  robotoTextWidget(textval: verify, colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold)
-                ),
+                    child: robotoTextWidget(
+                        textval: verify,
+                        colorval: AppColor.butgreen,
+                        sizeval: 16.0,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
-             Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.teal,
-                  ),
-                  onPressed: () {
-                    if(_start<0){
-                      fetchotp(phoneNumber: "+${countrycontroller.text}${phoneController.text}");
-                    }
-                  },
-                  child: _start<0? robotoTextWidget(textval: resend, colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold):robotoTextWidget(textval: "00:$_start", colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold)
-                ),
+                    style: TextButton.styleFrom(
+                      primary: Colors.teal,
+                    ),
+                    onPressed: () {
+                      if (_start < 0) {
+                        fetchotp(
+                            phoneNumber:
+                                "+${countrycontroller.text}${phoneController.text}");
+                      }
+                    },
+                    child: _start < 0
+                        ? robotoTextWidget(
+                            textval: resend,
+                            colorval: AppColor.butgreen,
+                            sizeval: 16.0,
+                            fontWeight: FontWeight.bold)
+                        : robotoTextWidget(
+                            textval: "00:$_start",
+                            colorval: AppColor.butgreen,
+                            sizeval: 16.0,
+                            fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 20.0,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
-
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: MaterialButton(
                 minWidth: double.infinity,
                 height: 25,
                 onPressed: () {
-
-                    setState(() {
-
-                      _timer.cancel();
-                      _showmobileview = true;
-                    });
-
+                  setState(() {
+                    _timer.cancel();
+                    _showmobileview = true;
+                  });
                 },
-
-
-                child: robotoTextWidget(textval: numberedit, colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold),
+                child: robotoTextWidget(
+                    textval: numberedit,
+                    colorval: AppColor.butgreen,
+                    sizeval: 16.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -200,55 +220,71 @@ robotoTextWidget(textval: verifymsg, colorval: AppColor.black, sizeval: 16.0, fo
       ),
     );
   }
-  Form loginview(){
-    return  Form(
+
+  Form loginview() {
+    return Form(
       key: _formKey,
       child: Center(
         child: Column(
           children: <Widget>[
-            Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
-            SizedBox(height:15,),
-            robotoTextWidget(textval: welcome, colorval: AppColor.black, sizeval: 20.0, fontWeight: FontWeight.bold),
-            robotoTextWidget(textval: mobilevalidation, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
+            Image.asset(
+              "assets/images/logo.png",
+              width: 276,
+              fit: BoxFit.fill,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            robotoTextWidget(
+                textval: welcome,
+                colorval: AppColor.black,
+                sizeval: 20.0,
+                fontWeight: FontWeight.bold),
+            robotoTextWidget(
+                textval: mobilevalidation,
+                colorval: AppColor.black,
+                sizeval: 16.0,
+                fontWeight: FontWeight.normal),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                 Expanded(child:   TextFormField(
-controller: plushcontroller,
-readOnly: true,
-                   style: const TextStyle(color: AppColor.black),
-
-                 ),
-                 ),
-
-                SizedBox(width: 5,),
-                 Expanded(
-                   flex:2,child:   TextFormField(
-                  controller: countrycontroller,
-                  keyboardType: TextInputType.phone,
-
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: const InputDecoration(
-                    hintText: "country code",
-                    hintStyle: TextStyle(color: Colors.black45),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter valid country code!';
-                    }
-                    return null;
-                  },
-                ),
-                ),
-                SizedBox(width: 5,),
                 Expanded(
-                  flex: 5,// wrap your Column in Expanded
-                  child:  TextFormField(
+                  child: TextFormField(
+                    controller: plushcontroller,
+                    readOnly: true,
+                    style: const TextStyle(color: AppColor.black),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    controller: countrycontroller,
+                    keyboardType: TextInputType.phone,
+                    style: const TextStyle(color: AppColor.black),
+                    decoration: const InputDecoration(
+                      hintText: "country code",
+                      hintStyle: TextStyle(color: Colors.black45),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter valid country code!';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 5, // wrap your Column in Expanded
+                  child: TextFormField(
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
-
                     style: const TextStyle(color: AppColor.black),
                     decoration: const InputDecoration(
                       hintText: "Please enter phone number",
@@ -264,16 +300,12 @@ readOnly: true,
                     },
                   ),
                 ),
-
-
               ],
             ),
-
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40.0,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               margin: const EdgeInsets.only(top: 30.0),
               child: MaterialButton(
                 minWidth: double.infinity,
@@ -285,57 +317,56 @@ readOnly: true,
                   }
                   _formKey.currentState!.save();
 
-                  if(_showmobileview){
+                  if (_showmobileview) {
                     setState(() {
-
-                      fetchotp(phoneNumber: "+${countrycontroller.text}${phoneController.text}");
+                      fetchotp(
+                          phoneNumber:
+                              "+${countrycontroller.text}${phoneController.text}");
                       _showmobileview = false;
                     });
                   }
                 },
-
-                child:  robotoTextWidget(textval: "Submit", colorval: AppColor.butgreen, sizeval: 16.0, fontWeight: FontWeight.bold),
+                child: robotoTextWidget(
+                    textval: "Submit",
+                    colorval: AppColor.butgreen,
+                    sizeval: 16.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
-
           ],
         ),
       ),
     );
   }
-  Future<void> fetchotp( {required String phoneNumber}) async {
+
+  Future<void> fetchotp({required String phoneNumber}) async {
     print("8*****************");
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
-       // print("object");
+        // print("object");
         await auth.signInWithCredential(credential);
       },
-
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
         }
-       // print(e.message);
+        // print(e.message);
       },
-
       codeSent: (String verificationId, int? resendToken) async {
-       // print("object");
+        // print("object");
         loginverificationId = verificationId;
-_start = 60;
+        _start = 60;
         startTimer();
-
-
       },
-
       codeAutoRetrievalTimeout: (String verificationId) {
-       // print("object");
+        // print("object");
       },
     );
   }
+
   Future<void> verifyotp() async {
-    PhoneAuthCredential phoneAuthCredential =
-    PhoneAuthProvider.credential(
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: loginverificationId, smsCode: otpController.text);
 
     signInWithPhoneAuthCredential(phoneAuthCredential);
@@ -345,7 +376,7 @@ _start = 60;
       PhoneAuthCredential phoneAuthCredential) async {
     try {
       final authCredential =
-      await auth.signInWithCredential(phoneAuthCredential);
+          await auth.signInWithCredential(phoneAuthCredential);
 //print(authCredential.user);
       if (authCredential.user != null) {
         signIn();
@@ -361,22 +392,22 @@ _start = 60;
     const oneSec = const Duration(seconds: 1);
     _timer = Timer.periodic(
         oneSec,
-            (Timer timer) => setState(() {
-          if (_start < 0) {
-            timer.cancel();
-          } else {
-            setState(() {
-              print(_start);
-              _start = _start - 1;
-
-            });
-
-          }
-        }));
+        (Timer timer) => setState(() {
+              if (_start < 0) {
+                timer.cancel();
+              } else {
+                setState(() {
+                  print(_start);
+                  _start = _start - 1;
+                });
+              }
+            }));
   }
+
   _getId() async {
     var deviceInfo = DeviceInfoPlugin();
-    if (Platform.isIOS) { // import 'dart:io'
+    if (Platform.isIOS) {
+      // import 'dart:io'
       var iosDeviceInfo = await deviceInfo.iosInfo;
       return iosDeviceInfo.identifierForVendor; // Unique ID on iOS
     } else {
@@ -384,9 +415,15 @@ _start = 60;
       return androidDeviceInfo.id; // Unique ID on Android
     }
   }
+
   void signIn() async {
     String? deviceId = await _getId();
-    Map data = {"countrycode": countrycontroller.text.toString(), "phone": phoneController.text.toString(),"FcmToken":"","deviceId":deviceId};
+    Map data = {
+      "countrycode": countrycontroller.text.toString(),
+      "phone": phoneController.text.toString(),
+      "FcmToken": "",
+      "deviceId": deviceId
+    };
     var jsonData = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     print(userLogin());
@@ -395,19 +432,22 @@ _start = 60;
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
-print(jsonData);
+      print(jsonData);
       setState(() {
         _timer.cancel();
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
-        if(users.id == ""){
+        if (users.id == "") {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        }else{
-           Navigator.push(
-               context, MaterialPageRoute(builder: (context) => ProfileAfterloginPage(profiledata: users.toJson(),)));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfileAfterloginPage(
+                        profiledata: users.toJson(),
+                      )));
         }
       });
-
     } else {
       setState(() {
         isLoading = false;

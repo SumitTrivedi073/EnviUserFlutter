@@ -5,7 +5,7 @@ import 'ApiConfig.dart' as APICONFIG;
 const scheme = 'http';
 const host = 'localhost';
 const port = '3300';
-const mobileHost = '192.168.1.11';
+const mobileHost = '192.168.1.8';
 
 const webBaseUrl = '$scheme://$host:$port';
 const mobileBaseUrl = '$scheme://$mobileHost:$port';

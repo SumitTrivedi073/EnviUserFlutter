@@ -1,0 +1,137 @@
+{
+  "project_info": {
+    "project_number": "604385937811",
+    "firebase_url": "https://envi-user.firebaseio.com",
+    "project_id": "envi-user",
+    "storage_bucket": "envi-user.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604385937811:android:cdab18b4878df253dbc066",
+        "android_client_info": {
+          "package_name": "com.malbork_admin.qa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604385937811-4c84q1vgm7g5ims76nclu4o889669nqi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malbork_admin.qa",
+            "certificate_hash": "089ef5a913dea72369e9bae6a12d1a058da46501"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCX-612--Zljlqyw2fpwF9gpGIQayrQLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604385937811-l7ialgsh2pp7f1vurnv63153ncgpig4f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "in.malbork.envi.app.user.qa"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604385937811:android:2994fe9ce8f9d74edbc066",
+        "android_client_info": {
+          "package_name": "in.malbork.envi.app.driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCX-612--Zljlqyw2fpwF9gpGIQayrQLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604385937811-l7ialgsh2pp7f1vurnv63153ncgpig4f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "in.malbork.envi.app.user.qa"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604385937811:android:ec9ec72d13c6fb15dbc066",
+        "android_client_info": {
+          "package_name": "in.malbork.envi.app.driver.qa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCX-612--Zljlqyw2fpwF9gpGIQayrQLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604385937811-l7ialgsh2pp7f1vurnv63153ncgpig4f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "in.malbork.envi.app.user.qa"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604385937811:android:6b327fc81c112c97dbc066",
+        "android_client_info": {
+          "package_name": "in.malbork.envi.app.user.qa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604385937811-438p8u65jg763pkbhhf3h53071j852ff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.user.qa",
+            "certificate_hash": "e7adfb822e39bb3959aae90b4d7e0aa7295a0d7b"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCX-612--Zljlqyw2fpwF9gpGIQayrQLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604385937811-l7ialgsh2pp7f1vurnv63153ncgpig4f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "in.malbork.envi.app.user.qa"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
