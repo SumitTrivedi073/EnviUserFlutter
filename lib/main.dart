@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-print("==============MyApp");
+
     return MaterialApp(
       title: 'Envi',
       debugShowCheckedModeBanner: false,
@@ -58,7 +58,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   void initState() {
     super.initState();
     checkLoginStatus();
-    print("================_MainEntryPointState");
   }
   @override
   Widget build(BuildContext context) {
