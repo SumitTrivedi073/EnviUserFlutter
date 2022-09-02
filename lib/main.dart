@@ -1,3 +1,4 @@
+import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
@@ -8,6 +9,7 @@ import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login/login.dart';
 import 'dart:convert' as convert;
@@ -29,8 +31,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+print("==============MyApp");
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
 
-    return MaterialApp(
+        ],
+     child: MaterialApp(
       title: 'Envi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -42,7 +49,7 @@ class MyApp extends StatelessWidget {
         theme: appTheme(),
         home: MainEntryPoint(),
       )
-    );
+    ));
   }
 }
 
@@ -59,6 +66,24 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     super.initState();
     checkLoginStatus();
   }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString(LoginID) == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+              (Route<dynamic> route) => false);
+    } else {
+
+      getLandingPageSettings();
+      context
+          .read<firestoreLiveTripDataNotifier>()
+          .listenToLiveUpdateStream();
+
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +120,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     if (response != null && response.statusCode == 200) {
 
     var  jsonData = convert.jsonDecode(response.body);
-      print(jsonData);
+     // print(jsonData);
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

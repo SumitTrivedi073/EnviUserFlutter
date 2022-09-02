@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class Utility {
@@ -22,4 +23,10 @@ _getId() async {
     var androidDeviceInfo = await deviceInfo.androidInfo;
     return androidDeviceInfo.id; // Unique ID on Android
   }
+}
+dynamic myEncode(dynamic item) {
+  if (item is Timestamp) {
+    return item.toString();
+  }
+  return item;
 }
