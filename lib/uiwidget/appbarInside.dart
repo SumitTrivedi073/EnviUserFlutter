@@ -1,4 +1,3 @@
-
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,8 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/color.dart';
 import '../web_service/Constant.dart';
 
-
-class AppBarInsideWidget extends StatefulWidget{
+class AppBarInsideWidget extends StatefulWidget {
   const AppBarInsideWidget({Key? key, required this.title}) : super(key: key);
   final String title;
 
@@ -17,17 +15,18 @@ class AppBarInsideWidget extends StatefulWidget{
 }
 
 class _AppBarInsidePageState extends State<AppBarInsideWidget> {
-  late SharedPreferences sharedPreferences ;
+  String? loginPic;
+  Future<void> getsharedPrefs() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    loginPic = sharedPreferences.getString(Loginpropic);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    init();
-  }
-
-  init() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-
+    getsharedPrefs();
+    //init();
   }
 
   @override
@@ -38,49 +37,50 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
       child: Stack(
         children: <Widget>[
           Card(
-              elevation: 4,
-              color: AppColor.greyblack,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                  children: [
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        "assets/svg/chevron-back-button.svg",
-                        width: 22,
-                        height: 24,
-
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+            elevation: 4,
+            color: AppColor.greyblack,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      "assets/svg/chevron-back-button.svg",
+                      width: 22,
+                      height: 24,
                     ),
-
-                    Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        children: [
-                          robotoTextWidget(textval: widget.title,colorval: AppColor.lightwhite,sizeval: 18.0,fontWeight: FontWeight.w800,),
-                        ],
-                      ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        robotoTextWidget(
+                          textval: widget.title,
+                          colorval: AppColor.lightwhite,
+                          sizeval: 18.0,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ],
                     ),
-
-                    Card(
-                      child: Image.network("$imageServerurl${(sharedPreferences.getString(Loginpropic) ?? '')}",
-                        fit: BoxFit.fill,height: 40,
-                        width: 40,),
-                    )
-                  ],
-                ),
+                  ),
+                  Card(
+                    child: Image.network(
+                      "$imageServerurl${(loginPic ?? '')}",
+                      fit: BoxFit.fill,
+                      height: 40,
+                      width: 40,
+                    ),
+                  )
+                ],
               ),
             ),
-
+          ),
         ],
       ),
     );
   }
-
-
 }

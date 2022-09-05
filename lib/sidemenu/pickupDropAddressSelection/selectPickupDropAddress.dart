@@ -8,7 +8,8 @@ import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_place/google_place.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../theme/color.dart';
@@ -31,18 +32,25 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<dynamic> _placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
-  late SharedPreferences sharedPreferences;
+  // late SharedPreferences sharedPreferences;
   String SearchFromLocation = "", SearchToLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   TextEditingController ToLocationText = TextEditingController();
   late String _sessionToken;
   var uuid = const Uuid();
   bool _isVisible = false;
+  DetailsResult? startPosition;
+  DetailsResult? endPosition;
+  // late FocusNode startFocusNode;
+  // late FocusNode endFocusNode;
+  late GooglePlace googlePlace;
+  String kPLACES_API_KEY = "AIzaSyAMnSO4iTYphqjRAnu80OG0FNLt1mvQe3c";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     setState(() {
       _sessionToken = uuid.v4();
     });
@@ -55,6 +63,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       isFrom = false;
       _firstLoad();
     });
+    googlePlace = GooglePlace(kPLACES_API_KEY);
   }
 
   @override
@@ -105,7 +114,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   void getSuggestion(String input) async {
-    String kPLACES_API_KEY = "AIzaSyAMnSO4iTYphqjRAnu80OG0FNLt1mvQe3c";
     String type = '(regions)';
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
@@ -121,7 +129,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           _placeList = json.decode(response.body)['predictions'];
           for (var i = 0; i < _placeList.length; i++) {
             searchPlaceList.add(SearchPlaceModel(
-                id: _placeList[i]["description"],
+                id: _placeList[i]["place_id"],
                 address: _placeList[i]["description"],
                 title: _placeList[i]["description"]));
           }
@@ -188,6 +196,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 child: Visibility(
                     visible: _isVisible,
                     child: ListView.builder(
+                      shrinkWrap: true,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Card(
@@ -213,13 +222,37 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 height: 20,
                               ),
                               onTap: () {
-                                setState(() {
+                                setState(() async {
                                   if (isFrom) {
-                                    FromLocationText.text =
-                                        searchPlaceList[index].address;
+                                    // FromLocationText.text =
+                                    //     searchPlaceList[index].address;
+                                    final placeId = searchPlaceList[index].id;
+                                    final details =
+                                        await googlePlace.details.get(placeId);
+                                    if (details != null &&
+                                        details.result != null &&
+                                        mounted) {
+                                      startPosition = details.result;
+                                      FromLocationText.text =
+                                          details.result!.name!;
+                                    }
                                   } else {
-                                    ToLocationText.text =
-                                        searchPlaceList[index].address;
+                                    // ToLocationText.text =
+                                    //     searchPlaceList[index].address;
+                                    setState(() async {
+                                      final endPlaceId =
+                                          searchPlaceList[index].id;
+                                      final endDetails = await googlePlace
+                                          .details
+                                          .get(endPlaceId);
+                                      if (endDetails != null &&
+                                          endDetails.result != null &&
+                                          mounted) {
+                                        endPosition = endDetails.result;
+                                        ToLocationText.text =
+                                            endDetails.result!.name!;
+                                      }
+                                    });
                                   }
                                   _isVisible = false;
                                 });
@@ -242,9 +275,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                              SearchDriver()),
-                              (Route<dynamic> route) => true);
-
+                                  SearchDriver()),
+                          (Route<dynamic> route) => true);
                     },
                     style: ElevatedButton.styleFrom(
                       primary: AppColor.greyblack,
@@ -355,6 +387,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   TextField FromTextWidget() {
     return TextField(
       controller: FromLocationText,
+      // focusNode: startFocusNode,
       decoration: InputDecoration(
         hintText: FromLocationHint,
         border: InputBorder.none,
@@ -373,6 +406,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   TextField ToTextWidget() {
     return TextField(
       controller: ToLocationText,
+      // focusNode: endFocusNode,
       decoration: InputDecoration(
         hintText: ToLocationHint,
         border: InputBorder.none,
