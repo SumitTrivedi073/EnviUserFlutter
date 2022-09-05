@@ -101,17 +101,17 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       ),
     );
   }
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-   if (sharedPreferences.getString(LoginID) == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
-    } else {
-      getLandingPageSettings();
+  // checkLoginStatus() async {
+  //   sharedPreferences = await SharedPreferences.getInstance();
+  //  if (sharedPreferences.getString(LoginID) == null) {
+  //     Navigator.of(context).pushAndRemoveUntil(
+  //         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+  //             (Route<dynamic> route) => false);
+  //   } else {
+  //     getLandingPageSettings();
 
-    }
-  }
+  //   }
+  // }
 
 
   void getLandingPageSettings() async {
