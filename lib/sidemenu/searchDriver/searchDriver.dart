@@ -37,7 +37,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
                 child: Column(
                   children: [
                     Container(
-                      height:40,
+                      height: 40,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -55,7 +55,6 @@ class _SearchDriverPageState extends State<SearchDriver> {
                               Row(children: [
                                 Container(
                                   width: 1,
-
                                   color: AppColor.darkgrey,
                                 ),
                                 IconButton(
@@ -68,7 +67,6 @@ class _SearchDriverPageState extends State<SearchDriver> {
                               Row(children: [
                                 Container(
                                   width: 1,
-
                                   color: AppColor.darkgrey,
                                 ),
                                 IconButton(
@@ -102,38 +100,47 @@ class _SearchDriverPageState extends State<SearchDriver> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                            const Padding(padding: EdgeInsets.all(8),
-                            child: robotoTextWidget(textval: '7 Minutes Away',
-                                colorval: AppColor.black,
-                                sizeval: 16,
-                                fontWeight: FontWeight.w600),),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                              RatingBar.builder(
-                              initialRating: 4,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 20,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                              const Padding(
+                                padding: EdgeInsets.all(8),
+                                child: robotoTextWidget(
+                                    textval: '7 Minutes Away',
+                                    colorval: AppColor.black,
+                                    sizeval: 16,
+                                    fontWeight: FontWeight.w600),
                               ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
-                            ),
-                                Card(
-                                  child: Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
-                                    fit: BoxFit.fill,height: 40,
-                                    width: 50,),
-                                )
-                            ],)
-                          ],)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RatingBar.builder(
+                                    initialRating: 4,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    itemSize: 20,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0),
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                  Card(
+                                    child: Image.network(
+                                      "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                                      fit: BoxFit.fill,
+                                      height: 40,
+                                      width: 50,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          )
                         ],
                       ),
                     ),

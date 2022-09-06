@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-print("==============MyApp");
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
@@ -69,19 +68,23 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString(LoginID) == null) {
+   /* if (sharedPreferences.getString(LoginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
     } else {
 
       getLandingPageSettings();
-      context
-          .read<firestoreLiveTripDataNotifier>()
+      // ignore: use_build_context_synchronously
+      context.read<firestoreLiveTripDataNotifier>()
           .listenToLiveUpdateStream();
 
 
-    }
+    }*/
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage(title: "title")),
+            (Route<dynamic> route) => false);
   }
 
   @override
@@ -101,17 +104,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       ),
     );
   }
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-   if (sharedPreferences.getString(LoginID) == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
-    } else {
-      getLandingPageSettings();
 
-    }
-  }
 
 
   void getLandingPageSettings() async {

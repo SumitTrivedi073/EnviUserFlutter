@@ -157,10 +157,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const ConfirmDropLocation(
-                                        title: 'Confirm Drop Location',
-                                      )),
-                              (Route<dynamic> route) => true);
+                                  const ConfirmDropLocation(
+                                    title: 'Confirm Drop Location',
+                                  )),
+                                  (Route<dynamic> route) => true);
                         },
                         child: Container(
                           margin: const EdgeInsets.all(10),
@@ -242,7 +242,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                              SearchDriver()),
+                                  SearchDriver()),
                               (Route<dynamic> route) => true);
 
                     },

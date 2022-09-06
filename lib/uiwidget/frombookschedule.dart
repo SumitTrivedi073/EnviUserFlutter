@@ -18,8 +18,6 @@ class FromBookScheduleWidget extends StatefulWidget {
 
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
-  String Address = PickUp;
-
   @override
   void initState() {
     // TODO: implement initState
