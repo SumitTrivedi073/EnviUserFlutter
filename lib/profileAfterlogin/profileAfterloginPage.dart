@@ -73,7 +73,7 @@ profiledata = LoginModel.fromJson(widget.profiledata);
               width: MediaQuery.of(context).size.width > 400
                   ? 400
                   : MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(boxShadow: [
+              decoration: const BoxDecoration(boxShadow: [
                 BoxShadow(
                   color: AppColor.white,
                   blurRadius: 20.0, // soften the shadow
@@ -106,10 +106,10 @@ gender = "Male";
         child: Column(
           children: <Widget>[
             Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
-            SizedBox(height:15,),
+            const SizedBox(height:15,),
              robotoTextWidget(textval: "Wellcome back, ${profiledata.name}!", colorval: AppColor.black, sizeval: 20.0, fontWeight: FontWeight.bold),
             robotoTextWidget(textval: reviewprofile, colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.normal),
-SizedBox(height: 20,),
+const SizedBox(height: 20,),
             Card(
                 semanticContainer: true,
                 clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -126,28 +126,28 @@ SizedBox(height: 20,),
                       child:
                       Column(
                         children: [
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           ClipRRect(
                               borderRadius: BorderRadius.circular(55.0),
                               child: Image.network("$imageServerurl${profiledata.propic}",
                                 fit: BoxFit.fill,height: 80,
                                 width: 80,)
                           ),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           robotoTextWidget(textval: profiledata.name, colorval: AppColor.black, sizeval: 18.0, fontWeight: FontWeight.normal),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           robotoTextWidget(textval: gender, colorval: AppColor.textgray, sizeval: 14.0, fontWeight: FontWeight.normal),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           robotoTextWidget(textval: profiledata.phone, colorval: AppColor.textgray, sizeval: 14.0, fontWeight: FontWeight.normal),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           robotoTextWidget(textval: profiledata.mailid, colorval: AppColor.textgray, sizeval: 14.0, fontWeight: FontWeight.normal),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                         ],
                       )
                   ),
                 ),),
 
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
         Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -180,7 +180,7 @@ SizedBox(height: 20,),
               ),
             ),
           )),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
         Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,

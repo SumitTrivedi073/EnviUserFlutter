@@ -174,8 +174,8 @@ class ConfirmDropLocationState extends State {
                   borderRadius: BorderRadius.circular(12), // <-- Radius
                 ),
               ),
-              child: const robotoTextWidget(
-                textval: 'CONTINUE',
+              child:  robotoTextWidget(
+                textval: continue1,
                 colorval: AppColor.white,
                 sizeval: 14,
                 fontWeight: FontWeight.w600,
