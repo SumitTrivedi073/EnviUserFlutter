@@ -67,9 +67,17 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                       ],
                     ),
                   ),
+                  // Card(
+                  //   child: Image.network(
+                  //     "$imageServerurl${(loginPic ?? '')}",
+                  //     fit: BoxFit.fill,
+                  //     height: 40,
+                  //     width: 40,
+                  //   ),
+                  // )
                   Card(
                     child: Image.network(
-                      "$imageServerurl${(loginPic ?? '')}",
+                      placeHolderImage,
                       fit: BoxFit.fill,
                       height: 40,
                       width: 40,

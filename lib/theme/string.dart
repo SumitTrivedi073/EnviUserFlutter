@@ -51,3 +51,5 @@ String thankYouForChoosingEnviText = "Thank you for choosing Envi!";
 String letsSetUpyourProfileText = "Let's set up your profile";
 String examplePhoneNumberText = "+91982401235";
 String genderText = "Gender";
+String confirmDropLocationText = "Confirm Drop Location";
+String pickOnMapText = "Pick on Map";

@@ -14,8 +14,10 @@ import '../../theme/string.dart';
 
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
+  final String fromLocation;
+  final String? toLocation;
 
-  const ConfirmDropLocation({Key? key, required this.title}) : super(key: key);
+  const ConfirmDropLocation({Key? key, required this.title, required  this.fromLocation,  this.toLocation}) : super(key: key);
 
   @override
   State createState() {
