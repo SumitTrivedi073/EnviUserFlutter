@@ -26,4 +26,5 @@ class AppColor {
   static const alfaorange = Color(0xFFFFC100);
   static const blue = Color(0xFF0089ff);
   static const textgray = Color(0XFF909090);
+  static const textfieldlightgrey = Color(0XFFEFEFEF);
 }
