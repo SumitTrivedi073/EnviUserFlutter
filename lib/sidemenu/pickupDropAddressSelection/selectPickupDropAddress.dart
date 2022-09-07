@@ -153,8 +153,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       ConfirmDropLocation(
-                                        fromLocation: FromLocationText.text ?? '',
-                                        toLocation: ToLocationText.text ?? '',
+                                        fromLocation: FromLocationText.text ,
+                                        toLocation: ToLocationText.text,
                                         title: confirmDropLocationText,
                                       )),
                               (Route<dynamic> route) => true);
