@@ -2,6 +2,7 @@ import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../database/database.dart';
@@ -26,7 +27,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
   bool _isLoadMoreRunning = false;
   int _limit = 20;
 
-  List<ScheduleTripModel> arrtrip = [];
+  List<FavoritesData> arraddress = [];
   late final FavoritesDataDao dao;
 
   @override
@@ -42,8 +43,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
         .databaseBuilder('envi_user.db')
         .build();
      dao = database.taskDao;
-    var data =  await dao.getFavoriate() ;//findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
-print("==========${data}");
+    arraddress =  await dao.getFavoriate() ;//findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
+print("==========${arraddress}");
   }
   @override
   void dispose() {
@@ -116,7 +117,7 @@ print("==========${data}");
           itemBuilder: (context, index) {
             return ListItem(index);
           },
-          itemCount: arrtrip.length,
+          itemCount: arraddress.length,
           padding: const EdgeInsets.all(8),
           separatorBuilder: (context, index) {
             return const Divider(
@@ -153,7 +154,7 @@ print("==========${data}");
               height: 1,
               color: AppColor.border,
             ),
-            CellRow3(),
+
           ]),
     );
   }
@@ -167,25 +168,20 @@ print("==========${data}");
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(children:  [
-            Icon(
-              Icons.sunny,
-              color: AppColor.black,
-              size: 20.0,
+            SvgPicture.asset(
+              "assets/svg/place-custom.svg",
+              width: 22,
+              height: 24,
             ),
             SizedBox(width: 10,),
             robotoTextWidget(
-              textval: "${getdayTodayTomarrowYesterday(arrtrip[index].scheduledAt)}",
+              textval: arraddress[index].title,
               colorval: AppColor.black,
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
           ]),
-          robotoTextWidget(
-            textval: "₹ ~${arrtrip[index].estimatedPrice.toString()}",
-            colorval: AppColor.black,
-            sizeval: 14.0,
-            fontWeight: FontWeight.bold,
-          ),
+
         ],
       ),
     );
@@ -216,7 +212,7 @@ print("==========${data}");
                     Row(
                       children:  [
                         robotoTextWidget(
-                          textval: arrtrip[index].toAddress.length > 30 ? arrtrip[index].toAddress.substring(0, 30) : arrtrip[index].toAddress,
+                          textval: arraddress[index].address.length > 30 ? arraddress[index].address.substring(0, 30) : arraddress[index].address,
                           colorval: AppColor.black,
                           sizeval: 14.0,
                           fontWeight: FontWeight.normal,
@@ -226,16 +222,7 @@ print("==========${data}");
                     const SizedBox(
                       height: 3,
                     ),
-                    Row(
-                      children:  [
-                        robotoTextWidget(
-                          textval: arrtrip[index].fromAddress.length > 30 ? arrtrip[index].fromAddress.substring(0, 30) : arrtrip[index].fromAddress,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ],
-                    ),
+
                   ],
                 ),
               ],
@@ -262,25 +249,5 @@ print("==========${data}");
     );
   }
 
-  Container CellRow3() {
-    return Container(
-      color: AppColor.white,
-      height: 38,
-      padding: const EdgeInsets.only(left: 15, right: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          MaterialButton(
-            child: robotoTextWidget(
-              textval: CancelBooking,
-              colorval: Color(0xFFED0000),
-              sizeval: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
+
 }
