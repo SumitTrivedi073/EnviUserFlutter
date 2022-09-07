@@ -51,3 +51,6 @@ getUserTripHistory(String userid, int pagecount, int limit){
   print(Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
   return Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
 }
+GetAllFavouriteAddressdata(String userid){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/getAll/$userid');
+}

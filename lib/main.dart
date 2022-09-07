@@ -1,3 +1,5 @@
+import 'package:envi/database/favoritesData.dart';
+import 'package:envi/database/favoritesDataDao.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
@@ -11,6 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'database/database.dart';
 import 'login/login.dart';
 import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
@@ -19,6 +22,11 @@ Future<void> main() async {
 WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+final database = await $FloorFlutterDatabase
+    .databaseBuilder('envi_uswer.db')
+    .build();
+final dao = database.taskDao;
+
   runApp(const MyApp());
 
 
@@ -59,6 +67,7 @@ class MainEntryPoint extends StatefulWidget {
 
 class _MainEntryPointState extends State<MainEntryPoint> {
   late SharedPreferences sharedPreferences;
+  late final FavoritesDataDao dao;
 
   @override
   void initState() {
@@ -73,7 +82,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
     } else {
-
+      GetAllFavouriteAddress();
       getLandingPageSettings();
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>()
@@ -119,6 +128,50 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           MaterialPageRoute(
               builder: (BuildContext context) => const HomePage(title: "title")),
               (Route<dynamic> route) => false);
+    } else {
+      setState(() {
+
+      });
+    }
+  }
+  void GetAllFavouriteAddress() async {
+    final database = await $FloorFlutterDatabase
+        .databaseBuilder('envi_user.db')
+        .build();
+    final dao = database.taskDao;
+
+dynamic userid =sharedPreferences.getString(LoginID);
+    dynamic response = await HTTP.get(GetAllFavouriteAddressdata(userid));
+    if (response != null && response.statusCode == 200) {
+
+      List<dynamic>   jsonData = convert.jsonDecode(response.body)['content']['address'];
+       print(jsonData);
+      for (var res in jsonData) {
+
+        if(res["address"] != null || res["address"] != ""){
+          String title = "";
+
+          if(res["name"] != ""){
+            title = res["name"];
+          }else{
+            final splitList = res["address"].split(",");
+            title = splitList[1];
+
+          }
+         var data =  await dao.findByIdentifier(res["id"]) ;
+          if(data == null) {
+            final task = FavoritesData.optional(identifier: res["id"],
+                address: res["address"],
+                isFavourite: res["isFavourite"],
+                latitude: res["location"]['coordinates'][0].toString(),
+                longitude: res["location"]['coordinates'][1].toString(),
+                title: title);
+            print(task);
+            await dao.insertTask(task);
+          }
+        }
+      }
+
     } else {
       setState(() {
 

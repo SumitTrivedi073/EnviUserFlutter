@@ -18,16 +18,18 @@ class AppBarInsideWidget extends StatefulWidget{
 
 class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   late SharedPreferences sharedPreferences ;
+  String? loginPic;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    init();
+    getsharedPrefs();
   }
 
-  init() async {
-    sharedPreferences = await SharedPreferences.getInstance();
 
+  Future<void> getsharedPrefs() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //loginPic = sharedPreferences.getString(Loginpropic);
   }
 
   @override
