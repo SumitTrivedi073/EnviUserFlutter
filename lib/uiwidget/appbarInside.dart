@@ -42,40 +42,30 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
           Card(
               elevation: 4,
               color: AppColor.greyblack,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      "assets/svg/chevron-back-button.svg",
+                      width: 22,
+                      height: 24,
 
-                  children: [
-                    IconButton(
-                      icon: SvgPicture.asset(
-                        "assets/svg/chevron-back-button.svg",
-                        width: 22,
-                        height: 24,
-
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
                     ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
 
-                    Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        children: [
-                          robotoTextWidget(textval: widget.title,colorval: AppColor.lightwhite,sizeval: 18.0,fontWeight: FontWeight.w800,),
-                        ],
-                      ),
-                    ),
+                  robotoTextWidget(textval: widget.title,colorval: AppColor.lightwhite,sizeval: 18.0,fontWeight: FontWeight.w800,),
 
-                    Card(
-                      child: Image.network("$imageServerurl${loginPic}",
-                        fit: BoxFit.fill,height: 40,
-                        width: 40,),
-                    )
-                  ],
-                ),
+
+                  Card(
+                    child: Image.network(placeHolderImage,
+                      fit: BoxFit.fill,height: 40,
+                      width: 40,),
+                  )
+                ],
               ),
             ),
 
@@ -83,6 +73,5 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
       ),
     );
   }
-
 
 }
