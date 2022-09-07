@@ -54,3 +54,5 @@ var genderText = "Gender";
 var estimateFare = "ESTIMATED FARE";
 var bookNow = "BOOK NOW";
 var continue1 = "CONTINUE";
+var confirmDropLocationText = 'Confirm Drop Location';
+var pickOnMapText = 'Pick on Map';
