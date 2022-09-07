@@ -1,6 +1,8 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/mapStyle.dart';
+import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
@@ -8,32 +10,46 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme/string.dart';
 
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
-  final String fromLocation;
-  final String? toLocation;
+  final DetailsResult? fromLocation;
 
-  const ConfirmDropLocation({Key? key, required this.title, required  this.fromLocation,  this.toLocation}) : super(key: key);
+  const ConfirmDropLocation(
+      {Key? key, required this.title, required this.fromLocation})
+      : super(key: key);
 
   @override
-  State createState() {
-    // TODO: implement createState
-    return ConfirmDropLocationState(title);
-  }
+  State<ConfirmDropLocation> createState() => _ConfirmDropLocationState();
 }
 
-class ConfirmDropLocationState extends State {
-  LatLng? latlong = null;
+class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
+  late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
-  String title;
+  ToAddressLatLong? toAddress;
+  Set<Marker> markers = Set();
 
-  ConfirmDropLocationState(this.title);
+  Future<void> customMarker() async {
+    LatLng startLocation = latlong;
+    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      "assets/images/destination-marker.png",
+    );
+
+    markers.add(Marker(
+      //add start location marker
+      markerId: MarkerId(startLocation.toString()),
+      position: startLocation, //position of marker
+
+      icon: markerbitmap, //Icon for Marker
+    ));
+  }
 
   @override
   void initState() {
@@ -41,6 +57,7 @@ class ConfirmDropLocationState extends State {
     super.initState();
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
+    customMarker();
   }
 
   @override
@@ -48,32 +65,30 @@ class ConfirmDropLocationState extends State {
     // TODO: implement build
     return SafeArea(
         child: Stack(children: [
-      (latlong != null)
-          ? GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: _cameraPosition!,
-              onMapCreated: (GoogleMapController controller) {
-                controller.setMapStyle(MapStyle.mapStyles);
-                _controller = (controller);
+      GoogleMap(
+        markers: markers,
+        mapType: MapType.normal,
+        initialCameraPosition: _cameraPosition!,
+        onMapCreated: (GoogleMapController controller) {
+          controller.setMapStyle(MapStyle.mapStyles);
+          _controller = (controller);
 
-                _controller?.animateCamera(
-                    CameraUpdate.newCameraPosition(_cameraPosition!));
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-              mapToolbarEnabled: false,
-              zoomGesturesEnabled: true,
-              rotateGesturesEnabled: true,
-              zoomControlsEnabled: false,
-              onCameraIdle: () {
-                GetAddressFromLatLong(latlong!);
-              },
-              onCameraMove: (CameraPosition position) {
-                latlong =
-                    LatLng(position.target.latitude, position.target.longitude);
-              },
-            )
-          : Container(),
+          _controller
+              ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+        },
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        mapToolbarEnabled: false,
+        zoomGesturesEnabled: true,
+        rotateGesturesEnabled: true,
+        zoomControlsEnabled: false,
+        onCameraIdle: () {
+          GetAddressFromLatLong(latlong!);
+        },
+        onCameraMove: (CameraPosition position) {
+          latlong = LatLng(position.target.latitude, position.target.longitude);
+        },
+      ),
       Center(
           child: SvgPicture.asset(
         "assets/svg/from-location-img.svg",
@@ -102,7 +117,7 @@ class ConfirmDropLocationState extends State {
       Column(
         children: [
           AppBarInsideWidget(
-            title: title,
+            title: widget.title,
           ),
           Card(
             margin: EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -113,10 +128,15 @@ class ConfirmDropLocationState extends State {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SvgPicture.asset(
-                      "assets/svg/to-location-img.svg",
-                      width: 20,
-                      height: 20,
+                    // SvgPicture.asset(
+                    //   "assets/svg/to-location-img.svg",
+                    //   width: 20,
+                    //   height: 20,
+                    // ),
+                    Image.asset(
+                      "assets/images/destination-marker.png",
+                      scale: 2,
+                      fit: BoxFit.none,
                     ),
                     const SizedBox(
                       width: 5,
@@ -136,22 +156,26 @@ class ConfirmDropLocationState extends State {
                     const SizedBox(
                       width: 5,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SvgPicture.asset(
-                        "assets/svg/to-location-img.svg",
-                        width: 40,
-                        height: 30,
-                      ),
-                    )
+                    const Align(
+                        alignment: Alignment.centerRight,
+                        child: Icon(
+                          Icons.keyboard,
+                          color: AppColor.grey,
+                        ))
                   ],
                 )),
           ),
-          robotoTextWidget(
-            textval: Address,
-            colorval: AppColor.black,
-            sizeval: 18,
-            fontWeight: FontWeight.w200,
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              moveAroundText,
+              style: AppTextStyle.robotoRegular16,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),
@@ -165,10 +189,14 @@ class ConfirmDropLocationState extends State {
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                         SearchDriver()),
-                        (Route<dynamic> route) => true);
-
+                        builder: (BuildContext context) => SearchDriver(
+                              fromLocation: widget.fromLocation,
+                              toAddress: ToAddressLatLong(
+                                address: Address,
+                                position: latlong,
+                              ),
+                            )),
+                    (Route<dynamic> route) => true);
               },
               style: ElevatedButton.styleFrom(
                 primary: AppColor.greyblack,
@@ -176,7 +204,7 @@ class ConfirmDropLocationState extends State {
                   borderRadius: BorderRadius.circular(12), // <-- Radius
                 ),
               ),
-              child:  robotoTextWidget(
+              child: robotoTextWidget(
                 textval: continue1,
                 colorval: AppColor.white,
                 sizeval: 14,

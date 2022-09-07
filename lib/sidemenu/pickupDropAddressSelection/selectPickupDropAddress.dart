@@ -47,6 +47,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late GooglePlace googlePlace;
   String kPLACES_API_KEY = "AIzaSyAMnSO4iTYphqjRAnu80OG0FNLt1mvQe3c";
   Timer? _debounce;
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -153,8 +154,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       ConfirmDropLocation(
-                                        fromLocation: FromLocationText.text ,
-                                        toLocation: ToLocationText.text,
+                                        fromLocation: startPosition ,                
                                         title: confirmDropLocationText,
                                       )),
                               (Route<dynamic> route) => true);
@@ -218,6 +218,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           if (startFocusNode.hasFocus) {
                             setState(() {
                               startPosition = details.result;
+                             
                               FromLocationText.text = details.result!.name!;
                               searchPlaceList = [];
                             });
@@ -250,7 +251,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  SearchDriver()),
+                                  SearchDriver(
+                                    fromLocation: startPosition,
+                                    toLocation: endPosition,
+                                  )),
                           (Route<dynamic> route) => true);
                     },
                     style: ElevatedButton.styleFrom(

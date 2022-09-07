@@ -9,6 +9,12 @@ class AppTextStyle {
     fontFamily: 'Roboto',
     color: AppColor.black,
   );
+  static const TextStyle robotoRegular14 = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Roboto',
+    color: AppColor.black,
+  );
     static const TextStyle robotoRegular18Gray = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
