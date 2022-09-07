@@ -2,6 +2,7 @@ import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
@@ -16,7 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<firestoreLiveTripDataNotifier>(
@@ -24,26 +24,26 @@ class _HomePageState extends State<HomePage> {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-print(value.liveTripData);
+          print(value.liveTripData);
         }
       });
-    return Scaffold(
-      drawer: NavigationDrawer(),
-      body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-        MyMap(),
-        Column(
-          children: [
-            AppBarWidget(),
-            CardBanner(),
+      return Scaffold(
+        drawer: NavigationDrawer(),
+        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+          MyMap(),
+          Column(
+            children: [
+              AppBarWidget(),
+              CardBanner(),
 
-            /*PaymentModeOptionWidget(
+              /*PaymentModeOptionWidget(
               strpaymentOptions: "qr_code,online,cash",
               selectedOption: "qr_code",
             )*/
-          ],
-        ),
-      ]),
-    );
-        });
+            ],
+          ),
+        ]),
+      );
+    });
   }
 }

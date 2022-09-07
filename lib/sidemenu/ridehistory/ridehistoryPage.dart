@@ -136,14 +136,10 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               title: TitelRideHistory,
             ),
             totalTripHeader(),
-            // Expanded(
-            //   child: Container(
-            //       margin: const EdgeInsets.only(right: 10.0),
-            //       child: _buildPosts(context)),
-            // ),
+
             Expanded(
               child: _isFirstLoadRunning
-                  ? Center(
+                  ? const Center(
                 child: CircularProgressIndicator(),
               )
                   : Container(
@@ -152,8 +148,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
             ),
             // when the _loadMore function is running
             if (_isLoadMoreRunning == true)
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 40),
+              const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 40),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -164,7 +160,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               Container(
                 padding: const EdgeInsets.only(top: 30, bottom: 40),
                 color: Colors.green,
-                child: Center(
+                child: const Center(
                   child: Text(
                     'You have fetched all of the content',
                     style: TextStyle(
@@ -227,7 +223,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(children:  [
-            Icon(
+            const Icon(
               Icons.nights_stay_sharp,
               color: AppColor.black,
             ),
@@ -269,7 +265,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         Icons.star,
                         color: AppColor.butgreen,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       robotoTextWidget(
@@ -285,7 +281,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   ),
                   Row(
                     children:  [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(left: 25),
                       ),
                       robotoTextWidget(
@@ -344,7 +340,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       foregroundDecoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(10),
-              bottomRight: const Radius.circular(10)),
+              bottomRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Align(

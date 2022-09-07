@@ -15,18 +15,19 @@ class AppBarInsideWidget extends StatefulWidget {
 }
 
 class _AppBarInsidePageState extends State<AppBarInsideWidget> {
+  late SharedPreferences sharedPreferences ;
   String? loginPic;
-  Future<void> getsharedPrefs() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    loginPic = sharedPreferences.getString(Loginpropic);
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getsharedPrefs();
-    //init();
+  }
+
+
+  Future<void> getsharedPrefs() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //loginPic = sharedPreferences.getString(Loginpropic);
   }
 
   @override
@@ -37,10 +38,8 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
       child: Stack(
         children: <Widget>[
           Card(
-            elevation: 4,
-            color: AppColor.greyblack,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              elevation: 4,
+              color: AppColor.greyblack,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -49,46 +48,28 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                       "assets/svg/chevron-back-button.svg",
                       width: 22,
                       height: 24,
+
                     ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Row(
-                      children: [
-                        robotoTextWidget(
-                          textval: widget.title,
-                          colorval: AppColor.lightwhite,
-                          sizeval: 18.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Card(
-                  //   child: Image.network(
-                  //     "$imageServerurl${(loginPic ?? '')}",
-                  //     fit: BoxFit.fill,
-                  //     height: 40,
-                  //     width: 40,
-                  //   ),
-                  // )
+
+                  robotoTextWidget(textval: widget.title,colorval: AppColor.lightwhite,sizeval: 18.0,fontWeight: FontWeight.w800,),
+
+
                   Card(
-                    child: Image.network(
-                      placeHolderImage,
-                      fit: BoxFit.fill,
-                      height: 40,
-                      width: 40,
-                    ),
+                    child: Image.network(placeHolderImage,
+                      fit: BoxFit.fill,height: 40,
+                      width: 40,),
                   )
                 ],
               ),
             ),
-          ),
+
         ],
       ),
     );
   }
+
 }

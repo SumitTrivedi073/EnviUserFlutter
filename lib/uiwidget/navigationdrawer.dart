@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../theme/theme.dart';
@@ -225,6 +226,12 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
             onTap: () {
               closeDrawer();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => FavoritePlacesPage()),
+                      (route) => true
+              );
+
             },
           ),
           ListTile(

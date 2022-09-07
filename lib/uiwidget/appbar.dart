@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
+import '../web_service/Constant.dart';
 import 'navigationdrawer.dart';
 
 
@@ -72,7 +73,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ),
 
                         Card(
-                          child: Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                          child: Image.network(placeHolderImage,
                             fit: BoxFit.fill,height: 40,
                             width: 50,),
                         )
