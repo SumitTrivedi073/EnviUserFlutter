@@ -37,17 +37,11 @@ class _SearchDriverPageState extends State<SearchDriver> {
         ),
       ),
       child: Column(children: [
-        Container(
-          margin: const EdgeInsets.only(top: 50),
-          child: Column(
-            children: [
-              AppBarInsideWidget(title: "Envi"),
-              SizedBox(height: 10),
+
+        const AppBarInsideWidget(title: "Envi"),
+              const SizedBox(height: 5),
               FromToWidget(),
-            ],
-          ),
-        ),
-        Spacer(),
+        const Spacer(),
         DriverListItem(),
         Container(
             height: 40,

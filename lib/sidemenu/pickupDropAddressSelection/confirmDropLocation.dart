@@ -75,11 +75,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           "assets/images/destination-marker.png",
           scale: 2,
         ),
-        //      SvgPicture.asset(
-        //   "assets/images/destination-marker.png",
-        //   width: 20,
-        //   height: 20,
-        // )
       ),
       Align(
         alignment: Alignment.bottomRight,
@@ -110,15 +105,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             color: Colors.white,
             elevation: 4,
             child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // SvgPicture.asset(
-                    //   "assets/svg/to-location-img.svg",
-                    //   width: 20,
-                    //   height: 20,
-                    // ),
+
                     Image.asset(
                       "assets/images/destination-marker.png",
                       scale: 2,
@@ -134,7 +125,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         child: robotoTextWidget(
                           textval: Address,
                           colorval: AppColor.black,
-                          sizeval: 18,
+                          sizeval: 14,
                           fontWeight: FontWeight.w200,
                         ),
                       ),
@@ -146,11 +137,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         alignment: Alignment.centerRight,
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          color: AppColor.grey,
+                          color: AppColor.white,
                           child: const Icon(
                             Icons.keyboard_alt_outlined,
-                            color: AppColor.black,
-                            size: 30,
+                            color: AppColor.grey,
+                            size: 20,
                           ),
                         ))
                   ],
