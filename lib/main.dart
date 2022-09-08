@@ -112,7 +112,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
 
-
   void getLandingPageSettings() async {
 
     dynamic response = await HTTP.get(getfetchLandingPageSettings());

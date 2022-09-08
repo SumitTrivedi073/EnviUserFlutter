@@ -1,4 +1,3 @@
-
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,8 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/color.dart';
 import '../web_service/Constant.dart';
 
-
-class AppBarInsideWidget extends StatefulWidget{
+class AppBarInsideWidget extends StatefulWidget {
   const AppBarInsideWidget({Key? key, required this.title}) : super(key: key);
   final String title;
 
