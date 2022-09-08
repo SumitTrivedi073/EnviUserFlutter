@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../theme/color.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 import '../web_service/Constant.dart';
 import 'model/LoginModel.dart';
@@ -157,7 +158,11 @@ class _LoginpageState extends State<Loginpage> {
                       if (!isValid) {
                         return;
                       }
+
                       _formKeyofrverify.currentState!.save();
+                      setState(() {
+                        isLoading = true;
+                      });
                       verifyotp();
                     },
                     child: robotoTextWidget(
@@ -319,11 +324,13 @@ class _LoginpageState extends State<Loginpage> {
 
                   if (_showmobileview) {
                     setState(() {
+                      isLoading = true;
+                    });
                       fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
-                      _showmobileview = false;
-                    });
+
+
                   }
                 },
                 child: robotoTextWidget(
@@ -351,6 +358,10 @@ class _LoginpageState extends State<Loginpage> {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
         }
+        setState(() {
+          isLoading = false;
+        });
+        showToast(e.message, Color.fromARGB(255, 77, 142, 4), AppColor.cellheader, 'right', 30);
         // print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) async {
@@ -358,6 +369,10 @@ class _LoginpageState extends State<Loginpage> {
         loginverificationId = verificationId;
         _start = 60;
         startTimer();
+        setState(() {
+          isLoading = false;
+        });
+        _showmobileview = false;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         // print("object");
@@ -379,12 +394,21 @@ class _LoginpageState extends State<Loginpage> {
           await auth.signInWithCredential(phoneAuthCredential);
 //print(authCredential.user);
       if (authCredential.user != null) {
+        setState(() {
+          isLoading = true;
+        });
         signIn();
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => ProfilePage()));
       }
+
+
     } on FirebaseAuthException catch (e) {
       print("catch$e");
+      setState(() {
+        isLoading = false;
+      });
+      showToast(e.message, Color.fromARGB(255, 77, 142, 4), AppColor.cellheader, 'right', 30);
     }
   }
 
