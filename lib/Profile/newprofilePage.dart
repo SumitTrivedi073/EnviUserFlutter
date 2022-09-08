@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/theme/styles.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../web_service/Constant.dart';
 
@@ -17,6 +20,16 @@ class NewProfilePage extends StatefulWidget {
 }
 
 class _NewProfilePageState extends State<NewProfilePage> {
+  File? _image;
+  Future getImage() async {
+    final img = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (img == null) return;
+    final imageTemp = File(img.path);
+    setState(() {
+      _image = imageTemp;
+    });
+  }
+
   String? selectedGender;
   //textformfield controllers
   final TextEditingController _firstNameController = TextEditingController();
@@ -32,6 +45,15 @@ class _NewProfilePageState extends State<NewProfilePage> {
   }
 
   final _profileForm = GlobalKey<FormState>();
+  // var _image;
+  // var imagePicker;
+  // var type;
+  @override
+  void initState() {
+    // TODO: implement initState
+    // imagePicker = ImagePicker();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +106,32 @@ class _NewProfilePageState extends State<NewProfilePage> {
                       children: [
                         Row(
                           children: [
-                            Container(
-                              color: AppColor.textfieldlightgrey,
-                              height: 90,
-                              width: 90,
-                              child: const Icon(
-                                Icons.camera_alt_outlined,
-                                color: AppColor.grey,
-                              ),
+                            GestureDetector(
+                              onTap: () async {
+                                // var source = ImageSource.gallery;
+                                // XFile image = await imagePicker!
+                                //     .getImage(source: source);
+                                // setState(() {
+                                //   _image = File(image.path);
+                                // });
+                                getImage();
+                              },
+                              child: (_image != null)
+                                  ? Image.file(
+                                      _image!,
+                                      width: 100.0,
+                                      height: 100.0,
+                                      fit: BoxFit.fitHeight,
+                                    )
+                                  : Container(
+                                      color: AppColor.textfieldlightgrey,
+                                      height: 90,
+                                      width: 90,
+                                      child: const Icon(
+                                        Icons.camera_alt_outlined,
+                                        color: AppColor.grey,
+                                      ),
+                                    ),
                             ),
                             const SizedBox(
                               width: 12,
