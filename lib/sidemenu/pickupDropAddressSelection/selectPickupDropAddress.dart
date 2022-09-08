@@ -45,7 +45,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late FocusNode startFocusNode;
   late FocusNode endFocusNode;
   late GooglePlace googlePlace;
-  String kPLACES_API_KEY = "AIzaSyAMnSO4iTYphqjRAnu80OG0FNLt1mvQe3c";
+
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
 
@@ -58,7 +58,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
-    googlePlace = GooglePlace(kPLACES_API_KEY);
+    googlePlace = GooglePlace(GoogleApiKey);
   }
 
   @override
@@ -102,7 +102,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
     String request =
-        '$baseURL?input=$input&key=$kPLACES_API_KEY&sessiontoken=$_sessionToken';
+        '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
@@ -370,7 +370,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         _debounce = Timer(const Duration(milliseconds: 1000), () {
           if (value.isNotEmpty) {
             //places api
-            _firstLoad(value);
+          //  _firstLoad(value);
+            googleAPI(value);
           } else {
             searchPlaceList = [];
             startPosition = null;
@@ -407,7 +408,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         _debounce = Timer(const Duration(milliseconds: 1000), () {
           if (value.isNotEmpty) {
             //places api
-            _firstLoad(value);
+           // _firstLoad(value);
+            googleAPI(value);
           } else {
             searchPlaceList = [];
             endPosition = null;

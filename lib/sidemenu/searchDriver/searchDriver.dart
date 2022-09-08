@@ -2,6 +2,7 @@ import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.da
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/fromtowidget.dart';
+import 'package:envi/uiwidget/mapDirectionWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
@@ -16,7 +17,6 @@ class SearchDriver extends StatefulWidget {
   final DetailsResult? toLocation;
   final ToAddressLatLong? toAddress;
   const SearchDriver({Key? key, this.fromLocation, this.toLocation, this.toAddress}) : super(key: key);
-
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _SearchDriverPageState();
@@ -29,14 +29,10 @@ class _SearchDriverPageState extends State<SearchDriver> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(PageBackgroundImage),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Column(children: [
+        body:Stack(alignment: Alignment.centerRight, children: <Widget>[
+            MapDirectionWidget(),
+
+     Column(children: [
 
         const AppBarInsideWidget(title: "Envi"),
               const SizedBox(height: 5),
@@ -63,6 +59,6 @@ class _SearchDriverPageState extends State<SearchDriver> {
               ),
             )),
       ]),
-    ));
+    ]));
   }
 }

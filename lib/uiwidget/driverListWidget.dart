@@ -78,7 +78,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
             height: 5,
           ),
           Card(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(5),
             color: const Color(0xFFE4F3F5),
             child:Padding(
                 padding: const EdgeInsets.all(8),
