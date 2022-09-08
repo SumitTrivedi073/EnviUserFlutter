@@ -54,3 +54,8 @@ var genderText = "Gender";
 var estimateFare = "ESTIMATED FARE";
 var bookNow = "BOOK NOW";
 var continue1 = "CONTINUE";
+var hometext = "Home";
+var worktext = "Work";
+var presetplacetext = "PRESET PLACES";
+var  customplacetext  = "CUSTOM PLACES";
+

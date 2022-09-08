@@ -43,7 +43,11 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
         .databaseBuilder('envi_user.db')
         .build();
      dao = database.taskDao;
-    arraddress =  await dao.getFavoriate() ;//findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
+  List<FavoritesData>  temparr =  await dao.getFavoriate() ;
+    setState(() {
+      arraddress =  temparr ;
+    });
+   //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
 print("==========${arraddress}");
   }
   @override
@@ -63,16 +67,14 @@ print("==========${arraddress}");
           ),
         ),
         child: Column(
+
           children: [
             AppBarInsideWidget(
               title: TitelUpcomingRides,
             ),
-            robotoTextWidget(
-              textval: "PRESET PLACES",
-              colorval: AppColor.grey,
-              sizeval: 14.0,
-              fontWeight: FontWeight.normal,
-            ),
+
+            presetplace(),
+
             Expanded(
               child:_isFirstLoadRunning
                   ? Center(
@@ -81,6 +83,36 @@ print("==========${arraddress}");
                   : Container(
                   margin: const EdgeInsets.only(right: 10.0),
                   child: _buildPosts(context)),
+            ),
+            Container(
+              width:200,
+              height: 40.0,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              margin: const EdgeInsets.only(top: 30.0,bottom: 50),
+              child:Center(child:MaterialButton(
+color: AppColor.butgreen,
+                height: 40,
+                onPressed: () {
+
+
+
+                },
+                child:  Row(children:  [
+                  SvgPicture.asset(
+                    "assets/svg/add-place-plus.svg",
+                    width: 22,
+                    height: 24,
+                    color: AppColor.white,
+                  ),
+                  SizedBox(width: 10,),
+                  robotoTextWidget(
+                      textval: "ADD PLACE",
+                      colorval: AppColor.white,
+                      sizeval: 16.0,
+                      fontWeight: FontWeight.bold),
+                ]),
+
+              ), )
             ),
             if (_isLoadMoreRunning == true)
               Padding(
@@ -130,124 +162,240 @@ print("==========${arraddress}");
         ));
   }
 
-  Card ListItem(int index) {
-    return Card(
-      elevation: 4,
-      semanticContainer: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(
-          color: AppColor.border,
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CellRow1(index),
-            Container(
-              height: 1,
-              color: AppColor.border,
-            ),
-            CellRow2(index),
-            Container(
-              height: 1,
-              color: AppColor.border,
-            ),
+  Column ListItem(int index) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(height: 20,),
+          CellRow1(index),
+          //CellRow2(index),
 
-          ]),
-    );
+          const SizedBox(height: 20,),
+          Container(
+            height: 1,
+            color: AppColor.border,
+          ),
+
+        ]);
   }
 
   Container CellRow1(int index) {
     return Container(
-      color: AppColor.alfaorange.withOpacity(.3),
-      height: 38,
-      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(children:  [
-            SvgPicture.asset(
-              "assets/svg/place-custom.svg",
-              width: 22,
-              height: 24,
-            ),
-            SizedBox(width: 10,),
-            robotoTextWidget(
-              textval: arraddress[index].title,
-              colorval: AppColor.black,
-              sizeval: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ]),
+      color: AppColor.white.withOpacity(0.1),
+        padding:  const EdgeInsets.only(left: 18, right: 18),
 
-        ],
-      ),
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children:  [
+              SvgPicture.asset(
+                "assets/svg/place-custom.svg",
+                width: 22,
+                height: 24,
+                color: AppColor.darkGreen,
+              ),
+              SizedBox(width: 10,),
+              robotoTextWidget(
+                textval: arraddress[index].title,
+                colorval: AppColor.black,
+                sizeval: 14.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ]),
+
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children:  [
+
+              const SizedBox(width: 22,),
+              // Expanded(child: robotoTextWidget(
+              //   textval: arraddress[index].address,
+              //   colorval: AppColor.black,
+              //   sizeval: 14.0,
+              //   fontWeight: FontWeight.normal,
+              // ),),
+        // Flexible(
+        //   child: Wrap(children: [
+        //   Container(
+        //   padding: const EdgeInsets.only(right: 8),
+        //     child:
+        //     robotoTextWidget(
+        //       textval: arraddress[index].address,
+        //       colorval: AppColor.darkgrey,
+        //       sizeval: 14.0,
+        //       fontWeight: FontWeight.normal,
+        //     ),)
+        //   ])),
+              robotoTextWidget(
+                textval: arraddress[index].address,
+                colorval: AppColor.darkgrey,
+                sizeval: 14.0,
+                fontWeight: FontWeight.normal,
+              ),
+
+            ]),
+
+          ],
+        ),
+      ],)
+
     );
   }
 
-  Container CellRow2(int index) {
+
+  Container presetplace(){
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(PageBackgroundImage),
-          fit: BoxFit.cover,
-        ),
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 22,),
+          Row(children:  [
+            const SizedBox(width: 22,),
+            robotoTextWidget(
+              textval: presetplacetext,
+              colorval: AppColor.grey,
+              sizeval: 14.0,
+              fontWeight: FontWeight.normal,
+            ),
+          ]),
+          const SizedBox(height: 5,),
+      Container(
+        height: 1,
+        color: AppColor.border,
       ),
-      child: Container(
-        color: AppColor.alfaorange.withOpacity(0.1),
-        height: 94,
-        padding:
-        const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+          const SizedBox(height: 20,),
+        Container(
+            color: AppColor.white.withOpacity(0.1),
+            padding:  const EdgeInsets.only(left: 20, right: 20),
+
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children:  [
+                    SvgPicture.asset(
+                      "assets/svg/place-home.svg",
+                      width: 22,
+                      height: 24,
+                      color: AppColor.darkGreen,
+                    ),
+                    SizedBox(width: 10,),
+                    robotoTextWidget(
+                      textval: hometext,
+                      colorval: AppColor.black,
+                      sizeval: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ]),
+
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children:  [
+
+                    const SizedBox(width: 22,),
+                    // Expanded(child: robotoTextWidget(
+                    //   textval: arraddress[index].address,
+                    //   colorval: AppColor.black,
+                    //   sizeval: 14.0,
+                    //   fontWeight: FontWeight.normal,
+                    // ),),
+                    robotoTextWidget(
+                      textval: "arraddress[index].address",
+                      colorval: AppColor.darkgrey,
+                      sizeval: 14.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+
+                  ]),
+
+                ],
+              ),
+            ],)
+
+        ),
+          const SizedBox(height: 20,),
+          Container(
+            height: 1,
+            color: AppColor.border,
+          ),
+          const SizedBox(height: 20,),
+          Container(
+              color: AppColor.white.withOpacity(0.1),
+              padding:  const EdgeInsets.only(left: 20, right: 20),
+
+              child: Column(children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children:  [
-                        robotoTextWidget(
-                          textval: arraddress[index].address.length > 30 ? arraddress[index].address.substring(0, 30) : arraddress[index].address,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
+                    Row(children:  [
+                      SvgPicture.asset(
+                        "assets/svg/place-work.svg",
+                        width: 22,
+                        height: 24,
+                        color: AppColor.darkGreen,
+                      ),
+                      SizedBox(width: 10,),
+                      robotoTextWidget(
+                        textval: worktext,
+                        colorval: AppColor.black,
+                        sizeval: 14.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ]),
 
                   ],
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 7,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(children: const [
-                  robotoTextWidget(
-                    textval: "18 Kms",
-                    colorval: AppColor.greyblack,
-                    sizeval: 13.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ]),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(children:  [
 
+                      const SizedBox(width: 22,),
+
+                      robotoTextWidget(
+                        textval: "arraddress[index].address",
+                        colorval: AppColor.darkgrey,
+                        sizeval: 14.0,
+                        fontWeight: FontWeight.normal,
+                      ),
+
+                    ]),
+
+                  ],
+                ),
+              ],)
+
+          ),
+          const SizedBox(height: 20,),
+          Container(
+            height: 1,
+            color: AppColor.border,
+          ),
+          const SizedBox(height: 22,),
+          Row(children:  [
+            const SizedBox(width: 22,),
+            robotoTextWidget(
+              textval: customplacetext,
+              colorval: AppColor.grey,
+              sizeval: 14.0,
+              fontWeight: FontWeight.normal,
+            ),
+          ]),
+          const SizedBox(height: 5,),
+          Container(
+            height: 1,
+            color: AppColor.border,
+          ),
+    ],),);
+  }
 
 }
