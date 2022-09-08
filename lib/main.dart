@@ -77,7 +77,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-   if (sharedPreferences.getString(LoginID) == null) {
+    if (sharedPreferences.getString(LoginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
@@ -88,11 +88,9 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       context.read<firestoreLiveTripDataNotifier>()
           .listenToLiveUpdateStream();
 
+
     }
-    // Navigator.of(context).pushAndRemoveUntil(
-    //     MaterialPageRoute(
-    //         builder: (BuildContext context) =>  SearchDriver()),
-    //         (Route<dynamic> route) => false);
+
   }
 
   @override
