@@ -158,7 +158,11 @@ class _LoginpageState extends State<Loginpage> {
                       if (!isValid) {
                         return;
                       }
+
                       _formKeyofrverify.currentState!.save();
+                      setState(() {
+                        isLoading = true;
+                      });
                       verifyotp();
                     },
                     child: robotoTextWidget(
@@ -319,7 +323,9 @@ class _LoginpageState extends State<Loginpage> {
                   _formKey.currentState!.save();
 
                   if (_showmobileview) {
-
+                    setState(() {
+                      isLoading = true;
+                    });
                       fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
@@ -352,6 +358,9 @@ class _LoginpageState extends State<Loginpage> {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
         }
+        setState(() {
+          isLoading = false;
+        });
         showToast(e.message, Color.fromARGB(255, 77, 142, 4), AppColor.cellheader, 'right', 30);
         // print(e.message);
       },
@@ -360,6 +369,9 @@ class _LoginpageState extends State<Loginpage> {
         loginverificationId = verificationId;
         _start = 60;
         startTimer();
+        setState(() {
+          isLoading = false;
+        });
         _showmobileview = false;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
