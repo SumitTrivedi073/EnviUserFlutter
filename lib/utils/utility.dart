@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:envi/theme/color.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Utility {
   _getId() async {
@@ -29,4 +31,18 @@ dynamic myEncode(dynamic item) {
     return item.toString();
   }
   return item;
+}
+void showToast(dynamic toast_msg, dynamic backgroundColor, dynamic webBgColor,
+    dynamic webPosition, int timeInSecForIosWeb) {
+  Fluttertoast.showToast(
+      msg: toast_msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: timeInSecForIosWeb,
+      backgroundColor: backgroundColor,
+      textColor: AppColor.white,
+      fontSize: 16.0,
+      webBgColor: webBgColor,
+      webPosition: webPosition,
+      webShowClose: true);
 }
