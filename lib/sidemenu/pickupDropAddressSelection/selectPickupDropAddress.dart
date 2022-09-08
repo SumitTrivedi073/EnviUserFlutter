@@ -47,16 +47,15 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late GooglePlace googlePlace;
   String kPLACES_API_KEY = "AIzaSyAMnSO4iTYphqjRAnu80OG0FNLt1mvQe3c";
   Timer? _debounce;
-  
+  List<AutocompletePrediction> predictions = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    setState(() {
-      _sessionToken = uuid.v4();
-    });
-  
+    _sessionToken = uuid.v4();
+
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
     googlePlace = GooglePlace(kPLACES_API_KEY);
@@ -71,23 +70,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   _firstLoad(String value) async {
     Map data;
-   
+
     data = {
       "search": value,
     };
- 
+
     dynamic res = await HTTP.post(searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
-        setState(() {
-          if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
-            searchPlaceList = (jsonDecode(res.body)['content'] as List)
-                .map((i) => SearchPlaceModel.fromJson(i))
-                .toList();
-          } else {
-            googleAPI(value);
-          }
-        });
+        if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
+          searchPlaceList = (jsonDecode(res.body)['content'] as List)
+              .map((i) => SearchPlaceModel.fromJson(i))
+              .toList();
+        } else {
+          googleAPI(value);
+        }
       } else {
         googleAPI(value);
       }
@@ -98,7 +95,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   void googleAPI(String value) {
     getSuggestion(value);
-   
   }
 
   void getSuggestion(String input) async {
@@ -154,7 +150,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       ConfirmDropLocation(
-                                        fromLocation: startPosition ,                
+                                        fromLocation: startPosition,
                                         title: confirmDropLocationText,
                                       )),
                               (Route<dynamic> route) => true);
@@ -171,7 +167,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               const SizedBox(
                                 width: 5,
                               ),
-                               robotoTextWidget(
+                              robotoTextWidget(
                                   textval: pickOnMapText,
                                   colorval: AppColor.blue,
                                   sizeval: 14,
@@ -186,58 +182,62 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ListTile(
-                      title: robotoTextWidget(
-                        textval: searchPlaceList[index].title,
-                        colorval: AppColor.black,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.w800,
+                return InkWell(
+                  onTap: () async {
+                    final placeId = searchPlaceList[index].id;
+                    final details = await googlePlace.details.get(placeId,
+                        sessionToken: _sessionToken,
+                        fields:
+                            'geometry,address_components,name,international_phone_number');
+                    if (details != null && details.result != null && mounted) {
+                      if (startFocusNode.hasFocus) {
+                        setState(() {
+                          startPosition = details.result;
+
+                          FromLocationText.text = details.result!.name!;
+                          searchPlaceList = [];
+                        });
+                      } else {
+                        setState(() {
+                          endPosition = details.result;
+                          ToLocationText.text = details.result!.name!;
+                          searchPlaceList = [];
+                        });
+                      }
+                    }
+                  },
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ListTile(
+                        title: robotoTextWidget(
+                          textval: searchPlaceList[index].title,
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        subtitle: robotoTextWidget(
+                          textval: searchPlaceList[index].address,
+                          colorval: AppColor.black,
+                          sizeval: 12.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        leading: SvgPicture.asset(
+                          "assets/svg/to-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        // onTap: () async {
+
+                        // },
                       ),
-                      subtitle: robotoTextWidget(
-                        textval: searchPlaceList[index].address,
-                        colorval: AppColor.black,
-                        sizeval: 12.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      leading: SvgPicture.asset(
-                        "assets/svg/to-location-img.svg",
-                        width: 20,
-                        height: 20,
-                      ),
-                      onTap: () async {
-                       
-                        final placeId = searchPlaceList[index].id;
-                        final details = await googlePlace.details.get(placeId);
-                        if (details != null &&
-                            details.result != null &&
-                            mounted) {
-                          if (startFocusNode.hasFocus) {
-                            setState(() {
-                              startPosition = details.result;
-                             
-                              FromLocationText.text = details.result!.name!;
-                              searchPlaceList = [];
-                            });
-                          } else {
-                            setState(() {
-                              endPosition = details.result;
-                              ToLocationText.text = details.result!.name!;
-                              searchPlaceList = [];
-                            });
-                          }
-                        }
-                      
-                        _isVisible = false;
-                      },
                     ),
                   ),
                 );
               },
-              itemCount: searchPlaceList.length,
+              itemCount:
+                  searchPlaceList.length < 10 ? searchPlaceList.length : 10,
               padding: const EdgeInsets.all(8),
             )),
             Align(
@@ -250,8 +250,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     onPressed: () {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  SearchDriver(
+                              builder: (BuildContext context) => SearchDriver(
                                     fromLocation: startPosition,
                                     toLocation: endPosition,
                                   )),
@@ -328,7 +327,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               ),
               GestureDetector(
                   onTap: () {
-                  //  print("Tapped a Container");
+                    //  print("Tapped a Container");
                   },
                   child: Container(
                     height: 50,
@@ -372,12 +371,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           if (value.isNotEmpty) {
             //places api
             _firstLoad(value);
+          } else {
+            searchPlaceList = [];
+            startPosition = null;
           }
         });
       },
       showCursor: true,
       controller: FromLocationText,
-    
       decoration: InputDecoration(
           hintText: FromLocationHint,
           border: InputBorder.none,
@@ -407,11 +408,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           if (value.isNotEmpty) {
             //places api
             _firstLoad(value);
+          } else {
+            searchPlaceList = [];
+            endPosition = null;
           }
         });
       },
       controller: ToLocationText,
- 
       decoration: InputDecoration(
           hintText: ToLocationHint,
           border: InputBorder.none,

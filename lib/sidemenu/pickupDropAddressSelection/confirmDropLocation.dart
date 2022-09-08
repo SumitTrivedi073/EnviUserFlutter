@@ -33,23 +33,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   GoogleMapController? _controller;
   String Address = PickUp;
   ToAddressLatLong? toAddress;
-  Set<Marker> markers = Set();
-
-  Future<void> customMarker() async {
-    LatLng startLocation = latlong;
-    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      "assets/images/destination-marker.png",
-    );
-
-    markers.add(Marker(
-      //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
-
-      icon: markerbitmap, //Icon for Marker
-    ));
-  }
 
   @override
   void initState() {
@@ -57,7 +40,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     super.initState();
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
-    customMarker();
   }
 
   @override
@@ -66,7 +48,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     return SafeArea(
         child: Stack(children: [
       GoogleMap(
-        markers: markers,
         mapType: MapType.normal,
         initialCameraPosition: _cameraPosition!,
         onMapCreated: (GoogleMapController controller) {
@@ -83,18 +64,23 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         rotateGesturesEnabled: true,
         zoomControlsEnabled: false,
         onCameraIdle: () {
-          GetAddressFromLatLong(latlong!);
+          GetAddressFromLatLong(latlong);
         },
         onCameraMove: (CameraPosition position) {
           latlong = LatLng(position.target.latitude, position.target.longitude);
         },
       ),
       Center(
-          child: SvgPicture.asset(
-        "assets/svg/from-location-img.svg",
-        width: 20,
-        height: 20,
-      )),
+        child: Image.asset(
+          "assets/images/destination-marker.png",
+          scale: 2,
+        ),
+        //      SvgPicture.asset(
+        //   "assets/images/destination-marker.png",
+        //   width: 20,
+        //   height: 20,
+        // )
+      ),
       Align(
         alignment: Alignment.bottomRight,
         child: Container(
@@ -156,11 +142,16 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                     const SizedBox(
                       width: 5,
                     ),
-                    const Align(
+                    Align(
                         alignment: Alignment.centerRight,
-                        child: Icon(
-                          Icons.keyboard,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
                           color: AppColor.grey,
+                          child: const Icon(
+                            Icons.keyboard_alt_outlined,
+                            color: AppColor.black,
+                            size: 30,
+                          ),
                         ))
                   ],
                 )),
