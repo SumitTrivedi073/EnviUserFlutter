@@ -6,6 +6,7 @@ import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/theme/responsive.dart';
+import 'package:envi/uiwidget/mapDirectionWidget.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -90,7 +91,9 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
 
     }
-
+  /*  Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) =>  MapDirectionWidget()),
+            (Route<dynamic> route) => false);*/
   }
 
   @override
