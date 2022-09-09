@@ -82,6 +82,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           searchPlaceList = (jsonDecode(res.body)['content'] as List)
               .map((i) => SearchPlaceModel.fromJson(i))
               .toList();
+             print(searchPlaceList.toString());
         } else {
           googleAPI(value);
         }
@@ -188,7 +189,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     final details = await googlePlace.details.get(placeId,
                         sessionToken: _sessionToken,
                         fields:
-                            'geometry,address_components,name,international_phone_number');
+                            'geometry,formatted_address,name');
                     if (details != null && details.result != null && mounted) {
                       if (startFocusNode.hasFocus) {
                         setState(() {

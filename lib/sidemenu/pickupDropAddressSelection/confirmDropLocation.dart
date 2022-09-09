@@ -1,3 +1,4 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
@@ -181,7 +182,14 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (BuildContext context) => SearchDriver(
-                              fromLocation: widget.fromLocation,
+                              fromAddress: FromAddressLatLong(
+                                  address:
+                                      widget.fromLocation!.formattedAddress!,
+                                  position: LatLng(
+                                      widget.fromLocation!.geometry!.location!
+                                          .lat!,
+                                      widget.fromLocation!.geometry!.location!
+                                          .lng!)),
                               toAddress: ToAddressLatLong(
                                 address: Address,
                                 position: latlong,

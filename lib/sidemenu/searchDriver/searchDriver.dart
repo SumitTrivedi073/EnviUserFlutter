@@ -1,3 +1,4 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -12,10 +13,13 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 
 class SearchDriver extends StatefulWidget {
+  //variables for selectpickup drop address navigation route
   final DetailsResult? fromLocation;
   final DetailsResult? toLocation;
+  // variables for confirm drop location navigation route
   final ToAddressLatLong? toAddress;
-  const SearchDriver({Key? key, this.fromLocation, this.toLocation, this.toAddress}) : super(key: key);
+  final FromAddressLatLong? fromAddress;
+  const SearchDriver({Key? key, this.fromLocation, this.toLocation, this.toAddress, this.fromAddress}) : super(key: key);
 
   @override
   // TODO: implement createState
