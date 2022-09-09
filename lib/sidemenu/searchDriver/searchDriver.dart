@@ -10,13 +10,16 @@ import 'package:google_place/google_place.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/driverListWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
-import '../../web_service/Constant.dart';
 
 class SearchDriver extends StatefulWidget {
   final DetailsResult? fromLocation;
   final DetailsResult? toLocation;
   final ToAddressLatLong? toAddress;
-  const SearchDriver({Key? key, this.fromLocation, this.toLocation, this.toAddress}) : super(key: key);
+
+  const SearchDriver(
+      {Key? key, this.fromLocation, this.toLocation, this.toAddress})
+      : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _SearchDriverPageState();
@@ -29,14 +32,12 @@ class _SearchDriverPageState extends State<SearchDriver> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        body:Stack(alignment: Alignment.centerRight, children: <Widget>[
-            MapDirectionWidget(),
-
-     Column(children: [
-
+        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+      MapDirectionWidget(),
+      Column(children: [
         const AppBarInsideWidget(title: "Envi"),
-              const SizedBox(height: 5),
-              FromToWidget(),
+        const SizedBox(height: 5),
+        FromToWidget(),
         const Spacer(),
         DriverListItem(),
         Container(

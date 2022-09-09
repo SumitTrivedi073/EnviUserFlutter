@@ -13,10 +13,13 @@ class DriverListItem extends StatefulWidget {
 }
 
 class _DriverListItemPageState extends State<DriverListItem> {
+  var listItemCount = 4;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Card(
+    return Expanded(
+        child: Card(
       elevation: 5,
       margin: const EdgeInsets.all(10),
       child: Column(
@@ -29,7 +32,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: const robotoTextWidget(
-                      textval: '3 Ride Option',
+                      textval: '4 Ride Option',
                       colorval: AppColor.black,
                       sizeval: 14,
                       fontWeight: FontWeight.w800),
@@ -77,181 +80,253 @@ class _DriverListItemPageState extends State<DriverListItem> {
           const SizedBox(
             height: 5,
           ),
-          Card(
-            margin: const EdgeInsets.all(5),
-            color: const Color(0xFFE4F3F5),
-            child:Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const robotoTextWidget(
-                            textval: '7 Minutes Away',
-                            colorval: AppColor.black,
-                            sizeval: 16,
-                            fontWeight: FontWeight.w600),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            RatingBar.builder(
-                              initialRating: 4,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 20,
-                              itemPadding: const EdgeInsets.symmetric(
-                                  horizontal: 4.0),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+          Expanded(
+            child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                      onTap: () {
+
+                      },
+                      child:Card(
+                        margin: const EdgeInsets.all(5),
+                        color: const Color(0xFFE4F3F5),
+                        child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const robotoTextWidget(
+                                      textval: '7 Minutes Away',
+                                      colorval: AppColor.black,
+                                      sizeval: 16,
+                                      fontWeight: FontWeight.w600),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RatingBar.builder(
+                                        initialRating: 4,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 20,
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          print(rating);
+                                        },
+                                      ),
+                                      Card(
+                                        child: Image.network(
+                                          "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                                          fit: BoxFit.fill,
+                                          height: 40,
+                                          width: 50,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
-                            ),
-                            Card(
-                              child: Image.network(
-                                "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
-                                fit: BoxFit.fill,
-                                height: 40,
-                                width: 50,
-                              ),
-                            )
-                          ],
-                        ),],
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/svg/car-type-sedan.svg",
-                          width: 40,
-                          height: 30,
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children:  [
-                            const robotoTextWidget(textval: "Hatchback",
-                                colorval: AppColor.black,
-                                sizeval: 14,
-                                fontWeight: FontWeight.w200),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
                                 Row(
                                   children: [
-                                    Image.asset(
-                                        'assets/images/passengers-icon.png',
-                                        height: 15,
-                                        width: 15,
-                                        fit:BoxFit.cover
+                                    SvgPicture.asset(
+                                      "assets/svg/car-type-sedan.svg",
+                                      width: 40,
+                                      height: 30,
                                     ),
                                     const SizedBox(
-                                      width: 5,
+                                      width: 20,
                                     ),
-                                    const robotoTextWidget(textval: "3 People",
-                                        colorval:  AppColor.black,
-                                        sizeval: 14,
-                                        fontWeight: FontWeight.w200)
-                                  ],),
+                                    Column(
+                                      children: [
+                                        const robotoTextWidget(
+                                            textval: "Hatchback",
+                                            colorval: AppColor.black,
+                                            sizeval: 14,
+                                            fontWeight: FontWeight.w200),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                    'assets/images/passengers-icon.png',
+                                                    height: 15,
+                                                    width: 15,
+                                                    fit: BoxFit.cover),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                const robotoTextWidget(
+                                                    textval: "3 People",
+                                                    colorval: AppColor.black,
+                                                    sizeval: 14,
+                                                    fontWeight: FontWeight.w200)
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                    'assets/images/weight-icon.png',
+                                                    height: 15,
+                                                    width: 15,
+                                                    fit: BoxFit.cover),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                const robotoTextWidget(
+                                                    textval: "7 Kg",
+                                                    colorval: AppColor.black,
+                                                    sizeval: 14,
+                                                    fontWeight: FontWeight.w200)
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 10),
+                                  color: AppColor.border,
+                                  height: 2,
+                                ),
                                 const SizedBox(
-                                  width: 10,
+                                  height: 5,
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Image.asset(
-                                        'assets/images/weight-icon.png',
-                                        height: 15,
-                                        width: 15,
-                                        fit:BoxFit.cover
+                                    robotoTextWidget(
+                                        textval: estimateFare,
+                                        colorval: AppColor.darkgrey,
+                                        sizeval: 12,
+                                        fontWeight: FontWeight.w600),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.info_outlined,
+                                          size: 20.0,
+                                          color: Colors.grey,
+                                        ))
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const robotoTextWidget(
+                                        textval: "₹220",
+                                        colorval: AppColor.black,
+                                        sizeval: 20,
+                                        fontWeight: FontWeight.w800),
+                                    const SizedBox(
+                                      width: 25,
+                                    ),
+                                    const Text(
+                                      "₹350",
+                                      textAlign: TextAlign.justify,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColor.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'Roboto',
+                                          decoration: TextDecoration.lineThrough),
                                     ),
                                     const SizedBox(
-                                      width: 5,
+                                      width: 25,
                                     ),
-                                    const robotoTextWidget(textval: "7 Kg",
-                                        colorval:  AppColor.black,
-                                        sizeval: 14,
-                                        fontWeight: FontWeight.w200)
-                                  ],)
+                                    Column(
+                                      children: const [
+                                        robotoTextWidget(
+                                            textval: "Special Offer",
+                                            colorval: AppColor.purple,
+                                            sizeval: 14,
+                                            fontWeight: FontWeight.w800),
+                                        robotoTextWidget(
+                                            textval: "20% Off",
+                                            colorval: AppColor.purple,
+                                            sizeval: 13,
+                                            fontWeight: FontWeight.w400),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      color: AppColor.border,
-                      height: 2,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        robotoTextWidget(textval: estimateFare,
-                            colorval: AppColor.darkgrey,
-                            sizeval: 12,
-                            fontWeight: FontWeight.w600),
-
-                        IconButton(
-                            onPressed: (){},
-                            icon: const Icon(Icons.info_outlined,
-                              size: 20.0,
-                              color: Colors.grey,)
-                        )
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children:  [
-                        const robotoTextWidget(textval: "₹220",
-                            colorval: AppColor.black,
-                            sizeval: 20,
-                            fontWeight: FontWeight.w800),
-                        const Text(
-                          "₹350",
-                          textAlign: TextAlign.justify,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Roboto',
-                              decoration: TextDecoration.lineThrough),
-                        ),
-
-                        Column(
-                          children: const [
-                            robotoTextWidget(textval: "Special Offer",
-                                colorval: AppColor.purple,
-                                sizeval: 14,
-                                fontWeight: FontWeight.w800),
-                            robotoTextWidget(textval: "20% Off",
-                                colorval: AppColor.purple,
-                                sizeval: 13,
-                                fontWeight: FontWeight.w400),
-                          ],
-                        )
-
-                      ],
-                    ),
-                  ],
-                )),
-          ),
+                            )),
+                      )
+                  );
+                },
+                itemCount: 4,
+                scrollDirection: Axis.horizontal,
+                physics: const AlwaysScrollableScrollPhysics(),
+              ),
+          )
         ],
       ),
-    );
+    ));
+  }
+
+  void confirmBookingPopup(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            scrollable: true,
+            title: const Text('Login'),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                        icon: Icon(Icons.account_box),
+                      ),
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        icon: Icon(Icons.email),
+                      ),
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Message',
+                        icon: const Icon(Icons.message ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              RaisedButton(
+                  child: const Text("Submit"),
+                  onPressed: () {
+                    // your code
+                  })
+            ],
+          );
+        });
+
   }
 }
