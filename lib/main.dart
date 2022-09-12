@@ -83,12 +83,14 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
     } else {
-      GetAllFavouriteAddress();
-      getLandingPageSettings();
-      // ignore: use_build_context_synchronously
-      context.read<firestoreLiveTripDataNotifier>()
-          .listenToLiveUpdateStream();
-
+      // GetAllFavouriteAddress();
+      // getLandingPageSettings();
+      // // ignore: use_build_context_synchronously
+      // context.read<firestoreLiveTripDataNotifier>()
+      //     .listenToLiveUpdateStream();
+   Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+              (Route<dynamic> route) => false);
 
     }
   /*  Navigator.of(context).pushAndRemoveUntil(

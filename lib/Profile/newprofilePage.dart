@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:envi/login/model/LoginModel.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/dropdown.dart';
+import 'package:envi/web_service/ApiServices/user_api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -13,8 +15,8 @@ import 'package:image_picker/image_picker.dart';
 import '../web_service/Constant.dart';
 
 class NewProfilePage extends StatefulWidget {
-  const NewProfilePage({Key? key}) : super(key: key);
-
+  const NewProfilePage({Key? key, required this.user}) : super(key: key);
+  final LoginModel user;
   @override
   State<NewProfilePage> createState() => _NewProfilePageState();
 }
@@ -35,7 +37,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+   final TextEditingController _emailController = TextEditingController();
 
   //choose gender
   void chooseGender(String val) {
@@ -48,8 +50,15 @@ class _NewProfilePageState extends State<NewProfilePage> {
   // var _image;
   // var imagePicker;
   // var type;
+  void updateUser() {
+    _emailController.text = widget.user.mailid;
+    _phoneNoController.text = widget.user.phone;
+   _firstNameController.text = widget.user.name;
+
+  }
   @override
   void initState() {
+
     // TODO: implement initState
     // imagePicker = ImagePicker();
     super.initState();
@@ -244,7 +253,13 @@ class _NewProfilePageState extends State<NewProfilePage> {
                 height: 15,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                 UserApiService userApi = UserApiService();
+                
+                 userApi.userEditProfile(token: widget.user.token,name: _firstNameController.text,gender: selectedGender!,propic: '$_image.path' );
+
+                 
+                },
                 height: 48,
                 minWidth: double.infinity,
                 color: AppColor.greyblack,

@@ -153,7 +153,9 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const NewProfilePage()));
+                                            NewProfilePage(
+user: widget.profiledata,
+                                            )));
                               },
                               child: const Icon(
                                 Icons.edit_note_outlined,
