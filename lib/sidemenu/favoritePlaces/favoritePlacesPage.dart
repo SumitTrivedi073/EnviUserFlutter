@@ -1,5 +1,6 @@
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
+import 'package:envi/theme/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,28 +33,28 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
   late final FavoritesDataDao dao;
 
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     loadData();
 
+    // _controller = new ScrollController()..addListener(_loadMore);
+  }
 
-   // _controller = new ScrollController()..addListener(_loadMore);
-  }
   Future<void> loadData() async {
-    final database = await $FloorFlutterDatabase
-        .databaseBuilder('envi_user.db')
-        .build();
-     dao = database.taskDao;
-  List<FavoritesData>  temparr =  await dao.getFavoriate() ;
+    final database =
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
+    dao = database.taskDao;
+    List<FavoritesData> temparr = await dao.getFavoriate();
     setState(() {
-      arraddress =  temparr ;
+      arraddress = temparr;
     });
-   //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
-print("==========${arraddress}");
+    //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
+    print("==========${arraddress}");
   }
+
   @override
   void dispose() {
-   // _controller.removeListener(_loadMore);
+    // _controller.removeListener(_loadMore);
     super.dispose();
   }
 
@@ -68,7 +69,6 @@ print("==========${arraddress}");
           ),
         ),
         child: Column(
-
           children: [
             AppBarInsideWidget(
               title: TitelFavoritePlaces,
@@ -77,45 +77,50 @@ print("==========${arraddress}");
             presetplace(),
 
             Expanded(
-              child:_isFirstLoadRunning
+              child: _isFirstLoadRunning
                   ? Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  child: _buildPosts(context)),
+                      margin: const EdgeInsets.only(right: 10.0),
+                      child: _buildPosts(context)),
             ),
             Container(
-              width:200,
-              height: 40.0,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              margin: const EdgeInsets.only(top: 30.0,bottom: 50),
-              child:Center(child:MaterialButton(
-color: AppColor.butgreen,
-                height: 40,
-                onPressed: () {
-
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => AddEditFavoritePlacesPage(isforedit: "1",titleEditable: "1",data: null)));
-
-                },
-                child:  Row(children:  [
-                  SvgPicture.asset(
-                    "assets/svg/add-place-plus.svg",
-                    width: 22,
-                    height: 24,
-                    color: AppColor.white,
+                width: 200,
+                height: 40.0,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                margin: const EdgeInsets.only(top: 30.0, bottom: 50),
+                child: Center(
+                  child: MaterialButton(
+                    color: AppColor.butgreen,
+                    height: 40,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddEditFavoritePlacesPage(
+                                  isforedit: "1",
+                                  titleEditable: "1",
+                                  data: null)));
+                    },
+                    child: Row(children: [
+                      SvgPicture.asset(
+                        "assets/svg/add-place-plus.svg",
+                        width: 22,
+                        height: 24,
+                        color: AppColor.white,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      robotoTextWidget(
+                          textval: ADDPLACE,
+                          colorval: AppColor.white,
+                          sizeval: 16.0,
+                          fontWeight: FontWeight.bold),
+                    ]),
                   ),
-                  SizedBox(width: 10,),
-                  robotoTextWidget(
-                      textval: ADDPLACE,
-                      colorval: AppColor.white,
-                      sizeval: 16.0,
-                      fontWeight: FontWeight.bold),
-                ]),
-
-              ), )
-            ),
+                )),
             if (_isLoadMoreRunning == true)
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 40),
@@ -168,103 +173,114 @@ color: AppColor.butgreen,
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
 
           //CellRow2(index),
           GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddEditFavoritePlacesPage(isforedit: "0",titleEditable: "0",data: arraddress[index],)));
-    print("Tapped a Container");
-    },
-    child:CellRow1(index),),
-          const SizedBox(height: 20,),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddEditFavoritePlacesPage(
+                            isforedit: "0",
+                            titleEditable: "0",
+                            data: arraddress[index],
+                          )));
+              print("Tapped a Container");
+            },
+            child: CellRow1(index),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Container(
             height: 1,
             color: AppColor.border,
           ),
-
         ]);
   }
 
   Container CellRow1(int index) {
     return Container(
-      color: AppColor.white.withOpacity(0.1),
-        padding:  const EdgeInsets.only(left: 18, right: 18),
-
-      child: Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        color: AppColor.white.withOpacity(0.1),
+        padding: const EdgeInsets.only(left: 18, right: 18),
+        child: Column(
           children: [
-            Row(children:  [
-              SvgPicture.asset(
-                "assets/svg/place-custom.svg",
-                width: 22,
-                height: 24,
-                color: AppColor.darkGreen,
-              ),
-              SizedBox(width: 10,),
-              robotoTextWidget(
-                textval: arraddress[index].title,
-                colorval: AppColor.black,
-                sizeval: 14.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ]),
-
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children: [
+                  SvgPicture.asset(
+                    "assets/svg/place-custom.svg",
+                    width: 22,
+                    height: 24,
+                    color: AppColor.darkGreen,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  robotoTextWidget(
+                    textval: arraddress[index].title,
+                    colorval: AppColor.black,
+                    sizeval: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children: [
+                  const SizedBox(
+                    width: 22,
+                  ),
+                  // Expanded(child: robotoTextWidget(
+                  //   textval: arraddress[index].address,
+                  //   colorval: AppColor.black,
+                  //   sizeval: 14.0,
+                  //   fontWeight: FontWeight.normal,
+                  // ),),
+                  // Flexible(
+                  //   child: Wrap(children: [
+                  //   Container(
+                  //   padding: const EdgeInsets.only(right: 8),
+                  //     child:
+                  //     robotoTextWidget(
+                  //       textval: arraddress[index].address,
+                  //       colorval: AppColor.darkgrey,
+                  //       sizeval: 14.0,
+                  //       fontWeight: FontWeight.normal,
+                  //     ),)
+                  //   ])),
+                  robotoTextWidget(
+                    textval: arraddress[index].address,
+                    colorval: AppColor.darkgrey,
+                    sizeval: 14.0,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ]),
+              ],
+            ),
           ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(children:  [
-
-              const SizedBox(width: 22,),
-              // Expanded(child: robotoTextWidget(
-              //   textval: arraddress[index].address,
-              //   colorval: AppColor.black,
-              //   sizeval: 14.0,
-              //   fontWeight: FontWeight.normal,
-              // ),),
-        // Flexible(
-        //   child: Wrap(children: [
-        //   Container(
-        //   padding: const EdgeInsets.only(right: 8),
-        //     child:
-        //     robotoTextWidget(
-        //       textval: arraddress[index].address,
-        //       colorval: AppColor.darkgrey,
-        //       sizeval: 14.0,
-        //       fontWeight: FontWeight.normal,
-        //     ),)
-        //   ])),
-              robotoTextWidget(
-                textval: arraddress[index].address,
-                colorval: AppColor.darkgrey,
-                sizeval: 14.0,
-                fontWeight: FontWeight.normal,
-              ),
-
-            ]),
-
-          ],
-        ),
-      ],)
-
-    );
+        ));
   }
 
-
-  Container presetplace(){
+  Container presetplace() {
     return Container(
-
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 22,),
-          Row(children:  [
-            const SizedBox(width: 22,),
+          const SizedBox(
+            height: 22,
+          ),
+          Row(children: [
+            const SizedBox(
+              width: 22,
+            ),
             robotoTextWidget(
               textval: presetplacetext,
               colorval: AppColor.grey,
@@ -272,141 +288,167 @@ color: AppColor.butgreen,
               fontWeight: FontWeight.normal,
             ),
           ]),
-          const SizedBox(height: 5,),
-      Container(
-        height: 1,
-        color: AppColor.border,
-      ),
-          const SizedBox(height: 20,),
-      GestureDetector(
-        onTap: () {
-          setState(() {
-
-          });
-          print("Tapped a Container");
-        },
-        child: Container(
-            color: AppColor.white.withOpacity(0.1),
-            padding:  const EdgeInsets.only(left: 20, right: 20),
-
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(children:  [
-                    SvgPicture.asset(
-                      "assets/svg/place-home.svg",
-                      width: 22,
-                      height: 24,
-                      color: AppColor.darkGreen,
-                    ),
-                    SizedBox(width: 10,),
-                    robotoTextWidget(
-                      textval: hometext,
-                      colorval: AppColor.black,
-                      sizeval: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ]),
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(children:  [
-
-                    const SizedBox(width: 22,),
-                    // Expanded(child: robotoTextWidget(
-                    //   textval: arraddress[index].address,
-                    //   colorval: AppColor.black,
-                    //   sizeval: 14.0,
-                    //   fontWeight: FontWeight.normal,
-                    // ),),
-                    robotoTextWidget(
-                      textval: "arraddress[index].address",
-                      colorval: AppColor.darkgrey,
-                      sizeval: 14.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-
-                  ]),
-
-                ],
-              ),
-            ],)
-
-        ),),
-
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 5,
+          ),
           Container(
             height: 1,
             color: AppColor.border,
           ),
-          const SizedBox(height: 20,),
-      GestureDetector(
-        onTap: () {
-          setState(() {
-
-          });
-          print("Tapped a Container");
-        },
-        child: Container(
-            color: AppColor.white.withOpacity(0.1),
-            padding:  const EdgeInsets.only(left: 20, right: 20),
-
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(children:  [
-                    SvgPicture.asset(
-                      "assets/svg/place-work.svg",
-                      width: 22,
-                      height: 24,
-                      color: AppColor.darkGreen,
+          const SizedBox(
+            height: 20,
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {});
+              print("Tapped a Container");
+            },
+            child: Container(
+                color: AppColor.white.withOpacity(0.1),
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          SvgPicture.asset(
+                            "assets/svg/place-home.svg",
+                            width: 22,
+                            height: 24,
+                            color: AppColor.darkGreen,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          robotoTextWidget(
+                            textval: hometext,
+                            colorval: AppColor.black,
+                            sizeval: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ]),
+                      ],
                     ),
-                    SizedBox(width: 10,),
-                    robotoTextWidget(
-                      textval: worktext,
-                      colorval: AppColor.black,
-                      sizeval: 14.0,
-                      fontWeight: FontWeight.bold,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          SizedBox(
+                            width: 42,
+                          ),
+                          // Expanded(child: robotoTextWidget(
+                          //   textval: arraddress[index].address,
+                          //   colorval: AppColor.black,
+                          //   sizeval: 14.0,
+                          //   fontWeight: FontWeight.normal,
+                          // ),),
+                          Container(
+                            width:
+                                MediaQuery.of(context).size.width * (209 / 360),
+                            child: Text(
+                                '3 - Building Name, Street Name,Road Name,Area,City, 411001.',
+                                style: AppTextStyle.robotoRegular16,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          // robotoTextWidget(
+                          //   textval: "arraddress[index].address",
+                          //   colorval: AppColor.darkgrey,
+                          //   sizeval: 14.0,
+                          //   fontWeight: FontWeight.normal,
+                          // ),
+                        ]),
+                      ],
                     ),
-                  ]),
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(children:  [
-
-                    const SizedBox(width: 22,),
-
-                    robotoTextWidget(
-                      textval: "arraddress[index].address",
-                      colorval: AppColor.darkgrey,
-                      sizeval: 14.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-
-                  ]),
-
-                ],
-              ),
-            ],)
-
-        ),),
-
-          const SizedBox(height: 20,),
+                  ],
+                )),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Container(
             height: 1,
             color: AppColor.border,
           ),
-          const SizedBox(height: 22,),
-          Row(children:  [
-            const SizedBox(width: 22,),
+          const SizedBox(
+            height: 20,
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {});
+              print("Tapped a Container");
+            },
+            child: Container(
+                color: AppColor.white.withOpacity(0.1),
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          SvgPicture.asset(
+                            "assets/svg/place-work.svg",
+                            width: 22,
+                            height: 24,
+                            color: AppColor.darkGreen,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          robotoTextWidget(
+                            textval: worktext,
+                            colorval: AppColor.black,
+                            sizeval: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ]),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          SizedBox(
+                            width: 42,
+                          ),
+                          Container(
+                            width:
+                                MediaQuery.of(context).size.width * (209 / 360),
+                            child: Text(
+                                '302 - Somewhere Park, Near  Landmark, SEZ Name,City ',
+                                style: AppTextStyle.robotoRegular16,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+
+                          // robotoTextWidget(
+                          //   textval: "arraddress[index].address",
+                          //   colorval: AppColor.darkgrey,
+                          //   sizeval: 14.0,
+                          //   fontWeight: FontWeight.normal,
+                          // ),
+                        ]),
+                      ],
+                    ),
+                  ],
+                )),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            height: 1,
+            color: AppColor.border,
+          ),
+          const SizedBox(
+            height: 22,
+          ),
+          Row(children: [
+            const SizedBox(
+              width: 22,
+            ),
             robotoTextWidget(
               textval: customplacetext,
               colorval: AppColor.grey,
@@ -414,12 +456,15 @@ color: AppColor.butgreen,
               fontWeight: FontWeight.normal,
             ),
           ]),
-          const SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           Container(
             height: 1,
             color: AppColor.border,
           ),
-    ],),);
+        ],
+      ),
+    );
   }
-
 }
