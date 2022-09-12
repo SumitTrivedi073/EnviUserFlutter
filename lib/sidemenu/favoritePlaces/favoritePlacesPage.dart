@@ -13,6 +13,7 @@ import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 import '../upcomingride/model/ScheduleTripModel.dart';
+import 'addFavoritePage.dart';
 
 class FavoritePlacesPage extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ print("==========${arraddress}");
 
           children: [
             AppBarInsideWidget(
-              title: TitelUpcomingRides,
+              title: TitelFavoritePlaces,
             ),
 
             presetplace(),
@@ -94,7 +95,8 @@ color: AppColor.butgreen,
                 height: 40,
                 onPressed: () {
 
-
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => AddEditFavoritePlacesPage(isforedit: "1",titleEditable: "1",data: null)));
 
                 },
                 child:  Row(children:  [
@@ -106,7 +108,7 @@ color: AppColor.butgreen,
                   ),
                   SizedBox(width: 10,),
                   robotoTextWidget(
-                      textval: "ADD PLACE",
+                      textval: ADDPLACE,
                       colorval: AppColor.white,
                       sizeval: 16.0,
                       fontWeight: FontWeight.bold),
@@ -167,9 +169,15 @@ color: AppColor.butgreen,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 20,),
-          CellRow1(index),
-          //CellRow2(index),
 
+          //CellRow2(index),
+          GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AddEditFavoritePlacesPage(isforedit: "0",titleEditable: "0",data: arraddress[index],)));
+    print("Tapped a Container");
+    },
+    child:CellRow1(index),),
           const SizedBox(height: 20,),
           Container(
             height: 1,
@@ -270,7 +278,14 @@ color: AppColor.butgreen,
         color: AppColor.border,
       ),
           const SizedBox(height: 20,),
-        Container(
+      GestureDetector(
+        onTap: () {
+          setState(() {
+
+          });
+          print("Tapped a Container");
+        },
+        child: Container(
             color: AppColor.white.withOpacity(0.1),
             padding:  const EdgeInsets.only(left: 20, right: 20),
 
@@ -321,60 +336,69 @@ color: AppColor.butgreen,
               ),
             ],)
 
-        ),
+        ),),
+
           const SizedBox(height: 20,),
           Container(
             height: 1,
             color: AppColor.border,
           ),
           const SizedBox(height: 20,),
-          Container(
-              color: AppColor.white.withOpacity(0.1),
-              padding:  const EdgeInsets.only(left: 20, right: 20),
+      GestureDetector(
+        onTap: () {
+          setState(() {
 
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(children:  [
-                      SvgPicture.asset(
-                        "assets/svg/place-work.svg",
-                        width: 22,
-                        height: 24,
-                        color: AppColor.darkGreen,
-                      ),
-                      SizedBox(width: 10,),
-                      robotoTextWidget(
-                        textval: worktext,
-                        colorval: AppColor.black,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ]),
+          });
+          print("Tapped a Container");
+        },
+        child: Container(
+            color: AppColor.white.withOpacity(0.1),
+            padding:  const EdgeInsets.only(left: 20, right: 20),
 
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(children:  [
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children:  [
+                    SvgPicture.asset(
+                      "assets/svg/place-work.svg",
+                      width: 22,
+                      height: 24,
+                      color: AppColor.darkGreen,
+                    ),
+                    SizedBox(width: 10,),
+                    robotoTextWidget(
+                      textval: worktext,
+                      colorval: AppColor.black,
+                      sizeval: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ]),
 
-                      const SizedBox(width: 22,),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children:  [
 
-                      robotoTextWidget(
-                        textval: "arraddress[index].address",
-                        colorval: AppColor.darkgrey,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.normal,
-                      ),
+                    const SizedBox(width: 22,),
 
-                    ]),
+                    robotoTextWidget(
+                      textval: "arraddress[index].address",
+                      colorval: AppColor.darkgrey,
+                      sizeval: 14.0,
+                      fontWeight: FontWeight.normal,
+                    ),
 
-                  ],
-                ),
-              ],)
+                  ]),
 
-          ),
+                ],
+              ),
+            ],)
+
+        ),),
+
           const SizedBox(height: 20,),
           Container(
             height: 1,

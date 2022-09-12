@@ -58,4 +58,11 @@ var hometext = "Home";
 var worktext = "Work";
 var presetplacetext = "PRESET PLACES";
 var  customplacetext  = "CUSTOM PLACES";
-
+var TitelEditFavoritePlace = "Edit Favorite Place";
+var TitelFavoritePlaces = "Favorite Place";
+var  PlaceTitle= "Place Title";
+var Address = "Address";
+var savetext = "Save";
+var Clearlocation ="Clear Saved Location";
+var Deletelocation = "Delete Saved Place";
+var ADDPLACE= "ADD PLACE";
