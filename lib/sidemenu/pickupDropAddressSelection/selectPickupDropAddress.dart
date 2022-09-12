@@ -49,7 +49,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late FocusNode startFocusNode;
   late FocusNode endFocusNode;
   late GooglePlace googlePlace;
-
+  
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
   bool useGoogleApi = true;
@@ -88,6 +88,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           useGoogleApi = false;
         } else {
           googleAPI(value);
+          
         }
       } else {
         googleAPI(value);
@@ -120,6 +121,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 id: _placeList[i]["place_id"],
                 address: _placeList[i]["description"],
                 title: _placeList[i]["description"]));
+                
           }
         });
       } else {
@@ -202,9 +204,11 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
                             FromLocationText.text = details.result!.name!;
                             startingAddress = SearchPlaceModel(
-                                id:searchPlaceList[index].id ,
+                                id: searchPlaceList[index].id,
                                 address: details.result!.formattedAddress!,
-                                latLng: LatLng(details.result!.geometry!.location!.lat!,details.result!.geometry!.location!.lng!),
+                                latLng: LatLng(
+                                    details.result!.geometry!.location!.lat!,
+                                    details.result!.geometry!.location!.lng!),
                                 title: details.result!.name!);
                             searchPlaceList = [];
                           });
@@ -215,7 +219,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             endAddress = SearchPlaceModel(
                                 id: searchPlaceList[index].id,
                                 address: details.result!.formattedAddress!,
-                                latLng: LatLng(details.result!.geometry!.location!.lat!,details.result!.geometry!.location!.lng!),
+                                latLng: LatLng(
+                                    details.result!.geometry!.location!.lat!,
+                                    details.result!.geometry!.location!.lng!),
                                 title: details.result!.name!);
                             searchPlaceList = [];
                           });
@@ -397,18 +403,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     return TextField(
       focusNode: startFocusNode,
       onChanged: (value) {
-        if (_debounce?.isActive ?? false) _debounce!.cancel();
-        _debounce = Timer(const Duration(milliseconds: 1000), () {
-          if (value.isNotEmpty) {
-            //places api
-            _firstLoad(value);
-            // googleAPI(value);
-          } else {
-            searchPlaceList = [];
-            //startPosition = null;
-            startingAddress = null;
-          }
-        });
+        // if (_debounce?.isActive ?? false) _debounce!.cancel();
+        // _debounce = Timer(const Duration(milliseconds: 1000), () {
+        if (value.isNotEmpty) {
+          //places api
+          _firstLoad(value);
+          // googleAPI(value);
+        } else {
+          searchPlaceList = [];
+          //startPosition = null;
+          startingAddress = null;
+        }
+        //}
+        // );
       },
       showCursor: true,
       controller: FromLocationText,
@@ -436,8 +443,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       focusNode: endFocusNode,
       showCursor: true,
       onChanged: (value) {
-        if (_debounce?.isActive ?? false) _debounce!.cancel();
-        _debounce = Timer(const Duration(milliseconds: 1000), () {
+        // if (_debounce?.isActive ?? false) _debounce!.cancel();
+        // _debounce = Timer(const Duration(milliseconds: 1000), () {
           if (value.isNotEmpty) {
             //places api
             _firstLoad(value);
@@ -447,7 +454,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
             //endPosition = null;
             endAddress = null;
           }
-        });
+        // });
       },
       controller: ToLocationText,
       decoration: InputDecoration(
