@@ -151,7 +151,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   builder: (BuildContext context) =>
                                       ConfirmDropLocation(
                                         fromLocation: startPosition,
-                                        title: confirmDropLocationText,
+                                        title: 'Confirm Drop Location',
                                       )),
                               (Route<dynamic> route) => true);
                         },
@@ -168,7 +168,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 width: 5,
                               ),
                               robotoTextWidget(
-                                  textval: pickOnMapText,
+                                  textval: 'Pick on Map',
                                   colorval: AppColor.blue,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200)
