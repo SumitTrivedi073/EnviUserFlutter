@@ -15,17 +15,17 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 
 class SearchDriver extends StatefulWidget {
- 
   // final DetailsResult? fromLocation;
   // final DetailsResult? toLocation;
-  
+
   // final ToAddressLatLong? toAddress;
   // final FromAddressLatLong? fromAddress;
 
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
-  const SearchDriver({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+  const SearchDriver({Key? key, this.toAddress, this.fromAddress})
+      : super(key: key);
 
   @override
   // TODO: implement createState
@@ -39,14 +39,15 @@ class _SearchDriverPageState extends State<SearchDriver> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        body:Stack(alignment: Alignment.centerRight, children: <Widget>[
-            MapDirectionWidget(),
-
-     Column(children: [
-
+        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+      MapDirectionWidget(
+        fromAddress: widget.fromAddress,
+        toAddress: widget.toAddress,
+      ),
+      Column(children: [
         const AppBarInsideWidget(title: "Envi"),
-              const SizedBox(height: 5),
-              FromToWidget(),
+        const SizedBox(height: 5),
+        FromToWidget(),
         const Spacer(),
         DriverListItem(),
         Container(

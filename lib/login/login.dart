@@ -468,7 +468,7 @@ class _LoginpageState extends State<Loginpage> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileAfterloginPage(
-                        profiledata: users.toJson(),
+                        profiledata: users,
                       )));
         }
       });

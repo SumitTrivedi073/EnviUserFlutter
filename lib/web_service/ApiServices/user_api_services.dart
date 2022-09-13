@@ -1,26 +1,52 @@
+import 'dart:io';
+
 import 'package:envi/login/model/LoginModel.dart';
-import 'package:envi/web_service/HTTP.dart' as HTTP;
+import 'package:http/http.dart' as http;
 
 class UserApiService {
   late LoginModel user;
 
   Uri uri = Uri.parse('https://qausernew.azurewebsites.net/user/updateProfile');
-  Future<bool> userEditProfile({required String token, required String name,required String gender,required String propic}) async {
-    final body = <String, dynamic>{};
+  Future<bool> userEditProfile(
+      {required File image,
+      required String token,
+      required String name,
+      required String gender,
+      required String email
+     }) async {
+    final body = <String, String>{};
     body['name'] = name;
-    body['pro_pic'] = propic;
+    // body['pro_pic'] = propic;
     body['gender'] = gender;
-    try {
-      dynamic res = await HTTP.post(uri, body, {'x-access-token': token});
-      if (res.statuscode == 200) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print(e);
+    body['mailid'] = email;
+    var headers = {'x-access-token': token};
+    var request = http.MultipartRequest('POST', uri);
+    request.fields.addAll(body);
+    request.files.add(http.MultipartFile.fromBytes(
+      'pro_pic',
+      File(image.path).readAsBytesSync(),
+      filename: image.path.split("/").last,
+    ));
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      return true;
+    } else {
       return false;
     }
-   // return true; 
   }
 }
+
+
+
+// Future<String> uploadImage(filepath, url) async {
+//     var request = http.MultipartRequest('POST', Uri.parse(url));
+//     request.files.add(
+//         http.MultipartFile.fromBytes(
+//             'picture',
+//             File(filepath).readAsBytesSync(),
+//             filename: filepath.split("/").last
+//         )
+//     );
+//     var res = await request.send();
+//   }

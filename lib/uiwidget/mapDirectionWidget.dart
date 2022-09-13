@@ -3,9 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../web_service/Constant.dart';
 
 class MapDirectionWidget extends StatefulWidget{
+   
+
+  const MapDirectionWidget({Key? key, this.fromAddress, this.toAddress}) : super(key: key);
+final SearchPlaceModel? fromAddress;
+   final SearchPlaceModel? toAddress;
+ 
+    
   @override
   _MapDirectionWidgetState createState() => _MapDirectionWidgetState();
 }
@@ -20,7 +28,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
   Set<Marker> markers = Set(); //markers for google map
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
-  LatLng startLocation = const LatLng(13.199521326936647, 77.70186503653797);
+  late LatLng startLocation = LatLng(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude);
   LatLng endLocation = const LatLng(13.201484637508047, 77.6612178079766);
 
 
