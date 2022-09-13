@@ -1,3 +1,5 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -13,10 +15,18 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 
 class SearchDriver extends StatefulWidget {
-  final DetailsResult? fromLocation;
-  final DetailsResult? toLocation;
-  final ToAddressLatLong? toAddress;
-  const SearchDriver({Key? key, this.fromLocation, this.toLocation, this.toAddress}) : super(key: key);
+ 
+  // final DetailsResult? fromLocation;
+  // final DetailsResult? toLocation;
+  
+  // final ToAddressLatLong? toAddress;
+  // final FromAddressLatLong? fromAddress;
+
+  final SearchPlaceModel? fromAddress;
+  final SearchPlaceModel? toAddress;
+
+  const SearchDriver({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _SearchDriverPageState();
