@@ -1,0 +1,330 @@
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../theme/color.dart';
+import '../../theme/mapStyle.dart';
+import '../../theme/string.dart';
+import '../../uiwidget/appbarInside.dart';
+import '../../uiwidget/robotoTextWidget.dart';
+
+class ConfirmDriver extends StatefulWidget {
+  @override
+  // TODO: implement createState
+  State<StatefulWidget> createState() => _ConfirmDriverPageState();
+}
+
+class _ConfirmDriverPageState extends State<ConfirmDriver> {
+  LatLng? latlong = null;
+  CameraPosition? _cameraPosition;
+  GoogleMapController? _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
+    getCurrentLocation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+      (latlong != null)
+          ? GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _cameraPosition!,
+              onMapCreated: (GoogleMapController controller) {
+                controller.setMapStyle(MapStyle.mapStyles);
+                _controller = (controller);
+
+                _controller?.animateCamera(
+                    CameraUpdate.newCameraPosition(_cameraPosition!));
+              },
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              mapToolbarEnabled: false,
+              zoomGesturesEnabled: false,
+              rotateGesturesEnabled: true,
+              zoomControlsEnabled: false,
+            )
+          : Container(),
+      Column(children: const [
+        AppBarInsideWidget(title: "Booking Confirmation"),
+        SizedBox(height: 5),
+      ])
+    ]));
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return AlertDialog(
+      content: Container(
+          height: 320,
+          child: Column(children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Text(
+                "You are booking",
+                style: TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
+                ),
+              ),
+              child: Padding(padding: EdgeInsets.only(top: 5,bottom: 5),
+                child: Column(
+                  children: [
+                    const robotoTextWidget(
+                        textval: "Hatchback",
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset('assets/images/passengers-icon.png',
+                                height: 15, width: 15, fit: BoxFit.cover),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const robotoTextWidget(
+                                textval: "3 People",
+                                colorval: AppColor.black,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w200)
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Row(
+                          children: [
+                            Image.asset('assets/images/weight-icon.png',
+                                height: 15, width: 15, fit: BoxFit.cover),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const robotoTextWidget(
+                                textval: "7 Kg",
+                                colorval: AppColor.black,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w200)
+                          ],
+                        ),
+
+                      ],
+                    )
+                  ],
+                ),
+
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
+                ),
+              ),
+              child: SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(top: 5,bottom: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          robotoTextWidget(
+                              textval: "₹220",
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w800),
+
+                          robotoTextWidget(
+                              textval: "Approx. Fare",
+                              colorval: AppColor.black,
+                              sizeval: 12,
+                              fontWeight: FontWeight.w400),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      height: 55,
+                      width: 1,
+                      color: AppColor.border,
+                    ),
+                    const SizedBox(width: 10),
+              Container(
+                margin: EdgeInsets.only(right: 10),
+
+                  padding: EdgeInsets.only(top: 5,bottom: 5),
+                child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        robotoTextWidget(
+                            textval: "7 Mins",
+                            colorval: AppColor.black,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w800),
+
+                        robotoTextWidget(
+                            textval: "Pickup Time",
+                            colorval: AppColor.black,
+                            sizeval: 12,
+                            fontWeight: FontWeight.w400),
+                      ],
+                    )),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+                height: 10
+            ),
+            const Text(
+              "To address",
+              style: TextStyle(
+                  color: AppColor.butgreen,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+        Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2.0),
+              side: const BorderSide(
+                color: AppColor.border,
+              ),
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(top: 5,bottom: 5) ,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const robotoTextWidget(
+                        textval: "Place Name",
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    robotoTextWidget(
+                        textval: ToLocationHint,
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200),
+                  ],
+                ),
+            ),),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  height: 40,
+                    width: 120,
+                    margin: const EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: cancel,
+                        colorval: AppColor.greyblack,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+                Container(
+                  height: 40,
+                    width: 120,
+                    margin: const EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: confirm,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+              ],
+            )
+          ])),
+
+    );
+  }
+
+  Future getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission != PermissionStatus.granted) {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission != PermissionStatus.granted) getLocation();
+      return;
+    }
+    getLocation();
+  }
+
+  getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      latlong = LatLng(position.latitude, position.longitude);
+      _cameraPosition = CameraPosition(
+        bearing: 0,
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 14.0,
+      );
+    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => _buildPopupDialog(context),
+    );
+  }
+}

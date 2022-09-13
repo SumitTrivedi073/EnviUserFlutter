@@ -14,13 +14,6 @@ import '../../uiwidget/driverListWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 
 class SearchDriver extends StatefulWidget {
-
-  // final DetailsResult? fromLocation;
-  // final DetailsResult? toLocation;
-
-  // final ToAddressLatLong? toAddress;
-  // final FromAddressLatLong? fromAddress;
-
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
@@ -39,11 +32,16 @@ class _SearchDriverPageState extends State<SearchDriver> {
     // TODO: implement build
     return Scaffold(
         body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-      MapDirectionWidget(),
+      MapDirectionWidget(
+        fromAddress: widget.fromAddress,
+        toAddress: widget.toAddress,
+      ),
       Column(children: [
         const AppBarInsideWidget(title: "Envi"),
         const SizedBox(height: 5),
-        FromToWidget(),
+        FromToWidget(
+      fromAddress: widget.fromAddress,
+      toAddress: widget.toAddress,),
         const Spacer(),
         DriverListItem(),
         Container(
@@ -51,7 +49,9 @@ class _SearchDriverPageState extends State<SearchDriver> {
             margin: const EdgeInsets.all(5),
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+
+              },
               style: ElevatedButton.styleFrom(
                 primary: AppColor.greyblack,
                 shape: RoundedRectangleBorder(

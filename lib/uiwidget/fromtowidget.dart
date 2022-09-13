@@ -3,10 +3,19 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import '../theme/string.dart';
 
 class FromToWidget extends StatefulWidget {
+
+  final SearchPlaceModel? fromAddress;
+  final SearchPlaceModel? toAddress;
+
+  const FromToWidget({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+
+
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _FromToWidgetPageState();
@@ -59,7 +68,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               child: Container(
                                 padding: const EdgeInsets.all(5),
                                 child: robotoTextWidget(
-                                  textval: FromLocationHint,
+                                  textval: widget.fromAddress!.address,
                                   colorval: AppColor.black,
                                   sizeval: 16,
                                   fontWeight: FontWeight.w200,
@@ -128,7 +137,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               child: Container(
                                 padding: const EdgeInsets.all(5),
                                 child: robotoTextWidget(
-                                  textval: ToLocationHint,
+                                  textval: widget.toAddress!.address,
                                   colorval: AppColor.black,
                                   sizeval: 16,
                                   fontWeight: FontWeight.w200,
