@@ -150,6 +150,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     EditFromToWidget(),
                     GestureDetector(
                         onTap: () {
+                          searchPlaceList = [];
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -182,104 +183,115 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                   ],
                 )),
             Expanded(
-                child: ListView.builder(
-              shrinkWrap: true,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () async {
-                    if (useGoogleApi) {
-                      final placeId = searchPlaceList[index].id;
-                      final details = await googlePlace.details.get(placeId,
-                          sessionToken: _sessionToken,
-                          fields: 'geometry,formatted_address,name');
-                      if (details != null &&
-                          details.result != null &&
-                          mounted) {
-                        if (startFocusNode.hasFocus) {
-                          setState(() {
-                            // startPosition = details.result;
+                child: (searchPlaceList.isNotEmpty)
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () async {
+                              if (useGoogleApi) {
+                                final placeId = searchPlaceList[index].id;
+                                final details = await googlePlace.details.get(
+                                    placeId,
+                                    sessionToken: _sessionToken,
+                                    fields: 'geometry,formatted_address,name');
+                                if (details != null &&
+                                    details.result != null &&
+                                    mounted) {
+                                  if (startFocusNode.hasFocus) {
+                                    setState(() {
+                                      // startPosition = details.result;
 
-                            FromLocationText.text = details.result!.name!;
-                            startingAddress = SearchPlaceModel(
-                                id: searchPlaceList[index].id,
-                                address: details.result!.formattedAddress!,
-                                latLng: LatLng(
-                                    details.result!.geometry!.location!.lat!,
-                                    details.result!.geometry!.location!.lng!),
-                                title: details.result!.name!);
-                            searchPlaceList = [];
-                          });
-                        } else {
-                          setState(() {
-                            // endPosition = details.result;
-                            ToLocationText.text = details.result!.name!;
-                            endAddress = SearchPlaceModel(
-                                id: searchPlaceList[index].id,
-                                address: details.result!.formattedAddress!,
-                                latLng: LatLng(
-                                    details.result!.geometry!.location!.lat!,
-                                    details.result!.geometry!.location!.lng!),
-                                title: details.result!.name!);
-                            searchPlaceList = [];
-                          });
-                        }
-                      }
-                    } else {
-                      if (startFocusNode.hasFocus) {
-                        if (mounted) {
-                          setState(() {
-                            FromLocationText.text =
-                                searchPlaceList[index].title;
-                            startingAddress = searchPlaceList[index];
-                            searchPlaceList = [];
-                          });
-                        }
-                      } else {
-                        if (mounted) {
-                          setState(() {
-                            ToLocationText.text = searchPlaceList[index].title;
-                            endAddress = searchPlaceList[index];
-                            searchPlaceList = [];
-                          });
-                        }
-                      }
-                    }
-                  },
-                  child: Card(
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ListTile(
-                        title: robotoTextWidget(
-                          textval: searchPlaceList[index].title,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        subtitle: robotoTextWidget(
-                          textval: searchPlaceList[index].address,
-                          colorval: AppColor.black,
-                          sizeval: 12.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        leading: SvgPicture.asset(
-                          "assets/svg/to-location-img.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        // onTap: () async {
+                                      FromLocationText.text =
+                                          details.result!.name!;
+                                      startingAddress = SearchPlaceModel(
+                                          id: searchPlaceList[index].id,
+                                          address:
+                                              details.result!.formattedAddress!,
+                                          latLng: LatLng(
+                                              details.result!.geometry!
+                                                  .location!.lat!,
+                                              details.result!.geometry!
+                                                  .location!.lng!),
+                                          title: details.result!.name!);
+                                      searchPlaceList = [];
+                                    });
+                                  } else {
+                                    setState(() {
+                                      // endPosition = details.result;
+                                      ToLocationText.text =
+                                          details.result!.name!;
+                                      endAddress = SearchPlaceModel(
+                                          id: searchPlaceList[index].id,
+                                          address:
+                                              details.result!.formattedAddress!,
+                                          latLng: LatLng(
+                                              details.result!.geometry!
+                                                  .location!.lat!,
+                                              details.result!.geometry!
+                                                  .location!.lng!),
+                                          title: details.result!.name!);
+                                      searchPlaceList = [];
+                                    });
+                                  }
+                                }
+                              } else {
+                                if (mounted) {
+                                  if (startFocusNode.hasFocus) {
+                                    setState(() {
+                                      FromLocationText.text =
+                                          searchPlaceList[index].title;
+                                      startingAddress = searchPlaceList[index];
+                                      searchPlaceList = [];
+                                    });
+                                  } else {
+                                    setState(() {
+                                      ToLocationText.text =
+                                          searchPlaceList[index].title;
+                                      endAddress = searchPlaceList[index];
+                                      searchPlaceList = [];
+                                    });
+                                  }
+                                }
+                              }
+                            },
+                            child: Card(
+                              elevation: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: ListTile(
+                                  title: robotoTextWidget(
+                                    textval: searchPlaceList[index].title,
+                                    colorval: AppColor.black,
+                                    sizeval: 14.0,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                  subtitle: robotoTextWidget(
+                                    textval: searchPlaceList[index].address,
+                                    colorval: AppColor.black,
+                                    sizeval: 12.0,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  leading: SvgPicture.asset(
+                                    "assets/svg/to-location-img.svg",
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                  // onTap: () async {
 
-                        // },
-                      ),
-                    ),
-                  ),
-                );
-              },
-              itemCount:
-                  searchPlaceList.length < 10 ? searchPlaceList.length : 10,
-              padding: const EdgeInsets.all(8),
-            )),
+                                  // },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: searchPlaceList.length < 10
+                            ? searchPlaceList.length
+                            : 10,
+                        padding: const EdgeInsets.all(8),
+                      )
+                    : Container()),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -288,6 +300,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      searchPlaceList = [];
+
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) => SearchDriver(
