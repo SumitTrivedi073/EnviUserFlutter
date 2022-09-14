@@ -7,8 +7,6 @@ import 'package:envi/uiwidget/fromtowidget.dart';
 import 'package:envi/uiwidget/mapDirectionWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_place/google_place.dart';
-
 import '../../theme/color.dart';
 import '../../uiwidget/driverListWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -42,8 +40,11 @@ class _SearchDriverPageState extends State<SearchDriver> {
         FromToWidget(
       fromAddress: widget.fromAddress,
       toAddress: widget.toAddress,),
-        const Spacer(),
-        DriverListItem(),
+        const SizedBox(height: 230),
+        DriverListItem(
+          fromAddress: widget.fromAddress,
+          toAddress: widget.toAddress,
+        ),
         Container(
             height: 40,
             margin: const EdgeInsets.all(5),

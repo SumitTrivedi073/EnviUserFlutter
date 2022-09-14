@@ -81,10 +81,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     )),
                 Stack(alignment: Alignment.centerRight, children: <Widget>[
                   const SizedBox(
-                    height: 1,
+                    height: 2,
                     child: Divider(
-                      color: AppColor.grey,
-                      height: 1,
+                      color: AppColor.darkgrey,
+                      height: 2,
                     ),
                   ),
                   Container(

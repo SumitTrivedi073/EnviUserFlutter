@@ -102,11 +102,13 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
         zoomGesturesEnabled: true, //enable Zoom in, out on map
         initialCameraPosition: CameraPosition( //innital position in map
           target: startLocation, //initial position
-          zoom: 16.0, //initial zoom level
+          zoom: 12.0, //initial zoom level
         ),
         markers: markers, //markers to show on map
         polylines: Set<Polyline>.of(polylines.values), //polylines
-        mapType: MapType.normal, //map type
+        mapType: MapType.normal,
+        rotateGesturesEnabled: true,
+        zoomControlsEnabled: false,//map type
         onMapCreated: (controller) { //method called when map is created
           setState(() {
             mapController = controller;
