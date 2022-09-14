@@ -1,8 +1,7 @@
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
+import 'package:envi/theme/images.dart';
 import 'package:envi/theme/mapStyle.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -20,7 +19,7 @@ import '../../theme/string.dart';
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
   final SearchPlaceModel fromLocation;
-  
+
   const ConfirmDropLocation(
       {Key? key, required this.title, required this.fromLocation})
       : super(key: key);
@@ -30,12 +29,11 @@ class ConfirmDropLocation extends StatefulWidget {
 }
 
 class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
-   String? toAddressName;
+  String? toAddressName;
   late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
-  ToAddressLatLong? toAddress;
 
   @override
   void initState() {
@@ -75,7 +73,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       ),
       Center(
         child: Image.asset(
-          "assets/images/destination-marker.png",
+          Images.destinationMarkerImage,
           scale: 2,
         ),
       ),
@@ -112,9 +110,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     Image.asset(
-                      "assets/images/destination-marker.png",
+                      Images.destinationMarkerImage,
                       scale: 2,
                       fit: BoxFit.none,
                     ),
@@ -175,18 +172,18 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (BuildContext context) => SearchDriver(
-                              fromAddress: widget.fromLocation,
-                              toAddress: SearchPlaceModel(
-                                id: '',
-                                title:toAddressName! ,
-                                address: Address,
-                                latLng: latlong,
-                              )
-                              
-                              // ToAddressLatLong(
-                              //   address: Address,
-                              //   position: latlong,
-                              // ),
+                            fromAddress: widget.fromLocation,
+                            toAddress: SearchPlaceModel(
+                              id: '',
+                              title: toAddressName!,
+                              address: Address,
+                              latLng: latlong,
+                            )
+
+                            // ToAddressLatLong(
+                            //   address: Address,
+                            //   position: latlong,
+                            // ),
                             )),
                     (Route<dynamic> route) => true);
               },

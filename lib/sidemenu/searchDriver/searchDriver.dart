@@ -1,6 +1,5 @@
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
+// ignore: file_names
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/fromtowidget.dart';

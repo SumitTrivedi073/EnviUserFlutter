@@ -3,7 +3,7 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:envi/Profile/profilePage.dart';
+
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../Profile/profilePage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
@@ -459,10 +460,10 @@ class _LoginpageState extends State<Loginpage> {
       print(jsonData);
       setState(() {
         _timer.cancel();
-        LoginModel users = new LoginModel.fromJson(jsonData['content']);
+        LoginModel users =  LoginModel.fromJson(jsonData['content']);
         if (users.id == "") {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+              context, MaterialPageRoute(builder: (context) => const ProfilePage()));
         } else {
           Navigator.push(
               context,

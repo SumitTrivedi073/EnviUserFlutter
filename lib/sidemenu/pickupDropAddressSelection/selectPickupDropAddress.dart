@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:envi/sidemenu/pickupDropAddressSelection/confirmDropLocation.dart';
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
+import 'package:envi/theme/images.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
@@ -21,9 +21,11 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 
 class SelectPickupDropAddress extends StatefulWidget {
-  const SelectPickupDropAddress({Key? key, required this.title})
+  const SelectPickupDropAddress(
+      {Key? key, required this.title, this.currentLocation})
       : super(key: key);
   final String title;
+  final SearchPlaceModel? currentLocation;
 
   @override
   State<SelectPickupDropAddress> createState() =>
@@ -165,7 +167,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           child: Row(
                             children: [
                               SvgPicture.asset(
-                                "assets/svg/location-pin-menu.svg",
+                                Images.locationPinImage,
                                 width: 20,
                                 height: 20,
                               ),
@@ -188,7 +190,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return InkWell(
+                          return GestureDetector(
                             onTap: () async {
                               if (useGoogleApi) {
                                 final placeId = searchPlaceList[index].id;
@@ -245,7 +247,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                       startingAddress = searchPlaceList[index];
                                       searchPlaceList = [];
                                     });
-                                  } else {
+                                  } else if (endFocusNode.hasFocus) {
                                     setState(() {
                                       ToLocationText.text =
                                           searchPlaceList[index].title;
@@ -274,7 +276,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     fontWeight: FontWeight.w400,
                                   ),
                                   leading: SvgPicture.asset(
-                                    "assets/svg/to-location-img.svg",
+                                    Images.toLocationImage,
                                     width: 20,
                                     height: 20,
                                   ),
@@ -343,16 +345,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           child: Column(
             children: [
               GestureDetector(
-                  onTap: () {
-                    print("Tapped a Container");
-                  },
+                  onTap: () {},
                   child: Container(
                     height: 50,
                     margin: const EdgeInsets.only(left: 10),
                     child: Row(
                       children: [
                         SvgPicture.asset(
-                          "assets/svg/from-location-img.svg",
+                          Images.fromLocationImage,
                           width: 20,
                           height: 20,
                         ),
@@ -389,7 +389,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     child: Row(
                       children: [
                         SvgPicture.asset(
-                          "assets/svg/to-location-img.svg",
+                          Images.toLocationImage,
                           width: 20,
                           height: 20,
                         ),
@@ -418,8 +418,24 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField FromTextWidget() {
     return TextField(
+      autofocus: false,
       focusNode: startFocusNode,
       onChanged: (value) {
+        if (useGoogleApi) {
+          if (_debounce?.isActive ?? false) _debounce!.cancel();
+          _debounce = Timer(const Duration(milliseconds: 1000), () {
+            if (value.isNotEmpty) {
+              //places api
+              _firstLoad(value);
+              // googleAPI(value);
+            } else {
+              searchPlaceList = [];
+              //startPosition = null;
+              startingAddress = null;
+            }
+          });
+        }
+
         // if (_debounce?.isActive ?? false) _debounce!.cancel();
         // _debounce = Timer(const Duration(milliseconds: 1000), () {
         if (value.isNotEmpty) {
@@ -457,21 +473,32 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField ToTextWidget() {
     return TextField(
+      autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,
       onChanged: (value) {
-        // if (_debounce?.isActive ?? false) _debounce!.cancel();
-        // _debounce = Timer(const Duration(milliseconds: 1000), () {
+        if (useGoogleApi) {
+          if (_debounce?.isActive ?? false) _debounce!.cancel();
+          _debounce = Timer(const Duration(milliseconds: 1000), () {
+            if (value.isNotEmpty) {
+              //places api
+              _firstLoad(value);
+              // googleAPI(value);
+            } else {
+              searchPlaceList = [];
+              //endPosition = null;
+              endAddress = null;
+            }
+          });
+        }
+
         if (value.isNotEmpty) {
-          //places api
           _firstLoad(value);
-          // googleAPI(value);
         } else {
           searchPlaceList = [];
           //endPosition = null;
           endAddress = null;
         }
-        // });
       },
       controller: ToLocationText,
       decoration: InputDecoration(
