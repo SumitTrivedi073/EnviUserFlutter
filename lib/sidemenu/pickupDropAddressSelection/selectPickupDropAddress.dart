@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:envi/sidemenu/pickupDropAddressSelection/confirmDropLocation.dart';
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/string.dart';
@@ -9,6 +10,7 @@ import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -30,6 +32,8 @@ class SelectPickupDropAddress extends StatefulWidget {
 
 class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<SearchPlaceModel> searchPlaceList = [];
+  SearchPlaceModel? startingAddress;
+  SearchPlaceModel? endAddress;
   List<dynamic> _placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
@@ -48,14 +52,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
-
+  bool useGoogleApi = true;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     _sessionToken = uuid.v4();
-
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
     googlePlace = GooglePlace(GoogleApiKey);
@@ -82,6 +85,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           searchPlaceList = (jsonDecode(res.body)['content'] as List)
               .map((i) => SearchPlaceModel.fromJson(i))
               .toList();
+          useGoogleApi = false;
         } else {
           googleAPI(value);
         }
@@ -150,8 +154,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       ConfirmDropLocation(
-                                        fromLocation: startPosition,
-                                        title: 'Confirm Drop Location',
+                                        fromLocation: startingAddress!,
+                                        title: confirmDropLocationText,
                                       )),
                               (Route<dynamic> route) => true);
                         },
@@ -184,25 +188,61 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () async {
-                    final placeId = searchPlaceList[index].id;
-                    final details = await googlePlace.details.get(placeId,
-                        sessionToken: _sessionToken,
-                        fields:
-                            'geometry,address_components,name,international_phone_number');
-                    if (details != null && details.result != null && mounted) {
-                      if (startFocusNode.hasFocus) {
-                        setState(() {
-                          startPosition = details.result;
+                    if (useGoogleApi) {
+                      final placeId = searchPlaceList[index].id;
+                      final details = await googlePlace.details.get(placeId,
+                          sessionToken: _sessionToken,
+                          fields: 'geometry,formatted_address,name');
+                      if (details != null &&
+                          details.result != null &&
+                          mounted) {
+                        if (startFocusNode.hasFocus) {
+                          setState(() {
+                            // startPosition = details.result;
 
-                          FromLocationText.text = details.result!.name!;
-                          searchPlaceList = [];
-                        });
+                            FromLocationText.text = details.result!.name!;
+                            startingAddress = SearchPlaceModel(
+                                id: searchPlaceList[index].id,
+                                address: details.result!.formattedAddress!,
+                                latLng: LatLng(
+                                    details.result!.geometry!.location!.lat!,
+                                    details.result!.geometry!.location!.lng!),
+                                title: details.result!.name!);
+                            searchPlaceList = [];
+                          });
+                        } else {
+                          setState(() {
+                            // endPosition = details.result;
+                            ToLocationText.text = details.result!.name!;
+                            endAddress = SearchPlaceModel(
+                                id: searchPlaceList[index].id,
+                                address: details.result!.formattedAddress!,
+                                latLng: LatLng(
+                                    details.result!.geometry!.location!.lat!,
+                                    details.result!.geometry!.location!.lng!),
+                                title: details.result!.name!);
+                            searchPlaceList = [];
+                          });
+                        }
+                      }
+                    } else {
+                      if (startFocusNode.hasFocus) {
+                        if (mounted) {
+                          setState(() {
+                            FromLocationText.text =
+                                searchPlaceList[index].title;
+                            startingAddress = searchPlaceList[index];
+                            searchPlaceList = [];
+                          });
+                        }
                       } else {
-                        setState(() {
-                          endPosition = details.result;
-                          ToLocationText.text = details.result!.name!;
-                          searchPlaceList = [];
-                        });
+                        if (mounted) {
+                          setState(() {
+                            ToLocationText.text = searchPlaceList[index].title;
+                            endAddress = searchPlaceList[index];
+                            searchPlaceList = [];
+                          });
+                        }
                       }
                     }
                   },
@@ -251,8 +291,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) => SearchDriver(
-                                    fromLocation: startPosition,
-                                    toLocation: endPosition,
+                                    fromAddress: startingAddress,
+                                    toAddress: endAddress,
                                   )),
                           (Route<dynamic> route) => true);
                     },
@@ -366,17 +406,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     return TextField(
       focusNode: startFocusNode,
       onChanged: (value) {
-        if (_debounce?.isActive ?? false) _debounce!.cancel();
-        _debounce = Timer(const Duration(milliseconds: 1000), () {
-          if (value.isNotEmpty) {
-            //places api
-          //  _firstLoad(value);
-            googleAPI(value);
-          } else {
-            searchPlaceList = [];
-            startPosition = null;
-          }
-        });
+        // if (_debounce?.isActive ?? false) _debounce!.cancel();
+        // _debounce = Timer(const Duration(milliseconds: 1000), () {
+        if (value.isNotEmpty) {
+          //places api
+          _firstLoad(value);
+          // googleAPI(value);
+        } else {
+          searchPlaceList = [];
+          //startPosition = null;
+          startingAddress = null;
+        }
+        //}
+        // );
       },
       showCursor: true,
       controller: FromLocationText,
@@ -404,17 +446,18 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       focusNode: endFocusNode,
       showCursor: true,
       onChanged: (value) {
-        if (_debounce?.isActive ?? false) _debounce!.cancel();
-        _debounce = Timer(const Duration(milliseconds: 1000), () {
-          if (value.isNotEmpty) {
-            //places api
-           // _firstLoad(value);
-            googleAPI(value);
-          } else {
-            searchPlaceList = [];
-            endPosition = null;
-          }
-        });
+        // if (_debounce?.isActive ?? false) _debounce!.cancel();
+        // _debounce = Timer(const Duration(milliseconds: 1000), () {
+        if (value.isNotEmpty) {
+          //places api
+          _firstLoad(value);
+          // googleAPI(value);
+        } else {
+          searchPlaceList = [];
+          //endPosition = null;
+          endAddress = null;
+        }
+        // });
       },
       controller: ToLocationText,
       decoration: InputDecoration(

@@ -1,3 +1,5 @@
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
@@ -17,8 +19,8 @@ import '../../theme/string.dart';
 
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
-  final DetailsResult? fromLocation;
-
+  final SearchPlaceModel fromLocation;
+  
   const ConfirmDropLocation(
       {Key? key, required this.title, required this.fromLocation})
       : super(key: key);
@@ -28,6 +30,7 @@ class ConfirmDropLocation extends StatefulWidget {
 }
 
 class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
+   String? toAddressName;
   late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
@@ -172,11 +175,18 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (BuildContext context) => SearchDriver(
-                              fromLocation: widget.fromLocation,
-                              toAddress: ToAddressLatLong(
+                              fromAddress: widget.fromLocation,
+                              toAddress: SearchPlaceModel(
+                                id: '',
+                                title:toAddressName! ,
                                 address: Address,
-                                position: latlong,
-                              ),
+                                latLng: latlong,
+                              )
+                              
+                              // ToAddressLatLong(
+                              //   address: Address,
+                              //   position: latlong,
+                              // ),
                             )),
                     (Route<dynamic> route) => true);
               },
@@ -229,6 +239,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
+    toAddressName = place.name;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
