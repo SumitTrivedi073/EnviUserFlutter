@@ -66,3 +66,4 @@ var savetext = "Save";
 var Clearlocation ="Clear Saved Location";
 var Deletelocation = "Delete Saved Place";
 var ADDPLACE= "ADD PLACE";
+var confirmDropLocationText = "Confirm Drop Location";
