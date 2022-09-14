@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
+import 'package:envi/sidemenu/favoritePlaces/searchFavoriateLocation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,7 +19,8 @@ import '../../web_service/Constant.dart';
 import '../upcomingride/model/ScheduleTripModel.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
-  const AddEditFavoritePlacesPage(
+  final FavoritesData? data;
+   AddEditFavoritePlacesPage(
       {Key? key,
       required this.isforedit,
       required this.data,
@@ -24,7 +28,7 @@ class AddEditFavoritePlacesPage extends StatefulWidget {
       : super(key: key);
   final String isforedit;
   final String titleEditable;
-  final FavoritesData? data;
+
   @override
   State<AddEditFavoritePlacesPage> createState() =>
       _AddEditFavoritePlacesPageState();
@@ -36,15 +40,25 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   TextEditingController titlecontroller = new TextEditingController();
   TextEditingController addresscontroller = new TextEditingController();
   CameraPosition? _cameraPosition;
+  String address = "htttyty";
+
   @override
   void initState() {
     super.initState();
     loadData();
-    _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
 
+if(widget.isforedit == "0"){
+  titlecontroller.text = widget.data!.title;
+  address = widget.data!.address;
+  _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude)), zoom: 10.0);
+}else{
+  _cameraPosition =  CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
+}
     // _controller = new ScrollController()..addListener(_loadMore);
   }
+void FromLocationSearch(String fulladdress,double lat,double long){
 
+}
   Future<void> loadData() async {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
@@ -113,7 +127,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                               Card(
                                 child: TextFormField(
                                   controller: titlecontroller,
-                                  readOnly: widget.titleEditable == "1"
+                                  readOnly: widget.titleEditable == "0"
                                       ? false
                                       : true,
                                   keyboardType: TextInputType.phone,
@@ -147,29 +161,38 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                   ]),
                                 ],
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {});
-                                  print("Tapped a Container");
-                                },
-                                child: Card(
-                                    child: TextFormField(
-                                  controller: addresscontroller,
-                                  // readOnly: true,
-
-                                  style: const TextStyle(color: AppColor.black),
-                                  decoration: const InputDecoration(
-                                    hintText: "Please enter address",
-                                    hintStyle: TextStyle(color: Colors.black45),
-                                  ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter valid OTP!';
-                                    }
-                                    return null;
-                                  },
-                                )),
+                              const SizedBox(
+                                height: 5,
                               ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SearchFavoriateLocation(
+                                                      title: pickUpLocation,onCriteriaChanged: FromLocationSearch)),
+                                              (route) => true);
+                                      print("Tapped a Container");
+                                    },
+                                    child: Card(
+
+                                        child: Container( width:
+                                        MediaQuery.of(context).size.width -50,
+                                          height: 50,
+                                          child: robotoTextWidget(
+                                            textval: address,
+                                            colorval: AppColor.black,
+                                            sizeval: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                          ),)),
+                                  ),
+                                ],
+                              ),
+
                               const SizedBox(
                                 height: 22,
                               ),
@@ -216,7 +239,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                           width: 10,
                                         ),
                                         robotoTextWidget(
-                                            textval: widget.titleEditable == "1"
+                                            textval: widget.titleEditable == "0"
                                                 ? Deletelocation
                                                 : Clearlocation,
                                             colorval: AppColor.red,

@@ -100,7 +100,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                           MaterialPageRoute(
                               builder: (context) => AddEditFavoritePlacesPage(
                                   isforedit: "1",
-                                  titleEditable: "1",
+                                  titleEditable: "0",
                                   data: null)));
                     },
                     child: Row(children: [
@@ -255,12 +255,16 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                   //       fontWeight: FontWeight.normal,
                   //     ),)
                   //   ])),
-                  robotoTextWidget(
+                  Container( width:
+                  MediaQuery.of(context).size.width * (209 / 360),
+                  child: robotoTextWidget(
                     textval: arraddress[index].address,
                     colorval: AppColor.darkgrey,
                     sizeval: 14.0,
                     fontWeight: FontWeight.normal,
-                  ),
+                  ),)
+
+
                 ]),
               ],
             ),

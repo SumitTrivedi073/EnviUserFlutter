@@ -20,6 +20,7 @@ class SearchPlaceModel {
   String title;
 
 
+
   factory SearchPlaceModel.fromJson(Map<String, dynamic> json) => SearchPlaceModel(
     id: json["_id"],
     address: json["address"],
