@@ -182,11 +182,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                 address: Address,
                                 latLng: latlong,
                               )
-                              
-                              // ToAddressLatLong(
-                              //   address: Address,
-                              //   position: latlong,
-                              // ),
                             )),
                     (Route<dynamic> route) => true);
               },

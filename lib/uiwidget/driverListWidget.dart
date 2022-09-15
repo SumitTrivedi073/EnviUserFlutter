@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/web_service/Constant.dart';
@@ -28,8 +29,10 @@ class DriverListItem extends StatefulWidget {
 
 class _DriverListItemPageState extends State<DriverListItem> {
   var listItemCount = 4;
-  List<DriverListModel> DriverList = [];
+  List<Content> DriverList = [];
+  List<VehiclePriceClass> vehiclePriceClasses = [];
   late SharedPreferences sharedPreferences;
+  int? selectedIndex;
 
   @override
   void initState() {
@@ -57,15 +60,20 @@ class _DriverListItemPageState extends State<DriverListItem> {
       },
     };
 
-
+      print("data=======>$data");
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
 
       setState(() {
        DriverList = (jsonDecode(res.body)['content'] as List)
-            .map((i) => DriverListModel.fromJson(i))
+            .map((i) => Content.fromJson(i))
             .toList();
+
+       vehiclePriceClasses = (jsonDecode(res.body)['vehiclePriceClasses']as List)
+           .map((i) => VehiclePriceClass.fromJson(i))
+           .toList();
       });
+      print("vehiclePriceClasses==============>${res.body}");
     } else {
       throw "Can't get DriverList.";
     }
@@ -141,7 +149,9 @@ class _DriverListItemPageState extends State<DriverListItem> {
               child:ListView.builder(
               itemBuilder: (context, index) {
                 return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      selectedIndex = index;
+                    },
                     child: Card(
                         margin: const EdgeInsets.all(5),
                         color: const Color(0xFFE4F3F5),
@@ -181,7 +191,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
                                         ),
                                         Card(
                                           child: Image.network(
-                                            DriverList[index].driverPhoto.toString(),
+                                            DriverList[index].driverPhoto.toString()?? '',
                                             fit: BoxFit.fill,
                                             height: 40,
                                             width: 50,
@@ -243,8 +253,8 @@ class _DriverListItemPageState extends State<DriverListItem> {
                                                 const SizedBox(
                                                   width: 5,
                                                 ),
-                                                const robotoTextWidget(
-                                                    textval: "7 Kg",
+                                                 robotoTextWidget(
+                                                    textval:DriverList[index].priceClass!.bootSpace.toString(),
                                                     colorval: AppColor.black,
                                                     sizeval: 14,
                                                     fontWeight: FontWeight.w200)
@@ -287,20 +297,20 @@ class _DriverListItemPageState extends State<DriverListItem> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const robotoTextWidget(
-                                        textval: "₹220",
+                                     robotoTextWidget(
+                                        textval: "₹${vehiclePriceClasses[index].priceClass.totalFare}",
                                         colorval: AppColor.black,
                                         sizeval: 18,
                                         fontWeight: FontWeight.w800),
                                     const SizedBox(
                                       width: 25,
                                     ),
-                                    const Text(
-                                      "₹350",
+                                     Text(
+                                      getTotalPrice(vehiclePriceClasses[index].priceClass.totalFare!.toInt(),vehiclePriceClasses[index].priceClass.sellerDiscount!.toInt()),
                                       textAlign: TextAlign.justify,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 16,
                                           color: AppColor.black,
                                           fontWeight: FontWeight.w600,
@@ -311,14 +321,14 @@ class _DriverListItemPageState extends State<DriverListItem> {
                                       width: 25,
                                     ),
                                     Column(
-                                      children: const [
-                                        robotoTextWidget(
+                                      children:  [
+                                        const robotoTextWidget(
                                             textval: "Special Offer",
                                             colorval: AppColor.purple,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w800),
                                         robotoTextWidget(
-                                            textval: "20% Off",
+                                            textval:'${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
                                             colorval: AppColor.purple,
                                             sizeval: 13,
                                             fontWeight: FontWeight.w400),
@@ -335,9 +345,50 @@ class _DriverListItemPageState extends State<DriverListItem> {
               scrollDirection: Axis.horizontal,
               physics: const AlwaysScrollableScrollPhysics(),
             )),
-          )
+          ),
+          Container(
+              height: 40,
+              margin: const EdgeInsets.all(5),
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => ConfirmDriver(
+                            driverDetail: DriverList[selectedIndex!],
+                            priceDetail: vehiclePriceClasses[selectedIndex!],
+                            fromAddress: widget.fromAddress,
+                            toAddress: widget.toAddress,
+                             )
+                          ),
+                          (Route<dynamic> route) => false);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: AppColor.greyblack,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                ),
+                child: robotoTextWidget(
+                  textval: bookNow,
+                  colorval: AppColor.white,
+                  sizeval: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ))
         ],
       ),
     ));
   }
+}
+
+String getTotalPrice(int totalFare, int discount) {
+
+  int num1 = totalFare;
+
+  int num2 = discount ;
+
+  int sum =  num1 + num2;
+  print('sum:$sum');
+  return "₹$sum";
 }

@@ -45,27 +45,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
         ),
-        Container(
-            height: 40,
-            margin: const EdgeInsets.all(5),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
 
-              },
-              style: ElevatedButton.styleFrom(
-                primary: AppColor.greyblack,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-              ),
-              child: robotoTextWidget(
-                textval: bookNow,
-                colorval: AppColor.white,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            )),
       ]),
     ]));
   }

@@ -8,8 +8,20 @@ import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../home/homePage.dart';
+import '../pickupDropAddressSelection/model/searchPlaceModel.dart';
+import 'model/driverListModel.dart';
 
 class ConfirmDriver extends StatefulWidget {
+  final SearchPlaceModel? fromAddress;
+  final SearchPlaceModel? toAddress;
+
+  final Content? driverDetail;
+  final VehiclePriceClass? priceDetail;
+
+  const ConfirmDriver({Key? key, this.driverDetail, this.priceDetail,this.toAddress, this.fromAddress})
+      : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _ConfirmDriverPageState();
@@ -62,7 +74,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
       content: Container(
-          height: 320,
+          height: 340,
           child: Column(children: [
             const Padding(
               padding: EdgeInsets.only(top: 5),
@@ -75,7 +87,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                     fontSize: 14),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
@@ -85,11 +97,11 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                   color: AppColor.border,
                 ),
               ),
-              child: Padding(padding: EdgeInsets.only(top: 5,bottom: 5),
+              child: Padding(padding: const EdgeInsets.only(top: 5,bottom: 5),
                 child: Column(
                   children: [
-                    const robotoTextWidget(
-                        textval: "Hatchback",
+                     robotoTextWidget(
+                        textval: widget.driverDetail!.priceClass!.type.toString(),
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w200),
@@ -106,8 +118,8 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                             const SizedBox(
                               width: 5,
                             ),
-                            const robotoTextWidget(
-                                textval: "3 People",
+                             robotoTextWidget(
+                                textval: "${widget.driverDetail!.priceClass!.passengerCapacity} People",
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w200)
@@ -123,8 +135,8 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                             const SizedBox(
                               width: 5,
                             ),
-                            const robotoTextWidget(
-                                textval: "7 Kg",
+                             robotoTextWidget(
+                                textval:widget.driverDetail!.priceClass!.bootSpace.toString(),
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w200)
@@ -153,18 +165,18 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 10),
-                      padding: EdgeInsets.only(top: 5,bottom: 5),
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(top: 5,bottom: 5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children:  [
                           robotoTextWidget(
-                              textval: "₹220",
+                              textval:"₹${widget.priceDetail!.priceClass.totalFare.toString()}",
                               colorval: AppColor.black,
                               sizeval: 16,
                               fontWeight: FontWeight.w800),
 
-                          robotoTextWidget(
+                          const robotoTextWidget(
                               textval: "Approx. Fare",
                               colorval: AppColor.black,
                               sizeval: 12,
@@ -180,19 +192,19 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                     ),
                     const SizedBox(width: 10),
               Container(
-                margin: EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 10),
 
-                  padding: EdgeInsets.only(top: 5,bottom: 5),
+                  padding: const EdgeInsets.only(top: 5,bottom: 5),
                 child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children:  [
                         robotoTextWidget(
-                            textval: "7 Mins",
+                            textval: '${widget.driverDetail!.durationToPickUpLocation} Mins',
                             colorval: AppColor.black,
                             sizeval: 16,
                             fontWeight: FontWeight.w800),
 
-                        robotoTextWidget(
+                        const robotoTextWidget(
                             textval: "Pickup Time",
                             colorval: AppColor.black,
                             sizeval: 12,
@@ -226,7 +238,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
             ),
             child: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(top: 5,bottom: 5) ,
+              padding: const EdgeInsets.all(10) ,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -239,14 +251,14 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                       height: 5,
                     ),
                     robotoTextWidget(
-                        textval: ToLocationHint,
+                        textval:  widget.toAddress!.address.toString(),
                         colorval: AppColor.black,
-                        sizeval: 14,
+                        sizeval: 12,
                         fontWeight: FontWeight.w200),
                   ],
                 ),
             ),),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -259,6 +271,10 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => const HomePage(title: "title")),
+                                (Route<dynamic> route) => false);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.white,
@@ -280,6 +296,10 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => const HomePage(title: "title")),
+                                (Route<dynamic> route) => false);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
