@@ -37,6 +37,9 @@ abstract class FavoritesDataDao {
   @Query('SELECT * FROM FavoritesData WHERE identifier = :identifier')
   Future<FavoritesData?> findByIdentifier(String identifier);
 
-  @Query('SELECT * FROM FavoritesData WHERE identifier != \'Work\' and identifier != \'Home\' and isFavourite = \'Y\'')
+  @Query('SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'')
   Future<List<FavoritesData>> getFavoriate();
+  @Query('SELECT * FROM FavoritesTable WHERE title = :title')
+  Future<FavoritesData?> findTaskByTitle(String title);
+
 }

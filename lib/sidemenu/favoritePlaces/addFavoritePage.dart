@@ -6,11 +6,13 @@ import 'package:envi/sidemenu/favoritePlaces/searchFavoriateLocation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../database/database.dart';
 import '../../theme/color.dart';
+import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
@@ -41,7 +43,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   TextEditingController addresscontroller = new TextEditingController();
   CameraPosition? _cameraPosition;
   String address = "htttyty";
-
+  GoogleMapController? _controller;
+  late LatLng latlong;
   @override
   void initState() {
     super.initState();
@@ -57,7 +60,14 @@ if(widget.isforedit == "0"){
     // _controller = new ScrollController()..addListener(_loadMore);
   }
 void FromLocationSearch(String fulladdress,double lat,double long){
-
+setState(() {
+  address = fulladdress;
+  _cameraPosition =  CameraPosition(target: LatLng(lat, long), zoom: 10.0);
+  if (_controller != null) {
+    _controller
+        ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+  }
+});
 }
   Future<void> loadData() async {
     final database =
@@ -198,25 +208,36 @@ void FromLocationSearch(String fulladdress,double lat,double long){
                               ),
                               Container(
                                 height: 300,
-                                child: GoogleMap(
+                                child: Stack(children: [ GoogleMap(
                                   mapType: MapType.normal,
                                   initialCameraPosition: _cameraPosition!,
-                                  // onMapCreated: (GoogleMapController controller) {
-                                  //   controller.setMapStyle(MapStyle.mapStyles);
-                                  //   _controller = (controller);
-                                  //
-                                  //   _controller?.animateCamera(
-                                  //       CameraUpdate.newCameraPosition(_cameraPosition!));
-                                  // },
+                                  onMapCreated: (GoogleMapController controller) {
+                                    controller.setMapStyle(MapStyle.mapStyles);
+                                    _controller = (controller);
+
+                                    _controller
+                                        ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+                                  },
                                   myLocationEnabled: true,
                                   myLocationButtonEnabled: false,
                                   mapToolbarEnabled: false,
                                   zoomGesturesEnabled: true,
                                   rotateGesturesEnabled: true,
                                   zoomControlsEnabled: false,
-                                  onCameraIdle: () {},
+                                  onCameraIdle: () {
+                                   // GetAddressFromLatLong(latlong);
+                                  },
+                                  onCameraMove: (CameraPosition position) {
+                                   // latlong = LatLng(position.target.latitude, position.target.longitude);
+                                  },
                                 ),
-                              ),
+                                  Center(
+                                    child: Image.asset(
+                                      "assets/images/destination-marker.png",
+                                      scale: 2,
+                                    ),
+                                  ),
+                              ])),
                               const SizedBox(
                                 height: 22,
                               ),
@@ -279,140 +300,14 @@ void FromLocationSearch(String fulladdress,double lat,double long){
       ),
     );
   }
-
-  Container presetplace() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 22,
-          ),
-          Container(
-              color: AppColor.white.withOpacity(0.1),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(children: [
-                        robotoTextWidget(
-                          textval: PlaceTitle,
-                          colorval: AppColor.grey,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ]),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(children: [
-                        const SizedBox(
-                          width: 22,
-                        ),
-                        // Expanded(child: robotoTextWidget(
-                        //   textval: arraddress[index].address,
-                        //   colorval: AppColor.black,
-                        //   sizeval: 14.0,
-                        //   fontWeight: FontWeight.normal,
-                        // ),),
-                        robotoTextWidget(
-                          textval: "arraddress[index].address",
-                          colorval: AppColor.darkgrey,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ]),
-                    ],
-                  ),
-                ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            height: 1,
-            color: AppColor.border,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {});
-              print("Tapped a Container");
-            },
-            child: Container(
-                color: AppColor.white.withOpacity(0.1),
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                          robotoTextWidget(
-                            textval: Address,
-                            colorval: AppColor.grey,
-                            sizeval: 14.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ]),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                          const SizedBox(
-                            width: 22,
-                          ),
-                          robotoTextWidget(
-                            textval: "arraddress[index].address",
-                            colorval: AppColor.darkgrey,
-                            sizeval: 14.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ]),
-                      ],
-                    ),
-                  ],
-                )),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            height: 1,
-            color: AppColor.border,
-          ),
-          const SizedBox(
-            height: 22,
-          ),
-          Row(children: [
-            const SizedBox(
-              width: 22,
-            ),
-            robotoTextWidget(
-              textval: customplacetext,
-              colorval: AppColor.grey,
-              sizeval: 14.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ]),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            height: 1,
-            color: AppColor.border,
-          ),
-        ],
-      ),
-    );
+  Future<void> GetAddressFromLatLong(LatLng position) async {
+    List<Placemark> placemarks =
+    await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    setState(() {
+      Address =
+      '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    });
   }
 }

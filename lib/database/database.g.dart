@@ -88,7 +88,7 @@ class _$FlutterDatabase extends FlutterDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `FavoritesData` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `identifier` TEXT NOT NULL, `address` TEXT NOT NULL, `isFavourite` TEXT NOT NULL, `latitude` TEXT NOT NULL, `longitude` TEXT NOT NULL, `title` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `FavoritesData` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `identifier` TEXT NOT NULL, `address` TEXT NOT NULL, `isFavourite` TEXT NOT NULL, `latitude` TEXT NOT NULL, `longitude` TEXT NOT NULL, `title` TEXT NOT NULL,`timestamp` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -116,6 +116,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
                   'latitude':item.latitude,
                   'longitude':item.longitude,
                   'title':item.title,
+              'timestamp': _dateTimeConverter.encode(item.timestamp),
 
                 },
             changeListener),
@@ -131,6 +132,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
               'latitude':item.latitude,
               'longitude':item.longitude,
               'title':item.title,
+              'timestamp': _dateTimeConverter.encode(item.timestamp),
 
 
             },
@@ -147,6 +149,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
               'latitude':item.latitude,
               'longitude':item.longitude,
               'title':item.title,
+              'timestamp': _dateTimeConverter.encode(item.timestamp),
 
 
             },
@@ -176,7 +179,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
 
             row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,),
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [id]);
   }
   @override
@@ -191,7 +194,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
 
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,),
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [id]);
   }
   @override
@@ -206,11 +209,11 @@ class _$FavoritesDataDao extends FavoritesDataDao {
 
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,),);
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),);
   }
   @override
   Future<List<FavoritesData>> getFavoriate() async {
-    return _queryAdapter.queryList('SELECT * FROM FavoritesData WHERE identifier != \'Work\' and identifier != \'Home\' and isFavourite = \'Y\'',
+    return _queryAdapter.queryList('SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'',
         mapper: (Map<String, Object?> row) => FavoritesData(
           row['id'] as int?,
 
@@ -220,7 +223,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
 
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,),);
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),);
   }
   @override
   Stream<List<FavoritesData>> findAllTasksAsStream() {
@@ -234,7 +237,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
 
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,),
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
         queryableName: 'FavoritesData',
         isView: false);
   }
@@ -251,7 +254,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
 
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,),
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [type],
         queryableName: 'FavoritesData',
         isView: false);
@@ -285,6 +288,21 @@ class _$FavoritesDataDao extends FavoritesDataDao {
   @override
   Future<void> deleteTasks(List<FavoritesData> tasks) async {
     await _taskDeletionAdapter.deleteList(tasks);
+  }
+  @override
+  Future<FavoritesData?> findTaskByTitle(String title) async {
+    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE title = ?1',
+        mapper: (Map<String, Object?> row) => FavoritesData(
+          row['id'] as int?,
+
+          row['identifier'] as String,
+          row['address'] as String,
+          row['isFavourite'] as String,
+
+          row['latitude'] as String,
+          row['longitude'] as String,
+          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int),),
+        arguments: [title]);
   }
 }
 

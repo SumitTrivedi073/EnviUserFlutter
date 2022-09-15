@@ -16,11 +16,12 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../theme/string.dart';
 
 class ConfirmFavoriteLocation extends StatefulWidget {
-  final String title;
-  final DetailsResult? fromLocation;
 
+  final String fromLocation;
+  final void Function(String,double,double) onCriteriaChanged;
+final double lat,lng;
   const ConfirmFavoriteLocation(
-      {Key? key, required this.title, required this.fromLocation})
+      {Key? key,  required this.fromLocation,required this.lat,required this.lng,required this.onCriteriaChanged})
       : super(key: key);
 
   @override
@@ -38,10 +39,26 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
-    getCurrentLocation();
+    Future.delayed(Duration(seconds: 10), LoadMap);
+print("========${widget.lat}${widget.lng}");
+    _cameraPosition =  CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 10.0);
+   // getCurrentLocation();
   }
-
+  void LoadMap() async {
+    print("========${widget.lat},${widget.lng}");
+    setState(() {
+      _cameraPosition = CameraPosition(
+        bearing: 0,
+        target: LatLng(widget.lng,widget.lat),
+        zoom: 14.0,
+      );
+     // _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.lat),double.parse( widget.lng)), zoom: 10.0);
+      if (_controller != null) {
+        _controller
+            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -98,7 +115,7 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
           Column(
             children: [
               AppBarInsideWidget(
-                title: widget.title,
+                title: ConfirmLocation,
               ),
               Card(
                 margin: EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -169,16 +186,8 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => SearchDriver(
-                              fromLocation: widget.fromLocation,
-                              toAddress: ToAddressLatLong(
-                                address: Address,
-                                position: latlong,
-                              ),
-                            )),
-                            (Route<dynamic> route) => true);
+                   widget.onCriteriaChanged(Address,latlong.latitude,latlong.longitude);
+                   Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AppColor.greyblack,

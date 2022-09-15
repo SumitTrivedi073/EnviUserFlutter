@@ -31,7 +31,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
   List<FavoritesData> arraddress = [];
   late final FavoritesDataDao dao;
-
+late final FavoritesData? homeDetail;
+  late final FavoritesData? workDetail;
   @override
   void initState() {
     super.initState();
@@ -44,12 +45,16 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     dao = database.taskDao;
+    homeDetail = await dao.findTaskByTitle("Home");
+    workDetail = await dao.findTaskByTitle("Work");
     List<FavoritesData> temparr = await dao.getFavoriate();
     setState(() {
       arraddress = temparr;
     });
     //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
     print("==========${arraddress}");
+
+
   }
 
   @override
@@ -237,26 +242,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                   const SizedBox(
                     width: 22,
                   ),
-                  // Expanded(child: robotoTextWidget(
-                  //   textval: arraddress[index].address,
-                  //   colorval: AppColor.black,
-                  //   sizeval: 14.0,
-                  //   fontWeight: FontWeight.normal,
-                  // ),),
-                  // Flexible(
-                  //   child: Wrap(children: [
-                  //   Container(
-                  //   padding: const EdgeInsets.only(right: 8),
-                  //     child:
-                  //     robotoTextWidget(
-                  //       textval: arraddress[index].address,
-                  //       colorval: AppColor.darkgrey,
-                  //       sizeval: 14.0,
-                  //       fontWeight: FontWeight.normal,
-                  //     ),)
-                  //   ])),
+
                   Container( width:
-                  MediaQuery.of(context).size.width * (209 / 360),
+                  MediaQuery.of(context).size.width -98,
                   child: robotoTextWidget(
                     textval: arraddress[index].address,
                     colorval: AppColor.darkgrey,
@@ -304,7 +292,16 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
           ),
           GestureDetector(
             onTap: () {
-              setState(() {});
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddEditFavoritePlacesPage(
+                        isforedit: "0",
+                        titleEditable: "1",
+                        data:  homeDetail == null ? FavoritesData.optional(
+title: "Home",address: "",longitude: "0.0",latitude:" 0.0",
+                        ):homeDetail!,
+                      )));
               print("Tapped a Container");
             },
             child: Container(
@@ -341,27 +338,15 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                           SizedBox(
                             width: 42,
                           ),
-                          // Expanded(child: robotoTextWidget(
-                          //   textval: arraddress[index].address,
-                          //   colorval: AppColor.black,
-                          //   sizeval: 14.0,
-                          //   fontWeight: FontWeight.normal,
-                          // ),),
-                          Container(
-                            width:
-                                MediaQuery.of(context).size.width * (209 / 360),
-                            child: Text(
-                                '3 - Building Name, Street Name,Road Name,Area,City, 411001.',
-                                style: AppTextStyle.robotoRegular16,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          // robotoTextWidget(
-                          //   textval: "arraddress[index].address",
-                          //   colorval: AppColor.darkgrey,
-                          //   sizeval: 14.0,
-                          //   fontWeight: FontWeight.normal,
-                          // ),
+                          Container( width:
+                          MediaQuery.of(context).size.width -98,
+                            child: robotoTextWidget(
+                              textval: homeDetail == null ? "":homeDetail!.address,
+                              colorval: AppColor.darkgrey,
+                              sizeval: 14.0,
+                              fontWeight: FontWeight.normal,
+                            ),)
+
                         ]),
                       ],
                     ),
@@ -420,11 +405,14 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                           Container(
                             width:
                                 MediaQuery.of(context).size.width * (209 / 360),
-                            child: Text(
-                                '302 - Somewhere Park, Near  Landmark, SEZ Name,City ',
-                                style: AppTextStyle.robotoRegular16,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis),
+                            child:  Container( width:
+                            MediaQuery.of(context).size.width -98,
+                              child: robotoTextWidget(
+                                textval:workDetail == null ? "": workDetail!.address,
+                                colorval: AppColor.darkgrey,
+                                sizeval: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),)
                           ),
 
                           // robotoTextWidget(

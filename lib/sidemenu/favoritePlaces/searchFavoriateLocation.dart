@@ -17,6 +17,7 @@ import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
+import 'confirmFavoriteLocation.dart';
 import 'model/searchLocationModel.dart';
 
 class SearchFavoriateLocation extends StatefulWidget {
@@ -69,7 +70,10 @@ int searctType = 0;
     startFocusNode.dispose();
 
   }
-
+  void FromLocationSearch(String fulladdress,double lat,double long){
+    widget.onCriteriaChanged(Address,lat,long);
+    Navigator.pop(context);
+  }
   _firstLoad(String value) async {
     Map data;
 
@@ -87,8 +91,8 @@ searctType = 0;
             for (var i = 0; i < tem.length; i++) {
               searchPlaceList.add(SearchLocationModel(id: tem[i]['_id'],
                   address: tem[i]['address'],
-                  lng: tem[i]["location"]['coordinates'][1],
-                  lat: tem[i]["location"]['coordinates'][0],
+                  lng: tem[i]["location"]['coordinates'][0],
+                  lat: tem[i]["location"]['coordinates'][1],
                   title: tem[i]['title']));
             }
           });
@@ -166,21 +170,33 @@ searctType = 0;
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () async {
-                        final placeId = searchPlaceList[index].id;
-                        final details = await googlePlace.details.get(placeId,
-                            sessionToken: _sessionToken,
-                            fields:
-                            'geometry,address_components,name,international_phone_number');
-                        if (details != null && details.result != null && mounted) {
-                          if (startFocusNode.hasFocus) {
-                            setState(() {
-                              startPosition = details.result;
+String selecteAddress = "";
+double latitude = 0.0;
+double longitude = 0.0;
+                        if(searctType == 0){
+                          selecteAddress = searchPlaceList[index].address;
+                          latitude = searchPlaceList[index].lat;
+                          longitude = searchPlaceList[index].lng;
 
-                              FromLocationText.text = details.result!.name!;
-                              searchPlaceList = [];
-                            });
-                          }
                         }
+                        else if(searctType == 1){
+    final placeId = searchPlaceList[index].id;
+    final details = await googlePlace.details.get(placeId,
+    sessionToken: _sessionToken,
+    fields: 'geometry,formatted_address,name');
+    if (details != null &&
+    details.result != null &&
+    mounted) {
+      selecteAddress = details.result!.name!;
+      latitude = details.result!.geometry!.location!.lat!;
+      longitude = details.result!.geometry!.location!.lng!;
+    }
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ConfirmFavoriteLocation(onCriteriaChanged:FromLocationSearch,fromLocation: selecteAddress,lat: latitude,lng: longitude,
+                                )));
                       },
                       child: Card(
                         elevation: 4,
