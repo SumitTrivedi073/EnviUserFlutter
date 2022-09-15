@@ -59,10 +59,11 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    FromLocationText.text = widget.currentLocation!.title;
     _sessionToken = uuid.v4();
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
+    endFocusNode.requestFocus();
     googlePlace = GooglePlace(GoogleApiKey);
   }
 
@@ -88,6 +89,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               .map((i) => SearchPlaceModel.fromJson(i))
               .toList();
           useGoogleApi = false;
+          _isVisible = true;
         } else {
           googleAPI(value);
         }
@@ -100,6 +102,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   void googleAPI(String value) {
+    _isVisible = true;
     getSuggestion(value);
   }
 
@@ -108,7 +111,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
     String request =
-        '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken';
+        '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken&components=country:in';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
@@ -150,182 +153,231 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 child: Column(
                   children: [
                     EditFromToWidget(),
-                    GestureDetector(
-                        onTap: () {
-                          searchPlaceList = [];
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ConfirmDropLocation(
-                                        fromLocation: startingAddress!,
-                                        title: confirmDropLocationText,
-                                      )),
-                              (Route<dynamic> route) => true);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                Images.locationPinImage,
-                                width: 20,
-                                height: 20,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              robotoTextWidget(
-                                  textval: pickOnMapText,
-                                  colorval: AppColor.blue,
-                                  sizeval: 14,
-                                  fontWeight: FontWeight.w200)
-                            ],
-                          ),
-                        )),
+                    // GestureDetector(
+                    //     onTap: () {
+                    //       searchPlaceList = [];
+                    //       // Navigator.of(context).pushAndRemoveUntil(
+                    //       //     MaterialPageRoute(
+                    //       //         builder: (BuildContext context) =>
+                    //       //             ConfirmDropLocation(
+                    //       //               fromLocation: startingAddress ??
+                    //       //                   widget.currentLocation!,
+                    //       //               title: confirmDropLocationText,
+                    //       //             )),
+                    //       //     (Route<dynamic> route) => true);
+                    //     },
+                    //     child: Container(
+                    //       margin: const EdgeInsets.all(10),
+                    //       child: Row(
+                    //         children: [
+                    //           SvgPicture.asset(
+                    //             Images.locationPinImage,
+                    //             width: 20,
+                    //             height: 20,
+                    //           ),
+                    //           const SizedBox(
+                    //             width: 5,
+                    //           ),
+                    //           robotoTextWidget(
+                    //               textval: pickOnMapText,
+                    //               colorval: AppColor.blue,
+                    //               sizeval: 14,
+                    //               fontWeight: FontWeight.w200)
+                    //         ],
+                    //       ),
+                    //     )),
                   ],
                 )),
-            Expanded(
-                child: (searchPlaceList.isNotEmpty)
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              if (useGoogleApi) {
-                                final placeId = searchPlaceList[index].id;
-                                final details = await googlePlace.details.get(
-                                    placeId,
-                                    sessionToken: _sessionToken,
-                                    fields: 'geometry,formatted_address,name');
-                                if (details != null &&
-                                    details.result != null &&
-                                    mounted) {
-                                  if (startFocusNode.hasFocus) {
-                                    setState(() {
-                                      // startPosition = details.result;
-
-                                      FromLocationText.text =
-                                          details.result!.name!;
-                                      startingAddress = SearchPlaceModel(
-                                          id: searchPlaceList[index].id,
-                                          address:
-                                              details.result!.formattedAddress!,
-                                          latLng: LatLng(
-                                              details.result!.geometry!
-                                                  .location!.lat!,
-                                              details.result!.geometry!
-                                                  .location!.lng!),
-                                          title: details.result!.name!);
-                                      searchPlaceList = [];
-                                    });
-                                  } else {
-                                    setState(() {
-                                      // endPosition = details.result;
-                                      ToLocationText.text =
-                                          details.result!.name!;
-                                      endAddress = SearchPlaceModel(
-                                          id: searchPlaceList[index].id,
-                                          address:
-                                              details.result!.formattedAddress!,
-                                          latLng: LatLng(
-                                              details.result!.geometry!
-                                                  .location!.lat!,
-                                              details.result!.geometry!
-                                                  .location!.lng!),
-                                          title: details.result!.name!);
-                                      searchPlaceList = [];
-                                    });
-                                  }
-                                }
-                              } else {
-                                if (mounted) {
-                                  if (startFocusNode.hasFocus) {
-                                    setState(() {
-                                      FromLocationText.text =
-                                          searchPlaceList[index].title;
-                                      startingAddress = searchPlaceList[index];
-                                      searchPlaceList = [];
-                                    });
-                                  } else if (endFocusNode.hasFocus) {
-                                    setState(() {
-                                      ToLocationText.text =
-                                          searchPlaceList[index].title;
-                                      endAddress = searchPlaceList[index];
-                                      searchPlaceList = [];
-                                    });
-                                  }
-                                }
-                              }
-                            },
-                            child: Card(
-                              elevation: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: ListTile(
-                                  title: robotoTextWidget(
-                                    textval: searchPlaceList[index].title,
-                                    colorval: AppColor.black,
-                                    sizeval: 14.0,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                  subtitle: robotoTextWidget(
-                                    textval: searchPlaceList[index].address,
-                                    colorval: AppColor.black,
-                                    sizeval: 12.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  leading: SvgPicture.asset(
-                                    Images.toLocationImage,
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                  // onTap: () async {
-
-                                  // },
-                                ),
-                              ),
+            Visibility(
+              visible: _isVisible,
+              child: Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () async {
+                        if (useGoogleApi) {
+                          final placeId = searchPlaceList[index].id;
+                          final details = await googlePlace.details.get(placeId,
+                              sessionToken: _sessionToken,
+                              fields: 'geometry,formatted_address,name');
+                          if (details != null &&
+                              details.result != null &&
+                              mounted) {
+                            if (startFocusNode.hasFocus) {
+                              setState(() async {
+                                // startPosition = details.result;
+                                FromLocationText.text = details.result!.name!;
+                                startingAddress = SearchPlaceModel(
+                                    id: searchPlaceList[index].id,
+                                    address: details.result!.formattedAddress!,
+                                    latLng: LatLng(
+                                        details
+                                            .result!.geometry!.location!.lat!,
+                                        details
+                                            .result!.geometry!.location!.lng!),
+                                    title: details.result!.name!);
+                                searchPlaceList = [];
+                                _isVisible = false;
+                                startingAddress = await Navigator.of(context)
+                                    .pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  location: startingAddress,
+                                                  title: confirmLocationText,
+                                                )),
+                                        (Route<dynamic> route) => true);
+                                FromLocationText.text = startingAddress!.title;
+                                startFocusNode.unfocus();
+                                searchPlaceList = [];
+                              });
+                            } else {
+                              setState(() async {
+                                // endPosition = details.result;
+                                ToLocationText.text = details.result!.name!;
+                                endAddress = SearchPlaceModel(
+                                    id: searchPlaceList[index].id,
+                                    address: details.result!.formattedAddress!,
+                                    latLng: LatLng(
+                                        details
+                                            .result!.geometry!.location!.lat!,
+                                        details
+                                            .result!.geometry!.location!.lng!),
+                                    title: details.result!.name!);
+                                searchPlaceList = [];
+                                _isVisible = false;
+                                endAddress = await Navigator.of(context)
+                                    .pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  location: endAddress,
+                                                  title: confirmLocationText,
+                                                )),
+                                        (Route<dynamic> route) => true);
+                                ToLocationText.text = endAddress!.title;
+                                endFocusNode.unfocus();
+                                searchPlaceList = [];
+                              });
+                            }
+                          }
+                        } else {
+                          if (mounted) {
+                            if (startFocusNode.hasFocus) {
+                              setState(() async {
+                                FromLocationText.text =
+                                    searchPlaceList[index].title;
+                                startingAddress = searchPlaceList[index];
+                                searchPlaceList = [];
+                                _isVisible = false;
+                                startingAddress = await Navigator.of(context)
+                                    .pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  location: startingAddress,
+                                                  title: confirmLocationText,
+                                                )),
+                                        (Route<dynamic> route) => true);
+                                FromLocationText.text = startingAddress!.title;
+                                startFocusNode.unfocus();
+                                searchPlaceList = [];
+                              });
+                            } else {
+                              setState(() async {
+                                ToLocationText.text =
+                                    searchPlaceList[index].title;
+                                endAddress = searchPlaceList[index];
+                                searchPlaceList = [];
+                                _isVisible = false;
+                                endAddress = await Navigator.of(context)
+                                    .pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  location: endAddress,
+                                                  title: confirmLocationText,
+                                                )),
+                                        (Route<dynamic> route) => true);
+                                ToLocationText.text = endAddress!.title;
+                                endFocusNode.unfocus();
+                                searchPlaceList = [];
+                              });
+                            }
+                          }
+                        }
+                      },
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: ListTile(
+                            title: robotoTextWidget(
+                              textval: searchPlaceList[index].title,
+                              colorval: AppColor.black,
+                              sizeval: 14.0,
+                              fontWeight: FontWeight.w800,
                             ),
-                          );
-                        },
-                        itemCount: searchPlaceList.length < 10
-                            ? searchPlaceList.length
-                            : 10,
-                        padding: const EdgeInsets.all(8),
-                      )
-                    : Container()),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                  height: 40,
-                  margin: const EdgeInsets.all(5),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      searchPlaceList = [];
+                            subtitle: robotoTextWidget(
+                              textval: searchPlaceList[index].address,
+                              colorval: AppColor.black,
+                              sizeval: 12.0,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            leading: SvgPicture.asset(
+                              Images.toLocationImage,
+                              width: 20,
+                              height: 20,
+                            ),
+                            // onTap: () async {
 
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => SearchDriver(
-                                    fromAddress: startingAddress,
-                                    toAddress: endAddress,
-                                  )),
-                          (Route<dynamic> route) => true);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.greyblack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                            // },
+                          ),
+                        ),
                       ),
-                    ),
-                    child: robotoTextWidget(
-                      textval: continuebut,
-                      colorval: AppColor.white,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )),
+                    );
+                  },
+                  itemCount:
+                      searchPlaceList.length < 15 ? searchPlaceList.length : 15,
+                  padding: const EdgeInsets.all(8),
+                ),
+              ),
             ),
+            const Spacer(),
+            Container(
+                height: 40,
+                margin: const EdgeInsets.all(5),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    searchPlaceList = [];
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SearchDriver(
+                                  fromAddress:
+                                      startingAddress ?? widget.currentLocation,
+                                  toAddress: endAddress,
+                                )),
+                        (Route<dynamic> route) => true);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.greyblack,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                  ),
+                  child: robotoTextWidget(
+                    textval: continuebut,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                )),
+            const SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),

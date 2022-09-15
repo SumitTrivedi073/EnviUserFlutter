@@ -55,5 +55,7 @@ var estimateFare = "ESTIMATED FARE";
 var bookNow = "BOOK NOW";
 var continue1 = "CONTINUE";
 var confirmDropLocationText = 'Confirm Drop Location';
+var confirmLocationText = 'Confirm Location';
 var pickOnMapText = 'Pick on Map';
 var moveAroundText = 'Move the map around to set address,tap keyboard icon to type';
+var confirmText = "CONFIRM";
