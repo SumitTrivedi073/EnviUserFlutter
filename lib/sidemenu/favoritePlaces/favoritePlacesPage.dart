@@ -365,7 +365,17 @@ title: "Home",address: "",longitude: "0.0",latitude:" 0.0",
           ),
           GestureDetector(
             onTap: () {
-              setState(() {});
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddEditFavoritePlacesPage(
+                        isforedit: "0",
+                        titleEditable: "1",
+                        data:  homeDetail == null ? FavoritesData.optional(
+                          title: "Work",address: "",longitude: "0.0",latitude:" 0.0",
+                        ):homeDetail!,
+                      )));
+
               print("Tapped a Container");
             },
             child: Container(
