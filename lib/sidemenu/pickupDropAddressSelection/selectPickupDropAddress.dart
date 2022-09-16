@@ -230,7 +230,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         if (mounted) {
                           setState(() {
                             FromLocationText.text =
-                                searchPlaceList[index].title;
+                                searchPlaceList[index].address;
                             startingAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
@@ -238,7 +238,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       } else {
                         if (mounted) {
                           setState(() {
-                            ToLocationText.text = searchPlaceList[index].title;
+                            ToLocationText.text = searchPlaceList[index].address;
                             endAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
@@ -406,19 +406,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     return TextField(
       focusNode: startFocusNode,
       onChanged: (value) {
-        // if (_debounce?.isActive ?? false) _debounce!.cancel();
-        // _debounce = Timer(const Duration(milliseconds: 1000), () {
         if (value.isNotEmpty) {
-          //places api
           _firstLoad(value);
-          // googleAPI(value);
         } else {
           searchPlaceList = [];
-          //startPosition = null;
           startingAddress = null;
         }
-        //}
-        // );
       },
       showCursor: true,
       controller: FromLocationText,
@@ -446,18 +439,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       focusNode: endFocusNode,
       showCursor: true,
       onChanged: (value) {
-        // if (_debounce?.isActive ?? false) _debounce!.cancel();
-        // _debounce = Timer(const Duration(milliseconds: 1000), () {
         if (value.isNotEmpty) {
-          //places api
           _firstLoad(value);
-          // googleAPI(value);
         } else {
           searchPlaceList = [];
-          //endPosition = null;
           endAddress = null;
         }
-        // });
       },
       controller: ToLocationText,
       decoration: InputDecoration(
