@@ -173,6 +173,7 @@ const SizedBox(height: 20,),
                     sharedPreferences.setString(Loginpropic, profiledata.propic);
                     sharedPreferences.setString(Logingender, profiledata.gender);
                     sharedPreferences.setString(Loginphone, profiledata.phone);
+                    sharedPreferences.setString(LoginName, profiledata.name);
                     Navigator.push(
                         context, MaterialPageRoute(builder: (context) => MainEntryPoint()));
                   },

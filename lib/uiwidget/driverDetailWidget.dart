@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../theme/color.dart';
-import '../theme/string.dart';
-import '../theme/theme.dart';
 
 class DriverDetailWidget extends StatefulWidget {
   @override
@@ -20,7 +18,6 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      
       margin: EdgeInsets.all(10),
       height: 170,
       child: Card(
@@ -44,32 +41,33 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                       child: Row(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: Image.network("https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
-                              fit: BoxFit.fill,height: 46,
-                              width: 46,)
-                          ),
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: Image.network(
+                                "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
+                                fit: BoxFit.fill,
+                                height: 46,
+                                width: 46,
+                              )),
                           const SizedBox(
                             width: 10,
                           ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                robotoTextWidget(
-                  textval: "Anamika Chavan",
-                  colorval: AppColor.grey,
-                  sizeval: 16,
-                  fontWeight: FontWeight.w200,
-                ),
-                robotoTextWidget(
-                  textval: "7 Minutes Away",
-                  colorval: AppColor.black,
-                  sizeval: 18,
-                  fontWeight: FontWeight.w200,
-                ),
-              ])
-
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                robotoTextWidget(
+                                  textval: "Anamika Chavan",
+                                  colorval: AppColor.grey,
+                                  sizeval: 16,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                                robotoTextWidget(
+                                  textval: "7 Minutes Away",
+                                  colorval: AppColor.black,
+                                  sizeval: 18,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ])
                         ],
                       ),
                     )),
@@ -84,7 +82,6 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                   Container(
                     height: 50,
                     width: 50,
-
                     decoration: BoxDecoration(
                       color: AppColor.lightwhite,
                       border: Border.all(
@@ -93,11 +90,11 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                       borderRadius: const BorderRadius.all(
                           Radius.circular(10.0)), // Set rounded corner radius
                     ),
-                    child:  MaterialButton(
+                    child: MaterialButton(
                       minWidth: 20,
                       height: 20,
                       onPressed: () {
-                       // _launchPhoneURL(tripData.customer.phone.toString());
+                        // _launchPhoneURL(tripData.customer.phone.toString());
                       },
                       child: const Icon(
                         Icons.call_outlined,

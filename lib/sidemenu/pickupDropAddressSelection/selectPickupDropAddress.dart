@@ -513,9 +513,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         }
 
         if (value.isNotEmpty) {
-          //places api
           _firstLoad(value);
-          // googleAPI(value);
         } else {
           setState(() {
             searchPlaceList = [];
@@ -523,8 +521,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
             startingAddress = null;
           });
         }
-        //}
-        // );
       },
       showCursor: true,
       controller: FromLocationText,

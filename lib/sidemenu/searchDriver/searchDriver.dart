@@ -6,21 +6,11 @@ import 'package:envi/uiwidget/fromtowidget.dart';
 import 'package:envi/uiwidget/mapDirectionWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_place/google_place.dart';
-
 import '../../theme/color.dart';
 import '../../uiwidget/driverListWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
-import '../../web_service/Constant.dart';
 
 class SearchDriver extends StatefulWidget {
- 
-  // final DetailsResult? fromLocation;
-  // final DetailsResult? toLocation;
-  
-  // final ToAddressLatLong? toAddress;
-  // final FromAddressLatLong? fromAddress;
-
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
@@ -38,35 +28,23 @@ class _SearchDriverPageState extends State<SearchDriver> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        body:Stack(alignment: Alignment.centerRight, children: <Widget>[
-            MapDirectionWidget(),
-
-     Column(children: [
-
+        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+      MapDirectionWidget(
+        fromAddress: widget.fromAddress,
+        toAddress: widget.toAddress,
+      ),
+      Column(children: [
         const AppBarInsideWidget(title: "Envi"),
-              const SizedBox(height: 5),
-              FromToWidget(),
-        const Spacer(),
-        DriverListItem(),
-        Container(
-            height: 40,
-            margin: const EdgeInsets.all(5),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                primary: AppColor.greyblack,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-              ),
-              child: robotoTextWidget(
-                textval: bookNow,
-                colorval: AppColor.white,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            )),
+        const SizedBox(height: 5),
+        FromToWidget(
+      fromAddress: widget.fromAddress,
+      toAddress: widget.toAddress,),
+        const SizedBox(height: 230),
+        DriverListItem(
+          fromAddress: widget.fromAddress,
+          toAddress: widget.toAddress,
+        ),
+
       ]),
     ]));
   }

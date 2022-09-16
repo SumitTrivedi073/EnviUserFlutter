@@ -348,11 +348,9 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   Future<void> fetchotp({required String phoneNumber}) async {
-    print("8*****************");
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        // print("object");
         await auth.signInWithCredential(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
@@ -363,10 +361,8 @@ class _LoginpageState extends State<Loginpage> {
           isLoading = false;
         });
         showToast(e.message, Color.fromARGB(255, 77, 142, 4), AppColor.cellheader, 'right', 30);
-        // print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) async {
-        // print("object");
         loginverificationId = verificationId;
         _start = 60;
         startTimer();
@@ -393,14 +389,11 @@ class _LoginpageState extends State<Loginpage> {
     try {
       final authCredential =
           await auth.signInWithCredential(phoneAuthCredential);
-//print(authCredential.user);
       if (authCredential.user != null) {
         setState(() {
           isLoading = true;
         });
         signIn();
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => ProfilePage()));
       }
 
 
@@ -450,18 +443,16 @@ class _LoginpageState extends State<Loginpage> {
       "deviceId": deviceId
     };
     var jsonData = null;
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(userLogin());
     dynamic response = await HTTP.post(userLogin(), data);
 
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
-      print(jsonData);
+     // print("jsonData========>"+jsonData);
       setState(() {
         _timer.cancel();
-        LoginModel users =  LoginModel.fromJson(jsonData['content']);
-        if (users.id == "") {
+        LoginModel users = new LoginModel.fromJson(jsonData['content']);
+        if (users.id.isEmpty) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const ProfilePage()));
         } else {
