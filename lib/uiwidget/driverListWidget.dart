@@ -76,7 +76,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
            .map((i) => VehiclePriceClass.fromJson(i))
            .toList();
       });
-      print("vehiclePriceClasses==============>${res.body}");
+
     } else {
       throw "Can't get DriverList.";
     }
