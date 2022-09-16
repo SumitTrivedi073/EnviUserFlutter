@@ -54,3 +54,9 @@ getUserTripHistory(String userid, int pagecount, int limit){
 GetAllFavouriteAddressdata(String userid){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/getAll/$userid');
 }
+EditFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
+}
+AddFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
+}

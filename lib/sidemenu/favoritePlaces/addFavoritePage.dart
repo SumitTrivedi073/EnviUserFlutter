@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:envi/database/favoritesData.dart';
@@ -17,6 +18,8 @@ import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../utils/utility.dart';
+import '../../web_service/ApiCollection.dart';
 import '../../web_service/Constant.dart';
 import '../upcomingride/model/ScheduleTripModel.dart';
 
@@ -45,6 +48,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   String address = "htttyty";
   GoogleMapController? _controller;
   late LatLng latlong;
+  late SharedPreferences sharedPreferences;
   @override
   void initState() {
     super.initState();
@@ -53,6 +57,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
 if(widget.isforedit == "0"){
   titlecontroller.text = widget.data!.title;
   address = widget.data!.address;
+  latlong = LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude));
   _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude)), zoom: 10.0);
 }else{
   _cameraPosition =  CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
@@ -61,8 +66,10 @@ if(widget.isforedit == "0"){
   }
 void FromLocationSearch(String fulladdress,double lat,double long){
 setState(() {
+  print(fulladdress);
   address = fulladdress;
   _cameraPosition =  CameraPosition(target: LatLng(lat, long), zoom: 10.0);
+  latlong = LatLng(lat, long);
   if (_controller != null) {
     _controller
         ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
@@ -284,7 +291,26 @@ setState(() {
               child: MaterialButton(
                 color: AppColor.darkgrey,
                 height: 40,
-                onPressed: () {},
+                onPressed: () async {
+                  if(widget.titleEditable =="0"){
+                    if(titlecontroller.text=="Home"|| titlecontroller.text == "Work"){
+                      return ;
+                    }
+
+                  }
+                  print("======");
+
+                  var detail = await dao.findDataBylatlong(latlong.latitude.toString(), latlong.longitude.toString()) ;
+
+                  if(detail == null){
+                    print("======api");
+                    ApiCall_Add_Favorite();
+                  }
+                  else{
+                    print("=====${detail}");
+                    ApiCall_update_Favorite(detail.identifier);
+                  }
+                },
                 child: robotoTextWidget(
                     textval: savetext,
                     colorval: AppColor.white,
@@ -309,5 +335,56 @@ setState(() {
       Address =
       '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
+  }
+  Future<void> ApiCall_Add_Favorite()   async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response =
+    await ApiCollection.FavoriateDataAdd(userid, titlecontroller.text.toString(), address,latlong.latitude,latlong.longitude,"Y");
+    print(response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        String addressId = jsonDecode(response.body)['content']['addressId'];
+        print(jsonDecode(response.body)['content']);
+
+        final task = FavoritesData.optional(identifier: addressId,
+            address: address,
+            isFavourite: 'Y',
+            latitude: latlong.latitude.toString(),
+            longitude: latlong.longitude.toString(),
+            title: titlecontroller.text.toString());
+        print(task);
+        await dao.insertTask(task);
+        Navigator.pop(context);
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
+  }
+
+  Future<void> ApiCall_update_Favorite(String id)   async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response =
+    await ApiCollection.FavoriateDataUpdate(userid, titlecontroller.text.toString(), address,latlong.latitude,latlong.longitude,"Y",id);
+    print(response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        String addressId = jsonDecode(response.body)['content']['addressId'];
+        print(jsonDecode(response.body)['content']);
+
+        final task = FavoritesData.optional(identifier: addressId,
+            address: address,
+            isFavourite: 'Y',
+            latitude: latlong.latitude.toString(),
+            longitude: latlong.longitude.toString(),
+            title: titlecontroller.text.toString());
+        print(task);
+        await dao.updateTask(task);
+        Navigator.pop(context);
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
   }
 }

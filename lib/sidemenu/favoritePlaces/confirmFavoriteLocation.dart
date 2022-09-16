@@ -39,7 +39,7 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 10), LoadMap);
+    Future.delayed(Duration(seconds: 1), LoadMap);
 print("========${widget.lat}${widget.lng}");
     _cameraPosition =  CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 10.0);
    // getCurrentLocation();
@@ -49,7 +49,7 @@ print("========${widget.lat}${widget.lng}");
     setState(() {
       _cameraPosition = CameraPosition(
         bearing: 0,
-        target: LatLng(widget.lng,widget.lat),
+        target: LatLng(widget.lat,widget.lng),
         zoom: 14.0,
       );
      // _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.lat),double.parse( widget.lng)), zoom: 10.0);

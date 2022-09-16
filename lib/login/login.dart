@@ -361,7 +361,7 @@ class _LoginpageState extends State<Loginpage> {
         setState(() {
           isLoading = false;
         });
-        showToast(e.message, Color.fromARGB(255, 77, 142, 4), AppColor.cellheader, 'right', 30);
+        showToast(e.message.toString());
         // print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) async {
@@ -408,7 +408,7 @@ class _LoginpageState extends State<Loginpage> {
       setState(() {
         isLoading = false;
       });
-      showToast(e.message, Color.fromARGB(255, 77, 142, 4), AppColor.cellheader, 'right', 30);
+      showToast(e.message.toString());
     }
   }
 

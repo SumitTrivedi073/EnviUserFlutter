@@ -304,6 +304,22 @@ class _$FavoritesDataDao extends FavoritesDataDao {
           row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int),),
         arguments: [title]);
   }
+  @override
+  Future<FavoritesData?> findDataBylatlong(String lat,String long) async {
+
+    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE latitude = \'?1\' and longitude = \'?1\'',
+        mapper: (Map<String, Object?> row) => FavoritesData(
+            row['id'] as int?,
+
+            row['identifier'] as String,
+            row['address'] as String,
+            row['isFavourite'] as String,
+
+            row['latitude'] as String,
+            row['longitude'] as String,
+            row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
+        arguments: [lat,long]);
+  }
 }
 
 // ignore_for_file: unused_element

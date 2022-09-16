@@ -70,8 +70,9 @@ int searctType = 0;
     startFocusNode.dispose();
 
   }
-  void FromLocationSearch(String fulladdress,double lat,double long){
-    widget.onCriteriaChanged(Address,lat,long);
+  void FromConfirmLocation(String fulladdress,double lat,double long){
+    print(fulladdress);
+    widget.onCriteriaChanged(fulladdress,lat,long);
     Navigator.pop(context);
   }
   _firstLoad(String value) async {
@@ -81,6 +82,7 @@ int searctType = 0;
       "search": value,
     };
 searctType = 0;
+    searchPlaceList = [];
     dynamic res = await HTTP.post(searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
@@ -113,6 +115,7 @@ searctType = 0;
   }
 
   void getSuggestion(String input) async {
+    searchPlaceList = [];
     String type = '(regions)';
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
@@ -195,7 +198,7 @@ double longitude = 0.0;
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ConfirmFavoriteLocation(onCriteriaChanged:FromLocationSearch,fromLocation: selecteAddress,lat: latitude,lng: longitude,
+                                builder: (context) => ConfirmFavoriteLocation(onCriteriaChanged:FromConfirmLocation,fromLocation: selecteAddress,lat: latitude,lng: longitude,
                                 )));
                       },
                       child: Card(
@@ -303,6 +306,10 @@ double longitude = 0.0;
           if (value.isNotEmpty) {
             //places api
               _firstLoad(value);
+              setState(() {
+                searchPlaceList = [];
+                startPosition = null;
+              });
            // googleAPI(value);
           } else {
             setState(() {
