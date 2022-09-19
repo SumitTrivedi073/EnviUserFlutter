@@ -57,3 +57,9 @@ GetAllFavouriteAddressdata(String userid){
 searchDriver() {
   return Uri.parse('${getBaseURL()}/userTrip/searchDrivers');
 }
+EditFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
+}
+AddFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
+}

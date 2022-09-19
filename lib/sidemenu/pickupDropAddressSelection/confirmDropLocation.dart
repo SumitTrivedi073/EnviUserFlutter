@@ -156,7 +156,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(
-              moveAroundText,
+              'Move around',
               style: AppTextStyle.robotoRegular16,
               maxLines: 2,
               textAlign: TextAlign.center,
