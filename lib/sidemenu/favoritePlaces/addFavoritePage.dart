@@ -300,7 +300,7 @@ setState(() {
                   }
                   print("======");
 
-                  var detail = await dao.findDataBylatlong(latlong.latitude.toString(), latlong.longitude.toString()) ;
+                  var detail = await dao.findDataByaddressg(address) ;
 
                   if(detail == null){
                     print("======api");

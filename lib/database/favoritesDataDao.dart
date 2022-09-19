@@ -42,7 +42,7 @@ abstract class FavoritesDataDao {
   @Query('SELECT * FROM FavoritesData WHERE title = :title')
   Future<FavoritesData?> findTaskByTitle(String title);
 
-  @Query('SELECT * FROM FavoritesData WHERE latitude = :lat and longitude = :long')
-  Future<FavoritesData?> findDataBylatlong(String lat,String long);
+  @Query('SELECT * FROM FavoritesData WHERE address = :address')
+  Future<FavoritesData?> findDataByaddressg(String address);
 
 }

@@ -305,9 +305,9 @@ class _$FavoritesDataDao extends FavoritesDataDao {
         arguments: [title]);
   }
   @override
-  Future<FavoritesData?> findDataBylatlong(String lat,String long) async {
+  Future<FavoritesData?> findDataByaddressg(String address) async {
 
-    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE latitude = \'?1\' and longitude = \'?1\'',
+    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE address = \'?1\'',
         mapper: (Map<String, Object?> row) => FavoritesData(
             row['id'] as int?,
 
@@ -318,7 +318,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
             row['latitude'] as String,
             row['longitude'] as String,
             row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
-        arguments: [lat,long]);
+        arguments: [address]);
   }
 }
 
