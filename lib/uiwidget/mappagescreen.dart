@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/mapStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,7 +47,8 @@ class MyMapState extends State {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
-
+ String placeName = '';
+  String? isoId;
   @override
   void initState() {
     // TODO: implement initState
@@ -78,12 +80,13 @@ class MyMapState extends State {
                 zoomGesturesEnabled: true,
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
-                onCameraIdle: () {
-                  GetAddressFromLatLong(latlong!);
+                onCameraIdle: () async {
+                await  GetAddressFromLatLong(latlong!);
                 },
-                onCameraMove: (CameraPosition position) {
+                onCameraMove: (CameraPosition position)async {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
+                       await  GetAddressFromLatLong(latlong!);
                 },
               )
             : Container(),
@@ -118,6 +121,11 @@ class MyMapState extends State {
             margin: const EdgeInsets.only(bottom: 10),
             child: FromBookScheduleWidget(
               address: Address,
+              currentLocation: SearchPlaceModel(
+                  address: Address,
+                  id: isoId ?? '',
+                  title: placeName,
+                  latLng: latlong),
             ),
           ),
         )
@@ -157,6 +165,8 @@ class MyMapState extends State {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
+    placeName = (place.subLocality != '')?place.subLocality! :place.subAdministrativeArea!;
+    isoId = place.isoCountryCode;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';

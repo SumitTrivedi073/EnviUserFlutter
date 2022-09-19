@@ -3,7 +3,7 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:envi/Profile/profilePage.dart';
+
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../Profile/profilePage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
@@ -118,7 +119,7 @@ class _LoginpageState extends State<Loginpage> {
               width: 276,
               fit: BoxFit.fill,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             robotoTextWidget(
@@ -141,7 +142,7 @@ class _LoginpageState extends State<Loginpage> {
                 return null;
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -237,7 +238,7 @@ class _LoginpageState extends State<Loginpage> {
               width: 276,
               fit: BoxFit.fill,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             robotoTextWidget(
@@ -261,7 +262,7 @@ class _LoginpageState extends State<Loginpage> {
                     style: const TextStyle(color: AppColor.black),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Expanded(
@@ -282,7 +283,7 @@ class _LoginpageState extends State<Loginpage> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Expanded(
@@ -326,14 +327,15 @@ class _LoginpageState extends State<Loginpage> {
                     setState(() {
                       isLoading = true;
                     });
-                      fetchotp(
+                     /* fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
-
+*/
+                    signIn();
 
                   }
                 },
-                child: robotoTextWidget(
+                child: const robotoTextWidget(
                     textval: "Submit",
                     colorval: AppColor.butgreen,
                     sizeval: 16.0,
@@ -360,7 +362,6 @@ class _LoginpageState extends State<Loginpage> {
           isLoading = false;
         });
         showToast(e.message.toString());
-        // print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) async {
         loginverificationId = verificationId;
@@ -450,11 +451,11 @@ class _LoginpageState extends State<Loginpage> {
       jsonData = convert.jsonDecode(response.body);
      // print("jsonData========>"+jsonData);
       setState(() {
-        _timer.cancel();
+     //   _timer.cancel();
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+              context, MaterialPageRoute(builder: (context) => const ProfilePage()));
         } else {
           Navigator.push(
               context,
