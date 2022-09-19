@@ -48,7 +48,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
     sharedPreferences = await SharedPreferences.getInstance();
     Map data;
     data = {
-      "fromAddress":widget.fromAddress!.address,
+      "fromAddress": widget.fromAddress!.address,
       "phoneNumber": sharedPreferences.getString(Loginphone),
       "retry": "0",
       "userId": sharedPreferences.getString(LoginID),
@@ -63,20 +63,19 @@ class _DriverListItemPageState extends State<DriverListItem> {
       },
     };
 
-      print("data=======>$data");
+    print("data=======>$data");
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-
       setState(() {
-       DriverList = (jsonDecode(res.body)['content'] as List)
+        DriverList = (jsonDecode(res.body)['content'] as List)
             .map((i) => Content.fromJson(i))
             .toList();
 
-       vehiclePriceClasses = (jsonDecode(res.body)['vehiclePriceClasses']as List)
-           .map((i) => VehiclePriceClass.fromJson(i))
-           .toList();
+        vehiclePriceClasses =
+            (jsonDecode(res.body)['vehiclePriceClasses'] as List)
+                .map((i) => VehiclePriceClass.fromJson(i))
+                .toList();
       });
-
     } else {
       throw "Can't get DriverList.";
     }
@@ -87,131 +86,125 @@ class _DriverListItemPageState extends State<DriverListItem> {
     // TODO: implement build
     return Expanded(
         child: Card(
-          elevation: 5,
-          margin: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      elevation: 5,
+      margin: const EdgeInsets.all(5),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: robotoTextWidget(
+                      textval: '${DriverList.length} Ride Option',
+                      colorval: AppColor.black,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w800),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child:  robotoTextWidget(
-                          textval: '${DriverList.length} Ride Option',
-                          colorval: AppColor.black,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w800),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(children: [
-                          Container(
-                            width: 1,
-                            color: AppColor.darkgrey,
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                carouselController.previousPage();
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.green,
-                              ))
-                        ]),
-                        Row(children: [
-                          Container(
-                            width: 1,
-                            color: AppColor.darkgrey,
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                carouselController.nextPage();
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.green,
-                              )),
-                          Container(
-                            width: 1,
-                            color: AppColor.grey,
-                          ),
-                        ]),
-                      ],
-                    ),
+                    Row(children: [
+                      Container(
+                        width: 1,
+                        color: AppColor.darkgrey,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            if (selectedIndex != 0) {
+                              carouselController.previousPage();
+                            }
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            color: (selectedIndex != 0)
+                                ? Colors.green
+                                : AppColor.grey,
+                          ))
+                    ]),
+                    Row(children: [
+                      Container(
+                        width: 1,
+                        color: AppColor.darkgrey,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            if (selectedIndex != DriverList.length - 1) {
+                              carouselController.nextPage();
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.green,
+                          )),
+                      Container(
+                        width: 1,
+                        color: AppColor.grey,
+                      ),
+                    ]),
                   ],
                 ),
-              ),
-              Container(
-                height: 1,
-                color: AppColor.grey,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        selectedIndex = index;
-                      },
-                      child:CarouselSlider(
-                      items: List.generate(DriverList.length, (index) => driverListItems(index)),
-                      carouselController: carouselController,
-                      options: CarouselOptions(
-                      autoPlay: false,
-                      ),
-                      )
-                    );
-                  },
-                  itemCount: DriverList.length,
-                  scrollDirection: Axis.horizontal,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                ) ),
-              Container(
-                  height: 40,
-                  margin: const EdgeInsets.all(5),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => ConfirmDriver(
+              ],
+            ),
+          ),
+          Container(
+            height: 1,
+            color: AppColor.grey,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Expanded(
+              child: CarouselSlider(
+            items: List.generate(
+                DriverList.length, (index) => driverListItems(index)),
+            carouselController: carouselController,
+            options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                selectedIndex = index;
+              },
+              autoPlay: false,
+            ),
+          )),
+          Container(
+              height: 40,
+              margin: const EdgeInsets.all(5),
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => ConfirmDriver(
                                 driverDetail: DriverList[selectedIndex!],
-                                priceDetail: vehiclePriceClasses[selectedIndex!],
+                                priceDetail:
+                                    vehiclePriceClasses[selectedIndex!],
                                 fromAddress: widget.fromAddress,
                                 toAddress: widget.toAddress,
-                              )
-                          ),
-                              (Route<dynamic> route) => false);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.greyblack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
-                      ),
-                    ),
-                    child: robotoTextWidget(
-                      textval: bookNow,
-                      colorval: AppColor.white,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ))
-            ],
-          ),
-        )
-        );
-
-
+                              )),
+                      (Route<dynamic> route) => false);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: AppColor.greyblack,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                ),
+                child: robotoTextWidget(
+                  textval: bookNow,
+                  colorval: AppColor.white,
+                  sizeval: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ))
+        ],
+      ),
+    ));
   }
 
-
   Widget driverListItems(int index) {
-    return  Card(
+    return Card(
       margin: const EdgeInsets.all(5),
       color: const Color(0xFFE4F3F5),
       child: Padding(
@@ -221,21 +214,23 @@ class _DriverListItemPageState extends State<DriverListItem> {
               Row(
                 children: [
                   robotoTextWidget(
-                      textval: '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                      textval:
+                          '${DriverList[index].durationToPickUpLocation} Minutes Away',
                       colorval: AppColor.black,
                       sizeval: 16,
                       fontWeight: FontWeight.w600),
                   Row(
                     children: [
                       RatingBar.builder(
-                        initialRating: DriverList[index].driverRating!.toDouble(),
+                        initialRating:
+                            DriverList[index].driverRating!.toDouble(),
                         minRating: 1,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
                         itemCount: 5,
                         itemSize: 14,
-                        itemPadding: const EdgeInsets.symmetric(
-                            horizontal: 2.0),
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 2.0),
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
                           color: Colors.amber,
@@ -246,7 +241,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
                       ),
                       Card(
                         child: Image.network(
-                          DriverList[index].driverPhoto?? '',
+                          DriverList[index].driverPhoto ?? '',
                           fit: BoxFit.fill,
                           height: 40,
                           width: 50,
@@ -269,7 +264,8 @@ class _DriverListItemPageState extends State<DriverListItem> {
                   Column(
                     children: [
                       robotoTextWidget(
-                          textval: DriverList[index].priceClass!.type.toString(),
+                          textval:
+                              DriverList[index].priceClass!.type.toString(),
                           colorval: AppColor.black,
                           sizeval: 14,
                           fontWeight: FontWeight.w200),
@@ -280,16 +276,14 @@ class _DriverListItemPageState extends State<DriverListItem> {
                         children: [
                           Row(
                             children: [
-                              Image.asset(
-                                  'assets/images/passengers-icon.png',
-                                  height: 15,
-                                  width: 15,
-                                  fit: BoxFit.cover),
+                              Image.asset('assets/images/passengers-icon.png',
+                                  height: 15, width: 15, fit: BoxFit.cover),
                               const SizedBox(
                                 width: 5,
                               ),
                               robotoTextWidget(
-                                  textval: "${DriverList[index].priceClass!.passengerCapacity} People",
+                                  textval:
+                                      "${DriverList[index].priceClass!.passengerCapacity} People",
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200)
@@ -300,16 +294,16 @@ class _DriverListItemPageState extends State<DriverListItem> {
                           ),
                           Row(
                             children: [
-                              Image.asset(
-                                  'assets/images/weight-icon.png',
-                                  height: 15,
-                                  width: 15,
-                                  fit: BoxFit.cover),
+                              Image.asset('assets/images/weight-icon.png',
+                                  height: 15, width: 15, fit: BoxFit.cover),
                               const SizedBox(
                                 width: 5,
                               ),
                               robotoTextWidget(
-                                  textval:DriverList[index].priceClass!.bootSpace.toString(),
+                                  textval: DriverList[index]
+                                      .priceClass!
+                                      .bootSpace
+                                      .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200)
@@ -353,7 +347,8 @@ class _DriverListItemPageState extends State<DriverListItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   robotoTextWidget(
-                      textval: "₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                      textval:
+                          "₹${vehiclePriceClasses[index].priceClass.totalFare}",
                       colorval: AppColor.black,
                       sizeval: 18,
                       fontWeight: FontWeight.w800),
@@ -361,7 +356,15 @@ class _DriverListItemPageState extends State<DriverListItem> {
                     width: 25,
                   ),
                   Text(
-                    getTotalPrice(vehiclePriceClasses[index].priceClass.totalFare!.toInt(),vehiclePriceClasses[index].priceClass.sellerDiscount!.toInt()),
+                    getTotalPrice(
+                        vehiclePriceClasses[index]
+                            .priceClass
+                            .totalFare!
+                            .toInt(),
+                        vehiclePriceClasses[index]
+                            .priceClass
+                            .sellerDiscount!
+                            .toInt()),
                     textAlign: TextAlign.justify,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
@@ -376,14 +379,15 @@ class _DriverListItemPageState extends State<DriverListItem> {
                     width: 25,
                   ),
                   Column(
-                    children:  [
+                    children: [
                       const robotoTextWidget(
                           textval: "Special Offer",
                           colorval: AppColor.purple,
                           sizeval: 14,
                           fontWeight: FontWeight.w800),
                       robotoTextWidget(
-                          textval:'${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
+                          textval:
+                              '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
                           colorval: AppColor.purple,
                           sizeval: 13,
                           fontWeight: FontWeight.w400),
@@ -393,19 +397,16 @@ class _DriverListItemPageState extends State<DriverListItem> {
               ),
             ],
           )),
-    ) ;
+    );
   }
 
   String getTotalPrice(int totalFare, int discount) {
-
     int num1 = totalFare;
 
-    int num2 = discount ;
+    int num2 = discount;
 
-    int sum =  num1 + num2;
+    int sum = num1 + num2;
     print('sum:$sum');
     return "₹$sum";
   }
-
-
 }
