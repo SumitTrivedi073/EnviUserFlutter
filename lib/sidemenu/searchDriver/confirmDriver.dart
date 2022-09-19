@@ -1,16 +1,22 @@
+import 'dart:convert';
+
+import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../web_service/APIDirectory.dart';
 import '../home/homePage.dart';
 import '../pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'model/driverListModel.dart';
+import '../../../../web_service/HTTP.dart' as HTTP;
+import 'dart:convert' as convert;
 
 class ConfirmDriver extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
@@ -31,6 +37,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   LatLng? latlong = null;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
+  late SharedPreferences sharedPreferences;
 
   @override
   void initState() {
@@ -295,11 +302,12 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        /*Navigator.of(context).pop();
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (BuildContext context) => const HomePage(title: "title")),
-                                (Route<dynamic> route) => false);
+                                (Route<dynamic> route) => false);*/
+                        confirmBooking();
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
@@ -322,6 +330,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   }
 
   Future getCurrentLocation() async {
+    sharedPreferences = await SharedPreferences.getInstance();
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission != PermissionStatus.granted) {
       LocationPermission permission = await Geolocator.requestPermission();
@@ -346,5 +355,43 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
       context: context,
       builder: (BuildContext context) => _buildPopupDialog(context),
     );
+  }
+
+  Future<void> confirmBooking() async {
+    Map data;
+    data = {
+      "driverTripMasterId": widget.driverDetail!.driverTripMasterId,
+      "userId":sharedPreferences.get(LoginID),
+      "vehicleId": widget.driverDetail!.vehicleId,
+      "driverId": widget.driverDetail!.driverId,
+      "location": {
+        "latitude": widget.fromAddress!.latLng!.latitude.toDouble(),
+        "longitude":  widget.fromAddress!.latLng!.longitude.toDouble()
+      },
+      "toLocation": {
+        "latitude":  widget.toAddress!.latLng!.latitude.toDouble(),
+        "longitude": widget.toAddress!.latLng!.longitude.toDouble()
+      },
+      "paymentMode": "null",
+      "driverName": widget.driverDetail!.driverName,
+      "driverRating": widget.driverDetail!.driverRating!.toInt(),
+      "driverPhoto": widget.driverDetail!.driverPhoto.toString(),
+      "initialPrice": widget.priceDetail!.priceClass.totalFare!.toInt(),
+      "initialDistance": widget.priceDetail!.priceClass.distance!.toInt()
+
+    };
+
+    print("data=======>$data");
+    var jsonData = null;
+    dynamic res = await HTTP.post(startTrip(), data);
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
+      setState(() {
+        jsonData = convert.jsonDecode(res.body);
+        // print("jsonData========>"+jsonData);
+      });
+    } else {
+      throw "Can't get DriverList.";
+    }
+
   }
 }
