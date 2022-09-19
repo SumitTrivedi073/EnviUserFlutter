@@ -8,7 +8,8 @@ import 'model/tripDataModel.dart';
 
 
 class firestoreScheduleTripNotifier extends ChangeNotifier {
-  late TripDataModel liveTripData;
+
+  dynamic scheduleFailureSream = [];
 
   Future<void> listenToLiveUpdateStream() async {
     String liveUpdatecollectionName = 'user/1c7b86c2-a9f7-4037-8b46-c8059deac779/scheduled-trips';
@@ -20,9 +21,9 @@ class firestoreScheduleTripNotifier extends ChangeNotifier {
         var count = 0;
         print("object$result");
         for (var res in result.docChanges) {
-          dynamic data = res.doc.data();
+          var data = res.doc.data();
 
-
+scheduleFailureSream.add(data);
 
         }
         notifyListeners();
