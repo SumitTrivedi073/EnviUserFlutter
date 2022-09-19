@@ -58,6 +58,6 @@ searchDriver() {
   return Uri.parse('${getBaseURL()}/userTrip/searchDrivers');
 }
 startTrip() {
-  return Uri.parse('${getBaseURL()}/trip-dispatch/start-trip-user');
+  return Uri.parse('${getBaseURL()}/userTrip/startUserTrip');
 }
 
