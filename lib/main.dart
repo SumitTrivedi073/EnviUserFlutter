@@ -1,6 +1,7 @@
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
+import 'package:envi/provider/firestoreScheduleTripNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/web_service/APIDirectory.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
-
+          ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
      child: MaterialApp(
       title: 'Envi',
@@ -83,7 +84,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>()
           .listenToLiveUpdateStream();
-
+      context.read<firestoreScheduleTripNotifier>()
+          .listenToLiveUpdateStream();
 
     }
   /*  Navigator.of(context).pushAndRemoveUntil(
