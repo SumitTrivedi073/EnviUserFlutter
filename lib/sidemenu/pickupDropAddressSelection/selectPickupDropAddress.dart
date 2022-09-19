@@ -10,6 +10,7 @@ import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
@@ -66,6 +67,15 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     endFocusNode.requestFocus();
     googlePlace = GooglePlace(GoogleApiKey);
   }
+
+  final List<String> _suggestions = [
+    'Alligator',
+    'Buffalo',
+    'Chicken',
+    'Dog',
+    'Eagle',
+    'Frog'
+  ];
 
   @override
   void dispose() {
@@ -294,7 +304,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             //startFocusNode.unfocus();
 
                           } else {
-                            setState(()  {
+                            setState(() {
                               ToLocationText.text =
                                   searchPlaceList[index].title;
                               endAddress = searchPlaceList[index];
@@ -483,10 +493,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   TextField FromTextWidget() {
     return TextField(
       enableSuggestions: true,
-      
       autofocus: false,
       focusNode: startFocusNode,
-      autofillHints: const [AutofillHints.addressCity],
+      autofillHints: const ['babar', ',haha', 'huhu'],
       onChanged: (value) {
         if (useGoogleApi) {
           if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -536,57 +545,148 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     );
   }
 
-  TextField ToTextWidget() {
-    return TextField(
-      autofocus: false,
-      focusNode: endFocusNode,
-      autofillHints: const [AutofillHints.addressCity],
-      showCursor: true,
-      onChanged: (value) {
-        if (useGoogleApi) {
-          if (_debounce?.isActive ?? false) _debounce!.cancel();
-          _debounce = Timer(const Duration(milliseconds: 1000), () {
-            if (value.isNotEmpty) {
-              //places api
-              _firstLoad(value);
-              // googleAPI(value);
-            } else {
-              setState(() {
-                searchPlaceList = [];
-                //endPosition = null;
-                endAddress = null;
-              });
-            }
-          });
-        }
+  Widget ToTextWidget() {
+    return TypeAheadField(
+      textFieldConfiguration: TextFieldConfiguration(
+        focusNode: endFocusNode,
+        onChanged: (value) {
+          if (useGoogleApi) {
+            if (_debounce?.isActive ?? false) _debounce!.cancel();
+            _debounce = Timer(const Duration(milliseconds: 1000), () {
+              if (value.isNotEmpty) {
+                //places api
+                _firstLoad(value);
+                // googleAPI(value);
+              } else {
+                setState(() {
+                  searchPlaceList = [];
+                  //endPosition = null;
+                  endAddress = null;
+                });
+              }
+            });
+          }
 
-        if (value.isNotEmpty) {
-          _firstLoad(value);
-        } else {
-          setState(() {
-            searchPlaceList = [];
+          if (value.isNotEmpty) {
+            _firstLoad(value);
+          } else {
+            setState(() {
+              searchPlaceList = [];
 
-            endAddress = null;
-          });
-        }
+              endAddress = null;
+            });
+          }
+        },
+        controller: ToLocationText,
+        autofocus: true,
+        decoration: InputDecoration(
+            hintText: ToLocationHint,
+            border: InputBorder.none,
+            focusColor: Colors.white,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            suffixIcon: ToLocationText.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.cancel),
+                    onPressed: () {
+                      setState(() {
+                        ToLocationText.clear();
+                        searchPlaceList = [];
+                      });
+                    },
+                  )
+                : null),
+      ),
+      // suggestionsCallback: (pattern) async {
+      //  // return await BackendService.getSuggestions(pattern);
+      // },
+      hideOnEmpty: true,
+     hideSuggestionsOnKeyboardHide: false,
+    
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+          // leading: Icon(Icons.shopping_cart),
+          title: Text(_suggestions[0]),
+          // subtitle: Text('\$${suggestion['price']}'),
+        );
       },
-      controller: ToLocationText,
-      decoration: InputDecoration(
-          hintText: ToLocationHint,
-          border: InputBorder.none,
-          focusColor: Colors.white,
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          suffixIcon: ToLocationText.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      ToLocationText.clear();
-                      searchPlaceList = [];
-                    });
-                  },
-                )
-              : null),
+      onSuggestionSelected: (suggestion) {
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => ProductPage(product: suggestion)
+        // ));
+        ToLocationText.text = suggestion!.toString();
+      },
+      suggestionsCallback: (String pattern) {
+        return _suggestions;
+      },
     );
   }
 }
+//   Widget ToTextWidget() {
+//     return Autocomplete(
+//       optionsBuilder: (TextEditingValue value) {
+//         if (value.text.isEmpty) {
+//           return _suggestions;
+//         }
+//         return _suggestions;
+//       },
+//       fieldViewBuilder:
+//           ((context, textEditingController, focusNode, onFieldSubmitted) {
+//         return TextFormField(
+//           // onSubmitted: (val) {},
+//           focusNode: endFocusNode,
+//           showCursor: true,
+//           onChanged: (value) {
+//             if (useGoogleApi) {
+//               if (_debounce?.isActive ?? false) _debounce!.cancel();
+//               _debounce = Timer(const Duration(milliseconds: 1000), () {
+//                 if (value.isNotEmpty) {
+//                   //places api
+//                   _firstLoad(value);
+//                   // googleAPI(value);
+//                 } else {
+//                   setState(() {
+//                     searchPlaceList = [];
+//                     //endPosition = null;
+//                     endAddress = null;
+//                   });
+//                 }
+//               });
+//             }
+
+//             if (value.isNotEmpty) {
+//               _firstLoad(value);
+//             } else {
+//               setState(() {
+//                 searchPlaceList = [];
+
+//                 endAddress = null;
+//               });
+//             }
+//           },
+//           controller: ToLocationText,
+//           decoration: InputDecoration(
+//               hintText: ToLocationHint,
+//               border: InputBorder.none,
+//               focusColor: Colors.white,
+//               floatingLabelBehavior: FloatingLabelBehavior.never,
+//               suffixIcon: ToLocationText.text.isNotEmpty
+//                   ? IconButton(
+//                       icon: const Icon(Icons.cancel),
+//                       onPressed: () {
+//                         setState(() {
+//                           ToLocationText.clear();
+//                           searchPlaceList = [];
+//                         });
+//                       },
+//                     )
+//                   : null),
+//         );
+//       }),
+//     );
+//   }
+// }
+
+
+
+
+//
