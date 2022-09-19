@@ -172,7 +172,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 width: 5,
                               ),
                               robotoTextWidget(
-                                  textval: pickOnMapText,
+                                  textval: 'Pick on Map',
                                   colorval: AppColor.blue,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200)
