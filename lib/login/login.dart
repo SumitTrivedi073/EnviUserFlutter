@@ -3,7 +3,7 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:envi/Profile/profilePage.dart';
+
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../Profile/profilePage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
