@@ -1,4 +1,4 @@
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
+//import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/mapStyle.dart';
@@ -14,6 +14,8 @@ import 'package:google_place/google_place.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme/string.dart';
+import '../pickupDropAddressSelection/model/toAddressModel.dart';
+
 
 class ConfirmFavoriteLocation extends StatefulWidget {
 
