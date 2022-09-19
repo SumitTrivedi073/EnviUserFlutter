@@ -294,7 +294,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             //startFocusNode.unfocus();
 
                           } else {
-                            setState(() async {
+                            setState(()  {
                               ToLocationText.text =
                                   searchPlaceList[index].title;
                               endAddress = searchPlaceList[index];
