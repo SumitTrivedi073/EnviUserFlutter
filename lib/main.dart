@@ -157,8 +157,8 @@ dynamic userid =sharedPreferences.getString(LoginID);
             final task = FavoritesData.optional(identifier: res["id"],
                 address: res["address"],
                 isFavourite: res["isFavourite"],
-                latitude: res["location"]['coordinates'][0].toString(),
-                longitude: res["location"]['coordinates'][1].toString(),
+                latitude: res["location"]['coordinates'][1].toString(),
+                longitude: res["location"]['coordinates'][0].toString(),
                 title: title);
             print(task);
             await dao.insertTask(task);
