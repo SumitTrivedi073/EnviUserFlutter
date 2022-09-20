@@ -68,3 +68,6 @@ EditFavouriteAddressdata(){
 AddFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
 }
+DeleteFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
+}

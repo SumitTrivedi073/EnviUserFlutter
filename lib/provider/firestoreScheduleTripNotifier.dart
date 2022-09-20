@@ -16,6 +16,10 @@ class firestoreScheduleTripNotifier extends ChangeNotifier {
     final CollectionReference collectionRef =
     FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {
+      DateTime now = new DateTime.now();
+      final startAtTimestamp = Timestamp.fromMillisecondsSinceEpoch(
+          now.millisecondsSinceEpoch - 15 * 60000); // 15min:  //(5.3*3600000)
+
       final notificationStream = await collectionRef.snapshots();
       notificationStream.listen((result) {
         var count = 0;

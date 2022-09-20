@@ -43,6 +43,20 @@ class ApiCollection {
     dynamic res = await HTTP.post(EditFavouriteAddressdata(), data);
     return res;
   }
+  static Future<dynamic> FavoriateDataDelete(
+      userid,id) async {
 
+    Map address = {
+     "id" :id,
+    };
+    Map data = {
+      "userid": userid,
+      "address": address,
+
+    };
+    print(data);
+    dynamic res = await HTTP.post(DeleteFavouriteAddressdata(), data);
+    return res;
+  }
 
 }
