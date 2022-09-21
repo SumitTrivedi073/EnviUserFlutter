@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
@@ -8,24 +7,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../database/database.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
-import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../utils/utility.dart';
 import '../../web_service/ApiCollection.dart';
 import '../../web_service/Constant.dart';
-import '../upcomingride/model/ScheduleTripModel.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
   final FavoritesData? data;
-   AddEditFavoritePlacesPage(
+ // final void Function(String) onCriteriaChanged;
+
+  const AddEditFavoritePlacesPage(
       {Key? key,
       required this.isforedit,
       required this.data,
@@ -45,7 +46,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   TextEditingController titlecontroller = new TextEditingController();
   TextEditingController addresscontroller = new TextEditingController();
   CameraPosition? _cameraPosition;
-  String address = "htttyty";
+  String address = "";
   GoogleMapController? _controller;
   late LatLng latlong;
   late SharedPreferences sharedPreferences;
@@ -60,6 +61,7 @@ if(widget.isforedit == "0"){
   latlong = LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude));
   _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude)), zoom: 10.0);
 }else{
+  getCurrentLocation();
   _cameraPosition =  CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
 }
     // _controller = new ScrollController()..addListener(_loadMore);
@@ -248,6 +250,8 @@ setState(() {
                               const SizedBox(
                                 height: 22,
                               ),
+
+                              if(widget.isforedit == "0")
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -255,7 +259,9 @@ setState(() {
                                   Row(children: [
                                     MaterialButton(
                                       height: 40,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        ApiCall_Delete_Favorite(widget.data!.id,widget.data!.identifier);
+                                      },
                                       child: Row(children: [
                                         SvgPicture.asset(
                                           "assets/svg/place-delete.svg",
@@ -292,6 +298,12 @@ setState(() {
                 color: AppColor.darkgrey,
                 height: 40,
                 onPressed: () async {
+                  final isValid = _formKey.currentState!.validate();
+                  if (!isValid) {
+                    return;
+                  }
+                  _formKey.currentState!.save();
+
                   if(widget.titleEditable =="0"){
                     if(titlecontroller.text=="Home"|| titlecontroller.text == "Work"){
                       return ;
@@ -326,13 +338,41 @@ setState(() {
       ),
     );
   }
+
+  Future getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission != PermissionStatus.granted) {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission != PermissionStatus.granted) getLocation();
+      return;
+    }
+    getLocation();
+  }
+  getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      latlong = LatLng(position.latitude, position.longitude);
+      _cameraPosition = CameraPosition(
+        bearing: 0,
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 14.0,
+      );
+      if (_controller != null) {
+        _controller
+            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+      }
+    });
+    GetAddressFromLatLong(latlong);
+  }
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
     await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
-      Address =
+      address =
       '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
@@ -356,7 +396,7 @@ setState(() {
             title: titlecontroller.text.toString());
         print(task);
         await dao.insertTask(task);
-        Navigator.pop(context);
+        Navigator.pop(context,{"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }
@@ -382,7 +422,33 @@ setState(() {
             title: titlecontroller.text.toString());
         print(task);
         await dao.updateTask(task);
-        Navigator.pop(context);
+        Navigator.pop(context,{"isbact": true});
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
+  }
+  Future<void> ApiCall_Delete_Favorite(int? id,String identifire)   async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response =
+    await ApiCollection.FavoriateDataDelete(userid, identifire);
+    print(response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        //print("ff${jsonDecode(response.body)['content']}");
+        //String addressId = jsonDecode(response.body)['content']['addressId'];
+
+
+        final task = FavoritesData.optional(id: id,identifier: identifire,
+            address: address,
+            isFavourite: 'Y',
+            latitude: latlong.latitude.toString(),
+            longitude: latlong.longitude.toString(),
+            title: titlecontroller.text.toString());
+        print(task);
+        await dao.deleteTask(task);
+        Navigator.pop(context,{"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }
