@@ -59,6 +59,8 @@ dependencies:
   floor: ^1.3.0
   flutter_polyline_points: ^1.0.0
   carousel_slider: ^4.1.1
+  flutter_typeahead: ^4.1.1
+  paytm_allinonesdk: ^1.1.8
 
 dev_dependencies:
   flutter_test:

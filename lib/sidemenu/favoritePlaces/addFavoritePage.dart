@@ -25,7 +25,7 @@ import '../upcomingride/model/ScheduleTripModel.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
   final FavoritesData? data;
-   AddEditFavoritePlacesPage(
+  AddEditFavoritePlacesPage(
       {Key? key,
       required this.isforedit,
       required this.data,
@@ -54,28 +54,34 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     super.initState();
     loadData();
 
-if(widget.isforedit == "0"){
-  titlecontroller.text = widget.data!.title;
-  address = widget.data!.address;
-  latlong = LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude));
-  _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude)), zoom: 10.0);
-}else{
-  _cameraPosition =  CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
-}
+    if (widget.isforedit == "0") {
+      titlecontroller.text = widget.data!.title;
+      address = widget.data!.address;
+      latlong = LatLng(double.parse(widget.data!.latitude),
+          double.parse(widget.data!.longitude));
+      _cameraPosition = CameraPosition(
+          target: LatLng(double.parse(widget.data!.latitude),
+              double.parse(widget.data!.longitude)),
+          zoom: 10.0);
+    } else {
+      _cameraPosition = CameraPosition(target: LatLng(20, 78), zoom: 10.0);
+    }
     // _controller = new ScrollController()..addListener(_loadMore);
   }
-void FromLocationSearch(String fulladdress,double lat,double long){
-setState(() {
-  print(fulladdress);
-  address = fulladdress;
-  _cameraPosition =  CameraPosition(target: LatLng(lat, long), zoom: 10.0);
-  latlong = LatLng(lat, long);
-  if (_controller != null) {
-    _controller
-        ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+
+  void FromLocationSearch(String fulladdress, double lat, double long) {
+    setState(() {
+      print(fulladdress);
+      address = fulladdress;
+      _cameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 10.0);
+      latlong = LatLng(lat, long);
+      if (_controller != null) {
+        _controller
+            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+      }
+    });
   }
-});
-}
+
   Future<void> loadData() async {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
@@ -96,14 +102,7 @@ setState(() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(PageBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
+      body: SingleChildScrollView(
         child: Column(
           children: [
             AppBarInsideWidget(
@@ -183,7 +182,7 @@ setState(() {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -191,60 +190,67 @@ setState(() {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   SearchFavoriateLocation(
-                                                      title: pickUpLocation,onCriteriaChanged: FromLocationSearch)),
-                                              (route) => true);
+                                                      title: pickUpLocation,
+                                                      onCriteriaChanged:
+                                                          FromLocationSearch)),
+                                          (route) => true);
                                       print("Tapped a Container");
                                     },
                                     child: Card(
-
-                                        child: Container( width:
-                                        MediaQuery.of(context).size.width -50,
-                                          height: 50,
-                                          child: robotoTextWidget(
-                                            textval: address,
-                                            colorval: AppColor.black,
-                                            sizeval: 16.0,
-                                            fontWeight: FontWeight.normal,
-                                          ),)),
+                                        child: Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          50,
+                                      height: 50,
+                                      child: robotoTextWidget(
+                                        textval: address,
+                                        colorval: AppColor.black,
+                                        sizeval: 16.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    )),
                                   ),
                                 ],
                               ),
-
                               const SizedBox(
                                 height: 22,
                               ),
                               Container(
-                                height: 300,
-                                child: Stack(children: [ GoogleMap(
-                                  mapType: MapType.normal,
-                                  initialCameraPosition: _cameraPosition!,
-                                  onMapCreated: (GoogleMapController controller) {
-                                    controller.setMapStyle(MapStyle.mapStyles);
-                                    _controller = (controller);
+                                  height: 300,
+                                  child: Stack(children: [
+                                    GoogleMap(
+                                      
+                                      mapType: MapType.normal,
+                                      initialCameraPosition: _cameraPosition!,
+                                      onMapCreated:
+                                          (GoogleMapController controller) {
+                                        controller
+                                            .setMapStyle(MapStyle.mapStyles);
+                                        _controller = (controller);
 
-                                    _controller
-                                        ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
-                                  },
-                                  myLocationEnabled: true,
-                                  myLocationButtonEnabled: false,
-                                  mapToolbarEnabled: false,
-                                  zoomGesturesEnabled: true,
-                                  rotateGesturesEnabled: true,
-                                  zoomControlsEnabled: false,
-                                  onCameraIdle: () {
-                                   // GetAddressFromLatLong(latlong);
-                                  },
-                                  onCameraMove: (CameraPosition position) {
-                                   // latlong = LatLng(position.target.latitude, position.target.longitude);
-                                  },
-                                ),
-                                  Center(
-                                    child: Image.asset(
-                                      "assets/images/destination-marker.png",
-                                      scale: 2,
+                                        _controller?.animateCamera(
+                                            CameraUpdate.newCameraPosition(
+                                                _cameraPosition!));
+                                      },
+                                      myLocationEnabled: true,
+                                      myLocationButtonEnabled: false,
+                                      mapToolbarEnabled: false,
+                                      zoomGesturesEnabled: true,
+                                      rotateGesturesEnabled: true,
+                                      zoomControlsEnabled: false,
+                                      onCameraIdle: () {
+                                        // GetAddressFromLatLong(latlong);
+                                      },
+                                      onCameraMove: (CameraPosition position) {
+                                        // latlong = LatLng(position.target.latitude, position.target.longitude);
+                                      },
                                     ),
-                                  ),
-                              ])),
+                                    Center(
+                                      child: Image.asset(
+                                        "assets/images/destination-marker.png",
+                                        scale: 2,
+                                      ),
+                                    ),
+                                  ])),
                               const SizedBox(
                                 height: 22,
                               ),
@@ -292,21 +298,20 @@ setState(() {
                 color: AppColor.darkgrey,
                 height: 40,
                 onPressed: () async {
-                  if(widget.titleEditable =="0"){
-                    if(titlecontroller.text=="Home"|| titlecontroller.text == "Work"){
-                      return ;
+                  if (widget.titleEditable == "0") {
+                    if (titlecontroller.text == "Home" ||
+                        titlecontroller.text == "Work") {
+                      return;
                     }
-
                   }
                   print("======");
 
-                  var detail = await dao.findDataByaddressg(address) ;
+                  var detail = await dao.findDataByaddressg(address);
 
-                  if(detail == null){
+                  if (detail == null) {
                     print("======api");
                     ApiCall_Add_Favorite();
-                  }
-                  else{
+                  } else {
                     print("=====${detail}");
                     ApiCall_update_Favorite(detail.identifier);
                   }
@@ -326,21 +331,28 @@ setState(() {
       ),
     );
   }
+
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
+        await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
       Address =
-      '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
-  Future<void> ApiCall_Add_Favorite()   async {
+
+  Future<void> ApiCall_Add_Favorite() async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
-    final response =
-    await ApiCollection.FavoriateDataAdd(userid, titlecontroller.text.toString(), address,latlong.latitude,latlong.longitude,"Y");
+    final response = await ApiCollection.FavoriateDataAdd(
+        userid,
+        titlecontroller.text.toString(),
+        address,
+        latlong.latitude,
+        latlong.longitude,
+        "Y");
     print(response.body);
 
     if (response != null) {
@@ -348,7 +360,8 @@ setState(() {
         String addressId = jsonDecode(response.body)['content']['addressId'];
         print(jsonDecode(response.body)['content']);
 
-        final task = FavoritesData.optional(identifier: addressId,
+        final task = FavoritesData.optional(
+            identifier: addressId,
             address: address,
             isFavourite: 'Y',
             latitude: latlong.latitude.toString(),
@@ -362,11 +375,17 @@ setState(() {
     }
   }
 
-  Future<void> ApiCall_update_Favorite(String id)   async {
+  Future<void> ApiCall_update_Favorite(String id) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
-    final response =
-    await ApiCollection.FavoriateDataUpdate(userid, titlecontroller.text.toString(), address,latlong.latitude,latlong.longitude,"Y",id);
+    final response = await ApiCollection.FavoriateDataUpdate(
+        userid,
+        titlecontroller.text.toString(),
+        address,
+        latlong.latitude,
+        latlong.longitude,
+        "Y",
+        id);
     print(response.body);
 
     if (response != null) {
@@ -374,7 +393,8 @@ setState(() {
         String addressId = jsonDecode(response.body)['content']['addressId'];
         print(jsonDecode(response.body)['content']);
 
-        final task = FavoritesData.optional(identifier: addressId,
+        final task = FavoritesData.optional(
+            identifier: addressId,
             address: address,
             isFavourite: 'Y',
             latitude: latlong.latitude.toString(),
