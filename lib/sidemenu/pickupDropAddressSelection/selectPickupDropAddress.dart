@@ -545,146 +545,146 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     );
   }
 
-  Widget ToTextWidget() {
-    return TypeAheadField(
-      textFieldConfiguration: TextFieldConfiguration(
-        focusNode: endFocusNode,
-        onChanged: (value) {
-          if (useGoogleApi) {
-            if (_debounce?.isActive ?? false) _debounce!.cancel();
-            _debounce = Timer(const Duration(milliseconds: 1000), () {
-              if (value.isNotEmpty) {
-                //places api
-                _firstLoad(value);
-                // googleAPI(value);
-              } else {
-                setState(() {
-                  searchPlaceList = [];
-                  //endPosition = null;
-                  endAddress = null;
-                });
-              }
-            });
-          }
-
-          if (value.isNotEmpty) {
-            _firstLoad(value);
-          } else {
-            setState(() {
-              searchPlaceList = [];
-
-              endAddress = null;
-            });
-          }
-        },
-        controller: ToLocationText,
-        autofocus: true,
-        decoration: InputDecoration(
-            hintText: ToLocationHint,
-            border: InputBorder.none,
-            focusColor: Colors.white,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            suffixIcon: ToLocationText.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.cancel),
-                    onPressed: () {
-                      setState(() {
-                        ToLocationText.clear();
-                        searchPlaceList = [];
-                      });
-                    },
-                  )
-                : null),
-      ),
-      // suggestionsCallback: (pattern) async {
-      //  // return await BackendService.getSuggestions(pattern);
-      // },
-      hideOnEmpty: true,
-     hideSuggestionsOnKeyboardHide: false,
-    
-      itemBuilder: (context, suggestion) {
-        return ListTile(
-          // leading: Icon(Icons.shopping_cart),
-          title: Text(_suggestions[0]),
-          // subtitle: Text('\$${suggestion['price']}'),
-        );
-      },
-      onSuggestionSelected: (suggestion) {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => ProductPage(product: suggestion)
-        // ));
-        ToLocationText.text = suggestion!.toString();
-      },
-      suggestionsCallback: (String pattern) {
-        return _suggestions;
-      },
-    );
-  }
-}
 //   Widget ToTextWidget() {
-//     return Autocomplete(
-//       optionsBuilder: (TextEditingValue value) {
-//         if (value.text.isEmpty) {
-//           return _suggestions;
-//         }
+//     return TypeAheadField(
+//       textFieldConfiguration: TextFieldConfiguration(
+//         focusNode: endFocusNode,
+//         onChanged: (value) {
+//           if (useGoogleApi) {
+//             if (_debounce?.isActive ?? false) _debounce!.cancel();
+//             _debounce = Timer(const Duration(milliseconds: 1000), () {
+//               if (value.isNotEmpty) {
+//                 //places api
+//                 _firstLoad(value);
+//                 // googleAPI(value);
+//               } else {
+//                 setState(() {
+//                   searchPlaceList = [];
+//                   //endPosition = null;
+//                   endAddress = null;
+//                 });
+//               }
+//             });
+//           }
+
+//           if (value.isNotEmpty) {
+//             _firstLoad(value);
+//           } else {
+//             setState(() {
+//               searchPlaceList = [];
+
+//               endAddress = null;
+//             });
+//           }
+//         },
+//         controller: ToLocationText,
+//         autofocus: true,
+//         decoration: InputDecoration(
+//             hintText: ToLocationHint,
+//             border: InputBorder.none,
+//             focusColor: Colors.white,
+//             floatingLabelBehavior: FloatingLabelBehavior.never,
+//             suffixIcon: ToLocationText.text.isNotEmpty
+//                 ? IconButton(
+//                     icon: const Icon(Icons.cancel),
+//                     onPressed: () {
+//                       setState(() {
+//                         ToLocationText.clear();
+//                         searchPlaceList = [];
+//                       });
+//                     },
+//                   )
+//                 : null),
+//       ),
+//       // suggestionsCallback: (pattern) async {
+//       //  // return await BackendService.getSuggestions(pattern);
+//       // },
+//       hideOnEmpty: true,
+//      hideSuggestionsOnKeyboardHide: false,
+    
+//       itemBuilder: (context, suggestion) {
+//         return ListTile(
+//           // leading: Icon(Icons.shopping_cart),
+//           title: Text(_suggestions[0]),
+//           // subtitle: Text('\$${suggestion['price']}'),
+//         );
+//       },
+//       onSuggestionSelected: (suggestion) {
+//         // Navigator.of(context).push(MaterialPageRoute(
+//         //   builder: (context) => ProductPage(product: suggestion)
+//         // ));
+//         ToLocationText.text = suggestion!.toString();
+//       },
+//       suggestionsCallback: (String pattern) {
 //         return _suggestions;
 //       },
-//       fieldViewBuilder:
-//           ((context, textEditingController, focusNode, onFieldSubmitted) {
-//         return TextFormField(
-//           // onSubmitted: (val) {},
-//           focusNode: endFocusNode,
-//           showCursor: true,
-//           onChanged: (value) {
-//             if (useGoogleApi) {
-//               if (_debounce?.isActive ?? false) _debounce!.cancel();
-//               _debounce = Timer(const Duration(milliseconds: 1000), () {
-//                 if (value.isNotEmpty) {
-//                   //places api
-//                   _firstLoad(value);
-//                   // googleAPI(value);
-//                 } else {
-//                   setState(() {
-//                     searchPlaceList = [];
-//                     //endPosition = null;
-//                     endAddress = null;
-//                   });
-//                 }
-//               });
-//             }
-
-//             if (value.isNotEmpty) {
-//               _firstLoad(value);
-//             } else {
-//               setState(() {
-//                 searchPlaceList = [];
-
-//                 endAddress = null;
-//               });
-//             }
-//           },
-//           controller: ToLocationText,
-//           decoration: InputDecoration(
-//               hintText: ToLocationHint,
-//               border: InputBorder.none,
-//               focusColor: Colors.white,
-//               floatingLabelBehavior: FloatingLabelBehavior.never,
-//               suffixIcon: ToLocationText.text.isNotEmpty
-//                   ? IconButton(
-//                       icon: const Icon(Icons.cancel),
-//                       onPressed: () {
-//                         setState(() {
-//                           ToLocationText.clear();
-//                           searchPlaceList = [];
-//                         });
-//                       },
-//                     )
-//                   : null),
-//         );
-//       }),
 //     );
 //   }
 // }
+  Widget ToTextWidget() {
+    return Autocomplete(
+      optionsBuilder: (TextEditingValue value) {
+        if (value.text.isEmpty) {
+          return _suggestions;
+        }
+        return _suggestions;
+      },
+      fieldViewBuilder:
+          ((context, textEditingController, focusNode, onFieldSubmitted) {
+        return TextFormField(
+          // onSubmitted: (val) {},
+          focusNode: endFocusNode,
+          showCursor: true,
+          onChanged: (value) {
+            if (useGoogleApi) {
+              if (_debounce?.isActive ?? false) _debounce!.cancel();
+              _debounce = Timer(const Duration(milliseconds: 1000), () {
+                if (value.isNotEmpty) {
+                  //places api
+                  _firstLoad(value);
+                  // googleAPI(value);
+                } else {
+                  setState(() {
+                    searchPlaceList = [];
+                    //endPosition = null;
+                    endAddress = null;
+                  });
+                }
+              });
+            }
+
+            if (value.isNotEmpty) {
+              _firstLoad(value);
+            } else {
+              setState(() {
+                searchPlaceList = [];
+
+                endAddress = null;
+              });
+            }
+          },
+          controller: ToLocationText,
+          decoration: InputDecoration(
+              hintText: ToLocationHint,
+              border: InputBorder.none,
+              focusColor: Colors.white,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              suffixIcon: ToLocationText.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.cancel),
+                      onPressed: () {
+                        setState(() {
+                          ToLocationText.clear();
+                          searchPlaceList = [];
+                        });
+                      },
+                    )
+                  : null),
+        );
+      }),
+    );
+  }
+}
 
 
 
