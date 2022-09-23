@@ -1,19 +1,15 @@
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
-import 'package:envi/theme/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../database/database.dart';
 import '../../theme/color.dart';
 import '../../theme/string.dart';
-import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
-import '../upcomingride/model/ScheduleTripModel.dart';
 import 'addFavoritePage.dart';
 
 class FavoritePlacesPage extends StatefulWidget {
@@ -22,6 +18,7 @@ class FavoritePlacesPage extends StatefulWidget {
 }
 
 class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
+
   bool _isFirstLoadRunning = false;
   int pagecount = 1;
   late ScrollController _controller;
@@ -36,11 +33,17 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
   @override
   void initState() {
     super.initState();
-    loadData();
 
+    loadData();
     // _controller = new ScrollController()..addListener(_loadMore);
   }
 
+Future<void> getdata() async {
+  List<FavoritesData> temparr = await dao.getFavoriate();
+  setState(() {
+    arraddress = temparr;
+  });
+}
   Future<void> loadData() async {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
@@ -54,7 +57,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
     //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
     print("==========${arraddress}");
   }
+void comebackFromADD(String a){
 
+}
   @override
   void dispose() {
     // _controller.removeListener(_loadMore);
@@ -97,14 +102,15 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                   child: MaterialButton(
                     color: AppColor.butgreen,
                     height: 40,
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                     var come = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddEditFavoritePlacesPage(
                                   isforedit: "1",
                                   titleEditable: "0",
-                                  data: null)));
+                                  data: null,)));
+                     getdata();
                     },
                     child: Row(children: [
                       SvgPicture.asset(
@@ -182,8 +188,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
           //CellRow2(index),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              var come = await  Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
@@ -192,6 +198,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                             data: arraddress[index],
                           )));
               print("Tapped a Container");
+              getdata();
             },
             child: CellRow1(index),
           ),
@@ -287,8 +294,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
             height: 20,
           ),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              var come = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
@@ -304,6 +311,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                                 : homeDetail!,
                           )));
               print("Tapped a Container");
+              getdata();
             },
             child: Container(
                 color: AppColor.white.withOpacity(0.1),
@@ -366,23 +374,18 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
             height: 20,
           ),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              var come = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
-                            isforedit: "0",
-                            titleEditable: "1",
-                            data: homeDetail == null
-                                ? FavoritesData.optional(
-                                    title: "Work",
-                                    address: "",
-                                    longitude: "0.0",
-                                    latitude: " 0.0",
-                                  )
-                                : homeDetail!,
-                          )));
-
+                        isforedit: "0",
+                        titleEditable: "1",
+                        data:  homeDetail == null ? FavoritesData.optional(
+                          title: "Work",address: "",longitude: "0.0",latitude:" 0.0",
+                        ):homeDetail!,
+                      )));
+getdata();
               print("Tapped a Container");
             },
             child: Container(
