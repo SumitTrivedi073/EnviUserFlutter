@@ -1,4 +1,5 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
+import 'package:envi/appConfig/appConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+
+
     return Consumer<firestoreLiveTripDataNotifier>(
         builder: (context, value, child) {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
