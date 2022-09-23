@@ -87,11 +87,19 @@ class PaytmConfig {
       );
       response.then((value) {
         // Transaction successfull
-        print(value);
-      }).catchError((onError) {
+      // setState(() {
+      //     result = value.toString();
+      //   });
+      }
+      )
+      .catchError((onError) {
         if (onError is PlatformException) {
           result = onError.message! + " \n  " + onError.details.toString();
-          print(result);
+          //    setState(() {
+          //   result = onError.message.toString() +
+          //       " \n  " +
+          //       onError.details.toString();
+          // });
         } else {
           result = onError.toString();
           print(result);

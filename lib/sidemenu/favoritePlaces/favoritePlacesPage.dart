@@ -31,8 +31,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
   List<FavoritesData> arraddress = [];
   late final FavoritesDataDao dao;
-  late final FavoritesData? homeDetail;
-  late final FavoritesData? workDetail;
+ FavoritesData? homeDetail = null;
+   FavoritesData? workDetail = null;
   @override
   void initState() {
     super.initState();

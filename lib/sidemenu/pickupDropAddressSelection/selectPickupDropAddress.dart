@@ -8,19 +8,30 @@ import 'package:envi/theme/images.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
+import 'package:envi/web_service/autoCompleteService.dart';
+import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../database/database.dart';
+import '../../database/favoritesData.dart';
+import '../../database/favoritesDataDao.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../utils/utility.dart';
+import '../../web_service/ApiCollection.dart';
 import '../../web_service/Constant.dart';
-
+import '../../web_service/paytm_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 class SelectPickupDropAddress extends StatefulWidget {
   const SelectPickupDropAddress(
       {Key? key, required this.title, this.currentLocation})
@@ -52,10 +63,162 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late FocusNode startFocusNode;
   late FocusNode endFocusNode;
   late GooglePlace googlePlace;
-
+  late final FavoritesDataDao dao;
+  List<FavoritesData> arraddress = [];
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
   bool useGoogleApi = true;
+  late SharedPreferences sharedPreferences;
+
+  Future<void> getdata() async {
+    List<FavoritesData> temparr = await dao.getFavoriate();
+    setState(() {
+      arraddress = temparr;
+    });
+  }
+
+  Future<void> loadData() async {
+    final database =
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
+    dao = database.taskDao;
+    //List<FavoritesData>  temparr =  await dao.getFavoriate() ;
+    // setState(() {
+    //
+    // });
+    //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
+  }
+
+  Future<void> ApiCall_Add_Favorite() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response = await ApiCollection.FavoriateDataAdd(
+        userid,
+        FromLocationText.text.toString(),
+        startingAddress!.address,
+        startingAddress!.latLng!.latitude,
+        startingAddress!.latLng!.longitude,
+        "Y");
+    print(response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        String addressId = jsonDecode(response.body)['content']['addressId'];
+        print(jsonDecode(response.body)['content']);
+
+        final task = FavoritesData.optional(
+            identifier: addressId,
+            address: startingAddress!.address,
+            isFavourite: 'Y',
+            latitude: startingAddress!.latLng!.latitude.toString(),
+            longitude: startingAddress!.latLng!.longitude.toString(),
+            title: startingAddress!.title);
+        print(task);
+        await dao.insertTask(task);
+        Navigator.pop(context, {"isbact": true});
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
+  }
+
+
+  Future<void> ApiCall_update_Favorite(String id) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response = await ApiCollection.FavoriateDataUpdate(
+        userid,
+        FromLocationText.text.toString(),
+        startingAddress!.address,
+        startingAddress!.latLng!.latitude,
+        startingAddress!.latLng!.longitude,
+        "Y",
+        id);
+    print(response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        String addressId = jsonDecode(response.body)['content']['addressId'];
+        print(jsonDecode(response.body)['content']);
+
+        final task = FavoritesData.optional(
+            identifier: addressId,
+            address: startingAddress!.address,
+            isFavourite: 'Y',
+            latitude: startingAddress!.latLng!.latitude.toString(),
+            longitude: startingAddress!.latLng!.longitude.toString(),
+            title: startingAddress!.title);
+        print(task);
+        await dao.updateTask(task);
+        Navigator.pop(context, {"isbact": true});
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
+  }
+
+ Future<dynamic> createOrder() async {
+    var headers = {
+      'x-access-token':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkYjljNDk2LTBmZTItNDc5Mi1hODdlLWI5ZWZhZWUzZmQ1YiIsInR5cGVpZCI6MywicGhvbmVOdW1iZXIiOiI5NDI0ODgwNTgyIiwiaWF0IjoxNjYzODE5NjE3fQ.uLjsbCFkQR9I4WNz5nkzBCCRRCDaASHYP5EJ0W0_kDM',
+      'Content-Type': 'application/json'
+    };
+    var request = http.Request('POST',
+        Uri.parse('https://qausernew.azurewebsites.net/order/createOrder'));
+    request.body = json.encode(
+        {"passengerTripMasterId": "9b20343d-b725-4fc4-80cf-d0c68c4ae860"});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var result;
+    if (response.statusCode == 200) {
+      //print(await response.stream.bytesToString());
+      result = await response.stream.bytesToString();
+       var jres = json.decode(result);
+      print(jres['MID']);
+    await initiateTransaction( jres['ORDER_ID'], jres['amount'].toDouble(), jres['txnToken'], jres['CALLBACK_URL'], jres['MID']);
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+   Future<void> initiateTransaction(String orderId, double amount,
+      String txnToken, String callBackUrl,String miid) async {
+    String result = '';
+    try {
+      var response = AllInOneSdk.startTransaction(
+        miid,
+        orderId,
+        amount.toString(),
+        txnToken,
+        callBackUrl,
+        false,
+        true,
+      );
+      response.then((value) {
+        // Transaction successfull
+      setState(() {
+          result = value.toString();
+        });
+      }
+      )
+      .catchError((onError) {
+        if (onError is PlatformException) {
+          result = onError.message! + " \n  " + onError.details.toString();
+             setState(() {
+            result = onError.message.toString() +
+                " \n  " +
+                onError.details.toString();
+          });
+        } else {
+          result = onError.toString();
+          print(result);
+        }
+      });
+    } catch (err) {
+      // Transaction failed
+      result = err.toString();
+      print(result);
+    }
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -66,6 +229,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     endFocusNode = FocusNode();
     endFocusNode.requestFocus();
     googlePlace = GooglePlace(GoogleApiKey);
+    loadData();
   }
 
   final List<String> _suggestions = [
@@ -280,7 +444,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           if (startFocusNode.hasFocus) {
                             setState(() {
                               FromLocationText.text =
-                                  searchPlaceList[index].title;
+                                  searchPlaceList[index].address;
                               startingAddress = searchPlaceList[index];
                               //  searchPlaceList = [];
                               // _isVisible = false;
@@ -306,7 +470,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           } else {
                             setState(() {
                               ToLocationText.text =
-                                  searchPlaceList[index].title;
+                                  searchPlaceList[index].address;
                               endAddress = searchPlaceList[index];
                               //    searchPlaceList = [];
                               //   _isVisible = false;
@@ -373,8 +537,20 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 margin: const EdgeInsets.all(5),
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: ()  {
                     searchPlaceList = [];
+                    // PaytmConfig paytmConfig = PaytmConfig();
+                    // paytmConfig.createOrder();
+                    // var detail =
+                    //     await dao.findDataByaddressg(FromLocationText.text);
+                    // if (detail == null) {
+                    //   print("======api");
+                    //   ApiCall_Add_Favorite();
+                    // } else {
+                    //   print("=====${detail}");
+                    //   ApiCall_update_Favorite(detail.identifier);
+                    // }
+                    createOrder();
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (BuildContext context) => SearchDriver(
@@ -545,82 +721,83 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     );
   }
 
-//   Widget ToTextWidget() {
-//     return TypeAheadField(
-//       textFieldConfiguration: TextFieldConfiguration(
-//         focusNode: endFocusNode,
-//         onChanged: (value) {
-//           if (useGoogleApi) {
-//             if (_debounce?.isActive ?? false) _debounce!.cancel();
-//             _debounce = Timer(const Duration(milliseconds: 1000), () {
-//               if (value.isNotEmpty) {
-//                 //places api
-//                 _firstLoad(value);
-//                 // googleAPI(value);
-//               } else {
-//                 setState(() {
-//                   searchPlaceList = [];
-//                   //endPosition = null;
-//                   endAddress = null;
-//                 });
-//               }
-//             });
-//           }
+  // Widget ToTextWidget() {
+  //   return TypeAheadField(
+  //     textFieldConfiguration: TextFieldConfiguration(
+  //       focusNode: endFocusNode,
+  //       onChanged: (value) {
+  //         if (useGoogleApi) {
+  //           if (_debounce?.isActive ?? false) _debounce!.cancel();
+  //           _debounce = Timer(const Duration(milliseconds: 1000), () {
+  //             if (value.isNotEmpty) {
+  //               //places api
+  //               _firstLoad(value);
+  //               // googleAPI(value);
+  //             } else {
+  //               setState(() {
+  //                 searchPlaceList = [];
+  //                 //endPosition = null;
+  //                 endAddress = null;
+  //               });
+  //             }
+  //           });
+  //         }
 
-//           if (value.isNotEmpty) {
-//             _firstLoad(value);
-//           } else {
-//             setState(() {
-//               searchPlaceList = [];
+  //         if (value.isNotEmpty) {
+  //           _firstLoad(value);
+  //         } else {
+  //           setState(() {
+  //             searchPlaceList = [];
 
-//               endAddress = null;
-//             });
-//           }
-//         },
-//         controller: ToLocationText,
-//         autofocus: true,
-//         decoration: InputDecoration(
-//             hintText: ToLocationHint,
-//             border: InputBorder.none,
-//             focusColor: Colors.white,
-//             floatingLabelBehavior: FloatingLabelBehavior.never,
-//             suffixIcon: ToLocationText.text.isNotEmpty
-//                 ? IconButton(
-//                     icon: const Icon(Icons.cancel),
-//                     onPressed: () {
-//                       setState(() {
-//                         ToLocationText.clear();
-//                         searchPlaceList = [];
-//                       });
-//                     },
-//                   )
-//                 : null),
-//       ),
-//       // suggestionsCallback: (pattern) async {
-//       //  // return await BackendService.getSuggestions(pattern);
-//       // },
-//       hideOnEmpty: true,
-//      hideSuggestionsOnKeyboardHide: false,
-    
-//       itemBuilder: (context, suggestion) {
-//         return ListTile(
-//           // leading: Icon(Icons.shopping_cart),
-//           title: Text(_suggestions[0]),
-//           // subtitle: Text('\$${suggestion['price']}'),
-//         );
-//       },
-//       onSuggestionSelected: (suggestion) {
-//         // Navigator.of(context).push(MaterialPageRoute(
-//         //   builder: (context) => ProductPage(product: suggestion)
-//         // ));
-//         ToLocationText.text = suggestion!.toString();
-//       },
-//       suggestionsCallback: (String pattern) {
-//         return _suggestions;
-//       },
-//     );
-//   }
-// }
+  //             endAddress = null;
+  //           });
+  //         }
+  //       },
+  //       controller: ToLocationText,
+  //       autofocus: true,
+  //       decoration: InputDecoration(
+  //           hintText: ToLocationHint,
+  //           border: InputBorder.none,
+  //           focusColor: Colors.white,
+  //           floatingLabelBehavior: FloatingLabelBehavior.never,
+  //           suffixIcon: ToLocationText.text.isNotEmpty
+  //               ? IconButton(
+  //                   icon: const Icon(Icons.cancel),
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       ToLocationText.clear();
+  //                       searchPlaceList = [];
+  //                     });
+  //                   },
+  //                 )
+  //               : null),
+  //     ),
+  //     // suggestionsCallback: (pattern) async {
+  //     //  // return await BackendService.getSuggestions(pattern);
+  //     // },
+  //     hideOnEmpty: true,
+  //     hideSuggestionsOnKeyboardHide: false,
+
+  //     itemBuilder: (context, String suggestion) {
+  //       return ListTile(
+  //         // leading: Icon(Icons.shopping_cart),
+  //         title: Text(suggestion),
+  //         // subtitle: Text('\$${suggestion['price']}'),
+  //       );
+  //     },
+  //     onSuggestionSelected: (String suggestion) {
+  //       // Navigator.of(context).push(MaterialPageRoute(
+  //       //   builder: (context) => ProductPage(product: suggestion)
+  //       // ));
+  //       ToLocationText.text = suggestion.toString();
+  //     },
+  //     suggestionsCallback: (String pattern) async {
+  //       return await AutocompleteService().getSuggestions(pattern);
+  //     },
+  //   );
+  // }
+//}
+
   Widget ToTextWidget() {
     return Autocomplete(
       optionsBuilder: (TextEditingValue value) {
