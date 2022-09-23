@@ -47,7 +47,7 @@ class ApiCollection {
       userid,id) async {
 
     Map address = {
-     "id" :id,
+      "id" :id,
     };
     Map data = {
       "userid": userid,
@@ -58,5 +58,7 @@ class ApiCollection {
     dynamic res = await HTTP.post(DeleteFavouriteAddressdata(), data);
     return res;
   }
+
+
 
 }

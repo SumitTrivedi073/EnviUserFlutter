@@ -1,16 +1,13 @@
 //import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
-import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/mapStyle.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme/string.dart';
