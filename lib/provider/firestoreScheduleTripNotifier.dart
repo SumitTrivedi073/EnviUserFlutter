@@ -2,17 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/utility.dart';
+import '../web_service/Constant.dart';
 import 'model/tripDataModel.dart';
 
 
 class firestoreScheduleTripNotifier extends ChangeNotifier {
 
   dynamic scheduleFailureSream = [];
+  late SharedPreferences sharedPreferences;
 
   Future<void> listenToLiveUpdateStream() async {
-    String liveUpdatecollectionName = 'user/1c7b86c2-a9f7-4037-8b46-c8059deac779/scheduled-trips';
+    sharedPreferences = SharedPreferences.getInstance() as SharedPreferences;
+    String liveUpdatecollectionName =
+        'user/${sharedPreferences.getString(LoginID)}/scheduled-trips';
     final CollectionReference collectionRef =
     FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {

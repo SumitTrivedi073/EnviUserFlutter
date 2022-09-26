@@ -18,8 +18,7 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      margin: EdgeInsets.all(10),
-      height: 170,
+      margin: const EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 5),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -36,7 +35,6 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                       print("Tapped a Container");
                     },
                     child: Container(
-                      height: 40,
                       margin: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
@@ -45,8 +43,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                               child: Image.network(
                                 "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
                                 fit: BoxFit.fill,
-                                height: 46,
-                                width: 46,
+                                height: 50,
+                                width: 50,
                               )),
                           const SizedBox(
                             width: 10,
@@ -59,13 +57,13 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                   textval: "Anamika Chavan",
                                   colorval: AppColor.grey,
                                   sizeval: 16,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 robotoTextWidget(
                                   textval: "7 Minutes Away",
                                   colorval: AppColor.black,
                                   sizeval: 18,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ])
                         ],
@@ -88,17 +86,12 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                           color: AppColor.grey, // Set border color
                           width: 1.0), // Set border width
                       borderRadius: const BorderRadius.all(
-                          Radius.circular(10.0)), // Set rounded corner radius
+                          Radius.circular(5.0)), // Set rounded corner radius
                     ),
-                    child: MaterialButton(
-                      minWidth: 20,
-                      height: 20,
-                      onPressed: () {
-                        // _launchPhoneURL(tripData.customer.phone.toString());
-                      },
-                      child: const Icon(
-                        Icons.call_outlined,
-                        color: Colors.green,
+                    child: Center(
+                      child: IconButton(
+                        icon: const Icon(Icons.call,color: Colors.green,),
+                        onPressed: () {},
                       ),
                     ),
                   ),
@@ -108,14 +101,12 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                       print("Tapped a Container");
                     },
                     child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.only(left: 8),
                       child: Row(
                         children: [
                           SvgPicture.asset(
                             "assets/svg/car-type-sedan.svg",
-                            width: 52,
-                            height: 24,
+                            width: 40,
+                            height: 30,
                           ),
                           const SizedBox(
                             width: 10,
@@ -128,13 +119,13 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                   textval: "Hatchback – 3 People",
                                   colorval: AppColor.grey,
                                   sizeval: 16,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 robotoTextWidget(
                                   textval: "KA04 AB 3545",
                                   colorval: AppColor.black,
                                   sizeval: 18,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ])
                         ],

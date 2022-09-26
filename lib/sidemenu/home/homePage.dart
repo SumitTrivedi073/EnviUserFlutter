@@ -35,7 +35,8 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               AppBarWidget(),
-              CardBanner(),
+              CardBanner(title:'Connecting Driver',
+                  image:'assets/images/connecting_driver_img.png'),
 
               /*PaymentModeOptionWidget(
               strpaymentOptions: "qr_code,online,cash",
