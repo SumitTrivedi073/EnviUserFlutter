@@ -24,7 +24,7 @@ import '../../web_service/Constant.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
   final FavoritesData? data;
- // final void Function(String) onCriteriaChanged;
+  // final void Function(String) onCriteriaChanged;
 
   const AddEditFavoritePlacesPage(
       {Key? key,
@@ -55,15 +55,19 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     super.initState();
     loadData();
 
-if(widget.isforedit == "0"){
-  titlecontroller.text = widget.data!.title;
-  address = widget.data!.address;
-  latlong = LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude));
-  _cameraPosition =  CameraPosition(target: LatLng(double.parse(widget.data!.latitude), double.parse(widget.data!.longitude)), zoom: 10.0);
-}else{
-  getCurrentLocation();
-  _cameraPosition =  CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
-}
+    if (widget.isforedit == "0") {
+      titlecontroller.text = widget.data!.title;
+      address = widget.data!.address;
+      latlong = LatLng(double.parse(widget.data!.latitude),
+          double.parse(widget.data!.longitude));
+      _cameraPosition = CameraPosition(
+          target: LatLng(double.parse(widget.data!.latitude),
+              double.parse(widget.data!.longitude)),
+          zoom: 10.0);
+    } else {
+      getCurrentLocation();
+      _cameraPosition = CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
+    }
     // _controller = new ScrollController()..addListener(_loadMore);
   }
 
@@ -144,7 +148,6 @@ if(widget.isforedit == "0"){
                                   readOnly: widget.titleEditable == "0"
                                       ? false
                                       : true,
-                                  keyboardType: TextInputType.phone,
                                   style: const TextStyle(color: AppColor.black),
                                   decoration: const InputDecoration(
                                     hintText: "Please enter Title!",
@@ -216,7 +219,6 @@ if(widget.isforedit == "0"){
                                   height: 300,
                                   child: Stack(children: [
                                     GoogleMap(
-                                      
                                       mapType: MapType.normal,
                                       initialCameraPosition: _cameraPosition!,
                                       onMapCreated:
@@ -252,40 +254,42 @@ if(widget.isforedit == "0"){
                               const SizedBox(
                                 height: 22,
                               ),
-
-                              if(widget.isforedit == "0")
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    MaterialButton(
-                                      height: 40,
-                                      onPressed: () {
-                                        ApiCall_Delete_Favorite(widget.data!.id,widget.data!.identifier);
-                                      },
-                                      child: Row(children: [
-                                        SvgPicture.asset(
-                                          "assets/svg/place-delete.svg",
-                                          width: 22,
-                                          height: 24,
-                                          color: AppColor.red,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        robotoTextWidget(
-                                            textval: widget.titleEditable == "0"
-                                                ? Deletelocation
-                                                : Clearlocation,
-                                            colorval: AppColor.red,
-                                            sizeval: 16.0,
-                                            fontWeight: FontWeight.normal),
-                                      ]),
-                                    )
-                                  ]),
-                                ],
-                              ),
+                              if (widget.isforedit == "0")
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      MaterialButton(
+                                        height: 40,
+                                        onPressed: () {
+                                          ApiCall_Delete_Favorite(
+                                              widget.data!.id,
+                                              widget.data!.identifier);
+                                        },
+                                        child: Row(children: [
+                                          SvgPicture.asset(
+                                            "assets/svg/place-delete.svg",
+                                            width: 22,
+                                            height: 24,
+                                            color: AppColor.red,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          robotoTextWidget(
+                                              textval:
+                                                  widget.titleEditable == "0"
+                                                      ? Deletelocation
+                                                      : Clearlocation,
+                                              colorval: AppColor.red,
+                                              sizeval: 16.0,
+                                              fontWeight: FontWeight.normal),
+                                        ]),
+                                      )
+                                    ]),
+                                  ],
+                                ),
                             ],
                           )),
                     ],
@@ -306,9 +310,10 @@ if(widget.isforedit == "0"){
                   }
                   _formKey.currentState!.save();
 
-                  if(widget.titleEditable =="0"){
-                    if(titlecontroller.text=="Home"|| titlecontroller.text == "Work"){
-                      return ;
+                  if (widget.titleEditable == "0") {
+                    if (titlecontroller.text == "Home" ||
+                        titlecontroller.text == "Work") {
+                      return;
                     }
                   }
                   print("======");
@@ -348,6 +353,7 @@ if(widget.isforedit == "0"){
     }
     getLocation();
   }
+
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -366,6 +372,7 @@ if(widget.isforedit == "0"){
     });
     GetAddressFromLatLong(latlong);
   }
+
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -373,7 +380,7 @@ if(widget.isforedit == "0"){
     Placemark place = placemarks[0];
     setState(() {
       address =
-      '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
 
@@ -403,7 +410,7 @@ if(widget.isforedit == "0"){
             title: titlecontroller.text.toString());
         print(task);
         await dao.insertTask(task);
-        Navigator.pop(context,{"isbact": true});
+        Navigator.pop(context, {"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }
@@ -436,16 +443,18 @@ if(widget.isforedit == "0"){
             title: titlecontroller.text.toString());
         print(task);
         await dao.updateTask(task);
-        Navigator.pop(context,{"isbact": true});
+        
+        Navigator.pop(context, {"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
-  Future<void> ApiCall_Delete_Favorite(int? id,String identifire)   async {
+
+  Future<void> ApiCall_Delete_Favorite(int? id, String identifire) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
     final response =
-    await ApiCollection.FavoriateDataDelete(userid, identifire);
+        await ApiCollection.FavoriateDataDelete(userid, identifire);
     print(response.body);
 
     if (response != null) {
@@ -453,8 +462,9 @@ if(widget.isforedit == "0"){
         //print("ff${jsonDecode(response.body)['content']}");
         //String addressId = jsonDecode(response.body)['content']['addressId'];
 
-
-        final task = FavoritesData.optional(id: id,identifier: identifire,
+        final task = FavoritesData.optional(
+            id: id,
+            identifier: identifire,
             address: address,
             isFavourite: 'Y',
             latitude: latlong.latitude.toString(),
@@ -462,7 +472,7 @@ if(widget.isforedit == "0"){
             title: titlecontroller.text.toString());
         print(task);
         await dao.deleteTask(task);
-        Navigator.pop(context,{"isbact": true});
+        Navigator.pop(context, {"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }

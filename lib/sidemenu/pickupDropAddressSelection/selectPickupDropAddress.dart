@@ -32,6 +32,7 @@ import '../../web_service/Constant.dart';
 import '../../web_service/paytm_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
+
 class SelectPickupDropAddress extends StatefulWidget {
   const SelectPickupDropAddress(
       {Key? key, required this.title, this.currentLocation})
@@ -65,9 +66,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late GooglePlace googlePlace;
   late final FavoritesDataDao dao;
   List<FavoritesData> arraddress = [];
+
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
-  bool useGoogleApi = true;
+  bool useGoogleApi = false;
   late SharedPreferences sharedPreferences;
 
   Future<void> getdata() async {
@@ -88,15 +90,15 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
   }
 
-  Future<void> ApiCall_Add_Favorite() async {
+  Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         FromLocationText.text.toString(),
-        startingAddress!.address,
-        startingAddress!.latLng!.latitude,
-        startingAddress!.latLng!.longitude,
+        addressToAdd!.address,
+        addressToAdd.latLng!.latitude,
+        addressToAdd.latLng!.longitude,
         "Y");
     print(response.body);
 
@@ -107,29 +109,29 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
         final task = FavoritesData.optional(
             identifier: addressId,
-            address: startingAddress!.address,
+            address: addressToAdd.address,
             isFavourite: 'Y',
-            latitude: startingAddress!.latLng!.latitude.toString(),
-            longitude: startingAddress!.latLng!.longitude.toString(),
-            title: startingAddress!.title);
+            latitude: addressToAdd.latLng!.latitude.toString(),
+            longitude: addressToAdd.latLng!.longitude.toString(),
+            title: addressToAdd.title);
         print(task);
         await dao.insertTask(task);
-        Navigator.pop(context, {"isbact": true});
+        //Navigator.pop(context, {"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
-
-  Future<void> ApiCall_update_Favorite(String id) async {
+  Future<void> apiCallUpdateFavorite(
+      {String? id, SearchPlaceModel? addressToUpdate}) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         FromLocationText.text.toString(),
-        startingAddress!.address,
-        startingAddress!.latLng!.latitude,
-        startingAddress!.latLng!.longitude,
+        addressToUpdate!.address,
+        addressToUpdate.latLng!.latitude,
+        addressToUpdate.latLng!.longitude,
         "Y",
         id);
     print(response.body);
@@ -148,13 +150,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
             title: startingAddress!.title);
         print(task);
         await dao.updateTask(task);
-        Navigator.pop(context, {"isbact": true});
+        //Navigator.pop(context, {"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
- Future<dynamic> createOrder() async {
+  Future<dynamic> createOrder() async {
     var headers = {
       'x-access-token':
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkYjljNDk2LTBmZTItNDc5Mi1hODdlLWI5ZWZhZWUzZmQ1YiIsInR5cGVpZCI6MywicGhvbmVOdW1iZXIiOiI5NDI0ODgwNTgyIiwiaWF0IjoxNjYzODE5NjE3fQ.uLjsbCFkQR9I4WNz5nkzBCCRRCDaASHYP5EJ0W0_kDM',
@@ -171,15 +173,17 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     if (response.statusCode == 200) {
       //print(await response.stream.bytesToString());
       result = await response.stream.bytesToString();
-       var jres = json.decode(result);
+      var jres = json.decode(result);
       print(jres['MID']);
-    await initiateTransaction( jres['ORDER_ID'], jres['amount'].toDouble(), jres['txnToken'], jres['CALLBACK_URL'], jres['MID']);
+      await initiateTransaction(jres['ORDER_ID'], jres['amount'].toDouble(),
+          jres['txnToken'], jres['CALLBACK_URL'], jres['MID']);
     } else {
       print(response.reasonPhrase);
     }
   }
-   Future<void> initiateTransaction(String orderId, double amount,
-      String txnToken, String callBackUrl,String miid) async {
+
+  Future<void> initiateTransaction(String orderId, double amount,
+      String txnToken, String callBackUrl, String miid) async {
     String result = '';
     try {
       var response = AllInOneSdk.startTransaction(
@@ -193,15 +197,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       );
       response.then((value) {
         // Transaction successfull
-      setState(() {
+        setState(() {
           result = value.toString();
         });
-      }
-      )
-      .catchError((onError) {
+      }).catchError((onError) {
         if (onError is PlatformException) {
           result = onError.message! + " \n  " + onError.details.toString();
-             setState(() {
+          setState(() {
             result = onError.message.toString() +
                 " \n  " +
                 onError.details.toString();
@@ -218,18 +220,26 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     }
   }
 
+  Future<void> getLocalSuggestions(String val) async {
+// var x =await AutocompleteService().getSuggestions(pattern);
+//  searchPlaceList = x
+    searchPlaceList = await AutocompleteService().getdata(val);
+    setState(() {});
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FromLocationText.text = widget.currentLocation!.title;
+    FromLocationText.text = widget.currentLocation!.address;
     _sessionToken = uuid.v4();
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
     endFocusNode.requestFocus();
     googlePlace = GooglePlace(GoogleApiKey);
     loadData();
+    getLocalSuggestions('');
+    startingAddress = widget.currentLocation;
   }
 
   final List<String> _suggestions = [
@@ -258,15 +268,18 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     dynamic res = await HTTP.post(searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
-        if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
-          searchPlaceList = (jsonDecode(res.body)['content'] as List)
-              .map((i) => SearchPlaceModel.fromJson(i))
-              .toList();
-          useGoogleApi = false;
-          _isVisible = true;
-        } else {
-          googleAPI(value);
-        }
+        setState(() {
+          if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
+            searchPlaceList = (jsonDecode(res.body)['content'] as List)
+                .map((i) => SearchPlaceModel.fromJson(i))
+                .toList();
+            useGoogleApi = false;
+
+            _isVisible = true;
+          } else {
+            googleAPI(value);
+          }
+        });
       } else {
         googleAPI(value);
       }
@@ -277,6 +290,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   void googleAPI(String value) {
     _isVisible = true;
+    useGoogleApi = true;
     getSuggestion(value);
   }
 
@@ -364,218 +378,244 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                   ],
                 )),
             Expanded(
-                child: Visibility(
-              visible: _isVisible,
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () async {
-                      if (useGoogleApi) {
-                        final placeId = searchPlaceList[index].id;
-                        final details = await googlePlace.details.get(placeId,
-                            sessionToken: _sessionToken,
-                            fields: 'geometry,formatted_address,name');
-                        if (details != null &&
-                            details.result != null &&
-                            mounted) {
-                          if (startFocusNode.hasFocus) {
-                            setState(() {
-                              // startPosition = details.result;
-                              FromLocationText.text = details.result!.name!;
-                              startingAddress = SearchPlaceModel(
-                                  id: searchPlaceList[index].id,
-                                  address: details.result!.formattedAddress!,
-                                  latLng: LatLng(
-                                      details.result!.geometry!.location!.lat!,
-                                      details.result!.geometry!.location!.lng!),
-                                  title: details.result!.name!);
-                              //  searchPlaceList = [];
-                              // _isVisible = false;
-                            });
-                            startingAddress = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              location: startingAddress,
-                                              title: confirmLocationText,
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            setState(() {
-                              FromLocationText.text = startingAddress!.title;
+                child: ListView.builder(
+              shrinkWrap: true,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () async {
+                    if (useGoogleApi) {
+                      final placeId = searchPlaceList[index].id;
+                      final details = await googlePlace.details.get(placeId,
+                          sessionToken: _sessionToken,
+                          fields: 'geometry,formatted_address,name');
+                      if (details != null &&
+                          details.result != null &&
+                          mounted) {
+                        if (startFocusNode.hasFocus) {
+                          setState(() {
+                            // startPosition = details.result;
+                            FromLocationText.text =
+                                details.result!.formattedAddress!;
+                            startingAddress = SearchPlaceModel(
+                                id: searchPlaceList[index].id,
+                                address: details.result!.formattedAddress!,
+                                latLng: LatLng(
+                                    details.result!.geometry!.location!.lat!,
+                                    details.result!.geometry!.location!.lng!),
+                                title: details.result!.name!);
 
-                              _isVisible = false;
-                            });
-                          } else {
-                            setState(() {
-                              // endPosition = details.result;
-                              ToLocationText.text = details.result!.name!;
-                              endAddress = SearchPlaceModel(
-                                  id: searchPlaceList[index].id,
-                                  address: details.result!.formattedAddress!,
-                                  latLng: LatLng(
-                                      details.result!.geometry!.location!.lat!,
-                                      details.result!.geometry!.location!.lng!),
-                                  title: details.result!.name!);
-                              //  searchPlaceList = [];
-                              // _isVisible = false;
-                            });
-                            endAddress = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              location: endAddress,
-                                              title: confirmLocationText,
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            setState(() {
-                              ToLocationText.text = endAddress!.title;
-                              _isVisible = false;
-                            });
+                            // _isVisible = false;
+                            searchPlaceList = [];
+                          });
+                          startingAddress = await Navigator.of(context)
+                              .pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConfirmDropLocation(
+                                            location: startingAddress,
+                                            title: confirmLocationText,
+                                          )),
+                                  (Route<dynamic> route) => true);
+                          setState(() {
+                            FromLocationText.text = startingAddress!.address;
 
+                            // _isVisible = false;
                             // searchPlaceList = [];
-                          }
-                        }
-                      } else {
-                        if (mounted) {
-                          if (startFocusNode.hasFocus) {
-                            setState(() {
-                              FromLocationText.text =
-                                  searchPlaceList[index].address;
-                              startingAddress = searchPlaceList[index];
-                              //  searchPlaceList = [];
-                              // _isVisible = false;
-                            });
-                            startingAddress = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              location: startingAddress,
-                                              title: confirmLocationText,
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            setState(() {
-                              FromLocationText.text = startingAddress!.title;
-                              _isVisible = false;
-                            });
+                          });
+                        } else {
+                          setState(() {
+                            // endPosition = details.result;
+                            ToLocationText.text =
+                                details.result!.formattedAddress!;
+                            endAddress = SearchPlaceModel(
+                                id: searchPlaceList[index].id,
+                                address: details.result!.formattedAddress!,
+                                latLng: LatLng(
+                                    details.result!.geometry!.location!.lat!,
+                                    details.result!.geometry!.location!.lng!),
+                                title: details.result!.name!);
+                            searchPlaceList = [];
 
-                            //   searchPlaceList = [];
+                            //
+                            // _isVisible = false;
+                          });
 
-                            //startFocusNode.unfocus();
+                          endAddress = await Navigator.of(context)
+                              .pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConfirmDropLocation(
+                                            location: endAddress,
+                                            title: confirmLocationText,
+                                          )),
+                                  (Route<dynamic> route) => true);
+                          setState(() {
+                            ToLocationText.text = endAddress!.address;
+                            // _isVisible = false;
+                            // searchPlaceList = [];
+                          });
 
-                          } else {
-                            setState(() {
-                              ToLocationText.text =
-                                  searchPlaceList[index].address;
-                              endAddress = searchPlaceList[index];
-                              //    searchPlaceList = [];
-                              //   _isVisible = false;
-                            });
-
-                            endAddress = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              location: endAddress,
-                                              title: confirmLocationText,
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            setState(() {
-                              ToLocationText.text = endAddress!.title;
-                              //  searchPlaceList = [];
-                              _isVisible = false;
-                            });
-
-                            // endFocusNode.unfocus();
-
-                          }
+                          // searchPlaceList = [];
                         }
                       }
-                    },
-                    child: Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: ListTile(
-                          title: robotoTextWidget(
-                            textval: searchPlaceList[index].title,
-                            colorval: AppColor.black,
-                            sizeval: 14.0,
-                            fontWeight: FontWeight.w800,
-                          ),
-                          subtitle: robotoTextWidget(
-                            textval: searchPlaceList[index].address,
-                            colorval: AppColor.black,
-                            sizeval: 12.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          leading: SvgPicture.asset(
-                            Images.toLocationImage,
-                            width: 20,
-                            height: 20,
-                          ),
-                          // onTap: () async {
+                    } else {
+                      if (mounted) {
+                        if (startFocusNode.hasFocus) {
+                          setState(() {
+                            FromLocationText.text =
+                                searchPlaceList[index].address;
+                            startingAddress = searchPlaceList[index];
+                            searchPlaceList = [];
+                            // _isVisible = false;
+                          });
 
-                          // },
+                          startingAddress = await Navigator.of(context)
+                              .pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConfirmDropLocation(
+                                            location: startingAddress,
+                                            title: confirmLocationText,
+                                          )),
+                                  (Route<dynamic> route) => true);
+                          setState(() {
+                            FromLocationText.text = startingAddress!.address;
+                            // _isVisible = false;
+                            // searchPlaceList = [];
+                          });
+
+                          //
+
+                          //startFocusNode.unfocus();
+
+                        } else {
+                          setState(() {
+                            ToLocationText.text =
+                                searchPlaceList[index].address;
+                            endAddress = searchPlaceList[index];
+                            searchPlaceList = [];
+
+                            //   _isVisible = false;
+                          });
+
+                          endAddress = await Navigator.of(context)
+                              .pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConfirmDropLocation(
+                                            location: endAddress,
+                                            title: confirmLocationText,
+                                          )),
+                                  (Route<dynamic> route) => true);
+                          setState(() {
+                            ToLocationText.text = endAddress!.address;
+                            // searchPlaceList = [];
+                            // _isVisible = false;
+                          });
+
+                          // endFocusNode.unfocus();
+
+                        }
+                      }
+                    }
+                  },
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ListTile(
+                        title: robotoTextWidget(
+                          textval: searchPlaceList[index].title,
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.w800,
                         ),
+                        subtitle: robotoTextWidget(
+                          textval: searchPlaceList[index].address,
+                          colorval: AppColor.black,
+                          sizeval: 12.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        leading: SvgPicture.asset(
+                          Images.toLocationImage,
+                          width: 20,
+                          height: 20,
+                        ),
+                        // onTap: () async {
+
+                        // },
                       ),
                     ),
-                  );
-                },
-                itemCount: searchPlaceList.length,
-                padding: const EdgeInsets.all(8),
-              ),
+                  ),
+                );
+              },
+              itemCount: searchPlaceList.length,
+              padding: const EdgeInsets.all(8),
             )),
             (searchPlaceList.isEmpty) ? const Spacer() : const SizedBox(),
-            Container(
-                height: 40,
-                margin: const EdgeInsets.all(5),
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: ()  {
-                    searchPlaceList = [];
-                    // PaytmConfig paytmConfig = PaytmConfig();
-                    // paytmConfig.createOrder();
-                    // var detail =
-                    //     await dao.findDataByaddressg(FromLocationText.text);
-                    // if (detail == null) {
-                    //   print("======api");
-                    //   ApiCall_Add_Favorite();
-                    // } else {
-                    //   print("=====${detail}");
-                    //   ApiCall_update_Favorite(detail.identifier);
-                    // }
-                    createOrder();
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => SearchDriver(
-                                  fromAddress:
-                                      startingAddress ?? widget.currentLocation,
-                                  toAddress: endAddress,
-                                )),
-                        (Route<dynamic> route) => true);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColor.greyblack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                  ),
-                  child: robotoTextWidget(
-                    textval: continuebut,
-                    colorval: AppColor.white,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                )),
-            const SizedBox(
-              height: 20,
-            )
+            (startingAddress != null &&
+                    endAddress != null &&
+                    FromLocationText.text != '' &&
+                    ToLocationText.text != '')
+                ? Container(
+                    height: 40,
+                    margin: const EdgeInsets.all(5),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        searchPlaceList = [];
+                        // PaytmConfig paytmConfig = PaytmConfig();
+                        // paytmConfig.createOrder();
+                        var detail =
+                            await dao.findDataByaddressg(FromLocationText.text);
+                        if (detail == null) {
+                          //print("======api");
+                          apiCallAddFavorite(startingAddress);
+                        } else {
+                          //print("=====${detail}");
+                          apiCallUpdateFavorite(
+                              id: detail.identifier,
+                              addressToUpdate: startingAddress);
+                        }
+
+                        var toDetail =
+                            await dao.findDataByaddressg(ToLocationText.text);
+                        if (toDetail == null) {
+                          //print("======api");
+                          apiCallAddFavorite(endAddress);
+                        } else {
+                          //print("=====${detail}");
+                          apiCallUpdateFavorite(
+                              id: toDetail.identifier,
+                              addressToUpdate: endAddress);
+                        }
+                        //createOrder();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => SearchDriver(
+                                      fromAddress: startingAddress ??
+                                          widget.currentLocation,
+                                      toAddress: endAddress,
+                                    )),
+                            (Route<dynamic> route) => true);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: continuebut,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ))
+                : const SizedBox(
+                    height: 20,
+                  )
           ],
         ),
       ),
@@ -668,37 +708,26 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField FromTextWidget() {
     return TextField(
-      enableSuggestions: true,
       autofocus: false,
       focusNode: startFocusNode,
-      autofillHints: const ['babar', ',haha', 'huhu'],
       onChanged: (value) {
-        if (useGoogleApi) {
-          if (_debounce?.isActive ?? false) _debounce!.cancel();
-          _debounce = Timer(const Duration(milliseconds: 1000), () {
-            if (value.isNotEmpty) {
-              //places api
-              _firstLoad(value);
-              // googleAPI(value);
-            } else {
-              setState(() {
-                searchPlaceList = [];
-                //startPosition = null;
-                startingAddress = null;
-              });
-            }
-          });
-        }
-
-        if (value.isNotEmpty) {
-          _firstLoad(value);
-        } else {
-          setState(() {
-            searchPlaceList = [];
-            //startPosition = null;
-            startingAddress = null;
-          });
-        }
+        if (_debounce?.isActive ?? false) _debounce!.cancel();
+        _debounce = Timer(const Duration(milliseconds: 1000), () {
+          if (value.isNotEmpty) {
+            (value.length < 5)
+                ? getLocalSuggestions(value)
+                :
+                //places api
+                _firstLoad(value);
+            // googleAPI(value);
+          } else {
+            setState(() {
+              searchPlaceList = [];
+              //startPosition = null;
+              startingAddress = null;
+            });
+          }
+        });
       },
       showCursor: true,
       controller: FromLocationText,
@@ -753,7 +782,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   //           });
   //         }
   //       },
-  //       controller: ToLocationText,
+  //  searchplacelist     controller: ToLocationText,
   //       autofocus: true,
   //       decoration: InputDecoration(
   //           hintText: ToLocationHint,
@@ -776,13 +805,20 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   //     //  // return await BackendService.getSuggestions(pattern);
   //     // },
   //     hideOnEmpty: true,
-  //     hideSuggestionsOnKeyboardHide: false,
+  //     hideSuggestionsOnKeyboardHide: true,
+  //     //  hideOnError: true,
+  //     // errorBuilder: (context, error) {
+  //     //   return const SizedBox();
+  //     // },
 
   //     itemBuilder: (context, String suggestion) {
-  //       return ListTile(
-  //         // leading: Icon(Icons.shopping_cart),
-  //         title: Text(suggestion),
-  //         // subtitle: Text('\$${suggestion['price']}'),
+  //       return Container(
+  //         width: double.infinity,
+  //         child: ListTile(
+  //           // leading: Icon(Icons.shopping_cart),
+  //           title: Text(suggestion),
+  //           // subtitle: Text('\$${suggestion['price']}'),
+  //         ),
   //       );
   //     },
   //     onSuggestionSelected: (String suggestion) {
@@ -792,78 +828,58 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   //       ToLocationText.text = suggestion.toString();
   //     },
   //     suggestionsCallback: (String pattern) async {
-  //       return await AutocompleteService().getSuggestions(pattern);
+  //       var x = await AutocompleteService().getSuggestions(pattern);
+  //       return x;
   //     },
   //   );
   // }
 //}
 
   Widget ToTextWidget() {
-    return Autocomplete(
-      optionsBuilder: (TextEditingValue value) {
-        if (value.text.isEmpty) {
-          return _suggestions;
-        }
-        return _suggestions;
+    return TextField(
+      // onSubmitted: (val) {},
+      autofocus: false,
+      focusNode: endFocusNode,
+      showCursor: true,
+      onChanged: (value) {
+        if (_debounce?.isActive ?? false) _debounce!.cancel();
+        _debounce = Timer(const Duration(milliseconds: 1000), () {
+          if (value.isNotEmpty) {
+            //places api
+            (value.length < 5)
+                ? getLocalSuggestions(value)
+                :
+                //places api
+                _firstLoad(value);
+            // googleAPI(value);
+          } else {
+            setState(() {
+              searchPlaceList = [];
+              //endPosition = null;
+              endAddress = null;
+            });
+          }
+        });
       },
-      fieldViewBuilder:
-          ((context, textEditingController, focusNode, onFieldSubmitted) {
-        return TextFormField(
-          // onSubmitted: (val) {},
-          focusNode: endFocusNode,
-          showCursor: true,
-          onChanged: (value) {
-            if (useGoogleApi) {
-              if (_debounce?.isActive ?? false) _debounce!.cancel();
-              _debounce = Timer(const Duration(milliseconds: 1000), () {
-                if (value.isNotEmpty) {
-                  //places api
-                  _firstLoad(value);
-                  // googleAPI(value);
-                } else {
-                  setState(() {
-                    searchPlaceList = [];
-                    //endPosition = null;
-                    endAddress = null;
-                  });
-                }
-              });
-            }
-
-            if (value.isNotEmpty) {
-              _firstLoad(value);
-            } else {
-              setState(() {
-                searchPlaceList = [];
-
-                endAddress = null;
-              });
-            }
-          },
-          controller: ToLocationText,
-          decoration: InputDecoration(
-              hintText: ToLocationHint,
-              border: InputBorder.none,
-              focusColor: Colors.white,
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              suffixIcon: ToLocationText.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.cancel),
-                      onPressed: () {
-                        setState(() {
-                          ToLocationText.clear();
-                          searchPlaceList = [];
-                        });
-                      },
-                    )
-                  : null),
-        );
-      }),
+      controller: ToLocationText,
+      decoration: InputDecoration(
+          hintText: ToLocationHint,
+          border: InputBorder.none,
+          focusColor: Colors.white,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          suffixIcon: ToLocationText.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      ToLocationText.clear();
+                      searchPlaceList = [];
+                    });
+                  },
+                )
+              : null),
     );
   }
 }
-
-
-
 
 //
