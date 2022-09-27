@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../utils/utility.dart';
 import 'model/tripDataModel.dart';
 
-
 class firestoreLiveTripDataNotifier extends ChangeNotifier {
-  late TripDataModel liveTripData;
- 
+  TripDataModel? liveTripData;
+
   Future<void> listenToLiveUpdateStream() async {
-    String liveUpdatecollectionName = 'user/e1252138-6f80-46a6-9d56-873697524dc5/running-trip';
+    String liveUpdatecollectionName =
+        'user/972a23cf-5119-4cfb-a247-ab04b9feb401/running-trip';
     final CollectionReference collectionRef =
-    FirebaseFirestore.instance.collection(liveUpdatecollectionName);
+        FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {
       final notificationStream = await collectionRef.snapshots();
       notificationStream.listen((result) {
@@ -33,9 +35,8 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
             var jsonObj = res.doc.data();
             var encodedJson = json.encode(jsonObj, toEncodable: myEncode);
             var jsonData = json.decode(encodedJson);
-            print("trip data ${event.data()}");
+            print("tripdata========> ${event.data()}");
             liveTripData = TripDataModel.fromJson(jsonData);
-
           });
         }
         notifyListeners();

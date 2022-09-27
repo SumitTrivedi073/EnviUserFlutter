@@ -1,237 +1,203 @@
-//tripDataModel
+// To parse this JSON data, do
+//
+//     final tripDataModel = tripDataModelFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-List<TripDataModel> userFromJson(String str) =>
-    List<TripDataModel>.from(
-        json.decode(str).map((x) => TripDataModel.fromJson(x)));
+TripDataModel tripDataModelFromJson(String str) =>
+    TripDataModel.fromJson(json.decode(str));
 
-String userToJson(List<TripDataModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String tripDataModelToJson(TripDataModel data) => json.encode(data.toJson());
 
 class TripDataModel {
-  late String? paymentMode,
-      tripStatus;
-
-  TripInfo driverTripDetails;
-  PassengerInfo passengerInfo;
-  double? tollAmount,totalFare;
-  DriverInfo driverInfo;
-  DriverLocation driverLocation;
-
-  TripDataModel(
-      {
-        required this.paymentMode,
-        required this.tripStatus,
-        required this.tollAmount,
-        required this.totalFare,
-
-        required this.driverTripDetails,
-        required this.passengerInfo,
-        required this.driverInfo,
-        required this.driverLocation,
-       });
-
-  static dynamic myEncode1(dynamic item) {
-    if (item is Timestamp) {
-      var dt = item.toDate();
-      // var d12 = DateFormat('yyyy-MM-ddThh:mm a').add_jm().format(dt);
-      // var d12 = DateFormat.yMd().add_jm().format(dt);
-      return dt.toIso8601String();
-    }
-
-    return item;
-  }
-
-  factory TripDataModel.fromJson(Map<String, dynamic> json) {
-    return TripDataModel(
-
-
-      paymentMode:
-      json["paymentMode"] != null ? json["paymentMode"].toString() : "NA",
-      tripStatus: json["tripStatus"] != null ? json["status"]?.toString() : "NA",
-
-      driverTripDetails: (json["tripInfo"] != null)
-          ? TripInfo.fromJson(json["tripInfo"])
-          : TripInfo.fromJson({}),
-
-      passengerInfo: (json["passengerInfo"] != null)
-          ? PassengerInfo.fromJson(json["passengerInfo"])
-          : PassengerInfo(countryCode: "NA", name: "NA", phone: "NA"),
-
-      driverInfo: (json["driverInfo"] != null)
-          ? DriverInfo.fromJson(json["driverInfo"])
-          : DriverInfo.fromJson({}),
-      driverLocation: (json["driverLocation"] != null)
-          ? DriverLocation.fromJson(json["driverLocation"])
-          : DriverLocation.fromJson({}),
-      tollAmount:
-      (json["tollAmount"] != 0) ? json["tollAmount"] : 0.0,
-      totalFare:
-      json["totalFare"] != 0 ? json["totalFare"] : 0.0,
-
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-
-    "paymentMode": paymentMode,
-    "status": tripStatus,
-
-    "driverTripDetails": driverTripDetails.toJson(),
-    "customer": passengerInfo.toJson(),
-    "driverInfo": driverInfo.toJson(),
-    "tollAmount":tollAmount,
-    "totalFare":totalFare,
-    "driverLocation":driverLocation.toJson(),
-
-  };
-}
-
-class TripInfo {
-  late String? passengerTripMasterId;
-  PickupLocation pickupLocation;
-  DropLocation dropLocation;
-  TripInfo({
-    required this.passengerTripMasterId,
-    required this.dropLocation,required this.pickupLocation,
+  TripDataModel({
+    required this.driverInfo,
+    required this.tollAmount,
+    required this.totalFare,
+    required this.driverLocation,
+    required this.paymentMode,
+    required this.passengerInfo,
+    required this.tripInfo,
+    required this.tripStatus,
   });
 
-  factory TripInfo.fromJson(Map<String, dynamic> json) =>
-      TripInfo(
-        passengerTripMasterId: json["passengerTripMasterId"] != null
-            ? json["passengerTripMasterId"]
-            : "NA",
-        pickupLocation: (json["pickupLocation"] != null)
-            ? PickupLocation.fromJson(json["pickupLocation"])
-            : PickupLocation.fromJson({}),
-        dropLocation: (json["dropLocation"] != null)
-            ? DropLocation.fromJson(json["dropLocation"])
-            : DropLocation.fromJson({}),
+  ErInfo? driverInfo;
+  int? tollAmount;
+  int? totalFare;
+  DriverLocation? driverLocation;
+  String? paymentMode;
+  ErInfo? passengerInfo;
+  TripInfo? tripInfo;
+  String? tripStatus;
+  UpdatedAt? updatedAt;
+
+  factory TripDataModel.fromJson(Map<String, dynamic> json) => TripDataModel(
+        driverInfo: ErInfo.fromJson(json["driverInfo"]) != null
+            ? ErInfo.fromJson(json['driverInfo'])
+            : null,
+        tollAmount: json["tollAmount"] ?? 0,
+        totalFare: json["totalFare"] ?? 0,
+        driverLocation: DriverLocation.fromJson(json["driverLocation"]) != null
+            ? DriverLocation.fromJson(json['driverLocation'])
+            : null,
+        paymentMode: json["paymentMode"] ?? '',
+        passengerInfo: ErInfo.fromJson(json["passengerInfo"]) != null
+            ? ErInfo.fromJson(json['passengerInfo'])
+            : null,
+        tripInfo: TripInfo.fromJson(json["tripInfo"]) != null
+            ? TripInfo.fromJson(json['tripInfo'])
+            : null,
+        tripStatus: json["tripStatus"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
-    "driverTripMasterId": passengerTripMasterId,
-    "dropLocation": dropLocation.toJson(),
-    "pickupLocation":pickupLocation.toJson(),
-  };
+        "driverInfo": driverInfo!.toJson(),
+        "tollAmount": tollAmount,
+        "totalFare": totalFare,
+        "driverLocation": driverLocation!.toJson(),
+        "paymentMode": paymentMode,
+        "passengerInfo": passengerInfo!.toJson(),
+        "tripInfo": tripInfo!.toJson(),
+        "tripStatus": tripStatus,
+      };
 }
-class DropLocation {
-  late String? dropAddress;
-  String longitude,latitude;
 
-  DropLocation({
-    required this.dropAddress,
-    required this.longitude,required this.latitude,
-  });
-
-  factory DropLocation.fromJson(Map<String, dynamic> json) =>
-      DropLocation(
-        dropAddress: json["dropAddress"] != null
-            ? json["dropAddress"]
-            : "NA",
-        latitude:
-        json["latitude"] != null ? json["latitude"] : "0",
-        longitude:
-        json["longitude"] != null ? json["longitude"] : "0",
-      );
-
-  Map<String, dynamic> toJson() => {
-    "dropAddress": dropAddress,
-    "latitude": latitude,
-    "longitude":longitude,
-  };
-}
-class PickupLocation {
-  late String? pickupAddress;
-  String longitude,latitude;
-
-  PickupLocation({
-    required this.pickupAddress,
-    required this.latitude,required this.longitude,
-  });
-
-  factory PickupLocation.fromJson(Map<String, dynamic> json) =>
-      PickupLocation(
-        pickupAddress: json["pickupAddress"] != null
-            ? json["pickupAddress"]
-            : "NA",
-        latitude:
-        json["latitude"] != null ? json["latitude"] : "0",
-        longitude:
-        json["longitude"] != null ? json["longitude"] : "0",
-      );
-
-  Map<String, dynamic> toJson() => {
-    "pickupAddress": pickupAddress,
-    "latitude": latitude,
-    "longitude":longitude,
-  };
-}
-class PassengerInfo {
-  late String? countryCode, name, phone;
-
-  PassengerInfo({
+class ErInfo {
+  ErInfo({
+    required this.phone,
     required this.countryCode,
     required this.name,
-    required this.phone,
   });
 
-  factory PassengerInfo.fromJson(Map<String, dynamic> json) => PassengerInfo(
-    countryCode: json != null && json["id"] != null ? json["countryCode"] : 'NA',
-    name: json != null && json["name"] != null ? json["name"] : "NA",
-    phone: json != null && json["phone"] != null ? json["phone"] : "NA",
-  );
+  String? phone;
+  String? countryCode;
+  String? name;
+
+  factory ErInfo.fromJson(Map<String, dynamic> json) => ErInfo(
+        phone: json["phone"] ?? '',
+        countryCode: json["countryCode"] ?? '',
+        name: json["name"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
-    "countryCode": countryCode,
-    "name": name,
-    "phone": phone,
-  };
+        "phone": phone,
+        "countryCode": countryCode,
+        "name": name,
+      };
 }
 
 class DriverLocation {
-
-String longitude,latitude;
-DriverLocation({
+  DriverLocation({
     required this.latitude,
     required this.longitude,
-
   });
+
+  double? latitude;
+  double? longitude;
 
   factory DriverLocation.fromJson(Map<String, dynamic> json) => DriverLocation(
-    latitude: json["latitude"] != null ? json["latitude"] : "0.0",
-    longitude: json["longitude"] != null ? json["longitude"] : "0.0",
-  );
+        latitude: json["latitude"].toDouble() ?? 0.0,
+        longitude: json["longitude"].toDouble() ?? 0.0,
+      );
 
   Map<String, dynamic> toJson() => {
-    "longitude": longitude,
-    "latitude": latitude,
-
-  };
+        "latitude": latitude,
+        "longitude": longitude,
+      };
 }
 
-
-class DriverInfo {
-  late String? countryCode, name, phone;
-
-  DriverInfo({
-    required this.countryCode,
-    required this.name,
-    required this.phone,
+class TripInfo {
+  TripInfo({
+    required this.passengerTripMasterId,
+    required this.dropLocation,
+    required this.pickupLocation,
   });
 
-  factory DriverInfo.fromJson(Map<String, dynamic> json) => DriverInfo(
-    countryCode: json["countryCode"] != null ? json["countryCode"] : 'NA',
-    name: json["name"] != null ? json["name"] : "NA",
-    phone: json["phone"] != null ? json["phone"] : "NA",
-  );
+  String? passengerTripMasterId;
+  DropLocation? dropLocation;
+  PickupLocation? pickupLocation;
+
+  factory TripInfo.fromJson(Map<String, dynamic> json) => TripInfo(
+        passengerTripMasterId: json["passengerTripMasterId"] ?? '',
+        dropLocation: DropLocation.fromJson(json["dropLocation"]) != null
+            ? DropLocation.fromJson(json['dropLocation'])
+            : null,
+        pickupLocation: PickupLocation.fromJson(json["pickupLocation"]) != null
+            ? PickupLocation.fromJson(json['pickupLocation'])
+            : null,
+      );
 
   Map<String, dynamic> toJson() => {
-    "countryCode": countryCode,
-    "name": name,
-    "phone": phone,
-  };
+        "passengerTripMasterId": passengerTripMasterId,
+        "dropLocation": dropLocation!.toJson(),
+        "pickupLocation": pickupLocation!.toJson(),
+      };
 }
 
+class DropLocation {
+  DropLocation({
+    required this.latitude,
+    required this.dropAddress,
+    required this.longitude,
+  });
 
+  double? latitude;
+  String? dropAddress;
+  double? longitude;
+
+  factory DropLocation.fromJson(Map<String, dynamic> json) => DropLocation(
+        latitude: json["latitude"].toDouble() ?? 0.0,
+        dropAddress: json["dropAddress"] ?? '',
+        longitude: json["longitude"].toDouble() ?? 0.0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "latitude": latitude,
+        "dropAddress": dropAddress,
+        "longitude": longitude,
+      };
+}
+
+class PickupLocation {
+  PickupLocation({
+    required this.pickupAddress,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  String? pickupAddress;
+  double? latitude;
+  double? longitude;
+
+  factory PickupLocation.fromJson(Map<String, dynamic> json) => PickupLocation(
+        pickupAddress: json["pickupAddress"] ?? '',
+        latitude: json["latitude"].toDouble() ?? 0.0,
+        longitude: json["longitude"].toDouble() ?? 0.0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "pickupAddress": pickupAddress,
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+}
+
+class UpdatedAt {
+  UpdatedAt({
+    required this.seconds,
+    required this.nanoseconds,
+  });
+
+  int? seconds;
+  int? nanoseconds;
+
+  factory UpdatedAt.fromJson(Map<String, dynamic> json) => UpdatedAt(
+        seconds: json["seconds"],
+        nanoseconds: json["nanoseconds"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "seconds": seconds,
+        "nanoseconds": nanoseconds,
+      };
+}

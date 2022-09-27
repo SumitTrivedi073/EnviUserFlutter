@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 
 import '../theme/color.dart';
 import '../theme/string.dart';
@@ -17,6 +18,13 @@ class _TimerButtonState extends State<TimerButton>
   int state = 0;
   late Timer timer;
   int counter = 60;
+  String reasonForCancellation = ShorterWaitingTime;
+  final List<String> _status = [
+    ShorterWaitingTime,
+    PlanChanged,
+    DriverDeniedPickup,
+    Other
+  ];
 
   @override
   void initState() {
@@ -34,7 +42,7 @@ class _TimerButtonState extends State<TimerButton>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
             child: MaterialButton(
               onPressed: () {},
               elevation: 4.0,
@@ -56,7 +64,13 @@ class _TimerButtonState extends State<TimerButton>
       return SizedBox(
         width: double.infinity,
         child: MaterialButton(
-            onPressed: () => {},
+            onPressed: () => {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        cancelBooking(context, false),
+                  )
+                },
             textColor: Colors.white,
             child: Stack(
               alignment: Alignment.centerRight,
@@ -77,7 +91,13 @@ class _TimerButtonState extends State<TimerButton>
       return SizedBox(
         width: double.infinity,
         child: MaterialButton(
-            onPressed: () => {},
+            onPressed: () => {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        cancelBooking(context, true),
+                  )
+                },
             textColor: Colors.white,
             child: Stack(
               alignment: Alignment.centerRight,
@@ -103,7 +123,7 @@ class _TimerButtonState extends State<TimerButton>
       state = 1;
     });
 
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (counter > 1) {
         setState(() {
           counter--;
@@ -123,6 +143,93 @@ class _TimerButtonState extends State<TimerButton>
     if (timer.isActive) {
       timer.cancel();
     }
+  }
+
+  Widget cancelBooking(BuildContext context, bool applyCancelCharge) {
+   return StatefulBuilder(builder: (context, StateSetter setState) {
+      return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: SizedBox(
+            height: 240,
+            child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Column(children: [
+                  robotoTextWidget(
+                      textval: ReasonForCancellation,
+                      colorval: AppColor.black,
+                      sizeval: 18,
+                      fontWeight: FontWeight.w800),
+                  const Divider(),
+                  RadioGroup<String>.builder(
+                      direction: Axis.vertical,
+                      groupValue: reasonForCancellation,
+                      horizontalAlignment: MainAxisAlignment.spaceAround,
+                      onChanged: (value) => setState(() {
+                            reasonForCancellation = value.toString();
+                          }),
+                      items: _status,
+                      textStyle: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                      itemBuilder: (item) => RadioButtonBuilder(
+                            item,
+                          )),
+                  const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                          height: 40,
+                          width: 100,
+                          margin: const EdgeInsets.all(5),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: AppColor.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12), // <-- Radius
+                              ),
+                            ),
+                            child: robotoTextWidget(
+                              textval: cancel,
+                              colorval: AppColor.greyblack,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )),
+                      Container(
+                          height: 40,
+                          width: 100,
+                          margin: const EdgeInsets.all(5),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: AppColor.greyblack,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12), // <-- Radius
+                              ),
+                            ),
+                            child: robotoTextWidget(
+                              textval: confirm,
+                              colorval: AppColor.white,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )),
+                    ],
+                  )
+                ])),
+          ));
+    });
   }
 }
 
