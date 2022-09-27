@@ -14,7 +14,7 @@ const deployedLambdaUrl = "";
 
 const qaUrl = 'https://qausernew.azurewebsites.net/';
 
-const productionUrl = 'https://envi-user-taxation-v2.azurewebsites.net/';
+const productionUrl = 'https://qausernew.azurewebsites.net/';
 
 getBaseURL() {
   String baseUrl = deployedLambdaUrl;
@@ -53,4 +53,21 @@ getUserTripHistory(String userid, int pagecount, int limit){
 }
 GetAllFavouriteAddressdata(String userid){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/getAll/$userid');
+}
+searchDriver() {
+  return Uri.parse('${getBaseURL()}/userTrip/searchDrivers');
+}
+startTrip() {
+  return Uri.parse('${getBaseURL()}/userTrip/startUserTrip');
+}
+
+
+EditFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
+}
+AddFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
+}
+DeleteFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
 }

@@ -32,17 +32,10 @@ dynamic myEncode(dynamic item) {
   }
   return item;
 }
-void showToast(dynamic toast_msg, dynamic backgroundColor, dynamic webBgColor,
-    dynamic webPosition, int timeInSecForIosWeb) {
+void showToast(String toast_msg) {
   Fluttertoast.showToast(
       msg: toast_msg,
-      toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: timeInSecForIosWeb,
-      backgroundColor: backgroundColor,
-      textColor: AppColor.white,
-      fontSize: 16.0,
-      webBgColor: webBgColor,
-      webPosition: webPosition,
-      webShowClose: true);
+      toastLength: Toast.LENGTH_LONG,
+      timeInSecForIosWeb: 9);
 }

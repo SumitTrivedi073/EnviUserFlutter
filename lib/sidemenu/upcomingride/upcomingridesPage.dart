@@ -304,9 +304,9 @@ print(userId);
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(children: const [
+                Row(children:  [
                   robotoTextWidget(
-                    textval: "18 Kms",
+                    textval: "${arrtrip[index].estimatedDistance} Kms",
                     colorval: AppColor.greyblack,
                     sizeval: 13.0,
                     fontWeight: FontWeight.bold,

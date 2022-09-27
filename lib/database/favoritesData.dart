@@ -12,10 +12,11 @@ final String title;
   final String isFavourite;
 final String longitude;
   final String latitude;
+  final DateTime timestamp;
 
 
 
-  FavoritesData(this.id, this.identifier, this.address, this.isFavourite,this.longitude,this.latitude,this.title);
+  FavoritesData(this.id, this.identifier, this.address, this.isFavourite,this.longitude,this.latitude,this.title, this.timestamp);
 
   factory FavoritesData.optional({
     int? id,
@@ -25,6 +26,7 @@ final String longitude;
     String? latitude,
     String? longitude,
     String? title,
+    DateTime? timestamp,
   }) =>
       FavoritesData(
         id,
@@ -37,12 +39,13 @@ final String longitude;
         latitude ?? "",
         longitude ?? "",
         title ?? "",
+        timestamp ?? DateTime.now(),
 
       );
 
   @override
   String toString() {
-    return 'FavoritesData{id: $id, identifier: $identifier, address: $address, isFavourite: $isFavourite, latitude: $latitude, longitude:$longitude, title: $title}';
+    return 'FavoritesData{id: $id, identifier: $identifier, address: $address, isFavourite: $isFavourite, latitude: $latitude, longitude:$longitude, title: $title, timestamp: $timestamp}';
   }
 
   FavoritesData copyWith({
@@ -53,7 +56,7 @@ final String longitude;
     String? latitude,
     String? longitude,
     String? title,
-
+    DateTime? timestamp,
   }) {
     return FavoritesData(
       id ?? this.id,
@@ -63,7 +66,7 @@ final String longitude;
       latitude ?? this.latitude,
       longitude ?? this.longitude,
       title ?? this.title,
-
+      timestamp ?? this.timestamp,
     );
   }
 
@@ -75,7 +78,7 @@ final String longitude;
               id == other.id &&
               identifier == other.identifier &&
               address == other.address &&
-              isFavourite == other.isFavourite && latitude == other.latitude && longitude == other.longitude && title == other.title;
+              isFavourite == other.isFavourite && latitude == other.latitude && longitude == other.longitude && title == other.title && timestamp == other.timestamp;
 
   @override
   int get hashCode =>
@@ -85,6 +88,7 @@ final String longitude;
       isFavourite.hashCode^
       latitude.hashCode^
        longitude.hashCode^
-  title.hashCode;
+  title.hashCode ^
+  timestamp.hashCode;
 
 }

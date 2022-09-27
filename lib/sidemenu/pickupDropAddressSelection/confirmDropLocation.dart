@@ -1,8 +1,7 @@
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/fromAddressModel.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/pickupDropAddressSelection/model/toAddressModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
+import 'package:envi/theme/images.dart';
 import 'package:envi/theme/mapStyle.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -19,10 +18,8 @@ import '../../theme/string.dart';
 
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
-  final SearchPlaceModel fromLocation;
-  
-  const ConfirmDropLocation(
-      {Key? key, required this.title, required this.fromLocation})
+  final SearchPlaceModel? location;
+  const ConfirmDropLocation({Key? key, required this.title, this.location})
       : super(key: key);
 
   @override
@@ -30,19 +27,23 @@ class ConfirmDropLocation extends StatefulWidget {
 }
 
 class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
-   String? toAddressName;
+  String? toAddressName;
   late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
-  ToAddressLatLong? toAddress;
-
+  LatLng initialLatLng = LatLng(0, 0);
+  bool isFromVerified = false;
+  bool isToVerified = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
-    getCurrentLocation();
+    initialLatLng = LatLng(
+        widget.location!.latLng!.latitude, widget.location!.latLng!.longitude);
+    _cameraPosition = CameraPosition(target: initialLatLng, zoom: 10.0);
+    // getCurrentLocation();
+    getLocation(initialLatLng);
   }
 
   @override
@@ -75,7 +76,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       ),
       Center(
         child: Image.asset(
-          "assets/images/destination-marker.png",
+          Images.destinationMarkerImage,
           scale: 2,
         ),
       ),
@@ -112,9 +113,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     Image.asset(
-                      "assets/images/destination-marker.png",
+                      Images.destinationMarkerImage,
                       scale: 2,
                       fit: BoxFit.none,
                     ),
@@ -156,7 +156,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(
-              moveAroundText,
+              'Move around',
               style: AppTextStyle.robotoRegular16,
               maxLines: 2,
               textAlign: TextAlign.center,
@@ -172,23 +172,30 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => SearchDriver(
-                              fromAddress: widget.fromLocation,
-                              toAddress: SearchPlaceModel(
-                                id: '',
-                                title:toAddressName! ,
-                                address: Address,
-                                latLng: latlong,
-                              )
-                              
-                              // ToAddressLatLong(
-                              //   address: Address,
-                              //   position: latlong,
-                              // ),
-                            )),
-                    (Route<dynamic> route) => true);
+                Navigator.pop(
+                    context,
+                    SearchPlaceModel(
+                        id: '',
+                        address: Address,
+                        title: toAddressName!,
+                        latLng: latlong));
+                // Navigator.of(context).pushAndRemoveUntil(
+                //     MaterialPageRoute(
+                //         builder: (BuildContext context) => SearchDriver(
+                //             fromAddress: widget.fromLocation,
+                //             toAddress: SearchPlaceModel(
+                //               id: '',
+                //               title: toAddressName!,
+                //               address: Address,
+                //               latLng: latlong,
+                //             )
+
+                //             // ToAddressLatLong(
+                //             //   address: Address,
+                //             //   position: latlong,
+                //             // ),
+                //             )),
+                //     (Route<dynamic> route) => true);
               },
               style: ElevatedButton.styleFrom(
                 primary: AppColor.greyblack,
@@ -197,7 +204,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 ),
               ),
               child: robotoTextWidget(
-                textval: continue1,
+                textval: confirmText,
                 colorval: AppColor.white,
                 sizeval: 14,
                 fontWeight: FontWeight.w600,
@@ -211,15 +218,15 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission != PermissionStatus.granted) {
       LocationPermission permission = await Geolocator.requestPermission();
-      if (permission != PermissionStatus.granted) getLocation();
+      if (permission != PermissionStatus.granted) getLocation(initialLatLng);
       return;
     }
-    getLocation();
+    getLocation(initialLatLng);
   }
 
-  getLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+  getLocation(LatLng position) async {
+    // Position position = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
     setState(() {
       latlong = LatLng(position.latitude, position.longitude);
       _cameraPosition = CameraPosition(
@@ -239,7 +246,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    toAddressName = place.name;
+    toAddressName = (place.subLocality != '')?place.subLocality : place.subAdministrativeArea;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';

@@ -1,15 +1,11 @@
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
+import 'package:envi/provider/firestoreScheduleTripNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
-import 'package:envi/sidemenu/pickupDropAddressSelection/PickerDemo.dart';
-import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/theme.dart';
-import 'package:envi/theme/responsive.dart';
-import 'package:envi/uiwidget/mapDirectionWidget.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/Constant.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
-
+          ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
      child: MaterialApp(
       title: 'Envi',
@@ -88,7 +84,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>()
           .listenToLiveUpdateStream();
-  
+      context.read<firestoreScheduleTripNotifier>()
+          .listenToLiveUpdateStream();
 
     }
   /*  Navigator.of(context).pushAndRemoveUntil(
@@ -162,11 +159,15 @@ dynamic userid =sharedPreferences.getString(LoginID);
             final task = FavoritesData.optional(identifier: res["id"],
                 address: res["address"],
                 isFavourite: res["isFavourite"],
-                latitude: res["location"]['coordinates'][0].toString(),
-                longitude: res["location"]['coordinates'][1].toString(),
+                latitude: res["location"]['coordinates'][1].toString(),
+                longitude: res["location"]['coordinates'][0].toString(),
                 title: title);
             print(task);
             await dao.insertTask(task);
+          }
+          else{
+            print("vbgbbnynynnynynynynynynyny$data");
+
           }
         }
       }

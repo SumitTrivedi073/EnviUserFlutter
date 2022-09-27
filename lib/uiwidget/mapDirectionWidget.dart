@@ -2,18 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
 
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../web_service/Constant.dart';
 
 class MapDirectionWidget extends StatefulWidget{
-   
+  final SearchPlaceModel? fromAddress;
+  final SearchPlaceModel? toAddress;
 
-  const MapDirectionWidget({Key? key, this.fromAddress, this.toAddress}) : super(key: key);
-final SearchPlaceModel? fromAddress;
-   final SearchPlaceModel? toAddress;
- 
-    
+  const MapDirectionWidget({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+
+
+
   @override
   _MapDirectionWidgetState createState() => _MapDirectionWidgetState();
 }
@@ -28,8 +29,10 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
   Set<Marker> markers = Set(); //markers for google map
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
+
   late LatLng startLocation = LatLng(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude);
-  LatLng endLocation = const LatLng(13.201484637508047, 77.6612178079766);
+  late  LatLng endLocation =  LatLng(widget.toAddress!.latLng!.latitude, widget.toAddress!.latLng!.longitude);
+
 
 
   @override
@@ -99,11 +102,13 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
         zoomGesturesEnabled: true, //enable Zoom in, out on map
         initialCameraPosition: CameraPosition( //innital position in map
           target: startLocation, //initial position
-          zoom: 16.0, //initial zoom level
+          zoom: 10.0, //initial zoom level
         ),
         markers: markers, //markers to show on map
         polylines: Set<Polyline>.of(polylines.values), //polylines
-        mapType: MapType.normal, //map type
+        mapType: MapType.normal,
+        rotateGesturesEnabled: true,
+        zoomControlsEnabled: false,//map type
         onMapCreated: (controller) { //method called when map is created
           setState(() {
             mapController = controller;

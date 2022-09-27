@@ -60,6 +60,7 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   image_picker: ^0.8.5+3
   path_provider: ^2.0.11
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
