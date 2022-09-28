@@ -46,7 +46,7 @@ class TripDataModel {
   factory TripDataModel.fromJson(Map<String, dynamic> json) {
     return TripDataModel(
 
-
+      
       paymentMode:
       json["paymentMode"] != null ? json["paymentMode"].toString() : "NA",
       tripStatus: json["tripStatus"] != null ? json["status"]?.toString() : "NA",

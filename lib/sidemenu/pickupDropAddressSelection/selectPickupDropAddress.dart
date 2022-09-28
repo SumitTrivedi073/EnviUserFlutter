@@ -578,7 +578,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               id: detail.identifier,
                               addressToUpdate: startingAddress);
                         }
-
                         var toDetail =
                             await dao.findDataByaddressg(ToLocationText.text);
                         if (toDetail == null) {

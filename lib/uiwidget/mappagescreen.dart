@@ -56,7 +56,8 @@ class MyMapState extends State {
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
   }
-
+  
+  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
