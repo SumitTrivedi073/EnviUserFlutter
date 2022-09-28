@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -38,7 +39,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
         const SizedBox(height: 5),
         FromToWidget(
       fromAddress: widget.fromAddress,
-      toAddress: widget.toAddress,),
+      toAddress: widget.toAddress,tripType: BookingTiming.now,),
         const SizedBox(height: 230),
         DriverListItem(
           fromAddress: widget.fromAddress,

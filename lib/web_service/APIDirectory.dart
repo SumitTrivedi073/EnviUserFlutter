@@ -68,3 +68,6 @@ EditFavouriteAddressdata(){
 AddFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
 }
+getScheduleEstimation(){
+  return Uri.parse('${getBaseURL()}/userTrip/getScheduleEstimation');
+}

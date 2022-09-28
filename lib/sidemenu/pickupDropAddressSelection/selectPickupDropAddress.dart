@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:envi/sidemenu/bookScheduleTrip/bookScheduleTrip.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/confirmDropLocation.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
@@ -15,6 +16,7 @@ import 'package:google_place/google_place.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../enum/BookingTiming.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -22,11 +24,11 @@ import '../../web_service/Constant.dart';
 
 class SelectPickupDropAddress extends StatefulWidget {
   const SelectPickupDropAddress(
-      {Key? key, required this.title, this.currentLocation})
+      {Key? key, required this.title,required this.tripType, this.currentLocation})
       : super(key: key);
   final String title;
   final SearchPlaceModel? currentLocation;
-
+final BookingTiming tripType;
   @override
   State<SelectPickupDropAddress> createState() =>
       _SelectPickupDropAddressState();
@@ -75,7 +77,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   _firstLoad(String value) async {
-    Map data;
+    var data;
 
     data = {
       "search": value,
@@ -85,11 +87,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
         if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
-          searchPlaceList = (jsonDecode(res.body)['content'] as List)
-              .map((i) => SearchPlaceModel.fromJson(i))
-              .toList();
-          useGoogleApi = false;
-          _isVisible = true;
+          print(jsonDecode(res.body)['content']);
+          setState(() {
+            searchPlaceList = (jsonDecode(res.body)['content'] as List)
+                .map((i) => SearchPlaceModel.fromJson(i))
+                .toList();
+            useGoogleApi = false;
+            _isVisible = true;
+          });
         } else {
           googleAPI(value);
         }
@@ -365,14 +370,27 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 child: ElevatedButton(
                   onPressed: () {
                     searchPlaceList = [];
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => SearchDriver(
-                                  fromAddress:
-                                      startingAddress ?? widget.currentLocation,
-                                  toAddress: endAddress,
-                                )),
-                        (Route<dynamic> route) => true);
+                    if(widget.tripType == BookingTiming.now){
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => SearchDriver(
+                                fromAddress:
+                                startingAddress ?? widget.currentLocation,
+                                toAddress: endAddress,
+                              )),
+                              (Route<dynamic> route) => true);
+                    }
+                    else{
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => BookScheduleTrip(
+                                fromAddress:
+                                startingAddress ?? widget.currentLocation,
+                                toAddress: endAddress,
+                              )),
+                              (Route<dynamic> route) => true);
+                    }
+
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AppColor.greyblack,

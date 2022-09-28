@@ -75,3 +75,7 @@ var Clearlocation ="Clear Saved Location";
 var Deletelocation = "Delete Saved Place";
 var ADDPLACE= "ADD PLACE";
 var ConfirmLocation = "Confirm Location";
+var serviceNotAvailable= "this service not available at this time";
+var FutureBookingTitel = "Future Booking";
+var pickupdate = "Pick-up Date";
+var pickuptime = "Pick-up Time";

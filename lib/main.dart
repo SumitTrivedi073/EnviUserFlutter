@@ -116,8 +116,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     if (response != null && response.statusCode == 200) {
 
     var  jsonData = convert.jsonDecode(response.body);
-      print(convert.jsonDecode(response.body)['applicationConfig']);
-    print(convert.jsonDecode(response.body)['landingPageSettings']);
+    //  print(convert.jsonDecode(response.body)['applicationConfig']);
+   // print(convert.jsonDecode(response.body)['landingPageSettings']);
 LandingPageConfig.setshowInfoPopup(jsonData['landingPageSettings']['showInfoPopup']);
     LandingPageConfig.setinfoPopupType(jsonData['landingPageSettings']['infoPopupType']);
     LandingPageConfig.setautoExpiryDuration(jsonData['landingPageSettings']['autoExpiryDuration']);
@@ -142,7 +142,7 @@ LandingPageConfig.setisOnMaintainance(jsonData['landingPageSettings']['isOnMaint
     AppConfig.setisScheduleFeatureEnabled(jsonData['applicationConfig']['scheduleTripConfig']['isScheduleFeatureEnabled']);
     AppConfig.setscheduleFreeDriverDistance(jsonData['applicationConfig']['scheduleTripConfig']['scheduleFreeDriverDistance']);
     AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']['scheduleTripConfig']['scheduleAllottedDriverDistance']);
-    AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']['paymentOptions']);
+    AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']['paymentOptions'].toString());
     AppConfig.setdefaultPaymentMode(jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
 
       Navigator.of(context).pushAndRemoveUntil(

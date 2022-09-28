@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           print(value.liveTripData);
+
         }
       });
       return Scaffold(

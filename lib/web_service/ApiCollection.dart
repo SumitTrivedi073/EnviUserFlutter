@@ -43,6 +43,19 @@ class ApiCollection {
     dynamic res = await HTTP.post(EditFavouriteAddressdata(), data);
     return res;
   }
+  static Future<dynamic> getScheduleEstimationdata(
+      from_latitude, from_longitude, to_latitude, to_longitude) async {
 
+    Map data = {
+      "from_latitude": from_latitude,
+      "from_longitude": from_longitude,
+      "to_latitude": to_latitude,
+      "to_longitude":to_longitude
+
+    };
+    print(data);
+    dynamic res = await HTTP.post(getScheduleEstimation(), data);
+    return res;
+  }
 
 }

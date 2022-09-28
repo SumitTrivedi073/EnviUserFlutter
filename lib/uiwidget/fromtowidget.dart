@@ -3,6 +3,7 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../enum/BookingTiming.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import '../theme/string.dart';
@@ -11,8 +12,8 @@ class FromToWidget extends StatefulWidget {
 
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
-
-  const FromToWidget({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+  final BookingTiming tripType;
+  const FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.tripType}) : super(key: key);
 
 
 
@@ -62,7 +63,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             SelectPickupDropAddress(
-                                                title: pickUpLocation)),
+                                                title: pickUpLocation,tripType: widget.tripType ,)),
                                     (route) => true);
                               },
                               child: Container(
@@ -131,7 +132,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             SelectPickupDropAddress(
-                                                title: dropLocation)),
+                                                title: dropLocation,tripType:BookingTiming.now ,)),
                                     (route) => true);
                               },
                               child: Container(
