@@ -1,5 +1,6 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
+import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
               strpaymentOptions: "qr_code,online,cash",
               selectedOption: "qr_code",
             )*/
+              ScheduleListAlertConsumer()
             ],
           ),
         ]),

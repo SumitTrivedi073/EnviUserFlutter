@@ -71,3 +71,6 @@ AddFavouriteAddressdata(){
 getScheduleEstimation(){
   return Uri.parse('${getBaseURL()}/userTrip/getScheduleEstimation');
 }
+DeleteFavouriteAddressdata(){
+  return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
+}
