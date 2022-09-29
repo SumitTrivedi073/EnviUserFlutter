@@ -27,7 +27,9 @@ class _FromToWidgetPageState extends State<FromToWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Card(
+    return Container(
+        margin: const EdgeInsets.only(left: 10, right: 10),
+        child:Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(
@@ -60,10 +62,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SelectPickupDropAddress(
-                                                title: pickUpLocation)),
-                                    (route) => true);
+                                        builder: (context) => SelectPickupDropAddress(
+                                            currentLocation: widget.fromAddress,
+                                            title: pickUpLocation)),
+                                        (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -129,10 +131,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SelectPickupDropAddress(
-                                                title: dropLocation)),
-                                    (route) => true);
+                                        builder: (context) => SelectPickupDropAddress(
+                                            currentLocation: widget.fromAddress,
+                                            title: dropLocation)),
+                                        (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -150,7 +152,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     ))
               ],
             ),
-          ));
+          )));
 
   }
 }

@@ -146,18 +146,20 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      latlong = LatLng(position.latitude, position.longitude);
-      _cameraPosition = CameraPosition(
-        bearing: 0,
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 14.0,
-      );
-      if (_controller != null) {
-        _controller
-            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
-      }
-    });
+    if (mounted) {
+      setState(() {
+        latlong = LatLng(position.latitude, position.longitude);
+        _cameraPosition = CameraPosition(
+          bearing: 0,
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 14.0,
+        );
+        if (_controller != null) {
+          _controller
+              ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+        }
+      });
+    }
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
@@ -171,6 +173,11 @@ class MyMapState extends State {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address

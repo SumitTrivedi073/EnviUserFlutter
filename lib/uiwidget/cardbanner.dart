@@ -1,7 +1,15 @@
 import 'package:envi/theme/color.dart';
 import 'package:flutter/material.dart';
 
+import '../theme/string.dart';
+
 class CardBanner extends StatefulWidget {
+  final String? title, image;
+
+  // receive data from the FirstScreen as a parameter
+  const CardBanner({Key? key, required this.title, required this.image})
+      : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _CardBannerPageState();
@@ -12,6 +20,7 @@ class _CardBannerPageState extends State<CardBanner> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -21,23 +30,34 @@ class _CardBannerPageState extends State<CardBanner> {
           elevation: 5,
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 10),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "Connecting Driver...",
-                  style: TextStyle(
-                      color: AppColor.black,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18),
+                  widget.title.toString(),
+                  style: getTextStyle(widget.title.toString()),
                 ),
               ),
               Image.asset(
-                'assets/images/connecting_driver_img.png',
+                widget.image.toString(),
                 fit: BoxFit.fill,
               ),
             ],
           )),
     );
+  }
+
+  getTextStyle(String title) {
+    if(title == Driverarrived) {
+      return const TextStyle(
+          color: AppColor.red,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w800,
+          fontSize: 18);
+    }
+    return  const TextStyle(
+        color: AppColor.black,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w800,
+        fontSize: 18);
   }
 }
