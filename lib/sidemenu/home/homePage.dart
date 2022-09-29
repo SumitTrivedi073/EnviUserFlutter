@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           print("liveTripData===>${value.liveTripData!.tripStatus}");
-          if (value.liveTripData!.tripStatus == TripStatusRequest &&
+          if (value.liveTripData!.tripStatus == TripStatusRequest ||
               value.liveTripData!.tripStatus == TripStatusAlloted) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(

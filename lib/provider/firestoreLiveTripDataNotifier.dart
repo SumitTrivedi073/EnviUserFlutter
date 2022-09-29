@@ -32,11 +32,15 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
               .doc("passengerTripMasterId:$dstat")
               .snapshots()
               .listen((event) {
-            var jsonObj = res.doc.data();
+            var jsonObj = event.data();
+
             var encodedJson = json.encode(jsonObj, toEncodable: myEncode);
             var jsonData = json.decode(encodedJson);
             print("tripdata========> ${event.data()}");
-            liveTripData = TripDataModel.fromJson(jsonData);
+            if(jsonData!=null && jsonData.toString().isNotEmpty) {
+              liveTripData = TripDataModel.fromJson(jsonData);
+              print("liveTripData_totalFare===>${liveTripData!.totalFare}");
+            }
           });
         }
         notifyListeners();

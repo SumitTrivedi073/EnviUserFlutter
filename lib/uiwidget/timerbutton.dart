@@ -1,13 +1,25 @@
 import 'dart:async';
+import 'dart:convert' as convert;
 
+import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
+import 'package:envi/web_service/APIDirectory.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import '../provider/model/tripDataModel.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 
 class TimerButton extends StatefulWidget {
+  TripDataModel? liveTripData;
+
+  TimerButton({Key? key, this.liveTripData}) : super(key: key);
+
   @override
   // ignore: library_private_types_in_public_api
   _TimerButtonState createState() => _TimerButtonState();
@@ -17,6 +29,7 @@ class _TimerButtonState extends State<TimerButton>
     with TickerProviderStateMixin {
   int state = 0;
   late Timer timer;
+  LatLng? latlong = null;
   int counter = 60;
   String reasonForCancellation = ShorterWaitingTime;
   final List<String> _status = [
@@ -33,6 +46,27 @@ class _TimerButtonState extends State<TimerButton>
     if (state == 0) {
       animateButton();
     }
+    getCurrentLocation();
+  }
+
+  Future getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission != PermissionStatus.granted) {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission != PermissionStatus.granted) getLocation();
+      return;
+    }
+    getLocation();
+  }
+
+  getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    if (mounted) {
+      setState(() {
+        latlong = LatLng(position.latitude, position.longitude);
+      });
+    }
   }
 
   @override
@@ -42,7 +76,7 @@ class _TimerButtonState extends State<TimerButton>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
             child: MaterialButton(
               onPressed: () {},
               elevation: 4.0,
@@ -146,7 +180,7 @@ class _TimerButtonState extends State<TimerButton>
   }
 
   Widget cancelBooking(BuildContext context, bool applyCancelCharge) {
-   return StatefulBuilder(builder: (context, StateSetter setState) {
+    return StatefulBuilder(builder: (context, StateSetter setState) {
       return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -210,6 +244,7 @@ class _TimerButtonState extends State<TimerButton>
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
+                              cancelTripAPI();
                             },
                             style: ElevatedButton.styleFrom(
                               primary: AppColor.greyblack,
@@ -230,6 +265,39 @@ class _TimerButtonState extends State<TimerButton>
                 ])),
           ));
     });
+  }
+
+  Future<void> cancelTripAPI() async {
+    Map data;
+    data = {
+      "passengerTripMasterId":
+          widget.liveTripData!.tripInfo!.passengerTripMasterId??'',
+      "driverTripMasterId": widget.liveTripData!.driverInfo!.driverId??'',
+      "reason": reasonForCancellation != null
+          ? reasonForCancellation
+          :ShorterWaitingTime,
+      "driverId": widget.liveTripData!.driverInfo!.driverId??'',
+      "location": {
+        "latitude": latlong!.latitude != null
+            ? latlong!.latitude
+            :0.0,
+        "longitude": latlong!.longitude != null
+            ? latlong!.longitude
+            :0.0
+      }
+    };
+    print("CancelTripdata=======>$data");
+    dynamic res = await HTTP.post(cancelTrip(), data);
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
+      print("CancelTripRes=======>${res.statusCode}");
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) => const HomePage(title: "title")),
+              (Route<dynamic> route) => false);
+    } else {
+      throw "Trip Not Cancelled";
+    }
   }
 }
 
