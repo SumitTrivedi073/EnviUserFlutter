@@ -28,7 +28,9 @@ class _FromToWidgetPageState extends State<FromToWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Card(
+    return Container(
+        margin: const EdgeInsets.only(left: 10, right: 10),
+        child:Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(
@@ -132,7 +134,8 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             SelectPickupDropAddress(
-                                                title: dropLocation,tripType:BookingTiming.now ,)),
+                                                title: dropLocation,tripType:BookingTiming.now ,
+                                                  currentLocation: widget.fromAddress,)),
                                     (route) => true);
                               },
                               child: Container(
@@ -151,7 +154,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     ))
               ],
             ),
-          ));
+          )));
 
   }
 }

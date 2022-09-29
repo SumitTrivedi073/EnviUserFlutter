@@ -30,9 +30,7 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
           str = reversedList.toString().replaceAll(',', "\n\n");
           print("======$str");
            showToast(str);
-          // setState(() {
-          //   _items = reversedList;
-          // });
+
         }
       });
       return Center(child:
@@ -54,52 +52,12 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
               ),
             ),
           ),
-          // Container(
-          //   decoration: BoxDecoration(color: Colors.greenAccent),
-          //   child: Row(
-          //     mainAxisSize: MainAxisSize.max,
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: <Widget>[
-          //       FlatButton(
-          //         onPressed: () {
-          //           setState(() {
-          //             listKey.currentState?.insertItem(0,
-          //                 duration: const Duration(milliseconds: 500));
-          //             _items = []
-          //               ..add(counter++)
-          //               ..addAll(_items);
-          //           });
-          //         },
-          //         child: Text(
-          //           "Add item to first",
-          //           style: TextStyle(color: Colors.black, fontSize: 20),
-          //         ),
-          //       ),
-          //       FlatButton(
-          //         onPressed: () {
-          //           if (_items.length <= 1) return;
-          //           listKey.currentState?.removeItem(
-          //               0, (_, animation) => slideIt(context, 0, animation),
-          //               duration: const Duration(milliseconds: 500));
-          //           setState(() {
-          //             _items.removeAt(0);
-          //           });
-          //         },
-          //         child: Text(
-          //           "Remove first item",
-          //           style: TextStyle(color: Colors.black, fontSize: 20),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
+
         ],
       ),));
     });
   }
   Widget slideIt(BuildContext context, int index, animation) {
-    int item = _items[index];
     TextStyle? textStyle = Theme.of(context).textTheme.headline4;
     return SlideTransition(
       position: Tween<Offset>(

@@ -61,7 +61,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FromLocationText.text = widget.currentLocation!.title;
+    FromLocationText.text = widget.currentLocation!.address;
     _sessionToken = uuid.v4();
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
@@ -159,39 +159,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 child: Column(
                   children: [
                     EditFromToWidget(),
-                    // GestureDetector(
-                    //     onTap: () {
-                    //       searchPlaceList = [];
-                    //       // Navigator.of(context).pushAndRemoveUntil(
-                    //       //     MaterialPageRoute(
-                    //       //         builder: (BuildContext context) =>
-                    //       //             ConfirmDropLocation(
-                    //       //               fromLocation: startingAddress ??
-                    //       //                   widget.currentLocation!,
-                    //       //               title: confirmDropLocationText,
-                    //       //             )),
-                    //       //     (Route<dynamic> route) => true);
-                    //     },
-                    //     child: Container(
-                    //       margin: const EdgeInsets.all(10),
-                    //       child: Row(
-                    //         children: [
-                    //           SvgPicture.asset(
-                    //             Images.locationPinImage,
-                    //             width: 20,
-                    //             height: 20,
-                    //           ),
-                    //           const SizedBox(
-                    //             width: 5,
-                    //           ),
-                    //           robotoTextWidget(
-                    //               textval: pickOnMapText,
-                    //               colorval: AppColor.blue,
-                    //               sizeval: 14,
-                    //               fontWeight: FontWeight.w200)
-                    //         ],
-                    //       ),
-                    //     )),
                   ],
                 )),
             Expanded(
@@ -214,7 +181,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           if (startFocusNode.hasFocus) {
                             setState(() {
                               // startPosition = details.result;
-                              FromLocationText.text = details.result!.name!;
+                              FromLocationText.text = details.result!.adrAddress!;
                               startingAddress = SearchPlaceModel(
                                   id: searchPlaceList[index].id,
                                   address: details.result!.formattedAddress!,
@@ -235,14 +202,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                             )),
                                     (Route<dynamic> route) => true);
                             setState(() {
-                              FromLocationText.text = startingAddress!.title;
+                              FromLocationText.text = startingAddress!.address;
 
                               _isVisible = false;
                             });
                           } else {
                             setState(() {
                               // endPosition = details.result;
-                              ToLocationText.text = details.result!.name!;
+                              ToLocationText.text = details.result!.adrAddress!;
                               endAddress = SearchPlaceModel(
                                   id: searchPlaceList[index].id,
                                   address: details.result!.formattedAddress!,
@@ -263,7 +230,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                             )),
                                     (Route<dynamic> route) => true);
                             setState(() {
-                              ToLocationText.text = endAddress!.title;
+                              ToLocationText.text = endAddress!.address;
                               _isVisible = false;
                             });
 
@@ -275,7 +242,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           if (startFocusNode.hasFocus) {
                             setState(() {
                               FromLocationText.text =
-                                  searchPlaceList[index].title;
+                                  searchPlaceList[index].address;
                               startingAddress = searchPlaceList[index];
                               //  searchPlaceList = [];
                               // _isVisible = false;
@@ -290,7 +257,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                             )),
                                     (Route<dynamic> route) => true);
                             setState(() {
-                              FromLocationText.text = startingAddress!.title;
+                              FromLocationText.text = startingAddress!.address;
                               _isVisible = false;
                             });
 
@@ -301,7 +268,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           } else {
                             setState(()  {
                               ToLocationText.text =
-                                  searchPlaceList[index].title;
+                                  searchPlaceList[index].address;
                               endAddress = searchPlaceList[index];
                               //    searchPlaceList = [];
                               //   _isVisible = false;
@@ -317,7 +284,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                             )),
                                     (Route<dynamic> route) => true);
                             setState(() {
-                              ToLocationText.text = endAddress!.title;
+                              ToLocationText.text = endAddress!.address;
                               //  searchPlaceList = [];
                               _isVisible = false;
                             });

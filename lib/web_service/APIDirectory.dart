@@ -60,6 +60,9 @@ searchDriver() {
 startTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/startUserTrip');
 }
+cancelTrip() {
+  return Uri.parse('${getBaseURL()}/userTrip/cancelUserTrip');
+}
 
 
 EditFavouriteAddressdata(){
