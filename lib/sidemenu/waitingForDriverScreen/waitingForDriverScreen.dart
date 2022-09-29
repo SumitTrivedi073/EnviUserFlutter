@@ -1,7 +1,7 @@
 import 'package:envi/UiWidget/cardbanner.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
-import 'package:envi/uiwidget/mapDirectionWidget_With_Driver.dart';
+import 'package:envi/uiwidget/mapDirectionWidgetPickup.dart';
 import 'package:envi/uiwidget/otpViewWidget.dart';
 import 'package:envi/uiwidget/timerbutton.dart';
 import 'package:envi/web_service/Constant.dart';
@@ -14,6 +14,7 @@ import '../../provider/model/tripDataModel.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/driverDetailWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../onRide/onRideWidget.dart';
 
 class WaitingForDriverScreen extends StatefulWidget {
   const WaitingForDriverScreen({Key? key}) : super(key: key);
@@ -31,9 +32,16 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
         child: Consumer<firestoreLiveTripDataNotifier>(
           builder: (context, value, child) {
             if (value.liveTripData != null) {
+              if(value.liveTripData!.tripStatus == TripStatusOnboarding){
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        const OnRideWidget()),
+                        (Route<dynamic> route) => false);
+              }
               return Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
-                MapDirectionWidgetWithDriver(
+                MapDirectionWidgetPickup(
                   liveTripData: value.liveTripData!,
                 ),
                 Column(children: [

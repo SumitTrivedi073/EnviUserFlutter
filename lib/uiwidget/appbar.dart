@@ -32,6 +32,7 @@ class _AppBarPageState extends State<AppBarWidget> {
     // TODO: implement build
     return Container(
           height: 150,
+          margin: EdgeInsets.only(left: 10,right: 10),
           child: Stack(
             children: <Widget>[
               Positioned(

@@ -34,7 +34,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30,left: 10,right: 10),
       child: Stack(
         children: <Widget>[
           Card(

@@ -3,12 +3,14 @@ import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../uiwidget/mappagescreen.dart';
 import '../../web_service/Constant.dart';
+import '../onRide/onRideWidget.dart';
 import '../waitingForDriverScreen/waitingForDriverScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,6 +22,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late SharedPreferences sharedPreferences;
+  late String name="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserName();
+  }
   @override
   Widget build(BuildContext context) {
     return Consumer<firestoreLiveTripDataNotifier>(
@@ -36,7 +48,13 @@ class _HomePageState extends State<HomePage> {
                     builder: (BuildContext context) =>
                         const WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
-          }
+          }else if(value.liveTripData!.tripStatus == TripStatusOnboarding){
+           Navigator.of(context).pushAndRemoveUntil(
+               MaterialPageRoute(
+                   builder: (BuildContext context) =>
+                   const OnRideWidget()),
+                   (Route<dynamic> route) => false);
+         }
 
 
       }
@@ -48,9 +66,9 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               AppBarWidget(),
-              const CardBanner(
-                  title: 'Connecting Driver',
-                  image: 'assets/images/connecting_driver_img.png'),
+               CardBanner(
+                  title: 'Welcome $name',
+                  image: 'assets/images/welcome_card_dashboard.png'),
 
               /*PaymentModeOptionWidget(
               strpaymentOptions: "qr_code,online,cash",
@@ -61,6 +79,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ]),
       );
+    });
+  }
+
+  Future<void> getUserName() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    name = sharedPreferences.getString(LoginName)!;
+    setState(() {
+
     });
   }
 }
