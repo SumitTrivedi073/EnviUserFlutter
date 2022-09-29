@@ -1,16 +1,17 @@
 import 'package:envi/UiWidget/cardbanner.dart';
+import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/mapDirectionWidget_With_Driver.dart';
+import 'package:envi/uiwidget/otpViewWidget.dart';
 import 'package:envi/uiwidget/timerbutton.dart';
+import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../provider/model/tripDataModel.dart';
 import '../../theme/color.dart';
-import '../../theme/string.dart';
 import '../../uiwidget/driverDetailWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 
@@ -38,9 +39,13 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                 Column(children: [
                   const AppBarInsideWidget(title: "Envi"),
                   const SizedBox(height: 5),
-                  const CardBanner(
-                      title: 'Connecting Driver',
-                      image: 'assets/images/connecting_driver_img.png'),
+                  getCardBanner(value.liveTripData!),
+                  const Align(
+                    alignment: Alignment.topRight,
+                    child: OTPView(
+                      otp: "3592",
+                    ),
+                  ),
                   const Spacer(),
                   TimerButton(
                     liveTripData: value.liveTripData!,
@@ -63,6 +68,22 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+  }
+
+  Widget getCardBanner(TripDataModel liveTripData) {
+    if (liveTripData.tripStatus == TripStatusArrived) {
+      return  CardBanner(
+          title: Driverarrived,
+          image: 'assets/images/driver_arrived_img.png');
+    } else if (liveTripData.tripStatus == TripStatusAlloted) {
+      return  CardBanner(
+          title: DriverOnTheWay,
+          image: 'assets/images/driver_on_way.png');
+    } else {
+     return  CardBanner(
+          title: ContactingDriver,
+          image: 'assets/images/connecting_driver_img.png');
+    }
   }
 }
 
@@ -93,7 +114,7 @@ Widget FromToData(TripDataModel liveTripData) {
                       Flexible(
                           child: Wrap(children: [
                         Container(
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
                             textval: liveTripData
                                 .tripInfo!.pickupLocation!.pickupAddress

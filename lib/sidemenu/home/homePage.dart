@@ -28,15 +28,18 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           print("liveTripData===>${value.liveTripData!.tripStatus}");
-          if (value.liveTripData!.tripStatus == TripStatusRequest ||
-              value.liveTripData!.tripStatus == TripStatusAlloted) {
+         if (value.liveTripData!.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripStatus == TripStatusAlloted||
+             value.liveTripData!.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
                         const WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
           }
-        }
+
+
+      }
       });
       return Scaffold(
         drawer: NavigationDrawer(),

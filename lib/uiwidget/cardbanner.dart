@@ -1,6 +1,8 @@
 import 'package:envi/theme/color.dart';
 import 'package:flutter/material.dart';
 
+import '../theme/string.dart';
+
 class CardBanner extends StatefulWidget {
   final String? title, image;
 
@@ -32,11 +34,7 @@ class _CardBannerPageState extends State<CardBanner> {
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
                   widget.title.toString(),
-                  style: const TextStyle(
-                      color: AppColor.black,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18),
+                  style: getTextStyle(widget.title.toString()),
                 ),
               ),
               Image.asset(
@@ -46,5 +44,20 @@ class _CardBannerPageState extends State<CardBanner> {
             ],
           )),
     );
+  }
+
+  getTextStyle(String title) {
+    if(title == Driverarrived) {
+      return const TextStyle(
+          color: AppColor.red,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w800,
+          fontSize: 18);
+    }
+    return  const TextStyle(
+        color: AppColor.black,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w800,
+        fontSize: 18);
   }
 }
