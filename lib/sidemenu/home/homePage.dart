@@ -8,6 +8,8 @@ import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../uiwidget/mappagescreen.dart';
+import '../../web_service/Constant.dart';
+import '../waitingForDriverScreen/waitingForDriverScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -25,8 +27,19 @@ class _HomePageState extends State<HomePage> {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          print(value.liveTripData);
-        }
+          print("liveTripData===>${value.liveTripData!.tripStatus}");
+         if (value.liveTripData!.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripStatus == TripStatusAlloted||
+             value.liveTripData!.tripStatus == TripStatusArrived) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        const WaitingForDriverScreen()),
+                (Route<dynamic> route) => false);
+          }
+
+
+      }
       });
       return Scaffold(
         drawer: NavigationDrawer(),
@@ -35,13 +48,15 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               AppBarWidget(),
-              CardBanner(),
+              const CardBanner(
+                  title: 'Connecting Driver',
+                  image: 'assets/images/connecting_driver_img.png'),
 
               /*PaymentModeOptionWidget(
               strpaymentOptions: "qr_code,online,cash",
               selectedOption: "qr_code",
             )*/
-              ScheduleListAlertConsumer()
+              const ScheduleListAlertConsumer()
             ],
           ),
         ]),

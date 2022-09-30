@@ -1,4 +1,5 @@
 import 'package:envi/sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
+import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
     // TODO: implement build
     return Container(
       height: 140,
+      margin: EdgeInsets.only(left: 10,right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,

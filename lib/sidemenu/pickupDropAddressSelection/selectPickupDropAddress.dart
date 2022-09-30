@@ -342,39 +342,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 child: Column(
                   children: [
                     EditFromToWidget(),
-                    // GestureDetector(
-                    //     onTap: () {
-                    //       searchPlaceList = [];
-                    //       // Navigator.of(context).pushAndRemoveUntil(
-                    //       //     MaterialPageRoute(
-                    //       //         builder: (BuildContext context) =>
-                    //       //             ConfirmDropLocation(
-                    //       //               fromLocation: startingAddress ??
-                    //       //                   widget.currentLocation!,
-                    //       //               title: confirmDropLocationText,
-                    //       //             )),
-                    //       //     (Route<dynamic> route) => true);
-                    //     },
-                    //     child: Container(
-                    //       margin: const EdgeInsets.all(10),
-                    //       child: Row(
-                    //         children: [
-                    //           SvgPicture.asset(
-                    //             Images.locationPinImage,
-                    //             width: 20,
-                    //             height: 20,
-                    //           ),
-                    //           const SizedBox(
-                    //             width: 5,
-                    //           ),
-                    //           robotoTextWidget(
-                    //               textval: pickOnMapText,
-                    //               colorval: AppColor.blue,
-                    //               sizeval: 14,
-                    //               fontWeight: FontWeight.w200)
-                    //         ],
-                    //       ),
-                    //     )),
                   ],
                 )),
             Expanded(
