@@ -1,17 +1,11 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 part of 'database.dart';
 
-
 // **************************************************************************
 // FloorGenerator
 // **************************************************************************
 
 // ignore: avoid_classes_with_only_static_members
-
-
-
-
-
 
 class $FloorFlutterDatabase {
   /// Creates a database builder for a persistent database.
@@ -110,14 +104,13 @@ class _$FavoritesDataDao extends FavoritesDataDao {
             'FavoritesData',
             (FavoritesData item) => <String, Object?>{
                   'id': item.id,
-              'identifier': item.identifier,
+                  'identifier': item.identifier,
                   'address': item.address,
-                  'isFavourite': item.isFavourite ,
-                  'latitude':item.latitude,
-                  'longitude':item.longitude,
-                  'title':item.title,
-              'timestamp': _dateTimeConverter.encode(item.timestamp),
-
+                  'isFavourite': item.isFavourite,
+                  'latitude': item.latitude,
+                  'longitude': item.longitude,
+                  'title': item.title,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp),
                 },
             changeListener),
         _taskUpdateAdapter = UpdateAdapter(
@@ -125,34 +118,30 @@ class _$FavoritesDataDao extends FavoritesDataDao {
             'FavoritesData',
             ['id'],
             (FavoritesData item) => <String, Object?>{
-              'id': item.id,
-              'identifier': item.identifier,
-              'address': item.address,
-              'isFavourite': item.isFavourite ,
-              'latitude':item.latitude,
-              'longitude':item.longitude,
-              'title':item.title,
-              'timestamp': _dateTimeConverter.encode(item.timestamp),
-
-
-            },
+                  'id': item.id,
+                  'identifier': item.identifier,
+                  'address': item.address,
+                  'isFavourite': item.isFavourite,
+                  'latitude': item.latitude,
+                  'longitude': item.longitude,
+                  'title': item.title,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp),
+                },
             changeListener),
         _taskDeletionAdapter = DeletionAdapter(
             database,
             'FavoritesData',
             ['id'],
             (FavoritesData item) => <String, Object?>{
-              'id': item.id,
-              'identifier': item.identifier,
-              'address': item.address,
-              'isFavourite': item.isFavourite ,
-              'latitude':item.latitude,
-              'longitude':item.longitude,
-              'title':item.title,
-              'timestamp': _dateTimeConverter.encode(item.timestamp),
-
-
-            },
+                  'id': item.id,
+                  'identifier': item.identifier,
+                  'address': item.address,
+                  'isFavourite': item.isFavourite,
+                  'latitude': item.latitude,
+                  'longitude': item.longitude,
+                  'title': item.title,
+                  'timestamp': _dateTimeConverter.encode(item.timestamp),
+                },
             changeListener);
 
   final sqflite.DatabaseExecutor database;
@@ -172,89 +161,93 @@ class _$FavoritesDataDao extends FavoritesDataDao {
     return _queryAdapter.query('SELECT * FROM FavoritesData WHERE id = ?1',
         mapper: (Map<String, Object?> row) => FavoritesData(
             row['id'] as int?,
-
-          row['identifier'] as String,
+            row['identifier'] as String,
             row['address'] as String,
             row['isFavourite'] as String,
-
             row['latitude'] as String,
-          row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
+            row['longitude'] as String,
+            row['title'] as String,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [id]);
   }
+
   @override
   Future<FavoritesData?> findByIdentifier(String id) async {
-    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE identifier = ?1',
+    return _queryAdapter.query(
+        'SELECT * FROM FavoritesData WHERE identifier = ?1',
         mapper: (Map<String, Object?> row) => FavoritesData(
-          row['id'] as int?,
-
-          row['identifier'] as String,
-          row['address'] as String,
-          row['isFavourite'] as String,
-
-          row['latitude'] as String,
-          row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
+            row['id'] as int?,
+            row['identifier'] as String,
+            row['address'] as String,
+            row['isFavourite'] as String,
+            row['latitude'] as String,
+            row['longitude'] as String,
+            row['title'] as String,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [id]);
   }
+
   @override
   Future<List<FavoritesData>> findAllTasks() async {
-    return _queryAdapter.queryList('SELECT * FROM FavoritesData',
-        mapper: (Map<String, Object?> row) => FavoritesData(
+    return _queryAdapter.queryList(
+      'SELECT * FROM FavoritesData',
+      mapper: (Map<String, Object?> row) => FavoritesData(
           row['id'] as int?,
-
           row['identifier'] as String,
           row['address'] as String,
           row['isFavourite'] as String,
-
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),);
+          row['title'] as String,
+          _dateTimeConverter.decode(row['timestamp'] as int)),
+    );
   }
+
   @override
   Future<List<FavoritesData>> getFavoriate() async {
-    return _queryAdapter.queryList('SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'',
-        mapper: (Map<String, Object?> row) => FavoritesData(
+    return _queryAdapter.queryList(
+      'SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'',
+      mapper: (Map<String, Object?> row) => FavoritesData(
           row['id'] as int?,
-
           row['identifier'] as String,
           row['address'] as String,
           row['isFavourite'] as String,
-
           row['latitude'] as String,
           row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),);
+          row['title'] as String,
+          _dateTimeConverter.decode(row['timestamp'] as int)),
+    );
   }
+
   @override
   Stream<List<FavoritesData>> findAllTasksAsStream() {
     return _queryAdapter.queryListStream('SELECT * FROM FavoritesData',
         mapper: (Map<String, Object?> row) => FavoritesData(
-          row['id'] as int?,
-
-          row['identifier'] as String,
-          row['address'] as String,
-          row['isFavourite'] as String,
-
-          row['latitude'] as String,
-          row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
+            row['id'] as int?,
+            row['identifier'] as String,
+            row['address'] as String,
+            row['isFavourite'] as String,
+            row['latitude'] as String,
+            row['longitude'] as String,
+            row['title'] as String,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
         queryableName: 'FavoritesData',
         isView: false);
   }
 
   @override
   Stream<List<FavoritesData>> findAllTasksByTypeAsStream(String type) {
-    return _queryAdapter.queryListStream('SELECT * FROM FavoritesData WHERE type = ?1',
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM FavoritesData WHERE type = ?1',
         mapper: (Map<String, Object?> row) => FavoritesData(
-          row['id'] as int?,
-
-          row['identifier'] as String,
-          row['address'] as String,
-          row['isFavourite'] as String,
-
-          row['latitude'] as String,
-          row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
+            row['id'] as int?,
+            row['identifier'] as String,
+            row['address'] as String,
+            row['isFavourite'] as String,
+            row['latitude'] as String,
+            row['longitude'] as String,
+            row['title'] as String,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [type],
         queryableName: 'FavoritesData',
         isView: false);
@@ -289,36 +282,56 @@ class _$FavoritesDataDao extends FavoritesDataDao {
   Future<void> deleteTasks(List<FavoritesData> tasks) async {
     await _taskDeletionAdapter.deleteList(tasks);
   }
+
   @override
   Future<FavoritesData?> findTaskByTitle(String title) async {
     return _queryAdapter.query('SELECT * FROM FavoritesData WHERE title = ?1',
         mapper: (Map<String, Object?> row) => FavoritesData(
-          row['id'] as int?,
-
-          row['identifier'] as String,
-          row['address'] as String,
-          row['isFavourite'] as String,
-
-          row['latitude'] as String,
-          row['longitude'] as String,
-          row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int),),
+              row['id'] as int?,
+              row['identifier'] as String,
+              row['address'] as String,
+              row['isFavourite'] as String,
+              row['latitude'] as String,
+              row['longitude'] as String,
+              row['title'] as String,
+              _dateTimeConverter.decode(row['timestamp'] as int),
+            ),
         arguments: [title]);
   }
+
   @override
   Future<FavoritesData?> findDataByaddressg(String address) async {
-
-    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE address = \'?1\'',
+    return _queryAdapter.query('SELECT * FROM FavoritesData WHERE address = ?',
         mapper: (Map<String, Object?> row) => FavoritesData(
             row['id'] as int?,
-
             row['identifier'] as String,
             row['address'] as String,
             row['isFavourite'] as String,
-
             row['latitude'] as String,
             row['longitude'] as String,
-            row['title'] as String,_dateTimeConverter.decode(row['timestamp'] as int)),
+            row['title'] as String,
+            _dateTimeConverter.decode(row['timestamp'] as int)),
         arguments: [address]);
+  }
+
+ 
+
+  @override
+  Future<List<FavoritesData?>> displayAscByAddress(String address) async{
+     return _queryAdapter.queryList(
+      'SELECT * FROM FavoritesData WHERE  address LIKE ? ORDER BY timestamp ASC LIMIT 15',
+      mapper: (Map<String, Object?> row) => FavoritesData(
+          row['id'] as int?,
+          row['identifier'] as String,
+          row['address'] as String,
+          row['isFavourite'] as String,
+          row['latitude'] as String,
+          row['longitude'] as String,
+          row['title'] as String,
+          _dateTimeConverter.decode(row['timestamp'] as int)),
+         arguments: ['%$address%']
+          );
+    
   }
 }
 

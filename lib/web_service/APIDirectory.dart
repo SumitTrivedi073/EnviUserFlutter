@@ -74,3 +74,7 @@ AddFavouriteAddressdata(){
 DeleteFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
 }
+
+updatePaymentMode(){
+  return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
+}

@@ -28,8 +28,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
   List<FavoritesData> arraddress = [];
   late final FavoritesDataDao dao;
-late final FavoritesData? homeDetail;
-  late final FavoritesData? workDetail;
+ FavoritesData? homeDetail = null;
+   FavoritesData? workDetail = null;
   @override
   void initState() {
     super.initState();
@@ -56,8 +56,6 @@ Future<void> getdata() async {
     });
     //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
     print("==========${arraddress}");
-
-
   }
 void comebackFromADD(String a){
 
@@ -249,17 +247,15 @@ void comebackFromADD(String a){
                   const SizedBox(
                     width: 22,
                   ),
-
-                  Container( width:
-                  MediaQuery.of(context).size.width -98,
-                  child: robotoTextWidget(
-                    textval: arraddress[index].address,
-                    colorval: AppColor.darkgrey,
-                    sizeval: 14.0,
-                    fontWeight: FontWeight.normal,
-                  ),)
-
-
+                  Container(
+                    width: MediaQuery.of(context).size.width - 98,
+                    child: robotoTextWidget(
+                      textval: arraddress[index].address,
+                      colorval: AppColor.darkgrey,
+                      sizeval: 14.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  )
                 ]),
               ],
             ),
@@ -303,12 +299,17 @@ void comebackFromADD(String a){
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
-                        isforedit: "0",
-                        titleEditable: "1",
-                        data:  homeDetail == null ? FavoritesData.optional(
-title: "Home",address: "",longitude: "0.0",latitude:" 0.0",
-                        ):homeDetail!,
-                      )));
+                            isforedit: "0",
+                            titleEditable: "1",
+                            data: homeDetail == null
+                                ? FavoritesData.optional(
+                                    title: "Home",
+                                    address: "",
+                                    longitude: "0.0",
+                                    latitude: " 0.0",
+                                  )
+                                : homeDetail!,
+                          )));
               print("Tapped a Container");
               getdata();
             },
@@ -346,15 +347,16 @@ title: "Home",address: "",longitude: "0.0",latitude:" 0.0",
                           SizedBox(
                             width: 42,
                           ),
-                          Container( width:
-                          MediaQuery.of(context).size.width -98,
+                          Container(
+                            width: MediaQuery.of(context).size.width - 98,
                             child: robotoTextWidget(
-                              textval: homeDetail == null ? "":homeDetail!.address,
+                              textval:
+                                  homeDetail == null ? "" : homeDetail!.address,
                               colorval: AppColor.darkgrey,
                               sizeval: 14.0,
                               fontWeight: FontWeight.normal,
-                            ),)
-
+                            ),
+                          )
                         ]),
                       ],
                     ),
@@ -421,17 +423,19 @@ getdata();
                             width: 42,
                           ),
                           Container(
-                            width:
-                                MediaQuery.of(context).size.width * (209 / 360),
-                            child:  Container( width:
-                            MediaQuery.of(context).size.width -98,
-                              child: robotoTextWidget(
-                                textval:workDetail == null ? "": workDetail!.address,
-                                colorval: AppColor.darkgrey,
-                                sizeval: 14.0,
-                                fontWeight: FontWeight.normal,
-                              ),)
-                          ),
+                              width: MediaQuery.of(context).size.width *
+                                  (209 / 360),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 98,
+                                child: robotoTextWidget(
+                                  textval: workDetail == null
+                                      ? ""
+                                      : workDetail!.address,
+                                  colorval: AppColor.darkgrey,
+                                  sizeval: 14.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              )),
 
                           // robotoTextWidget(
                           //   textval: "arraddress[index].address",
