@@ -87,3 +87,4 @@ var ContactingDriver = "Contacting Driver…";
 var DriverOnTheWay ="Driver is on the way";
 var Driverarrived = "Driver has arrived";
 var DriverOnRide = "On Ride";
+var SOS = "SOS";

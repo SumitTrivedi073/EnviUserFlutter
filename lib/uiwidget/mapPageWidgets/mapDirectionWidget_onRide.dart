@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -10,8 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vector_math/vector_math.dart';
-
-import '../web_service/Constant.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
+import '../../direction_model/directionModel.dart';
+import '../../web_service/APIDirectory.dart';
+import '../../web_service/Constant.dart';
 
 class MapDirectionWidgetOnRide extends StatefulWidget {
   TripDataModel? liveTripData;
@@ -32,27 +35,27 @@ class _MapDirectionWidgetOnRideState
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
   late LatLng startLocation = LatLng(
-      (widget.liveTripData!.tripInfo!.pickupLocation!.latitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.latitude!
+      (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.latitude
           : 13.197965663195877,
-      (widget.liveTripData!.tripInfo!.pickupLocation!.longitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.longitude!
+      (widget.liveTripData!.tripInfo.pickupLocation.longitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.longitude
           : 77.70646809992469);
 
   late LatLng destinationLocation = LatLng(
-      (widget.liveTripData!.tripInfo!.dropLocation!.latitude != null)
-          ? widget.liveTripData!.tripInfo!.dropLocation!.latitude!
+      (widget.liveTripData!.tripInfo.dropLocation.latitude != null)
+          ? widget.liveTripData!.tripInfo.dropLocation.latitude
           : 13.197965663195877,
-      (widget.liveTripData!.tripInfo!.pickupLocation!.longitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.longitude!
+      (widget.liveTripData!.tripInfo.pickupLocation.longitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.longitude
           : 77.70646809992469);
 
   late LatLng carLocation = LatLng(
-      (widget.liveTripData!.driverLocation!.latitude != null)
-          ? widget.liveTripData!.driverLocation!.latitude!
+      (widget.liveTripData!.driverLocation.latitude != null)
+          ? widget.liveTripData!.driverLocation.latitude
           : 14.063446041067092,
-      (widget.liveTripData!.driverLocation!.longitude != null)
-          ? widget.liveTripData!.driverLocation!.longitude!
+      (widget.liveTripData!.driverLocation.longitude != null)
+          ? widget.liveTripData!.driverLocation.longitude
           : 77.345492878187);
 
   final List<Marker> markers = <Marker>[];
@@ -88,21 +91,32 @@ class _MapDirectionWidgetOnRideState
   getDirections() async {
     List<LatLng> polylineCoordinates = [];
 
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleAPiKey,
-      PointLatLng(startLocation.latitude, startLocation.longitude),
-      PointLatLng(destinationLocation.latitude, destinationLocation.longitude),
-      travelMode: TravelMode.driving,
-    );
 
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    } else {
-      print(result.errorMessage);
+    String request =
+        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
+    var url = Uri.parse(request);
+    dynamic response = await HTTP.get(url);
+    if (response != null && response != null) {
+      if (response.statusCode == 200) {
+        DirectionModel directionModel = DirectionModel.fromJson(json.decode(response.body) );
+        List<PointLatLng> pointLatLng = [];
+
+        for (var i = 0; i < directionModel.routes.length; i++) {
+
+          for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
+            for (var k = 0; k < directionModel.routes[i].legs[j].steps.length; k++) {
+              pointLatLng =   polylinePoints.decodePolyline(directionModel.routes[i].legs[j].steps[k].polyline.points);
+              for (var point in pointLatLng) {
+                polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+              }
+            }
+          }
+        }
+        addPolyLine(polylineCoordinates);
+      } else {
+        throw Exception('Failed to load predictions');
+      }
     }
-    addPolyLine(polylineCoordinates);
   }
 
   double calculateDistance(lat1, lon1, lat2, lon2) {
@@ -123,19 +137,7 @@ class _MapDirectionWidgetOnRideState
     );
     polylines[id] = polyline;
 
-    double totalDistance = 0.0;
-    for (var i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += calculateDistance(
-          polylineCoordinates[i].latitude,
-          polylineCoordinates[i].longitude,
-          polylineCoordinates[i + 1].latitude,
-          polylineCoordinates[i + 1].longitude);
-    }
-    print("totalDistance=======>$totalDistance");
-
-    setState(() {
-      distance = totalDistance;
-    });
+    setState(() {});
   }
 
   @override
@@ -189,8 +191,8 @@ class _MapDirectionWidgetOnRideState
 
     var destinationMarker = Marker(
       //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
+      markerId: MarkerId(destinationLocation.toString()),
+      position: destinationLocation, //position of marker
       infoWindow: const InfoWindow(
         //popup info
         title: 'Destination Location',
@@ -203,7 +205,7 @@ class _MapDirectionWidgetOnRideState
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
     var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
+        markerId: const MarkerId("Driver Location"),
         position: carLocation,
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),

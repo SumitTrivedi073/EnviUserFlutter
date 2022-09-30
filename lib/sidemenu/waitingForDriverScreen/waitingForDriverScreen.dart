@@ -1,7 +1,7 @@
 import 'package:envi/UiWidget/cardbanner.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
-import 'package:envi/uiwidget/mapDirectionWidgetPickup.dart';
+import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidgetPickup.dart';
 import 'package:envi/uiwidget/otpViewWidget.dart';
 import 'package:envi/uiwidget/timerbutton.dart';
 import 'package:envi/web_service/Constant.dart';
@@ -32,7 +32,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
         child: Consumer<firestoreLiveTripDataNotifier>(
           builder: (context, value, child) {
             if (value.liveTripData != null) {
-              if(value.liveTripData!.tripStatus == TripStatusOnboarding){
+              if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
@@ -48,10 +48,10 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                   const AppBarInsideWidget(title: "Envi"),
                   const SizedBox(height: 5),
                   getCardBanner(value.liveTripData!),
-                  const Align(
+                   Align(
                     alignment: Alignment.topRight,
                     child: OTPView(
-                      otp: "3592",
+                      otp: value.liveTripData!.tripInfo.otp
                     ),
                   ),
                   const Spacer(),
@@ -79,11 +79,11 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   Widget getCardBanner(TripDataModel liveTripData) {
-    if (liveTripData.tripStatus == TripStatusArrived) {
+    if (liveTripData.tripInfo.tripStatus == TripStatusArrived) {
       return  CardBanner(
           title: Driverarrived,
           image: 'assets/images/driver_arrived_img.png');
-    } else if (liveTripData.tripStatus == TripStatusAlloted) {
+    } else if (liveTripData.tripInfo.tripStatus == TripStatusAlloted) {
       return  CardBanner(
           title: DriverOnTheWay,
           image: 'assets/images/driver_on_way.png');
@@ -125,7 +125,7 @@ Widget FromToData(TripDataModel liveTripData) {
                           padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
                             textval: liveTripData
-                                .tripInfo!.pickupLocation!.pickupAddress
+                                .tripInfo.pickupLocation.pickupAddress
                                 .toString(),
                             colorval: AppColor.black,
                             sizeval: 16,
@@ -157,7 +157,7 @@ Widget FromToData(TripDataModel liveTripData) {
                           Radius.circular(10.0)), // Set rounded corner radius
                     ),
                     child: robotoTextWidget(
-                      textval: '${liveTripData.priceClass!.distance} Km',
+                      textval: '${liveTripData.tripInfo.priceClass.distance} Km',
                       colorval: AppColor.black,
                       sizeval: 14,
                       fontWeight: FontWeight.normal,
@@ -182,7 +182,7 @@ Widget FromToData(TripDataModel liveTripData) {
                           padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
                             textval: liveTripData
-                                .tripInfo!.dropLocation!.dropAddress
+                                .tripInfo.dropLocation.dropAddress
                                 .toString(),
                             colorval: AppColor.black,
                             sizeval: 16,

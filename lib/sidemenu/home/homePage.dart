@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
-import '../../uiwidget/mappagescreen.dart';
+import '../../uiwidget/mapPageWidgets/mappagescreen.dart';
 import '../../web_service/Constant.dart';
 import '../onRide/onRideWidget.dart';
 import '../waitingForDriverScreen/waitingForDriverScreen.dart';
@@ -39,16 +39,16 @@ class _HomePageState extends State<HomePage> {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          print("liveTripData===>${value.liveTripData!.tripStatus}");
-         if (value.liveTripData!.tripStatus == TripStatusRequest ||
-              value.liveTripData!.tripStatus == TripStatusAlloted||
-             value.liveTripData!.tripStatus == TripStatusArrived) {
+          print("liveTripData===>${value.liveTripData!.tripInfo.tripStatus}");
+         if (value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted||
+             value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        const WaitingForDriverScreen()),
+                        const OnRideWidget()),
                 (Route<dynamic> route) => false);
-          }else if(value.liveTripData!.tripStatus == TripStatusOnboarding){
+          }else if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
            Navigator.of(context).pushAndRemoveUntil(
                MaterialPageRoute(
                    builder: (BuildContext context) =>
