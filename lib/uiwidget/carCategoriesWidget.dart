@@ -48,19 +48,20 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   }
 
   void _firstLoad() async {
-    final response =
-    await ApiCollection.getScheduleEstimationdata(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude, widget.toAddress!.latLng!.latitude,widget.toAddress!.latLng!.longitude);
+    final response = await ApiCollection.getScheduleEstimationdata(
+        widget.fromAddress!.latLng!.latitude,
+        widget.fromAddress!.latLng!.longitude,
+        widget.toAddress!.latLng!.latitude,
+        widget.toAddress!.latLng!.longitude);
     print(response.body);
 
     if (response != null) {
       if (response.statusCode == 200) {
-
         setState(() {
-
-          vehiclePriceClasses =
-              (jsonDecode(response.body)['content']['vehiclePriceClasses'] as List)
-                  .map((i) => vehiclePriceClassesModel.fromJson(i))
-                  .toList();
+          vehiclePriceClasses = (jsonDecode(response.body)['content']
+                  ['vehiclePriceClasses'] as List)
+              .map((i) => vehiclePriceClassesModel.fromJson(i))
+              .toList();
           print(vehiclePriceClasses.length);
         });
       }
@@ -72,107 +73,109 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-        child:  Card(
-          elevation: 5,
-          margin: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Card(
+      elevation: 5,
+      margin: const EdgeInsets.all(5),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: robotoTextWidget(
+                      textval: '${vehiclePriceClasses.length} Ride Option',
+                      colorval: AppColor.black,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w800),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: robotoTextWidget(
-                          textval: '${vehiclePriceClasses.length} Ride Option',
-                          colorval: AppColor.black,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w800),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(children: [
-                          Container(
-                            width: 1,
-                            color: AppColor.darkgrey,
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                if (selectedIndex != 0) {
-                                  carouselController.previousPage();
-                                }
-                              },
-                              icon: Icon(
-                                Icons.arrow_back_ios,
-                                color: (selectedIndex != 0)
-                                    ? Colors.green
-                                    : AppColor.grey,
-                              ))
-                        ]),
-                        Row(children: [
-                          Container(
-                            width: 1,
-                            color: AppColor.darkgrey,
-                          ),
-                          IconButton(
-                              onPressed: () {
-
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.green,
-                              )),
-                          Container(
-                            width: 1,
-                            color: AppColor.grey,
-                          ),
-                        ]),
-                      ],
-                    ),
+                    Row(children: [
+                      Container(
+                        width: 1,
+                        color: AppColor.darkgrey,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            if (selectedIndex != 0) {
+                              carouselController.previousPage();
+                            }
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            color: (selectedIndex != 0)
+                                ? Colors.green
+                                : AppColor.grey,
+                          ))
+                    ]),
+                    Row(children: [
+                      Container(
+                        width: 1,
+                        color: AppColor.darkgrey,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            if (selectedIndex !=
+                                vehiclePriceClasses.length - 1) {
+                              carouselController.nextPage();
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.green,
+                          )),
+                      Container(
+                        width: 1,
+                        color: AppColor.grey,
+                      ),
+                    ]),
                   ],
                 ),
-              ),
-              Container(
-                height: 1,
-                color: AppColor.grey,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                  child: CarouselSlider(
-                    items: List.generate(
-                        vehiclePriceClasses.length, (index) => driverListItems(index)),
-                    carouselController: carouselController,
-                    options: CarouselOptions(
-                      onPageChanged: (index, reason) {
-                        selectedIndex = index;
-                      },
-                      autoPlay: false,
-                    ),
-                  )),
-
-            ],
+              ],
+            ),
           ),
-        ) );
+          Container(
+            height: 1,
+            color: AppColor.grey,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+              child: CarouselSlider(
+            items: List.generate(
+                vehiclePriceClasses.length, (index) => driverListItems(index)),
+            carouselController: carouselController,
+            options: CarouselOptions(
+              scrollPhysics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (index, reason) {
+                selectedIndex = index;
+              },
+              autoPlay: false,
+            ),
+          )),
+        ],
+      ),
+    ));
   }
 
   Widget driverListItems(int index) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         selectedIndex = index;
         print("selectedIndex========>$selectedIndex");
       },
       child: Card(
         margin: const EdgeInsets.all(5),
-        color:  const Color(0xFFE4F3F5),
+        color: const Color(0xFFE4F3F5),
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-
                 Row(
                   children: [
                     SvgPicture.asset(
@@ -186,8 +189,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     Column(
                       children: [
                         robotoTextWidget(
-                            textval:
-                            vehiclePriceClasses[index].type.toString(),
+                            textval: vehiclePriceClasses[index].type.toString(),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w200),
@@ -205,7 +207,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                                 ),
                                 robotoTextWidget(
                                     textval:
-                                    "${vehiclePriceClasses[index].passengerCapacity} People $index",
+                                        "${vehiclePriceClasses[index].passengerCapacity} People $index",
                                     colorval: AppColor.black,
                                     sizeval: 14,
                                     fontWeight: FontWeight.w200)
@@ -222,7 +224,9 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                                   width: 5,
                                 ),
                                 robotoTextWidget(
-                                    textval: vehiclePriceClasses[index].bootSpace.toString(),
+                                    textval: vehiclePriceClasses[index]
+                                        .bootSpace
+                                        .toString(),
                                     colorval: AppColor.black,
                                     sizeval: 14,
                                     fontWeight: FontWeight.w200)
@@ -266,8 +270,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval:
-                        "₹${vehiclePriceClasses[index].total_fare}",
+                        textval: "₹${vehiclePriceClasses[index].total_fare}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -277,8 +280,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     Text(
                       getTotalPrice(
                           vehiclePriceClasses[index].total_fare!.toInt(),
-                          vehiclePriceClasses[index].seller_discount!
-                              .toInt()),
+                          vehiclePriceClasses[index].seller_discount!.toInt()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -301,7 +303,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                             fontWeight: FontWeight.w800),
                         robotoTextWidget(
                             textval:
-                            '${vehiclePriceClasses[index].discountPercent.toString()} % Off',
+                                '${vehiclePriceClasses[index].discountPercent.toString()} % Off',
                             colorval: AppColor.purple,
                             sizeval: 13,
                             fontWeight: FontWeight.w400),

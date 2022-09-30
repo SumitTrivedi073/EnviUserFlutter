@@ -92,20 +92,26 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         dateMask: 'd MMM, yyyy',
                         controller: _controller1,
                         //initialValue: _initialValue,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
+                        firstDate: DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            DateTime.now().hour),
+                        lastDate: DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day + 10),
+                        icon: const Icon(Icons.event),
                         dateLabelText: pickupdate,
-                        // timeLabelText: "Hour",
+                        // timeLabelText: "Hour"
+
                         //use24HourFormat: false,
-                        //locale: Locale('pt', 'BR'),
+
                         selectableDayPredicate: (date) {
                           if (date.weekday == 6 || date.weekday == 7) {
                             return false;
                           }
                           return true;
                         },
-                        
+
                         //  onChanged: (val) => setState(() => _valueChanged1 = val),
                         // validator: (val) {
                         //   setState(() => _valueToValidate1 = val ?? '');
@@ -152,8 +158,11 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         controller: _controller2,
                         //initialValue: _initialValue,
                         // firstDate: DateTime(2000),
+                        initialTime: TimeOfDay(
+                            hour: DateTime.now().hour,
+                            minute: DateTime.now().minute),
                         // lastDate: DateTime(2100),
-                        icon: Icon(Icons.event),
+                        icon: Icon(Icons.access_time),
                         //dateLabelText: pickuptime,
                         timeLabelText: pickuptime,
                         //use24HourFormat: false,
