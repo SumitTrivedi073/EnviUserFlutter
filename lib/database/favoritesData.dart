@@ -8,7 +8,6 @@ class FavoritesData {
   final String identifier;
 final String title;
   final String address;
-
   final String isFavourite;
 final String longitude;
   final String latitude;
