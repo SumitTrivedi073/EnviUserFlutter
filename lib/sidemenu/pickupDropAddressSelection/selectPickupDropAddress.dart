@@ -24,6 +24,7 @@ import 'package:uuid/uuid.dart';
 import '../../database/database.dart';
 import '../../database/favoritesData.dart';
 import '../../database/favoritesDataDao.dart';
+import '../../enum/BookingTiming.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
