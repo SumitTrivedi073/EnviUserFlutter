@@ -187,7 +187,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     await getBytesFromAsset('assets/images/car-map.png', 70);
 
     var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
+        markerId:  MarkerId(carLocation.toString()),
         position: carLocation,
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
@@ -200,7 +200,6 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     markers.add(pickupMarker);
     markers.add(carMarker);
-
     mapMarkerSink.add(markers);
   }
 
