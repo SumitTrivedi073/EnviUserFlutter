@@ -37,11 +37,14 @@ import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 
 class SelectPickupDropAddress extends StatefulWidget {
   const SelectPickupDropAddress(
-      {Key? key, required this.title,required this.tripType, this.currentLocation})
+      {Key? key,
+      required this.title,
+      required this.tripType,
+      this.currentLocation})
       : super(key: key);
   final String title;
   final SearchPlaceModel? currentLocation;
-final BookingTiming tripType;
+  final BookingTiming tripType;
   @override
   State<SelectPickupDropAddress> createState() =>
       _SelectPickupDropAddressState();
@@ -559,14 +562,28 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               addressToUpdate: endAddress);
                         }
                         //createOrder();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => SearchDriver(
-                                      fromAddress: startingAddress ??
-                                          widget.currentLocation,
-                                      toAddress: endAddress,
-                                    )),
-                            (Route<dynamic> route) => true);
+
+                        if (widget.tripType == BookingTiming.now) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SearchDriver(
+                                        fromAddress: startingAddress ??
+                                            widget.currentLocation,
+                                        toAddress: endAddress,
+                                      )),
+                              (Route<dynamic> route) => true);
+                        } else {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      BookScheduleTrip(
+                                        fromAddress: startingAddress ??
+                                            widget.currentLocation,
+                                        toAddress: endAddress,
+                                      )),
+                              (Route<dynamic> route) => true);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
