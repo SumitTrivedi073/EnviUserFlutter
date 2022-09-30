@@ -1,4 +1,3 @@
-
 import 'package:floor/floor.dart';
 
 import 'favoritesData.dart';
@@ -37,7 +36,8 @@ abstract class FavoritesDataDao {
   @Query('SELECT * FROM FavoritesData WHERE identifier = :identifier')
   Future<FavoritesData?> findByIdentifier(String identifier);
 
-  @Query('SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'')
+  @Query(
+      'SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'')
   Future<List<FavoritesData>> getFavoriate();
   @Query('SELECT * FROM FavoritesData WHERE title = :title')
   Future<FavoritesData?> findTaskByTitle(String title);
@@ -45,4 +45,7 @@ abstract class FavoritesDataDao {
   @Query('SELECT * FROM FavoritesData WHERE address = :address')
   Future<FavoritesData?> findDataByaddressg(String address);
 
+  @Query(
+      'Select * FROM FavoritesData WHERE address  LIKE %address% ORDER BY timestamp ASC LIMIT 15 ')
+  Future<List<FavoritesData?>> displayAscByAddress(String address);
 }
