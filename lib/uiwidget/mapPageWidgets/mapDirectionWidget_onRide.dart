@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -10,50 +11,59 @@ import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
+import '../../direction_model/directionModel.dart';
+import '../../web_service/APIDirectory.dart';
+import '../../web_service/Constant.dart';
 
-import '../web_service/Constant.dart';
-
-class MapDirectionWidgetWithDriver extends StatefulWidget {
+class MapDirectionWidgetOnRide extends StatefulWidget {
   TripDataModel? liveTripData;
 
-  MapDirectionWidgetWithDriver({Key? key, this.liveTripData}) : super(key: key);
+  MapDirectionWidgetOnRide({Key? key, this.liveTripData}) : super(key: key);
 
   @override
-  _MapDirectionWidgetWithDriverState createState() =>
-      _MapDirectionWidgetWithDriverState();
+  _MapDirectionWidgetOnRideState createState() =>
+      _MapDirectionWidgetOnRideState();
 }
 
-class _MapDirectionWidgetWithDriverState
-    extends State<MapDirectionWidgetWithDriver> with TickerProviderStateMixin {
+class _MapDirectionWidgetOnRideState
+    extends State<MapDirectionWidgetOnRide> with TickerProviderStateMixin {
   GoogleMapController? mapController; //contrller for Google map
   PolylinePoints polylinePoints = PolylinePoints();
-
   String googleAPiKey = GoogleApiKey;
-  late Timer timer;
-  int count = 1;
 
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
   late LatLng startLocation = LatLng(
-      (widget.liveTripData!.tripInfo!.pickupLocation!.latitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.latitude!
+      (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.latitude
           : 13.197965663195877,
-      (widget.liveTripData!.tripInfo!.pickupLocation!.longitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.longitude!
+      (widget.liveTripData!.tripInfo.pickupLocation.longitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.longitude
           : 77.70646809992469);
-  
+
+  late LatLng destinationLocation = LatLng(
+      (widget.liveTripData!.tripInfo.dropLocation.latitude != null)
+          ? widget.liveTripData!.tripInfo.dropLocation.latitude
+          : 13.197965663195877,
+      (widget.liveTripData!.tripInfo.pickupLocation.longitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.longitude
+          : 77.70646809992469);
+
   late LatLng carLocation = LatLng(
-      (widget.liveTripData!.driverLocation!.latitude != null)
-          ? widget.liveTripData!.driverLocation!.latitude!
+      (widget.liveTripData!.driverLocation.latitude != null)
+          ? widget.liveTripData!.driverLocation.latitude
           : 14.063446041067092,
-      (widget.liveTripData!.driverLocation!.longitude != null)
-          ? widget.liveTripData!.driverLocation!.longitude!
+      (widget.liveTripData!.driverLocation.longitude != null)
+          ? widget.liveTripData!.driverLocation.longitude
           : 77.345492878187);
 
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
+
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
+
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
   double distance = 0.0;
 
@@ -68,8 +78,8 @@ class _MapDirectionWidgetWithDriverState
       animateCar(
         carLocation.latitude,
         carLocation.longitude,
-        startLocation.latitude,
-        startLocation.longitude,
+        destinationLocation.latitude,
+        destinationLocation.longitude,
         mapMarkerSink,
         this,
         mapController!,
@@ -81,31 +91,39 @@ class _MapDirectionWidgetWithDriverState
   getDirections() async {
     List<LatLng> polylineCoordinates = [];
 
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleAPiKey,
-      PointLatLng(startLocation.latitude, startLocation.longitude),
-      PointLatLng(carLocation.latitude, carLocation.longitude),
-      travelMode: TravelMode.driving,
-    );
 
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+    String request =
+        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
+    var url = Uri.parse(request);
+    dynamic response = await HTTP.get(url);
+    if (response != null && response != null) {
+      if (response.statusCode == 200) {
+        DirectionModel directionModel = DirectionModel.fromJson(json.decode(response.body) );
+        List<PointLatLng> pointLatLng = [];
 
-    } else {
-      print(result.errorMessage);
+        for (var i = 0; i < directionModel.routes.length; i++) {
+
+          for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
+            for (var k = 0; k < directionModel.routes[i].legs[j].steps.length; k++) {
+              pointLatLng =   polylinePoints.decodePolyline(directionModel.routes[i].legs[j].steps[k].polyline.points);
+              for (var point in pointLatLng) {
+                polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+              }
+            }
+          }
+        }
+        addPolyLine(polylineCoordinates);
+      } else {
+        throw Exception('Failed to load predictions');
+      }
     }
-    addPolyLine(polylineCoordinates);
-    startTimer();
-
   }
 
-  double calculateDistance(lat1, lon1, lat2, lon2){
+  double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
-    var a = 0.5 - cos((lat2 - lat1) * p)/2 +
-        cos(lat1 * p) * cos(lat2 * p) *
-            (1 - cos((lon2 - lon1) * p))/2;
+    var a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
 
@@ -119,19 +137,7 @@ class _MapDirectionWidgetWithDriverState
     );
     polylines[id] = polyline;
 
-    double totalDistance = 0.0;
-    for(var i = 0; i < polylineCoordinates.length-1; i++){
-      totalDistance += calculateDistance(
-          polylineCoordinates[i].latitude,
-          polylineCoordinates[i].longitude,
-          polylineCoordinates[i+1].latitude,
-          polylineCoordinates[i+1].longitude);
-    }
-    print("totalDistance=======>$totalDistance");
-
-    setState(() {
-      distance = totalDistance;
-    });
+    setState(() {});
   }
 
   @override
@@ -183,24 +189,35 @@ class _MapDirectionWidgetWithDriverState
           BitmapDescriptor.hueGreen), //Icon for Marker
     );
 
+    var destinationMarker = Marker(
+      //add start location marker
+      markerId: MarkerId(destinationLocation.toString()),
+      position: destinationLocation, //position of marker
+      infoWindow: const InfoWindow(
+        //popup info
+        title: 'Destination Location',
+      ),
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueRed), //Icon for Marker
+    );
 
     final Uint8List markerIcon =
-    await getBytesFromAsset('assets/images/car-map.png', 70);
+        await getBytesFromAsset('assets/images/car-map.png', 70);
 
     var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
+        markerId: const MarkerId("Driver Location"),
         position: carLocation,
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carLocation,startLocation),
+        rotation: getBearing(carLocation, startLocation),
         draggable: false);
-
 
     //Adding a delay and then showing the marker on screen
     await Future.delayed(const Duration(milliseconds: 500));
 
     markers.add(pickupMarker);
+    markers.add(destinationMarker);
     markers.add(carMarker);
 
     mapMarkerSink.add(markers);
@@ -306,19 +323,5 @@ class _MapDirectionWidgetWithDriverState
       return (90 - degrees(atan(lng / lat))) + 270;
     }
     return -1;
-  }
-
-  void startTimer() {
-    timer = Timer.periodic(
-        const Duration(minutes: 5),
-        (Timer t) => {
-              if (count <= 10) {getDirections(), count++}
-            });
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 }

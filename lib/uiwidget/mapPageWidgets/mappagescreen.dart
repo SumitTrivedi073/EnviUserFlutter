@@ -9,8 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../theme/string.dart';
-import 'frombookschedule.dart';
+import '../../theme/string.dart';
+import '../frombookschedule.dart';
 
 void main() {
   runApp(MaterialApp(home: MyHomePage()));
