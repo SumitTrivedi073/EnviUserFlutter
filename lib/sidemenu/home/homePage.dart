@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        const OnRideWidget()),
+                        const WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
           }else if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
            Navigator.of(context).pushAndRemoveUntil(
