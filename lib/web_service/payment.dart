@@ -15,7 +15,7 @@ class PaymentService {
     dynamic res = await HTTP.post(updatePaymentMode(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);
-      // print("jsonData========>"+jsonData);
+     
       
     } else {
       throw "Can't update.";
