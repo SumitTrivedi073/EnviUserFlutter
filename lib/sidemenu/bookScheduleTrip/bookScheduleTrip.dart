@@ -42,8 +42,9 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
   }
 
-  TextEditingController _controller1 =
+  final TextEditingController _controller1 =
       TextEditingController(text: DateTime.now().toString());
+  final TextEditingController _controller2 = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -104,6 +105,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                           }
                           return true;
                         },
+                        
                         //  onChanged: (val) => setState(() => _valueChanged1 = val),
                         // validator: (val) {
                         //   setState(() => _valueToValidate1 = val ?? '');
@@ -147,13 +149,13 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                       child: DateTimePicker(
                         type: DateTimePickerType.time,
                         //  dateMask: 'd MMM, yyyy',
-                        controller: _controller1,
+                        controller: _controller2,
                         //initialValue: _initialValue,
                         // firstDate: DateTime(2000),
                         // lastDate: DateTime(2100),
                         icon: Icon(Icons.event),
-                        dateLabelText: pickuptime,
-                        // timeLabelText: "Hour",
+                        //dateLabelText: pickuptime,
+                        timeLabelText: pickuptime,
                         //use24HourFormat: false,
                         //locale: Locale('pt', 'BR'),
                         // selectableDayPredicate: (date) {
@@ -171,24 +173,24 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                       ),
                     ),
                   ),
-                  Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          robotoTextWidget(
-                              textval: ' Mins',
-                              colorval: AppColor.black,
-                              sizeval: 16,
-                              fontWeight: FontWeight.w800),
-                          robotoTextWidget(
-                              textval: pickuptime,
-                              colorval: AppColor.lightText,
-                              sizeval: 16,
-                              fontWeight: FontWeight.w400),
-                        ],
-                      )),
+                  // Container(
+                  //     margin: const EdgeInsets.only(right: 10),
+                  //     padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  //     child: Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         robotoTextWidget(
+                  //             textval: ' Mins',
+                  //             colorval: AppColor.black,
+                  //             sizeval: 16,
+                  //             fontWeight: FontWeight.w800),
+                  //         robotoTextWidget(
+                  //             textval: pickuptime,
+                  //             colorval: AppColor.lightText,
+                  //             sizeval: 16,
+                  //             fontWeight: FontWeight.w400),
+                  //       ],
+                  //     )),
                 ],
               ),
             ),

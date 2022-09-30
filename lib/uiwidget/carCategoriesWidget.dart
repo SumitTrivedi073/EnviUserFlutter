@@ -187,7 +187,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                       children: [
                         robotoTextWidget(
                             textval:
-                            vehiclePriceClasses[index].type!.toString(),
+                            vehiclePriceClasses[index].type.toString(),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w200),
