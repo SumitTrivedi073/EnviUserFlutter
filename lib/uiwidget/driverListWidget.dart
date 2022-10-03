@@ -34,7 +34,7 @@ class _DriverListItemPageState extends State<DriverListItem> {
   List<Content> DriverList = [];
   List<VehiclePriceClass> vehiclePriceClasses = [];
   late SharedPreferences sharedPreferences;
-  int? selectedIndex;
+  int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
 
   @override
