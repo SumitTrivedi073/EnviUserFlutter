@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
@@ -7,25 +6,23 @@ import 'dart:ui' as ui;
 
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/theme/color.dart';
-import 'package:envi/utils/utility.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:envi/web_service/HTTP.dart' as HTTP;
+
 import '../../direction_model/directionModel.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
-import 'package:envi/direction_model/route.dart'as Route;
-import 'package:envi/direction_model/leg.dart';
-
 
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
 
-  MapDirectionWidgetPickup({Key? key, this.liveTripData}) : super(key: key);
+  MapDirectionWidgetPickup(
+      {Key? key, this.liveTripData}) : super(key: key);
 
   @override
   _MapDirectionWidgetPickupState createState() =>
@@ -44,7 +41,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   var uuid = const Uuid();
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
-  late LatLng startLocation = LatLng(
+  late LatLng pickupLocation = LatLng(
       (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
           ? widget.liveTripData!.tripInfo.pickupLocation.latitude
           : 13.197965663195877,
@@ -52,8 +49,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           ? widget.liveTripData!.tripInfo.pickupLocation.longitude
           : 77.70646809992469);
 
-
-  late LatLng carLocation = LatLng(
+  late LatLng carCurrentLocation = LatLng(
       (widget.liveTripData!.driverLocation.latitude != null)
           ? widget.liveTripData!.driverLocation.latitude
           : 14.063446041067092,
@@ -61,6 +57,8 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           ? widget.liveTripData!.driverLocation.longitude
           : 77.345492878187);
 
+  late LatLng previousLocation = const LatLng(0.0, 0.0);
+  var carMarker;
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
@@ -68,7 +66,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-  double distance = 0.0;
+
 
   @override
   void initState() {
@@ -77,53 +75,68 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     _sessionToken = uuid.v4();
     addMarker();
     getDirections();
-    if (mapController != null) {
-      animateCar(
-        carLocation.latitude,
-        carLocation.longitude,
-        startLocation.latitude,
-        startLocation.longitude,
-        mapMarkerSink,
-        this,
-        mapController!,
-      );
-      setState(() {});
-    }
+
   }
 
   getDirections() async {
     List<LatLng> polylineCoordinates = [];
 
     String request =
-        '$directionBaseURL?origin=${carLocation.latitude},${carLocation.longitude}&destination=${startLocation.latitude},${startLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
+        '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
-        DirectionModel directionModel = DirectionModel.fromJson(json.decode(response.body) );
+        DirectionModel directionModel =
+            DirectionModel.fromJson(json.decode(response.body));
         List<PointLatLng> pointLatLng = [];
 
         for (var i = 0; i < directionModel.routes.length; i++) {
-
           for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
-           for (var k = 0; k < directionModel.routes[i].legs[j].steps.length; k++) {
-              pointLatLng =   polylinePoints.decodePolyline(directionModel.routes[i].legs[j].steps[k].polyline.points);
+            for (var k = 0;
+                k < directionModel.routes[i].legs[j].steps.length;
+                k++) {
+              pointLatLng = polylinePoints.decodePolyline(
+                  directionModel.routes[i].legs[j].steps[k].polyline.points);
               for (var point in pointLatLng) {
-                polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+                polylineCoordinates
+                    .add(LatLng(point.latitude, point.longitude));
               }
             }
           }
         }
         addPolyLine(polylineCoordinates);
-        startTimer();
-    } else {
-    throw Exception('Failed to load predictions');
+        //    startTimer();
+      } else {
+        throw Exception('Failed to load predictions');
+      }
     }
-  }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    carCurrentLocation = LatLng(
+        (widget.liveTripData!.driverLocation.latitude != null)
+            ? widget.liveTripData!.driverLocation.latitude
+            : 14.063446041067092,
+        (widget.liveTripData!.driverLocation.longitude != null)
+            ? widget.liveTripData!.driverLocation.longitude
+            : 77.345492878187);
+
+
+    if (previousLocation.latitude!=0.0 && previousLocation!=carCurrentLocation) {
+      animateCar(
+        previousLocation.latitude,
+        previousLocation.longitude,
+        carCurrentLocation.latitude,
+        carCurrentLocation.longitude,
+        mapMarkerSink,
+        this,
+        mapController!,
+      );
+    }
+
     final googleMap = StreamBuilder<List<Marker>>(
         stream: mapMarkerStream,
         builder: (context, snapshot) {
@@ -131,7 +144,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
               //innital position in map
-              target: carLocation, //initial position
+              target: carCurrentLocation, //initial position
               zoom: 15.0, //initial zoom level
             ),
             polylines: Set<Polyline>.of(polylines.values),
@@ -167,14 +180,20 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       width: 5,
     );
     polylines[id] = polyline;
+
     setState(() {});
+
+    if(previousLocation!=carCurrentLocation) {
+      previousLocation = carCurrentLocation;
+    }
   }
 
   addMarker() async {
+
     var pickupMarker = Marker(
       //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
+      markerId: MarkerId(pickupLocation.toString()),
+      position: pickupLocation, //position of marker
       infoWindow: const InfoWindow(
         //popup info
         title: 'Pickup Location',
@@ -184,15 +203,15 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     );
 
     final Uint8List markerIcon =
-    await getBytesFromAsset('assets/images/car-map.png', 70);
+        await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    var carMarker = Marker(
-        markerId:  MarkerId(carLocation.toString()),
-        position: carLocation,
+    carMarker = Marker(
+        markerId: MarkerId(carCurrentLocation.toString()),
+        position: carCurrentLocation,
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carLocation, startLocation),
+        rotation: getBearing(carCurrentLocation, pickupLocation),
         draggable: false);
 
     //Adding a delay and then showing the marker on screen
@@ -213,37 +232,26 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         .asUint8List();
   }
 
-  animateCar(double fromLat, //Starting latitude
-      double fromLong, //Starting longitude
-      double toLat, //Ending latitude
-      double toLong, //Ending longitude
-      StreamSink<List<Marker>>
-      mapMarkerSink, //Stream build of map to update the UI
-      TickerProvider
-      provider, //Ticker provider of the widget. This is used for animation
-      GoogleMapController controller, //Google map controller of our widget
-      ) async {
+  animateCar(
+    double fromLat, //Starting latitude
+    double fromLong, //Starting longitude
+    double toLat, //Ending latitude
+    double toLong, //Ending longitude
+    StreamSink<List<Marker>>
+        mapMarkerSink, //Stream build of map to update the UI
+    TickerProvider
+        provider, //Ticker provider of the widget. This is used for animation
+    GoogleMapController controller, //Google map controller of our widget
+  ) async {
     final double bearing =
-    getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
+        getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
 
-    markers.clear();
+    //markers.clear();
 
     final Uint8List markerIcon =
     await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
-        position: LatLng(fromLat, fromLong),
-        icon: BitmapDescriptor.fromBytes(markerIcon),
-        anchor: const Offset(0.5, 0.5),
-        flat: true,
-        rotation: bearing,
-        draggable: false);
-
-    //Adding initial marker to the start location.
-    markers.add(carMarker);
-    mapMarkerSink.add(markers);
-
+    //addMarker();
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
       vsync: provider, //From the widget
@@ -264,7 +272,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
         //New marker location
         carMarker = Marker(
-            markerId: const MarkerId("driverMarker"),
+            markerId: const MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
@@ -283,6 +291,9 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     //Starting the animation
     animationController.forward();
+    if(previousLocation!=carCurrentLocation) {
+      previousLocation = carCurrentLocation;
+    }
   }
 
   double getBearing(LatLng begin, LatLng end) {
@@ -307,15 +318,14 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   void startTimer() {
     timer = Timer.periodic(
         const Duration(minutes: 5),
-            (Timer t) =>
-        {
-          if (count <= 10) {getDirections(), count++}
-        });
+        (Timer t) => {
+              if (count <= 10) {getDirections(), count++}
+            });
   }
 
   @override
   void dispose() {
-    //  timer.cancel();
+    //timer.cancel();
     super.dispose();
   }
 }

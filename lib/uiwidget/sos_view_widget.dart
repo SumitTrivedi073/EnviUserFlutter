@@ -1,6 +1,7 @@
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../theme/string.dart';
 
@@ -28,16 +29,14 @@ class _SOSViewPageState extends State<SOSView> {
             side: BorderSide(width: 5, color: Colors.transparent)),
 
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Center(
-                  child:  Image.asset(
-                    'assets/images/fire_alarm.png',
-                    fit: BoxFit.fill,
-                    height: 20,
-                    color: Colors.white ,
+                  child: SvgPicture.asset(
+                    "assets/svg/fire_alarm.svg",
+                    width: 20,
                   ),
                 ),
                 const SizedBox(
