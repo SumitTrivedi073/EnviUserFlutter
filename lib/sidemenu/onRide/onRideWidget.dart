@@ -46,7 +46,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                       image: 'assets/images/driver_on_ride.png'),
                       Align(
                         alignment: Alignment.topRight,
-                        child: SOSView(),
+                        child: SOSView(liveTripData: value.liveTripData!,),
                       ),
                       Spacer(),
                       FromToData(value.liveTripData!),

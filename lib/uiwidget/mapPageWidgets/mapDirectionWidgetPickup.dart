@@ -82,7 +82,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     List<LatLng> polylineCoordinates = [];
 
     String request =
-        '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
+        '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
@@ -206,8 +206,12 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
     carMarker = Marker(
-        markerId: MarkerId(carCurrentLocation.toString()),
+        markerId: MarkerId("Driver Location"),
         position: carCurrentLocation,
+        infoWindow: const InfoWindow(
+          //popup info
+          title: 'Driver Location',
+        ),
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
@@ -246,12 +250,10 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     final double bearing =
         getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
 
-    //markers.clear();
 
     final Uint8List markerIcon =
     await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    //addMarker();
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
       vsync: provider, //From the widget
@@ -272,7 +274,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
         //New marker location
         carMarker = Marker(
-            markerId: const MarkerId("Driver Location"),
+            markerId:  MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
