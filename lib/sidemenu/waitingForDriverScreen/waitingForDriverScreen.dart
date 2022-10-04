@@ -1,4 +1,5 @@
 import 'package:envi/UiWidget/cardbanner.dart';
+import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidgetPickup.dart';
@@ -33,14 +34,23 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
         child: Consumer<firestoreLiveTripDataNotifier>(
           builder: (context, value, child) {
             if (value.liveTripData != null) {
-              if (value.liveTripData!.tripInfo.tripStatus ==
-                  TripStatusOnboarding) {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const OnRideWidget()),
-                    (Route<dynamic> route) => false);
-              }
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (value.liveTripData!.tripInfo.tripStatus ==
+                    TripStatusOnboarding) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                          const OnRideWidget()),
+                          (Route<dynamic> route) => false);
+                } else if (value.liveTripData!.tripInfo.tripStatus ==
+                    TripStatusCancel) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                          const HomePage(title: 'title')),
+                          (Route<dynamic> route) => false);
+                }
+              });
               return Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
                 MapDirectionWidgetPickup(
@@ -62,10 +72,11 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                   FromToData(value.liveTripData!),
                 ]),
               ]));
-              // }
-            } else {
-              return const CircularProgressIndicator();
             }
+              return  Container(
+                child: CircularProgressIndicator(),
+              );
+
           },
         ),
       ),

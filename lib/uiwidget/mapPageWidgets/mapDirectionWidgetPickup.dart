@@ -40,6 +40,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   late String _sessionToken;
   var uuid = const Uuid();
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
+  List<LatLng> polylineCoordinates = [];
 
   late LatLng pickupLocation = LatLng(
       (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
@@ -79,8 +80,6 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   }
 
   getDirections() async {
-    List<LatLng> polylineCoordinates = [];
-
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);

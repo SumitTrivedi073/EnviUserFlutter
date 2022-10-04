@@ -1,8 +1,5 @@
-
-
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/uiwidget/estimate_fare_widget.dart';
-import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidgetPickup.dart';
 import 'package:envi/uiwidget/sos_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,6 +12,8 @@ import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/mapPageWidgets/mapDirectionWidget_onRide.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../web_service/Constant.dart';
+import '../home/homePage.dart';
 
 class OnRideWidget extends StatefulWidget {
   const OnRideWidget({Key? key}) : super(key: key);
@@ -32,38 +31,51 @@ class _OnRideWidgetState extends State<OnRideWidget> {
         child: Consumer<firestoreLiveTripDataNotifier>(
           builder: (context, value, child) {
             if (value.liveTripData != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (value.liveTripData!.tripInfo.tripStatus ==
+                    TripStatusCancel) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const HomePage(title: 'title')),
+                      (Route<dynamic> route) => false);
+                }
+              });
               return Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
-                    MapDirectionWidgetOnRide(
-                      liveTripData: value.liveTripData!,
-                    ),
-
-                    Column(children: [
-                      const AppBarInsideWidget(title: "Envi"),
-                      const SizedBox(height: 5),
+                MapDirectionWidgetOnRide(
+                  liveTripData: value.liveTripData!,
+                ),
+                Column(children: [
+                  const AppBarInsideWidget(title: "Envi"),
+                  const SizedBox(height: 5),
                   CardBanner(
                       title: DriverOnRide,
                       image: 'assets/images/driver_on_ride.png'),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: SOSView(liveTripData: value.liveTripData!,),
-                      ),
-                      Spacer(),
-                      FromToData(value.liveTripData!),
-                      EstimateFareWidget(amountTobeCollected: value.liveTripData!.tripInfo.priceClass.amountToBeCollected.toString())
-                      ]),
-
-                  ]));
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: SOSView(
+                      liveTripData: value.liveTripData!,
+                    ),
+                  ),
+                  Spacer(),
+                  FromToData(value.liveTripData!),
+                  EstimateFareWidget(
+                      amountTobeCollected: value
+                          .liveTripData!.tripInfo.priceClass.amountToBeCollected
+                          .toString())
+                ]),
+              ]));
               // }
-            } else {
-              return const CircularProgressIndicator();
             }
+            return  Container(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),
     );
   }
-
 
   Widget FromToData(TripDataModel liveTripData) {
     return Container(
@@ -91,18 +103,18 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                         ),
                         Flexible(
                             child: Wrap(children: [
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                child: robotoTextWidget(
-                                  textval: liveTripData
-                                      .tripInfo.pickupLocation.pickupAddress
-                                      .toString(),
-                                  colorval: AppColor.black,
-                                  sizeval: 16,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ),
-                            ])),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: robotoTextWidget(
+                              textval: liveTripData
+                                  .tripInfo.pickupLocation.pickupAddress
+                                  .toString(),
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   ),
@@ -127,7 +139,8 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                             Radius.circular(10.0)), // Set rounded corner radius
                       ),
                       child: robotoTextWidget(
-                        textval: '${liveTripData.tripInfo.priceClass.distance} Km',
+                        textval:
+                            '${liveTripData.tripInfo.priceClass.distance} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.normal,
@@ -148,18 +161,18 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                         ),
                         Flexible(
                             child: Wrap(children: [
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                child: robotoTextWidget(
-                                  textval: liveTripData
-                                      .tripInfo.dropLocation.dropAddress
-                                      .toString(),
-                                  colorval: AppColor.black,
-                                  sizeval: 16,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ),
-                            ])),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: robotoTextWidget(
+                              textval: liveTripData
+                                  .tripInfo.dropLocation.dropAddress
+                                  .toString(),
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   )
@@ -168,13 +181,9 @@ class _OnRideWidgetState extends State<OnRideWidget> {
             )));
   }
 
-
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
   }
-
-
-
 }
