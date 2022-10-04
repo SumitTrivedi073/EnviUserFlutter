@@ -64,7 +64,9 @@ startTrip() {
 cancelTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/cancelUserTrip');
 }
-
+SosApi() {
+  return Uri.parse('${getBaseURL()}/user/sos');
+}
 
 EditFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
