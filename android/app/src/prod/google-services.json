@@ -1,0 +1,375 @@
+{
+  "project_info": {
+    "project_number": "1056599993557",
+    "firebase_url": "https://ecabdev-75760.firebaseio.com",
+    "project_id": "ecabdev-75760",
+    "storage_bucket": "ecabdev-75760.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056599993557:android:41a1b5e8ff8d67aa65c65c",
+        "android_client_info": {
+          "package_name": "in.malbork.envi.app.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056599993557-160kfph44ohrcjbfputa0t4bok7iqu0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.driver",
+            "certificate_hash": "d407e7f12453066639722cdd96199e22b4210ed7"
+          }
+        },
+        {
+          "client_id": "1056599993557-3p7niujcc9dg1mal3npfus06432vcalh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.driver",
+            "certificate_hash": "f1b70b8aeee57f8582a16d0bc72edf1e7be53c78"
+          }
+        },
+        {
+          "client_id": "1056599993557-kvvbmsqvdcbk1a9d020ng3d91b09g9bv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.driver",
+            "certificate_hash": "089ef5a913dea72369e9bae6a12d1a058da46501"
+          }
+        },
+        {
+          "client_id": "1056599993557-ljf8d9oi27r82jtnqu3tt3lf56o8keir.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.driver",
+            "certificate_hash": "471acdfc5bc261f86237a96f641b3169f5da02be"
+          }
+        },
+        {
+          "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTzBWrrlAvA8_bEGFRL1AKFbczR5Uk5l0"
+        },
+        {
+          "current_key": "AIzaSyASygh1HXxCKKlpSfwsFW9hiOH03Dixeh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1056599993557-8fvgqeqhj0hlhmbf1orn6rt9804u2nh1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sgs.env.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056599993557:android:cf4dc114933cd7ef65c65c",
+        "android_client_info": {
+          "package_name": "in.malbork.envi.app.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056599993557-5r4e664suqvttqbcgh15cdo79risf2go.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.user",
+            "certificate_hash": "089ef5a913dea72369e9bae6a12d1a058da46501"
+          }
+        },
+        {
+          "client_id": "1056599993557-q8k0idfbro5p06f2er8s31n9goorb5dh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.user",
+            "certificate_hash": "33aa03708372ba5ae5e2e824eb0442bcf599474c"
+          }
+        },
+        {
+          "client_id": "1056599993557-t3g2jc8caibbsal4n4dh5bfrb64oqlh1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.malbork.envi.app.user",
+            "certificate_hash": "d407e7f12453066639722cdd96199e22b4210ed7"
+          }
+        },
+        {
+          "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTzBWrrlAvA8_bEGFRL1AKFbczR5Uk5l0"
+        },
+        {
+          "current_key": "AIzaSyASygh1HXxCKKlpSfwsFW9hiOH03Dixeh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1056599993557-8fvgqeqhj0hlhmbf1orn6rt9804u2nh1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sgs.env.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056599993557:android:c06aec213c7a8c29",
+        "android_client_info": {
+          "package_name": "sgs.env.ecabsdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056599993557-a8hkt5hcbma48io102628mh7gft72otn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "1f501af7720203a9948e113e8d3ac2d36be11703"
+          }
+        },
+        {
+          "client_id": "1056599993557-avd5psifekjuqb9s26cokkacn6bkrdma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "2c51d914d7d37446b6d0b32fc72eeb39b986cc5d"
+          }
+        },
+        {
+          "client_id": "1056599993557-d758g8n78cd8m6rci9iqqrkfave29r77.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "f70d7c18f92868ee59067bd5207dc80426d71b2f"
+          }
+        },
+        {
+          "client_id": "1056599993557-fc0t2p8h7b9q3kj6b3a4eut7lkg6um7n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "9b7ea606568b3cf726f01403f55b487fe77e19f9"
+          }
+        },
+        {
+          "client_id": "1056599993557-fs8a1g8amb2kgah2s0e5kpflk039lc4b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "e8506b250c0879a64cb402179df65bba8aa111fb"
+          }
+        },
+        {
+          "client_id": "1056599993557-hhh366fca9tugsmgkhg6kc9h14l13403.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "91b9cf368c01534b6c29cf39e3e0007be4a62139"
+          }
+        },
+        {
+          "client_id": "1056599993557-ufola1kvktdd61cmav8phltl1usj4khb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.ecabsdriver",
+            "certificate_hash": "f7fff8baf050b784a9c28176c797bb6e68a6e2a0"
+          }
+        },
+        {
+          "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTzBWrrlAvA8_bEGFRL1AKFbczR5Uk5l0"
+        },
+        {
+          "current_key": "AIzaSyASygh1HXxCKKlpSfwsFW9hiOH03Dixeh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1056599993557-8fvgqeqhj0hlhmbf1orn6rt9804u2nh1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sgs.env.user"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056599993557:android:7fbd49c5027f81db",
+        "android_client_info": {
+          "package_name": "sgs.env.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056599993557-4t6p4mvagqhpkblfsc3s09l2kac1l0vh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "91b9cf368c01534b6c29cf39e3e0007be4a62139"
+          }
+        },
+        {
+          "client_id": "1056599993557-6geflfcdckd5pn5o2de9mriaq4n7m1qf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "fb3a2e5a7a00e9f950a6c53783d51bc0e11f15f7"
+          }
+        },
+        {
+          "client_id": "1056599993557-724s2vick8qvvb7p6uafeii6lf347hut.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "c0904fdce2f4b77c496f04a2527acea2eade4d85"
+          }
+        },
+        {
+          "client_id": "1056599993557-8brm4h2h7p5cbmhg27b3d83fld4divn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "e1b04f1162cb9a0a7ecd6a9b78db24279660399a"
+          }
+        },
+        {
+          "client_id": "1056599993557-955iv0df9kftmcc4koapno96th5f4p6s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "e8506b250c0879a64cb402179df65bba8aa111fb"
+          }
+        },
+        {
+          "client_id": "1056599993557-978538d7e04mesdlqso7rq15ebe2vmmn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "34bbf56d6b331343c7adeaaf1990b79078b14029"
+          }
+        },
+        {
+          "client_id": "1056599993557-cd3a29b0g25jpf5v4ebq28u42ibo2itj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "4f44ce185b630c1b570013ae3697906b84ce7e38"
+          }
+        },
+        {
+          "client_id": "1056599993557-cg950kbfsvu2r4o3tqqs48qpectt7ebq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "9b7ea606568b3cf726f01403f55b487fe77e19f9"
+          }
+        },
+        {
+          "client_id": "1056599993557-flvthlevsnd8gj1h6uuribf13v8ut309.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "22f6bc5a65d69ec90e832fdd85f477f19246a2a7"
+          }
+        },
+        {
+          "client_id": "1056599993557-r81363n4rh3ohl02ig9m17pt4lvgikc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "1f501af7720203a9948e113e8d3ac2d36be11703"
+          }
+        },
+        {
+          "client_id": "1056599993557-rl3bqvrkd8kjhspveu0v4omdflqt5fso.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "c51b9a80f35a13cd8658252b1a607061eb864fcc"
+          }
+        },
+        {
+          "client_id": "1056599993557-u65bpdbs5j6voq5sgg4d0dp94k3r2lkr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sgs.env.user",
+            "certificate_hash": "f70d7c18f92868ee59067bd5207dc80426d71b2f"
+          }
+        },
+        {
+          "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTzBWrrlAvA8_bEGFRL1AKFbczR5Uk5l0"
+        },
+        {
+          "current_key": "AIzaSyASygh1HXxCKKlpSfwsFW9hiOH03Dixeh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056599993557-rkeob3b3m0v818cl4sb5t4v4565mv0in.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1056599993557-8fvgqeqhj0hlhmbf1orn6rt9804u2nh1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sgs.env.user"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

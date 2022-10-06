@@ -1,5 +1,6 @@
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
+import 'package:envi/productFlavour/appconfig.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/provider/firestoreScheduleTripNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
@@ -15,16 +16,14 @@ import 'login/login.dart';
 import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
 
-Future<void> main() async {
+Future<Widget> initializeApp(AppConfig appConfig) async {
 WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 final database = await $FloorFlutterDatabase
-    .databaseBuilder('envi_uswer.db')
+    .databaseBuilder('envi_user.db')
     .build();
-final dao = database.taskDao;
-
-  runApp(const MyApp());
+return MyApp(appConfig);
 
 
 // Ideal time to initialize
@@ -32,7 +31,23 @@ final dao = database.taskDao;
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  final AppConfig appConfig;
+  const MyApp(this.appConfig);
+
+  Widget _flavorBanner(Widget child) {
+    return Banner(
+      child: child,
+      location: BannerLocation.topEnd,
+      message: appConfig.flavor,
+      color: appConfig.flavor == 'qa'
+          ? Colors.red.withOpacity(0.6)
+          : Colors.green.withOpacity(0.6),
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w700, fontSize: 14.0, letterSpacing: 1.0),
+      textDirection: TextDirection.ltr,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +64,11 @@ class MyApp extends StatelessWidget {
       ),
       home: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Malbork',
+        title: 'Envi',
         theme: appTheme(),
-        home: MainEntryPoint(),
+        home: _flavorBanner(
+          MainEntryPoint(),
+        ),
       )
     ));
   }

@@ -44,7 +44,7 @@ dependencies:
   geocoding: ^2.0.4
   uuid: ^3.0.6
   flutter_rating_bar: ^4.0.1
-  change_app_package_name: ^0.1.2
+
   firebase_auth: ^3.6.3
   firebase_core: ^1.20.1
   firebase_messaging: 12.0.2
@@ -63,7 +63,7 @@ dependencies:
   paytm_allinonesdk: ^1.1.8
   group_radio_button: ^1.2.0
   url_launcher: ^6.1.5
-
+  change_app_package_name: ^1.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

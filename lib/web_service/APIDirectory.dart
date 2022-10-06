@@ -14,7 +14,7 @@ const deployedLambdaUrl = "";
 
 const qaUrl = 'https://qausernew.azurewebsites.net/';
 
-const productionUrl = 'https://qausernew.azurewebsites.net/';
+const productionUrl = 'https://envi-user-taxation-v2.azurewebsites.net/';
 const directionBaseURL = 'https://maps.googleapis.com/maps/api/directions/json';
 
 getBaseURL() {
