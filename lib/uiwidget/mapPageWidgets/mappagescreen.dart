@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/mapStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,8 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../theme/string.dart';
-import 'frombookschedule.dart';
+import '../../theme/string.dart';
+import '../frombookschedule.dart';
 
 void main() {
   runApp(MaterialApp(home: MyHomePage()));
@@ -46,7 +47,8 @@ class MyMapState extends State {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
-
+ String placeName = '';
+  String? isoId;
   @override
   void initState() {
     // TODO: implement initState
@@ -54,7 +56,8 @@ class MyMapState extends State {
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
   }
-
+  
+  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -78,12 +81,13 @@ class MyMapState extends State {
                 zoomGesturesEnabled: true,
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
-                onCameraIdle: () {
-                  GetAddressFromLatLong(latlong!);
+                onCameraIdle: () async {
+                await  GetAddressFromLatLong(latlong!);
                 },
-                onCameraMove: (CameraPosition position) {
+                onCameraMove: (CameraPosition position)async {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
+                       await  GetAddressFromLatLong(latlong!);
                 },
               )
             : Container(),
@@ -118,6 +122,11 @@ class MyMapState extends State {
             margin: const EdgeInsets.only(bottom: 10),
             child: FromBookScheduleWidget(
               address: Address,
+              currentLocation: SearchPlaceModel(
+                  address: Address,
+                  id: isoId ?? '',
+                  title: placeName,
+                  latLng: latlong),
             ),
           ),
         )
@@ -138,18 +147,20 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      latlong = LatLng(position.latitude, position.longitude);
-      _cameraPosition = CameraPosition(
-        bearing: 0,
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 14.0,
-      );
-      if (_controller != null) {
-        _controller
-            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
-      }
-    });
+    if (mounted) {
+      setState(() {
+        latlong = LatLng(position.latitude, position.longitude);
+        _cameraPosition = CameraPosition(
+          bearing: 0,
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 14.0,
+        );
+        if (_controller != null) {
+          _controller
+              ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+        }
+      });
+    }
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
@@ -157,10 +168,17 @@ class MyMapState extends State {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
+    placeName = (place.subLocality != '')?place.subLocality! :place.subAdministrativeArea!;
+    isoId = place.isoCountryCode;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address

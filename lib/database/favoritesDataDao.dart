@@ -1,20 +1,19 @@
-
 import 'package:floor/floor.dart';
 
 import 'favoritesData.dart';
 
 @dao
 abstract class FavoritesDataDao {
-  @Query('SELECT * FROM FavoritesTable WHERE id = :id')
+  @Query('SELECT * FROM FavoritesData WHERE id = :id')
   Future<FavoritesData?> findTaskById(int id);
 
-  @Query('SELECT * FROM FavoritesTable')
+  @Query('SELECT * FROM FavoritesData')
   Future<List<FavoritesData>> findAllTasks();
 
-  @Query('SELECT * FROM FavoritesTable')
+  @Query('SELECT * FROM FavoritesData')
   Stream<List<FavoritesData>> findAllTasksAsStream();
 
-  @Query('SELECT * FROM FavoritesTable WHERE type = :type')
+  @Query('SELECT * FROM FavoritesData WHERE type = :type')
   Stream<List<FavoritesData>> findAllTasksByTypeAsStream(String type);
 
   @insert
@@ -37,6 +36,16 @@ abstract class FavoritesDataDao {
   @Query('SELECT * FROM FavoritesData WHERE identifier = :identifier')
   Future<FavoritesData?> findByIdentifier(String identifier);
 
-  @Query('SELECT * FROM FavoritesData WHERE identifier != \'Work\' and identifier != \'Home\' and isFavourite = \'Y\'')
+  @Query(
+      'SELECT * FROM FavoritesData WHERE title != \'Work\' and title != \'Home\' and isFavourite = \'Y\'')
   Future<List<FavoritesData>> getFavoriate();
+  @Query('SELECT * FROM FavoritesData WHERE title = :title')
+  Future<FavoritesData?> findTaskByTitle(String title);
+
+  @Query('SELECT * FROM FavoritesData WHERE address = :address')
+  Future<FavoritesData?> findDataByaddressg(String address);
+
+  @Query(
+      'Select * FROM FavoritesData WHERE address  LIKE %address% ORDER BY timestamp ASC LIMIT 15 ')
+  Future<List<FavoritesData?>> displayAscByAddress(String address);
 }

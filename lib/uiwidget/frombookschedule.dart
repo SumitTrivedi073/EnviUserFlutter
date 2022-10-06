@@ -1,20 +1,27 @@
 import 'package:envi/sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
+import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../theme/string.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
   final String address;
 
-  FromBookScheduleWidget({required this.address});
+  final SearchPlaceModel? currentLocation;
+  FromBookScheduleWidget({required this.address, this.currentLocation});
 
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _FromBookScheduleWidgetPageState();
 }
+
+enum BookingTiming { now, later }
+
+late BookingTiming _status;
 
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
@@ -29,6 +36,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
     // TODO: implement build
     return Container(
       height: 140,
+      margin: EdgeInsets.only(left: 10,right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -59,23 +67,13 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           ),
                           Flexible(
                               child: Wrap(children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            SelectPickupDropAddress(
-                                                title: pickUpLocation)),
-                                    (route) => true);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: robotoTextWidget(
-                                  textval: widget.address,
-                                  colorval: AppColor.black,
-                                  sizeval: 18,
-                                  fontWeight: FontWeight.w200,
-                                ),
+                            Container(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: robotoTextWidget(
+                                textval: widget.address,
+                                colorval: AppColor.black,
+                                sizeval: 18,
+                                fontWeight: FontWeight.w200,
                               ),
                             ),
                           ]))
@@ -98,16 +96,41 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(10), // <-- Radius
+                              ),
+                            ),
+                            backgroundColor:
+                                MaterialStateProperty.all(AppColor.darkGreen)),
                         child: robotoTextWidget(
                           textval: BookNow,
                           colorval: AppColor.black,
                           sizeval: 18.0,
                           fontWeight: FontWeight.w800,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _status = BookingTiming.now;
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => SelectPickupDropAddress(
+                                      currentLocation: widget.currentLocation,
+                                      title: pickUpLocation)),
+                              (route) => true);
+                        },
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _status = BookingTiming.later;
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => SelectPickupDropAddress(
+                                      currentLocation: widget.currentLocation,
+                                      title: pickUpLocation)),
+                              (route) => true);
+                        },
                         style: ElevatedButton.styleFrom(
                           primary: AppColor.yellow,
                           shape: RoundedRectangleBorder(
