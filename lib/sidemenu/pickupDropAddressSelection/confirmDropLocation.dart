@@ -67,7 +67,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         zoomGesturesEnabled: true,
         rotateGesturesEnabled: true,
         zoomControlsEnabled: false,
-        onCameraIdle: () {
+        onCameraIdle: () async {
+          await Future.delayed(const Duration(milliseconds: 2000));
           GetAddressFromLatLong(latlong);
         },
         onCameraMove: (CameraPosition position) {
@@ -247,7 +248,9 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    toAddressName = (place.subLocality != '')?place.subLocality : place.subAdministrativeArea;
+    toAddressName = (place.subLocality != '')
+        ? place.subLocality
+        : place.subAdministrativeArea;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';

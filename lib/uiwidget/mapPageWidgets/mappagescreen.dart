@@ -80,7 +80,8 @@ class MyMapState extends State {
                 zoomGesturesEnabled: true,
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
-                onCameraIdle: () {
+                onCameraIdle: () async {
+                  await Future.delayed(const Duration(milliseconds: 2000));
                   GetAddressFromLatLong(latlong!);
                 },
                 onCameraMove: (CameraPosition position) {
