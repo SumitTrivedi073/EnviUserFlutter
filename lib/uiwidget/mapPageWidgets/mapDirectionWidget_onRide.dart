@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import '../../direction_model/directionModel.dart';
@@ -50,14 +51,15 @@ class _MapDirectionWidgetOnRideState
           ? widget.liveTripData!.tripInfo.pickupLocation.longitude
           : 77.70646809992469);
 
-  late LatLng carLocation = LatLng(
+  late LatLng carCurrentLocation = LatLng(
       (widget.liveTripData!.driverLocation.latitude != null)
           ? widget.liveTripData!.driverLocation.latitude
           : 14.063446041067092,
       (widget.liveTripData!.driverLocation.longitude != null)
           ? widget.liveTripData!.driverLocation.longitude
           : 77.345492878187);
-
+  late LatLng previousLocation = const LatLng(0.0, 0.0);
+  var carMarker;
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
@@ -65,27 +67,17 @@ class _MapDirectionWidgetOnRideState
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-  double distance = 0.0;
+  late String _sessionToken;
+  var uuid = const Uuid();
 
   @override
   void initState() {
     //fetch direction polylines from Google API
     super.initState();
-
+    _sessionToken = uuid.v4();
     addMarker();
     getDirections();
-    if (mapController != null) {
-      animateCar(
-        carLocation.latitude,
-        carLocation.longitude,
-        destinationLocation.latitude,
-        destinationLocation.longitude,
-        mapMarkerSink,
-        this,
-        mapController!,
-      );
-      setState(() {});
-    }
+
   }
 
   getDirections() async {
@@ -93,7 +85,7 @@ class _MapDirectionWidgetOnRideState
 
 
     String request =
-        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
+        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
@@ -138,10 +130,34 @@ class _MapDirectionWidgetOnRideState
     polylines[id] = polyline;
 
     setState(() {});
+    if(previousLocation!=carCurrentLocation) {
+      previousLocation = carCurrentLocation;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    carCurrentLocation = LatLng(
+        (widget.liveTripData!.driverLocation.latitude != null)
+            ? widget.liveTripData!.driverLocation.latitude
+            : 14.063446041067092,
+        (widget.liveTripData!.driverLocation.longitude != null)
+            ? widget.liveTripData!.driverLocation.longitude
+            : 77.345492878187);
+
+
+    if (previousLocation.latitude!=0.0 && previousLocation!=carCurrentLocation) {
+      animateCar(
+        previousLocation.latitude,
+        previousLocation.longitude,
+        carCurrentLocation.latitude,
+        carCurrentLocation.longitude,
+        mapMarkerSink,
+        this,
+        mapController!,
+      );
+    }
     final googleMap = StreamBuilder<List<Marker>>(
         stream: mapMarkerStream,
         builder: (context, snapshot) {
@@ -149,7 +165,7 @@ class _MapDirectionWidgetOnRideState
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
               //innital position in map
-              target: carLocation, //initial position
+              target: carCurrentLocation, //initial position
               zoom: 15.0, //initial zoom level
             ),
             polylines: Set<Polyline>.of(polylines.values),
@@ -204,13 +220,13 @@ class _MapDirectionWidgetOnRideState
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    var carMarker = Marker(
+     carMarker = Marker(
         markerId: const MarkerId("Driver Location"),
-        position: carLocation,
+        position: carCurrentLocation,
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carLocation, startLocation),
+        rotation: getBearing(carCurrentLocation, startLocation),
         draggable: false);
 
     //Adding a delay and then showing the marker on screen
@@ -243,27 +259,13 @@ class _MapDirectionWidgetOnRideState
     TickerProvider
         provider, //Ticker provider of the widget. This is used for animation
     GoogleMapController controller, //Google map controller of our widget
-  ) async {
+  ) async  {
     final double bearing =
-        getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
+    getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
 
-    markers.clear();
 
     final Uint8List markerIcon =
-        await getBytesFromAsset('assets/images/car-map.png', 70);
-
-    var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
-        position: LatLng(fromLat, fromLong),
-        icon: BitmapDescriptor.fromBytes(markerIcon),
-        anchor: const Offset(0.5, 0.5),
-        flat: true,
-        rotation: bearing,
-        draggable: false);
-
-    //Adding initial marker to the start location.
-    markers.add(carMarker);
-    mapMarkerSink.add(markers);
+    await getBytesFromAsset('assets/images/car-map.png', 70);
 
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
@@ -285,7 +287,7 @@ class _MapDirectionWidgetOnRideState
 
         //New marker location
         carMarker = Marker(
-            markerId: const MarkerId("driverMarker"),
+            markerId:  MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
@@ -304,6 +306,9 @@ class _MapDirectionWidgetOnRideState
 
     //Starting the animation
     animationController.forward();
+    if(previousLocation!=carCurrentLocation) {
+      previousLocation = carCurrentLocation;
+    }
   }
 
   double getBearing(LatLng begin, LatLng end) {

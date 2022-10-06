@@ -6,6 +6,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
+import 'package:uuid/uuid.dart';
 
 import '../../direction_model/directionModel.dart';
 import '../../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
@@ -38,12 +39,14 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
 
   late LatLng startLocation = LatLng(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude);
   late  LatLng destinationLocation =  LatLng(widget.toAddress!.latLng!.latitude, widget.toAddress!.latLng!.longitude);
+  late String _sessionToken;
+  var uuid = const Uuid();
 
 
 
   @override
   void initState() {
-
+    _sessionToken = uuid.v4();
     markers.add(Marker( //add start location marker
       markerId: MarkerId(startLocation.toString()),
       position: startLocation, //position of marker
@@ -73,7 +76,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
     List<LatLng> polylineCoordinates = [];
 
     String request =
-        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&key=$googleAPiKey';
+        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {

@@ -86,7 +86,14 @@ String convertTimeFromString(String strDate) {
   var timeString = hourMinString + ' ' + temp.split(' ')[3];
   return timeString;
 }
-
+void showSnackbar(BuildContext context, String message) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      content:  Text(message),
+    ),
+  );
+}
 List decodePolyline(String input) {
   var list=input.codeUnits;
   List lList = [];
