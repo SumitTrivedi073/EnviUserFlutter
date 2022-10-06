@@ -24,7 +24,7 @@ class SearchDriver extends StatefulWidget {
 
 class _SearchDriverPageState extends State<SearchDriver> {
   final pagecontroller = PageController();
-  
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
