@@ -14,7 +14,8 @@ class SearchDriver extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
-  const SearchDriver({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+  const SearchDriver({Key? key, this.toAddress, this.fromAddress})
+      : super(key: key);
 
   @override
   // TODO: implement createState
@@ -23,7 +24,7 @@ class SearchDriver extends StatefulWidget {
 
 class _SearchDriverPageState extends State<SearchDriver> {
   final pagecontroller = PageController();
-  
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
