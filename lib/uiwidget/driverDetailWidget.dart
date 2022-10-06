@@ -1,9 +1,14 @@
+import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../provider/firestoreLiveTripDataNotifier.dart';
 import '../theme/color.dart';
+import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
   @override
@@ -14,108 +19,109 @@ class DriverDetailWidget extends StatefulWidget {
 class _DriverDetailWidgetState extends State<DriverDetailWidget> {
   bool isButtonPressed = false;
 
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      margin: EdgeInsets.all(10),
-      height: 170,
-      child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 5,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                GestureDetector(
-                    onTap: () {
-                      print("Tapped a Container");
-                    },
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.only(left: 10),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: Image.network(
-                                "https://i.picsum.photos/id/1001/5616/3744.jpg?hmac=38lkvX7tHXmlNbI0HzZbtkJ6_wpWyqvkX4Ty6vYElZE",
-                                fit: BoxFit.fill,
-                                height: 46,
-                                width: 46,
-                              )),
-                          const SizedBox(
-                            width: 10,
+    return Consumer<firestoreLiveTripDataNotifier>(
+      builder: (context, value, child) {
+        if (value.liveTripData == null) {
+          return const CircularProgressIndicator();
+        } else {
+          return  Container(
+            margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+            child: Card(
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 10),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: Image.network(
+                                  value.liveTripData!.driverInfo.driverImgUrl.toString() != null
+                                      ? value.liveTripData!.driverInfo.driverImgUrl.toString()
+                                      : placeHolderImage,
+                                  fit: BoxFit.fill,
+                                  height: 50,
+                                  width: 50,
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  robotoTextWidget(
+                                    textval:
+                                    value.liveTripData!.driverInfo.name.toString() != null
+                                        ? value.liveTripData!.driverInfo.name.toString()
+                                        : '',
+                                    colorval: AppColor.grey,
+                                    sizeval: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  const robotoTextWidget(
+                                    textval: "7 Minutes Away",
+                                    colorval: AppColor.black,
+                                    sizeval: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ])
+                          ],
+                        ),
+                      ),
+                      Stack(alignment: Alignment.centerRight, children: <Widget>[
+                        const SizedBox(
+                          height: 2,
+                          child: Divider(
+                            color: AppColor.grey,
+                            height: 2,
                           ),
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                robotoTextWidget(
-                                  textval: "Anamika Chavan",
-                                  colorval: AppColor.grey,
-                                  sizeval: 16,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                                robotoTextWidget(
-                                  textval: "7 Minutes Away",
-                                  colorval: AppColor.black,
-                                  sizeval: 18,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ])
-                        ],
-                      ),
-                    )),
-                Stack(alignment: Alignment.centerRight, children: <Widget>[
-                  const SizedBox(
-                    height: 2,
-                    child: Divider(
-                      color: AppColor.grey,
-                      height: 2,
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: AppColor.lightwhite,
-                      border: Border.all(
-                          color: AppColor.grey, // Set border color
-                          width: 1.0), // Set border width
-                      borderRadius: const BorderRadius.all(
-                          Radius.circular(10.0)), // Set rounded corner radius
-                    ),
-                    child: MaterialButton(
-                      minWidth: 20,
-                      height: 20,
-                      onPressed: () {
-                        // _launchPhoneURL(tripData.customer.phone.toString());
-                      },
-                      child: const Icon(
-                        Icons.call_outlined,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ]),
-                GestureDetector(
-                    onTap: () {
-                      print("Tapped a Container");
-                    },
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.only(left: 8),
-                      child: Row(
+                        ),
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: AppColor.lightwhite,
+                            border: Border.all(
+                                color: AppColor.grey, // Set border color
+                                width: 1.0), // Set border width
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(5.0)), // Set rounded corner radius
+                          ),
+                          child: Center(
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.call,
+                                color: Colors.green,
+                              ),
+                              onPressed: () {
+                                makingPhoneCall(
+                                    value.liveTripData!.driverInfo.phone.toString() != null
+                                        ? value.liveTripData!.driverInfo.phone.toString()
+                                        : '');
+                              },
+                            ),
+                          ),
+                        ),
+                      ]),
+                      Row(
                         children: [
                           SvgPicture.asset(
                             "assets/svg/car-type-sedan.svg",
-                            width: 52,
-                            height: 24,
+                            width: 40,
+                            height: 30,
                           ),
                           const SizedBox(
                             width: 10,
@@ -123,26 +129,39 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                           Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children:  [
                                 robotoTextWidget(
-                                  textval: "Hatchback – 3 People",
+                                  textval: '${value.liveTripData!.tripInfo.priceClass.type.toString()} - ${value.liveTripData!.tripInfo.priceClass.passengerCapacity.toString()} People',
                                   colorval: AppColor.grey,
                                   sizeval: 16,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                robotoTextWidget(
-                                  textval: "KA04 AB 3545",
+                                 robotoTextWidget(
+                                  textval:  value.liveTripData!.driverInfo.vehicleNumber.toString() != null
+                                      ? value.liveTripData!.driverInfo.vehicleNumber.toString()
+                                      : '',
                                   colorval: AppColor.black,
                                   sizeval: 18,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ])
                         ],
-                      ),
-                    ))
-              ],
-            ),
-          )),
+                      )
+                    ],
+                  ),
+                )),
+          );
+        }
+      },
     );
+  }
+
+  Future<void> makingPhoneCall(String phone) async {
+    var url = Uri.parse("tel:$phone");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

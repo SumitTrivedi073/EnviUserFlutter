@@ -15,6 +15,7 @@ const deployedLambdaUrl = "";
 const qaUrl = 'https://qausernew.azurewebsites.net/';
 
 const productionUrl = 'https://qausernew.azurewebsites.net/';
+const directionBaseURL = 'https://maps.googleapis.com/maps/api/directions/json';
 
 getBaseURL() {
   String baseUrl = deployedLambdaUrl;
@@ -60,7 +61,12 @@ searchDriver() {
 startTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/startUserTrip');
 }
-
+cancelTrip() {
+  return Uri.parse('${getBaseURL()}/userTrip/cancelUserTrip');
+}
+SosApi() {
+  return Uri.parse('${getBaseURL()}/user/sos');
+}
 
 EditFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
@@ -70,4 +76,8 @@ AddFavouriteAddressdata(){
 }
 DeleteFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
+}
+
+updatePaymentMode(){
+  return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
 }
