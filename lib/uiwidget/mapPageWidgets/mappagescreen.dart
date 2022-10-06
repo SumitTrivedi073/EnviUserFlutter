@@ -47,7 +47,7 @@ class MyMapState extends State {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
- String placeName = '';
+  String placeName = '';
   String? isoId;
   @override
   void initState() {
@@ -56,8 +56,7 @@ class MyMapState extends State {
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
   }
-  
-  
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -81,13 +80,13 @@ class MyMapState extends State {
                 zoomGesturesEnabled: true,
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
-                onCameraIdle: () async {
-                await  GetAddressFromLatLong(latlong!);
+                onCameraIdle: () {
+                  GetAddressFromLatLong(latlong!);
                 },
-                onCameraMove: (CameraPosition position)async {
+                onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                       await  GetAddressFromLatLong(latlong!);
+                  GetAddressFromLatLong(latlong!);
                 },
               )
             : Container(),
@@ -105,13 +104,14 @@ class MyMapState extends State {
               padding: const EdgeInsets.all(16),
               child: FloatingActionButton(
                 // isExtended: true,
-                child: const Icon(Icons.my_location_outlined),
                 backgroundColor: Colors.green,
                 onPressed: () {
                   setState(() {
                     getCurrentLocation();
                   });
                 },
+                // isExtended: true,
+                child: const Icon(Icons.my_location_outlined),
               ),
             ),
           ),
@@ -166,15 +166,18 @@ class MyMapState extends State {
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
+    //print(placemarks);
     Placemark place = placemarks[0];
-    placeName = (place.subLocality != '')?place.subLocality! :place.subAdministrativeArea!;
+    placeName = (place.subLocality != '')
+        ? place.subLocality!
+        : place.subAdministrativeArea!;
     isoId = place.isoCountryCode;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

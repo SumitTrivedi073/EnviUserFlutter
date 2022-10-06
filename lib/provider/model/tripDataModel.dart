@@ -263,7 +263,7 @@ class PriceClass {
         sellerDiscount: json["seller_discount"].toDouble(),
         totalFare: json["total_fare"].toDouble(),
         advancePaid: json["advancePaid"],
-        baseFare: json["base_fare"],
+        baseFare: json["base_fare"].toDouble(),
         skuId: json["sku_id"],
         perKmFare: json["perKMFare"].toDouble(),
         type: json["type"],

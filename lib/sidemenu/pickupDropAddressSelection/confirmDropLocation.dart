@@ -31,7 +31,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  String Address = PickUp;
+  String Address = '';
   LatLng initialLatLng = LatLng(0, 0);
   bool isFromVerified = false;
   bool isToVerified = false;
