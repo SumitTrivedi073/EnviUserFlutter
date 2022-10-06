@@ -1,22 +1,37 @@
+import 'dart:io';
+
+import 'package:envi/login/model/LoginModel.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/dropdown.dart';
+import 'package:envi/web_service/ApiServices/user_api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import '../web_service/Constant.dart';
 
 class NewProfilePage extends StatefulWidget {
-  const NewProfilePage({Key? key}) : super(key: key);
-
+  const NewProfilePage({Key? key, required this.user}) : super(key: key);
+  final LoginModel user;
   @override
   State<NewProfilePage> createState() => _NewProfilePageState();
 }
 
 class _NewProfilePageState extends State<NewProfilePage> {
+  File? _image;
+  Future getImage() async {
+    final img = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (img == null) return;
+    final imageTemp = File(img.path);
+    setState(() {
+      _image = imageTemp;
+    });
+  }
+
   String? selectedGender;
   //textformfield controllers
   final TextEditingController _firstNameController = TextEditingController();
@@ -32,6 +47,29 @@ class _NewProfilePageState extends State<NewProfilePage> {
   }
 
   final _profileForm = GlobalKey<FormState>();
+  // var _image;
+  // var imagePicker;
+  // var type;
+  void updateUser() {
+    _emailController.text = widget.user.mailid;
+    _phoneNoController.text = widget.user.phone;
+    _firstNameController.text = widget.user.name;
+    if (widget.user.gender.toString() == "m") {
+      selectedGender = "Male";
+    } else if (widget.user.gender.toString() == "f") {
+      selectedGender = "Female";
+    } else {
+      selectedGender = "I'd rather not say";
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // imagePicker = ImagePicker();
+    updateUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +122,32 @@ class _NewProfilePageState extends State<NewProfilePage> {
                       children: [
                         Row(
                           children: [
-                            Container(
-                              color: AppColor.textfieldlightgrey,
-                              height: 90,
-                              width: 90,
-                              child: const Icon(
-                                Icons.camera_alt_outlined,
-                                color: AppColor.grey,
-                              ),
+                            GestureDetector(
+                              onTap: () async {
+                                // var source = ImageSource.gallery;
+                                // XFile image = await imagePicker!
+                                //     .getImage(source: source);
+                                // setState(() {
+                                //   _image = File(image.path);
+                                // });
+                                getImage();
+                              },
+                              child: (_image != null)
+                                  ? Image.file(
+                                      _image!,
+                                      width: 100.0,
+                                      height: 100.0,
+                                      fit: BoxFit.fitHeight,
+                                    )
+                                  : Container(
+                                      color: AppColor.textfieldlightgrey,
+                                      height: 90,
+                                      width: 90,
+                                      child: const Icon(
+                                        Icons.camera_alt_outlined,
+                                        color: AppColor.grey,
+                                      ),
+                                    ),
                             ),
                             const SizedBox(
                               width: 12,
@@ -151,6 +207,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                     backGroundColor:
                                         AppColor.textfieldlightgrey,
                                     selectedValue: selectedGender,
+                                    defaultValue: selectedGender,
                                     onChange: (val) {
                                       chooseGender(val);
                                     },
@@ -181,6 +238,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                           height: 10,
                         ),
                         TextFormField(
+                          enabled: false,
                           controller: _emailController,
                           decoration: InputDecoration(
                               filled: true,
@@ -204,7 +262,40 @@ class _NewProfilePageState extends State<NewProfilePage> {
                 height: 15,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () async {
+                  // Uri uri = Uri.parse(
+                  //     'https://qausernew.azurewebsites.net/user/updateProfile');
+                  // var data = {
+                  //   "name": _firstNameController.text,
+                  //   "gender": selectedGender
+                  // };
+                  // var res;
+                  // res = await HTTP.postToAcceptMultipartRequest(
+                  //     uri,
+                  //     data,
+                  //     File(_image!.path).readAsBytesSync(),
+                  //     _image!.path.split("/").last,
+                  //     "pro_pic");
+                  // if (res != null) {
+                  //   print(res);
+                  // } else {
+                  //   print(res);
+                  // }
+                  UserApiService userApi = UserApiService();
+                  final response = await userApi.userEditProfile(
+                    image: _image!,
+                    token: widget.user.token,
+                    name: _firstNameController.text,
+                    gender: selectedGender!,
+                    email: _emailController.text
+                  );
+                  // var res;
+                  // res = await userApi.userEditProfile(
+                  //     token: widget.user.token,
+                  //     name: _firstNameController.text,
+                  //     gender: selectedGender!,
+                  //     propic: '$_image.path');
+                },
                 height: 48,
                 minWidth: double.infinity,
                 color: AppColor.greyblack,
