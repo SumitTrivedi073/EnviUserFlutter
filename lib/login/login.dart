@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../Profile/newprofilePage.dart';
 import '../Profile/profilePage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
@@ -455,13 +456,13 @@ class _LoginpageState extends State<Loginpage> {
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,)));
         } else {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileAfterloginPage(
-                        profiledata: users.toJson(),
+                        profiledata: users,
                       )));
         }
       });
