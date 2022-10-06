@@ -13,8 +13,6 @@ import '../../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
-import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import '../web_service/Constant.dart';
 
 class MapDirectionWidget extends StatefulWidget{
   final SearchPlaceModel? fromAddress;
@@ -22,13 +20,6 @@ class MapDirectionWidget extends StatefulWidget{
 
   const MapDirectionWidget({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
 
-
-
-
-
-  const MapDirectionWidget({Key? key, this.fromAddress, this.toAddress}) : super(key: key);
-final SearchPlaceModel? fromAddress;
-   final SearchPlaceModel? toAddress;
 
 
   @override
