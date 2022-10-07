@@ -244,6 +244,7 @@ class PriceClass {
   double totalFare;
   int advancePaid;
   int baseFare;
+  //change baseFare to double
   String skuId;
   double perKmFare;
   String type;
@@ -263,7 +264,7 @@ class PriceClass {
         sellerDiscount: json["seller_discount"].toDouble(),
         totalFare: json["total_fare"].toDouble(),
         advancePaid: json["advancePaid"],
-        baseFare: json["base_fare"].toDouble(),
+        baseFare: json["base_fare"],
         skuId: json["sku_id"],
         perKmFare: json["perKMFare"].toDouble(),
         type: json["type"],

@@ -81,13 +81,13 @@ class MyMapState extends State {
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
-                  await Future.delayed(const Duration(milliseconds: 2000));
+                 // await Future.delayed(const Duration(milliseconds: 2000));
                   GetAddressFromLatLong(latlong!);
                 },
                 onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                  GetAddressFromLatLong(latlong!);
+                //  GetAddressFromLatLong(latlong!);
                 },
               )
             : Container(),
@@ -163,7 +163,6 @@ class MyMapState extends State {
       });
     }
   }
-
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
