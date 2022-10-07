@@ -11,8 +11,9 @@ class FromToWidget extends StatefulWidget {
 
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
+  String distance;
 
-  const FromToWidget({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
+   FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.distance}) : super(key: key);
 
 
 
@@ -102,7 +103,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                           Radius.circular(10.0)), // Set rounded corner radius
                     ),
                     child: robotoTextWidget(
-                      textval: kmHint,
+                      textval: widget.distance,
                       colorval: AppColor.black,
                       sizeval: 14,
                       fontWeight: FontWeight.normal,
