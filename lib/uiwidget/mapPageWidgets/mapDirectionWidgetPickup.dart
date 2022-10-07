@@ -67,7 +67,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-
+  late double distancecorrectionFactor,googleDistance, duration;
 
   @override
   void initState() {
@@ -95,6 +95,9 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             for (var k = 0;
                 k < directionModel.routes[i].legs[j].steps.length;
                 k++) {
+              duration = directionModel.routes[i].legs[j].duration.value.toDouble();
+              googleDistance = directionModel.routes[i].legs[j].distance.value.toDouble();
+
               pointLatLng = polylinePoints.decodePolyline(
                   directionModel.routes[i].legs[j].steps[k].polyline.points);
               for (var point in pointLatLng) {
@@ -105,11 +108,22 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           }
         }
         addPolyLine(polylineCoordinates);
-        //    startTimer();
+        distancecorrectionFactor = googleDistance / calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+
+          startTimer();
       } else {
         throw Exception('Failed to load predictions');
       }
     }
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
   }
 
   @override
@@ -295,8 +309,17 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     if(previousLocation!=carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
+    updatePickupTime();
   }
+  void updatePickupTime() {
 
+    double new_distance = distancecorrectionFactor * calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+    double new_time = (duration / googleDistance) * new_distance;
+
+    int minutes =  new_time ~/ 60;
+    int seconds =  (new_time % 60).toInt();
+
+  }
   double getBearing(LatLng begin, LatLng end) {
     double lat = (begin.latitude - end.latitude).abs();
     double lng = (begin.longitude - end.longitude).abs();
@@ -326,7 +349,9 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   @override
   void dispose() {
-    //timer.cancel();
+    timer.cancel();
     super.dispose();
   }
+
+
 }
