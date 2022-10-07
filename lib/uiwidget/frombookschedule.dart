@@ -36,7 +36,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
     // TODO: implement build
     return Container(
       height: 140,
-      margin: EdgeInsets.only(left: 10,right: 10),
+      margin: EdgeInsets.only(left: 10, right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,

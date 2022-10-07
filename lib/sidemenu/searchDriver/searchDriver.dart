@@ -45,12 +45,10 @@ class _SearchDriverPageState extends State<SearchDriver> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _prepareData();
   }
 
-  void _prepareData() async {
+  Future<dynamic> searchDriv() async {
     sharedPreferences = await SharedPreferences.getInstance();
-
     data = {
       "fromAddress": widget.fromAddress!.address,
       "toAddress": widget.toAddress!.address,
@@ -67,26 +65,6 @@ class _SearchDriverPageState extends State<SearchDriver> {
         "longitude": widget.toAddress!.latLng!.longitude
       },
     };
-
-    //print("data=======>$data");
-    // dynamic res = await HTTP.post(searchDriver(), data);
-    // if (res != null && res.statusCode != null && res.statusCode == 200) {
-    //   setState(() {
-    //     DriverList = (jsonDecode(res.body)['content'] as List)
-    //         .map((i) => Content.fromJson(i))
-    //         .toList();
-
-    //     vehiclePriceClasses =
-    //         (jsonDecode(res.body)['vehiclePriceClasses'] as List)
-    //             .map((i) => VehiclePriceClass.fromJson(i))
-    //             .toList();
-    //   });
-    // } else {
-    //   throw "Can't get DriverList.";
-    // }
-  }
-
-  Future<dynamic> searchDriv(dynamic data) async {
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
@@ -110,7 +88,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
     // TODO: implement build
     return Scaffold(
         body: FutureBuilder(
-            future: searchDriv(data),
+            future: searchDriv(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.data == null || snapshot.hasError) {
                 return const Center(child: CircularProgressIndicator());
@@ -132,7 +110,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
                           5,
                     ),
                     const SizedBox(height: 230),
-                    
+
                     Expanded(
                         child: Card(
                       elevation: 5,
