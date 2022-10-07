@@ -1,3 +1,4 @@
+import 'package:envi/payment/payment_page.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'package:envi/theme/color.dart';
@@ -36,7 +37,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
     // TODO: implement build
     return Container(
       height: 140,
-      margin: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -50,7 +51,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
               children: [
                 GestureDetector(
                     onTap: () {
-                      print("Tapped a Container");
+                      // print("Tapped a Container");
                     },
                     child: Container(
                       height: 50,
@@ -115,9 +116,12 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           _status = BookingTiming.now;
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                  builder: (context) => SelectPickupDropAddress(
+                                  builder: (context) => 
+                                  //PaymentPage()
+                                  SelectPickupDropAddress(
                                       currentLocation: widget.currentLocation,
-                                      title: pickUpLocation)),
+                                      title: pickUpLocation)
+                                  ),
                               (route) => true);
                         },
                       ),

@@ -19,6 +19,10 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  bool arrowClicked = false;
+  List<String> breakDownNames = [distanceTravelledText,totalFareText,lessDiscountText,tollsText,taxesText,amountPayableText];
+  List<String> breakDownVals = ['13.0 Kms','x 18.00 ₹','234.00 ₹','- 40.0 ₹','70.00 ₹','32.00 ₹','296.00'];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -116,12 +120,67 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ),
                 ),
+                Card(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: robotoTextWidget(
+                            textval: yourFareText,
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.normal),
+                        subtitle: robotoTextWidget(
+                            textval: includesdiscountText,
+                            colorval: AppColor.textgray,
+                            sizeval: 14,
+                            fontWeight: FontWeight.normal),
+                        trailing: const robotoTextWidget(
+                            textval: '₹296',
+                            colorval: AppColor.darkGreen,
+                            sizeval: 40,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      const Divider(
+                        thickness: 2,
+                      ),
+                      ExpansionTile(
+                        onExpansionChanged: (value) {
+                          setState(() {
+                            arrowClicked = !arrowClicked;
+                          });
+                        },
+                        backgroundColor: Colors.yellow[50],
+                        leading: (arrowClicked)
+                            ? Icon(Icons.arrow_drop_up)
+                            : Icon(Icons.arrow_drop_down),
+                        trailing: const Icon(Icons.share),
+                        title: robotoTextWidget(
+                            textval: breakdownText,
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.bold),
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: 
+                                List.generate(7, (index) => Row(
+                                  children: [
+                                  //  robotoTextWidget(textval: breakDownNames[index], colorval: colorval, sizeval: sizeval, fontWeight: fontWeight)
+                                  ],
+                                ))
+                                
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 PaymentModeOptionWidget(
                   strpaymentOptions: "qr_code,online,cash",
                   selectedOption: "qr_code",
                 ),
                 Container(
-                    height: 40,
                     width: double.infinity,
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
