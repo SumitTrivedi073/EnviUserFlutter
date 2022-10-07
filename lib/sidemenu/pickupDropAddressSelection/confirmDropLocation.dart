@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
@@ -31,8 +33,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  String Address = '';
-  LatLng initialLatLng = LatLng(0, 0);
+  String Address = PickUp;
+  LatLng initialLatLng = const LatLng(0, 0);
   bool isFromVerified = false;
   bool isToVerified = false;
   @override
@@ -67,9 +69,10 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         zoomGesturesEnabled: true,
         rotateGesturesEnabled: true,
         zoomControlsEnabled: false,
-        onCameraIdle: () async {
-          await Future.delayed(const Duration(milliseconds: 2000));
-          GetAddressFromLatLong(latlong);
+        onCameraIdle: () {
+          Timer(const Duration(seconds: 1), () {
+            GetAddressFromLatLong(latlong);
+          });
         },
         onCameraMove: (CameraPosition position) {
           latlong = LatLng(position.target.latitude, position.target.longitude);
@@ -107,7 +110,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             isBackButtonNeeded: false,
           ),
           Card(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 5),
+            margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
             color: Colors.white,
             elevation: 4,
             child: Container(
@@ -155,8 +158,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          const Padding(
+            padding: EdgeInsets.all(20.0),
             child: Text(
               'Move around',
               style: AppTextStyle.robotoRegular16,
@@ -181,23 +184,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         address: Address,
                         title: toAddressName!,
                         latLng: latlong));
-                // Navigator.of(context).pushAndRemoveUntil(
-                //     MaterialPageRoute(
-                //         builder: (BuildContext context) => SearchDriver(
-                //             fromAddress: widget.fromLocation,
-                //             toAddress: SearchPlaceModel(
-                //               id: '',
-                //               title: toAddressName!,
-                //               address: Address,
-                //               latLng: latlong,
-                //             )
-
-                //             // ToAddressLatLong(
-                //             //   address: Address,
-                //             //   position: latlong,
-                //             // ),
-                //             )),
-                //     (Route<dynamic> route) => true);
               },
               style: ElevatedButton.styleFrom(
                 primary: AppColor.greyblack,

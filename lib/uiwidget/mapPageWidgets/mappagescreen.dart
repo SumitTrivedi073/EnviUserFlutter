@@ -81,13 +81,14 @@ class MyMapState extends State {
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
-                 // await Future.delayed(const Duration(milliseconds: 2000));
-                  GetAddressFromLatLong(latlong!);
+                  Timer(const Duration(seconds: 1), () {
+                      GetAddressFromLatLong(latlong!);
+                  });
+
                 },
                 onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                //  GetAddressFromLatLong(latlong!);
                 },
               )
             : Container(),
