@@ -6,15 +6,17 @@ import 'package:envi/uiwidget/fromtowidget.dart';
 import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/driverListWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 
 class SearchDriver extends StatefulWidget {
+  final GlobalKey<DriverListItemPageState> _key = GlobalKey();
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
-  const SearchDriver({Key? key, this.toAddress, this.fromAddress})
+   SearchDriver({Key? key, this.toAddress, this.fromAddress})
       : super(key: key);
 
   @override
@@ -24,6 +26,7 @@ class SearchDriver extends StatefulWidget {
 
 class _SearchDriverPageState extends State<SearchDriver> {
   final pagecontroller = PageController();
+  late String distance = "";
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +42,21 @@ class _SearchDriverPageState extends State<SearchDriver> {
         const SizedBox(height: 5),
         FromToWidget(
       fromAddress: widget.fromAddress,
-      toAddress: widget.toAddress,),
+      toAddress: widget.toAddress,
+        distance: distance,),
         const SizedBox(height: 230),
-        DriverListItem(
+       DriverListItem(
+          key: widget._key,
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
+          callback: retrieveDistance,
         ),
-
       ]),
     ]));
+  }
+  retrieveDistance(String distanceInKm){
+   setState(() {
+     distance = distanceInKm;
+   });
   }
 }

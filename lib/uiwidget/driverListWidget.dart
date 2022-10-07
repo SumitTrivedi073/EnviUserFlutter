@@ -20,19 +20,21 @@ import '../web_service/APIDirectory.dart';
 class DriverListItem extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
+  final void Function(String) callback;
 
-  const DriverListItem({Key? key, this.toAddress, this.fromAddress})
+  const DriverListItem({Key? key, this.toAddress, this.fromAddress, required this.callback})
       : super(key: key);
 
   @override
   // TODO: implement createState
-  State<StatefulWidget> createState() => _DriverListItemPageState();
+  State<StatefulWidget> createState() => DriverListItemPageState();
 }
 
-class _DriverListItemPageState extends State<DriverListItem> {
+class DriverListItemPageState extends State<DriverListItem> {
   var listItemCount = 4;
   List<Content> DriverList = [];
   List<VehiclePriceClass> vehiclePriceClasses = [];
+  late Distance distance;
   late SharedPreferences sharedPreferences;
   int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
@@ -76,6 +78,10 @@ class _DriverListItemPageState extends State<DriverListItem> {
             (jsonDecode(res.body)['vehiclePriceClasses'] as List)
                 .map((i) => VehiclePriceClass.fromJson(i))
                 .toList();
+
+        distance = Distance.fromJson(jsonDecode(res.body)['distance']);
+        widget.callback(distance.text.toString());
+
       });
     } else {
       throw "Can't get DriverList.";
@@ -214,7 +220,6 @@ class _DriverListItemPageState extends State<DriverListItem> {
     return GestureDetector(
       onTap: (){
         selectedIndex = index;
-        print("selectedIndex========>$selectedIndex");
       },
       child: Card(
         margin: const EdgeInsets.all(5),
