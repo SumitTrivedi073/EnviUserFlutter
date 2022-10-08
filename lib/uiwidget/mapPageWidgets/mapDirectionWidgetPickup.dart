@@ -20,16 +20,16 @@ import '../../web_service/Constant.dart';
 
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
-
+  final void Function(String) callback;
   MapDirectionWidgetPickup(
-      {Key? key, this.liveTripData}) : super(key: key);
+      {Key? key, this.liveTripData, required this.callback}) : super(key: key);
 
   @override
-  _MapDirectionWidgetPickupState createState() =>
-      _MapDirectionWidgetPickupState();
+  MapDirectionWidgetPickupState createState() =>
+      MapDirectionWidgetPickupState();
 }
 
-class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
+class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     with TickerProviderStateMixin {
   GoogleMapController? mapController; //contrller for Google map
   PolylinePoints polylinePoints = PolylinePoints();
@@ -59,7 +59,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           : 77.345492878187);
 
   late LatLng previousLocation = const LatLng(0.0, 0.0);
-  var carMarker;
+  var carMarker, driverStartingLocation ;
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
@@ -83,6 +83,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
+    print("url==========>$url");
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
@@ -109,8 +110,8 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         }
         addPolyLine(polylineCoordinates);
         distancecorrectionFactor = googleDistance / calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
-
-          startTimer();
+        startTimer();
+        updatePickupTime();
       } else {
         throw Exception('Failed to load predictions');
       }
@@ -228,9 +229,24 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carCurrentLocation, pickupLocation),
+        rotation: getBearing(pickupLocation, carCurrentLocation),
         draggable: false);
 
+
+      if(driverStartingLocation==null) {
+         driverStartingLocation = Marker(
+          //add start location marker
+          markerId: MarkerId(carCurrentLocation.toString()),
+          position: carCurrentLocation, //position of marker
+          infoWindow: const InfoWindow(
+            //popup info
+            title: 'Driver Starting Location',
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueOrange), //Icon for Marker
+        );
+        markers.add(driverStartingLocation);
+      }
     //Adding a delay and then showing the marker on screen
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -261,11 +277,12 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     GoogleMapController controller, //Google map controller of our widget
   ) async {
     final double bearing =
-        getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
+        getBearing(pickupLocation, carCurrentLocation);
 
 
     final Uint8List markerIcon =
     await getBytesFromAsset('assets/images/car-map.png', 70);
+
 
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
@@ -318,7 +335,11 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     int minutes =  new_time ~/ 60;
     int seconds =  (new_time % 60).toInt();
-
+    if(minutes>0) {
+      widget.callback("$minutes Minute");
+    }else{
+      widget.callback("$seconds Second");
+    }
   }
   double getBearing(LatLng begin, LatLng end) {
     double lat = (begin.latitude - end.latitude).abs();

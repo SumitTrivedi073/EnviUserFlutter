@@ -35,7 +35,7 @@ class _MapDirectionWidgetOnRideState
 
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
-  late LatLng startLocation = LatLng(
+  late LatLng pickupLocation = LatLng(
       (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
           ? widget.liveTripData!.tripInfo.pickupLocation.latitude
           : 13.197965663195877,
@@ -85,7 +85,7 @@ class _MapDirectionWidgetOnRideState
 
 
     String request =
-        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
+        '$directionBaseURL?origin=${pickupLocation.latitude},${pickupLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
@@ -195,8 +195,8 @@ class _MapDirectionWidgetOnRideState
   addMarker() async {
     var pickupMarker = Marker(
       //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
+      markerId: MarkerId(pickupLocation.toString()),
+      position: pickupLocation, //position of marker
       infoWindow: const InfoWindow(
         //popup info
         title: 'Pickup Location',
@@ -226,7 +226,7 @@ class _MapDirectionWidgetOnRideState
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carCurrentLocation, startLocation),
+        rotation: getBearing(destinationLocation, carCurrentLocation),
         draggable: false);
 
     //Adding a delay and then showing the marker on screen
@@ -261,7 +261,7 @@ class _MapDirectionWidgetOnRideState
     GoogleMapController controller, //Google map controller of our widget
   ) async  {
     final double bearing =
-    getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
+    getBearing(destinationLocation, carCurrentLocation);
 
 
     final Uint8List markerIcon =
