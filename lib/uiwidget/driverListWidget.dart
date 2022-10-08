@@ -57,16 +57,15 @@ class DriverListItemPageState extends State<DriverListItem> {
       "userId": sharedPreferences.getString(LoginID),
       "userName": sharedPreferences.getString(LoginName),
       "location": {
-        "latitude": widget.fromAddress!.latLng!.latitude,
-        "longitude": widget.fromAddress!.latLng!.longitude
+        "latitude": widget.fromAddress!.latLng.latitude,
+        "longitude": widget.fromAddress!.latLng.longitude
       },
       "toLocation": {
-        "latitude": widget.toAddress!.latLng!.latitude,
-        "longitude": widget.toAddress!.latLng!.longitude
+        "latitude": widget.toAddress!.latLng.latitude,
+        "longitude": widget.toAddress!.latLng.longitude
       },
     };
 
-    print("data=======>$data");
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {

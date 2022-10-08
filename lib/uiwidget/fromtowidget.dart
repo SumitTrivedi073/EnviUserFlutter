@@ -13,10 +13,9 @@ class FromToWidget extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
   final BookingTiming tripType;
-  const FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.tripType}) : super(key: key);
   String distance;
 
-   FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.distance}) : super(key: key);
+   FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.distance,required this.tripType}) : super(key: key);
 
 
 

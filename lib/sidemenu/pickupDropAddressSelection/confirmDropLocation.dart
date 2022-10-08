@@ -42,7 +42,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     // TODO: implement initState
     super.initState();
     initialLatLng = LatLng(
-        widget.location!.latLng!.latitude, widget.location!.latLng!.longitude);
+        widget.location!.latLng.latitude, widget.location!.latLng.longitude);
     _cameraPosition = CameraPosition(target: initialLatLng, zoom: 10.0);
     // getCurrentLocation();
     isFavourite = widget.isFavourite;

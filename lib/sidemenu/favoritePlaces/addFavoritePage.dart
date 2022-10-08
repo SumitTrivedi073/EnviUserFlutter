@@ -24,6 +24,7 @@ import '../../web_service/Constant.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
   final FavoritesData? data;
+
   // final void Function(String) onCriteriaChanged;
 
   const AddEditFavoritePlacesPage(
@@ -46,7 +47,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   TextEditingController titlecontroller = new TextEditingController();
   TextEditingController addresscontroller = new TextEditingController();
   CameraPosition? _cameraPosition;
-  String address = "",editidentifire = "";
+  String address = "", editidentifire = "";
   GoogleMapController? _controller;
   late LatLng latlong;
   late SharedPreferences sharedPreferences;
@@ -71,7 +72,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
       editid = widget.data!.id;
     } else {
       getCurrentLocation();
-      _cameraPosition = CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
+      _cameraPosition =
+          const CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
     }
     // _controller = new ScrollController()..addListener(_loadMore);
   }
@@ -279,7 +281,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                             height: 24,
                                             color: AppColor.red,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 10,
                                           ),
                                           robotoTextWidget(
@@ -322,26 +324,23 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                     }
                   }
                   print("======");
-if(widget.isforedit != "0"){
-  var detail = await dao.findDataByaddressg(address);
+                  if (widget.isforedit != "0") {
+                    var detail = await dao.findDataByaddressg(address);
 
-  if (detail == null) {
-    print("======api");
-    ApiCall_Add_Favorite();
-  } else {
-    print("=====${detail}");
-    ApiCall_update_Favorite(detail.id
-        ,detail.identifier);
-  }
-}else{
-  if(editidentifire == "0"){
-
-    ApiCall_Add_Favorite();
-  }else{
-  ApiCall_update_Favorite(editid
-      ,editidentifire);}
-}
-
+                    if (detail == null) {
+                      print("======api");
+                      ApiCall_Add_Favorite();
+                    } else {
+                      print("=====${detail}");
+                      ApiCall_update_Favorite(detail.id, detail.identifier);
+                    }
+                  } else {
+                    if (editidentifire == "0") {
+                      ApiCall_Add_Favorite();
+                    } else {
+                      ApiCall_update_Favorite(editid, editidentifire);
+                    }
+                  }
                 },
                 child: robotoTextWidget(
                     textval: savetext,
@@ -431,7 +430,7 @@ if(widget.isforedit != "0"){
     }
   }
 
-  Future<void> ApiCall_update_Favorite(int? id,String idetifire) async {
+  Future<void> ApiCall_update_Favorite(int? id, String idetifire) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
     final response = await ApiCollection.FavoriateDataUpdate(
@@ -449,7 +448,8 @@ if(widget.isforedit != "0"){
         String addressId = jsonDecode(response.body)['content']['addressId'];
         print(jsonDecode(response.body)['content']);
 
-        final task = FavoritesData.optional(id: id,
+        final task = FavoritesData.optional(
+            id: id,
             identifier: idetifire,
             address: address,
             isFavourite: 'Y',
@@ -458,7 +458,7 @@ if(widget.isforedit != "0"){
             title: titlecontroller.text.toString());
         print(task);
         await dao.updateTask(task);
-        
+
         Navigator.pop(context, {"isbact": true});
       }
       showToast((jsonDecode(response.body)['message'].toString()));

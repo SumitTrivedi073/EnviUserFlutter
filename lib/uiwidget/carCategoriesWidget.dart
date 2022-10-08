@@ -49,12 +49,10 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
 
   void _firstLoad() async {
     final response = await ApiCollection.getScheduleEstimationdata(
-        widget.fromAddress!.latLng!.latitude,
-        widget.fromAddress!.latLng!.longitude,
-        widget.toAddress!.latLng!.latitude,
-        widget.toAddress!.latLng!.longitude);
-    print(response.body);
-
+        widget.fromAddress!.latLng.latitude,
+        widget.fromAddress!.latLng.longitude,
+        widget.toAddress!.latLng.latitude,
+        widget.toAddress!.latLng.longitude);
     if (response != null) {
       if (response.statusCode == 200) {
         setState(() {

@@ -72,10 +72,6 @@ class _HomePageState extends State<HomePage> {
                   title: 'Welcome $name',
                   image: 'assets/images/welcome_card_dashboard.png'),
 
-              /*PaymentModeOptionWidget(
-              strpaymentOptions: "qr_code,online,cash",
-              selectedOption: "qr_code",
-            )*/
               const ScheduleListAlertConsumer()
             ],
           ),
