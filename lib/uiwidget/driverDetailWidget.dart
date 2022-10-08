@@ -11,6 +11,11 @@ import '../theme/color.dart';
 import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
+
+  String duration;
+
+  DriverDetailWidget({Key? key, required this.duration,}) : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _DriverDetailWidgetState();
@@ -71,8 +76,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                     sizeval: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  const robotoTextWidget(
-                                    textval: "7 Minutes Away",
+                                   robotoTextWidget(
+                                    textval: "${widget.duration} Away",
                                     colorval: AppColor.black,
                                     sizeval: 18,
                                     fontWeight: FontWeight.w600,

@@ -19,13 +19,16 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../onRide/onRideWidget.dart';
 
 class WaitingForDriverScreen extends StatefulWidget {
-  const WaitingForDriverScreen({Key? key}) : super(key: key);
+  final GlobalKey<MapDirectionWidgetPickupState> _key = GlobalKey();
+   WaitingForDriverScreen({Key? key}) : super(key: key);
 
   @override
   State<WaitingForDriverScreen> createState() => _WaitingForDriverScreenState();
 }
 
 class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
+
+  late String duration = "5 Minute";
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -54,7 +57,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
               return Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
                 MapDirectionWidgetPickup(
+                  key: widget._key,
                   liveTripData: value.liveTripData!,
+                  callback: retrieveDuration,
                 ),
                 Column(children: [
                   const AppBarInsideWidget(title: "Envi"),
@@ -68,7 +73,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                   TimerButton(
                     liveTripData: value.liveTripData!,
                   ),
-                  DriverDetailWidget(),
+                  DriverDetailWidget(duration: duration,),
                   FromToData(value.liveTripData!),
                 ]),
               ]));
@@ -102,108 +107,118 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
           image: 'assets/images/connecting_driver_img.png');
     }
   }
+
+
+  Widget FromToData(TripDataModel liveTripData) {
+    return Container(
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/svg/from-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Flexible(
+                            child: Wrap(children: [
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                child: robotoTextWidget(
+                                  textval: liveTripData
+                                      .tripInfo.pickupLocation.pickupAddress
+                                      .toString(),
+                                  colorval: AppColor.black,
+                                  sizeval: 16,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ])),
+                      ],
+                    ),
+                  ),
+                  Stack(alignment: Alignment.centerRight, children: <Widget>[
+                    const SizedBox(
+                      height: 2,
+                      child: Divider(
+                        color: AppColor.darkgrey,
+                        height: 2,
+                      ),
+                    ),
+                    Container(
+                      height: 40,
+                      width: 70,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColor.lightwhite,
+                        border: Border.all(
+                            color: AppColor.grey, // Set border color
+                            width: 1.0), // Set border width
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10.0)), // Set rounded corner radius
+                      ),
+                      child: robotoTextWidget(
+                        textval:
+                        '${liveTripData.tripInfo.priceClass.distance} Km',
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ]),
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/svg/to-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Flexible(
+                            child: Wrap(children: [
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                child: robotoTextWidget(
+                                  textval: liveTripData
+                                      .tripInfo.dropLocation.dropAddress
+                                      .toString(),
+                                  colorval: AppColor.black,
+                                  sizeval: 16,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ])),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )));
+  }
+
+  retrieveDuration(String durationToPickupLocation){
+    setState(() {
+      duration = durationToPickupLocation;
+    });
+  }
 }
 
-Widget FromToData(TripDataModel liveTripData) {
-  return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-      child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 5,
-          child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(5),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/svg/from-location-img.svg",
-                        width: 20,
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Flexible(
-                          child: Wrap(children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          child: robotoTextWidget(
-                            textval: liveTripData
-                                .tripInfo.pickupLocation.pickupAddress
-                                .toString(),
-                            colorval: AppColor.black,
-                            sizeval: 16,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                      ])),
-                    ],
-                  ),
-                ),
-                Stack(alignment: Alignment.centerRight, children: <Widget>[
-                  const SizedBox(
-                    height: 2,
-                    child: Divider(
-                      color: AppColor.darkgrey,
-                      height: 2,
-                    ),
-                  ),
-                  Container(
-                    height: 40,
-                    width: 70,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColor.lightwhite,
-                      border: Border.all(
-                          color: AppColor.grey, // Set border color
-                          width: 1.0), // Set border width
-                      borderRadius: const BorderRadius.all(
-                          Radius.circular(10.0)), // Set rounded corner radius
-                    ),
-                    child: robotoTextWidget(
-                      textval:
-                          '${liveTripData.tripInfo.priceClass.distance} Km',
-                      colorval: AppColor.black,
-                      sizeval: 14,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ]),
-                Container(
-                  margin: const EdgeInsets.all(5),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/svg/to-location-img.svg",
-                        width: 20,
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Flexible(
-                          child: Wrap(children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          child: robotoTextWidget(
-                            textval: liveTripData
-                                .tripInfo.dropLocation.dropAddress
-                                .toString(),
-                            colorval: AppColor.black,
-                            sizeval: 16,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                      ])),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )));
-}
+
+

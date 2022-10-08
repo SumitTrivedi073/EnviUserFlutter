@@ -392,7 +392,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
         jsonData = convert.jsonDecode(res.body);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (BuildContext context) => const WaitingForDriverScreen()),
+                builder: (BuildContext context) => WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
       });
     } else {
