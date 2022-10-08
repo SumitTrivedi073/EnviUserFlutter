@@ -1,34 +1,28 @@
-import 'package:envi/UiWidget/cardbanner.dart';
-import 'package:envi/sidemenu/home/homePage.dart';
-import 'package:envi/theme/string.dart';
-import 'package:envi/uiwidget/appbarInside.dart';
-import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidgetPickup.dart';
-import 'package:envi/uiwidget/otpViewWidget.dart';
-import 'package:envi/uiwidget/timerbutton.dart';
-import 'package:envi/web_service/Constant.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:envi/provider/model/tripDataModel.dart';
+import 'package:envi/uiwidget/estimate_fare_widget.dart';
+import 'package:envi/uiwidget/sos_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
-import '../../provider/model/tripDataModel.dart';
 import '../../theme/color.dart';
-import '../../uiwidget/driverDetailWidget.dart';
+import '../../theme/string.dart';
+import '../../uiwidget/appbarInside.dart';
+import '../../uiwidget/mapPageWidgets/mapDirectionWidget_onRide.dart';
 import '../../uiwidget/robotoTextWidget.dart';
-import '../onRide/onRideWidget.dart';
+import '../../web_service/Constant.dart';
+import '../home/homePage.dart';
 
-class WaitingForDriverScreen extends StatefulWidget {
-  final GlobalKey<MapDirectionWidgetPickupState> _key = GlobalKey();
-   WaitingForDriverScreen({Key? key}) : super(key: key);
+class OnRideWidget extends StatefulWidget {
+  const OnRideWidget({Key? key}) : super(key: key);
 
   @override
-  State<WaitingForDriverScreen> createState() => _WaitingForDriverScreenState();
+  State<OnRideWidget> createState() => _OnRideWidgetState();
 }
 
-class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
-
-  late String duration = "5 Minute";
+class _OnRideWidgetState extends State<OnRideWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -39,75 +33,49 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
             if (value.liveTripData != null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (value.liveTripData!.tripInfo.tripStatus ==
-                    TripStatusOnboarding) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          const OnRideWidget()),
-                          (Route<dynamic> route) => false);
-                } else if (value.liveTripData!.tripInfo.tripStatus ==
                     TripStatusCancel) {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                          const HomePage(title: 'title')),
-                          (Route<dynamic> route) => false);
+                              const HomePage(title: 'title')),
+                      (Route<dynamic> route) => false);
                 }
               });
               return Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
-                MapDirectionWidgetPickup(
-                  key: widget._key,
+                MapDirectionWidgetOnRide(
                   liveTripData: value.liveTripData!,
-                  callback: retrieveDuration,
                 ),
                 Column(children: [
                   const AppBarInsideWidget(title: "Envi"),
                   const SizedBox(height: 5),
-                  getCardBanner(value.liveTripData!),
+                  CardBanner(
+                      title: DriverOnRide,
+                      image: 'assets/images/driver_on_ride.png'),
                   Align(
                     alignment: Alignment.topRight,
-                    child: OTPView(otp: value.liveTripData!.tripInfo.otp),
+                    child: SOSView(
+                      liveTripData: value.liveTripData!,
+                    ),
                   ),
-                  const Spacer(),
-                  TimerButton(
-                    liveTripData: value.liveTripData!,
-                  ),
-                  DriverDetailWidget(duration: duration,),
+                  Spacer(),
                   FromToData(value.liveTripData!),
+                  EstimateFareWidget(
+                      amountTobeCollected: value
+                          .liveTripData!.tripInfo.priceClass.amountToBeCollected
+                          .toString())
                 ]),
               ]));
+              // }
             }
-              return  Container(
-                child: CircularProgressIndicator(),
-              );
-
+            return  Container(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  Widget getCardBanner(TripDataModel liveTripData) {
-    if (liveTripData.tripInfo.tripStatus == TripStatusArrived) {
-      return CardBanner(
-          title: Driverarrived, image: 'assets/images/driver_arrived_img.png');
-    } else if (liveTripData.tripInfo.tripStatus == TripStatusAlloted) {
-      return CardBanner(
-          title: DriverOnTheWay, image: 'assets/images/driver_on_way.png');
-    } else {
-      return CardBanner(
-          title: ContactingDriver,
-          image: 'assets/images/connecting_driver_img.png');
-    }
-  }
-
 
   Widget FromToData(TripDataModel liveTripData) {
     return Container(
@@ -135,18 +103,18 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                         ),
                         Flexible(
                             child: Wrap(children: [
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                child: robotoTextWidget(
-                                  textval: liveTripData
-                                      .tripInfo.pickupLocation.pickupAddress
-                                      .toString(),
-                                  colorval: AppColor.black,
-                                  sizeval: 16,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ),
-                            ])),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: robotoTextWidget(
+                              textval: liveTripData
+                                  .tripInfo.pickupLocation.pickupAddress
+                                  .toString(),
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   ),
@@ -172,7 +140,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                       ),
                       child: robotoTextWidget(
                         textval:
-                        '${liveTripData.tripInfo.priceClass.distance} Km',
+                            '${liveTripData.tripInfo.priceClass.distance} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.normal,
@@ -193,18 +161,18 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                         ),
                         Flexible(
                             child: Wrap(children: [
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                child: robotoTextWidget(
-                                  textval: liveTripData
-                                      .tripInfo.dropLocation.dropAddress
-                                      .toString(),
-                                  colorval: AppColor.black,
-                                  sizeval: 16,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ),
-                            ])),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: robotoTextWidget(
+                              textval: liveTripData
+                                  .tripInfo.dropLocation.dropAddress
+                                  .toString(),
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                        ])),
                       ],
                     ),
                   )
@@ -213,12 +181,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
             )));
   }
 
-  retrieveDuration(String durationToPickupLocation){
-    setState(() {
-      duration = durationToPickupLocation;
-    });
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
-
-
-

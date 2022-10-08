@@ -2,18 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/utility.dart';
 import 'model/tripDataModel.dart';
 
 class firestoreLiveTripDataNotifier extends ChangeNotifier {
   TripDataModel? liveTripData;
+  late SharedPreferences sharedPreferences;
 
   Future<void> listenToLiveUpdateStream() async {
+    sharedPreferences = await SharedPreferences.getInstance();
     String liveUpdatecollectionName =
-        'user/972a23cf-5119-4cfb-a247-ab04b9feb401/running-trip';
+        'user/${sharedPreferences.getString(LoginID)}/running-trip';
     final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {
@@ -39,11 +43,12 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
             print("tripdata========> ${event.data()}");
             if(jsonData!=null && jsonData.toString().isNotEmpty) {
               liveTripData = TripDataModel.fromJson(jsonData);
-              print("liveTripData_totalFare===>${liveTripData!.totalFare}");
+
             }
+            notifyListeners();
           });
         }
-        notifyListeners();
+
       });
     } catch (e) {
       debugPrint("ERROR - $e");

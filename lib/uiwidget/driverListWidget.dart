@@ -20,21 +20,23 @@ import '../web_service/APIDirectory.dart';
 class DriverListItem extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
+  final void Function(String) callback;
 
-  const DriverListItem({Key? key, this.toAddress, this.fromAddress})
+  const DriverListItem({Key? key, this.toAddress, this.fromAddress, required this.callback})
       : super(key: key);
 
   @override
   // TODO: implement createState
-  State<StatefulWidget> createState() => _DriverListItemPageState();
+  State<StatefulWidget> createState() => DriverListItemPageState();
 }
 
-class _DriverListItemPageState extends State<DriverListItem> {
+class DriverListItemPageState extends State<DriverListItem> {
   var listItemCount = 4;
   List<Content> DriverList = [];
   List<VehiclePriceClass> vehiclePriceClasses = [];
+  late Distance distance;
   late SharedPreferences sharedPreferences;
-  int? selectedIndex;
+  int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
 
   @override
@@ -76,6 +78,10 @@ class _DriverListItemPageState extends State<DriverListItem> {
             (jsonDecode(res.body)['vehiclePriceClasses'] as List)
                 .map((i) => VehiclePriceClass.fromJson(i))
                 .toList();
+
+        distance = Distance.fromJson(jsonDecode(res.body)['distance']);
+        widget.callback(distance.text.toString());
+
       });
     } else {
       throw "Can't get DriverList.";
@@ -85,131 +91,135 @@ class _DriverListItemPageState extends State<DriverListItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Expanded(
-        child: Card(
-      elevation: 5,
-      margin: const EdgeInsets.all(5),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if(DriverList.isNotEmpty) {
+      return Expanded(
+          child: Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(5),
+            child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: robotoTextWidget(
-                      textval: '${DriverList.length} Ride Option',
-                      colorval: AppColor.black,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w800),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(children: [
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Container(
-                        width: 1,
-                        color: AppColor.darkgrey,
+                        padding: const EdgeInsets.all(10),
+                        child: robotoTextWidget(
+                            textval: '${DriverList.length} Ride Option',
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w800),
                       ),
-                      IconButton(
-                          onPressed: () {
-                            if (selectedIndex != 0) {
-                              carouselController.previousPage();
-                            }
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: (selectedIndex != 0)
-                                ? Colors.green
-                                : AppColor.grey,
-                          ))
-                    ]),
-                    Row(children: [
-                      Container(
-                        width: 1,
-                        color: AppColor.darkgrey,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Row(children: [
+                            Container(
+                              width: 1,
+                              color: AppColor.darkgrey,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  if (selectedIndex != 0) {
+                                    carouselController.previousPage();
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: (selectedIndex != 0)
+                                      ? Colors.green
+                                      : AppColor.grey,
+                                ))
+                          ]),
+                          Row(children: [
+                            Container(
+                              width: 1,
+                              color: AppColor.darkgrey,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  if (selectedIndex != DriverList.length - 1) {
+                                    carouselController.nextPage();
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.green,
+                                )),
+                            Container(
+                              width: 1,
+                              color: AppColor.grey,
+                            ),
+                          ]),
+                        ],
                       ),
-                      IconButton(
-                          onPressed: () {
-                            if (selectedIndex != DriverList.length - 1) {
-                              carouselController.nextPage();
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.green,
-                          )),
-                      Container(
-                        width: 1,
-                        color: AppColor.grey,
-                      ),
-                    ]),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 1,
-            color: AppColor.grey,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Expanded(
-              child: CarouselSlider(
-            items: List.generate(
-                DriverList.length, (index) => driverListItems(index)),
-            carouselController: carouselController,
-            options: CarouselOptions(
-              scrollPhysics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index, reason) {
-                selectedIndex = index;
-              },
-              autoPlay: false,
-            ),
-          )),
-          Container(
-              height: 40,
-              margin: const EdgeInsets.all(5),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => ConfirmDriver(
-                                driverDetail: DriverList[selectedIndex!],
-                                priceDetail:
-                                    vehiclePriceClasses[selectedIndex!],
-                                fromAddress: widget.fromAddress,
-                                toAddress: widget.toAddress,
-                              )),
-                      (Route<dynamic> route) => false);
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: AppColor.greyblack,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ],
                   ),
                 ),
-                child: robotoTextWidget(
-                  textval: bookNow,
-                  colorval: AppColor.white,
-                  sizeval: 14,
-                  fontWeight: FontWeight.w600,
+                Container(
+                  height: 1,
+                  color: AppColor.grey,
                 ),
-              ))
-        ],
-      ),
-    ));
+                const SizedBox(
+                  height: 5,
+                ),
+                Expanded(
+                    child: CarouselSlider(
+                      items: List.generate(
+                          DriverList.length, (index) => driverListItems(index)),
+                      carouselController: carouselController,
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          selectedIndex = index;
+                        },
+                        autoPlay: false,
+                      ),
+                    )),
+                Container(
+                    height: 40,
+                    margin: const EdgeInsets.all(5),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ConfirmDriver(
+                                      driverDetail: DriverList[selectedIndex!],
+                                      priceDetail:
+                                      vehiclePriceClasses[selectedIndex!],
+                                      fromAddress: widget.fromAddress,
+                                      toAddress: widget.toAddress,
+                                    )),
+                                (Route<dynamic> route) => false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: bookNow,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ))
+              ],
+            ),
+          ));
+    }
+    return Container(
+      child: CircularProgressIndicator(),
+    );
   }
 
   Widget driverListItems(int index) {
     return GestureDetector(
       onTap: () {
         selectedIndex = index;
-        print("selectedIndex========>$selectedIndex");
       },
       child: Card(
         margin: const EdgeInsets.all(5),

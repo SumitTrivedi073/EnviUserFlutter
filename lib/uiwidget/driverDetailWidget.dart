@@ -11,6 +11,11 @@ import '../theme/color.dart';
 import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
+
+  String duration;
+
+  DriverDetailWidget({Key? key, required this.duration,}) : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _DriverDetailWidgetState();
@@ -48,8 +53,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                             ClipRRect(
                                 borderRadius: BorderRadius.circular(50.0),
                                 child: Image.network(
-                                  value.liveTripData!.driverInfo!.driverImgUrl.toString() != null
-                                      ? value.liveTripData!.driverInfo!.driverImgUrl.toString()
+                                  value.liveTripData!.driverInfo.driverImgUrl.toString() != null
+                                      ? value.liveTripData!.driverInfo.driverImgUrl.toString()
                                       : placeHolderImage,
                                   fit: BoxFit.fill,
                                   height: 50,
@@ -64,15 +69,15 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                 children: [
                                   robotoTextWidget(
                                     textval:
-                                    value.liveTripData!.driverInfo!.name.toString() != null
-                                        ? value.liveTripData!.driverInfo!.name.toString()
+                                    value.liveTripData!.driverInfo.name.toString() != null
+                                        ? value.liveTripData!.driverInfo.name.toString()
                                         : '',
                                     colorval: AppColor.grey,
                                     sizeval: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  const robotoTextWidget(
-                                    textval: "7 Minutes Away",
+                                   robotoTextWidget(
+                                    textval: "${widget.duration} Away",
                                     colorval: AppColor.black,
                                     sizeval: 18,
                                     fontWeight: FontWeight.w600,
@@ -108,8 +113,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                               ),
                               onPressed: () {
                                 makingPhoneCall(
-                                    value.liveTripData!.driverInfo!.phone.toString() != null
-                                        ? value.liveTripData!.driverInfo!.phone.toString()
+                                    value.liveTripData!.driverInfo.phone.toString() != null
+                                        ? value.liveTripData!.driverInfo.phone.toString()
                                         : '');
                               },
                             ),
@@ -131,14 +136,14 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children:  [
                                 robotoTextWidget(
-                                  textval: '${value.liveTripData!.priceClass!.type.toString()} - ${value.liveTripData!.priceClass!.passengerCapacity.toString()} People',
+                                  textval: '${value.liveTripData!.tripInfo.priceClass.type.toString()} - ${value.liveTripData!.tripInfo.priceClass.passengerCapacity.toString()} People',
                                   colorval: AppColor.grey,
                                   sizeval: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
                                  robotoTextWidget(
-                                  textval:  value.liveTripData!.driverInfo!.vehicleNumber.toString() != null
-                                      ? value.liveTripData!.driverInfo!.vehicleNumber.toString()
+                                  textval:  value.liveTripData!.driverInfo.vehicleNumber.toString() != null
+                                      ? value.liveTripData!.driverInfo.vehicleNumber.toString()
                                       : '',
                                   colorval: AppColor.black,
                                   sizeval: 18,

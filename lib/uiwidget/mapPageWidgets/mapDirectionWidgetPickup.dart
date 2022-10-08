@@ -1,141 +1,156 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/theme/color.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../web_service/Constant.dart';
+import '../../direction_model/directionModel.dart';
+import '../../web_service/APIDirectory.dart';
+import '../../web_service/Constant.dart';
 
-class MapDirectionWidgetWithDriver extends StatefulWidget {
+class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
-
-  MapDirectionWidgetWithDriver({Key? key, this.liveTripData}) : super(key: key);
+  final void Function(String) callback;
+  MapDirectionWidgetPickup(
+      {Key? key, this.liveTripData, required this.callback}) : super(key: key);
 
   @override
-  _MapDirectionWidgetWithDriverState createState() =>
-      _MapDirectionWidgetWithDriverState();
+  MapDirectionWidgetPickupState createState() =>
+      MapDirectionWidgetPickupState();
 }
 
-class _MapDirectionWidgetWithDriverState
-    extends State<MapDirectionWidgetWithDriver> with TickerProviderStateMixin {
+class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
+    with TickerProviderStateMixin {
   GoogleMapController? mapController; //contrller for Google map
   PolylinePoints polylinePoints = PolylinePoints();
 
   String googleAPiKey = GoogleApiKey;
   late Timer timer;
   int count = 1;
-
+  late String _sessionToken;
+  var uuid = const Uuid();
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
+  List<LatLng> polylineCoordinates = [];
 
-  late LatLng startLocation = LatLng(
-      (widget.liveTripData!.tripInfo!.pickupLocation!.latitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.latitude!
+  late LatLng pickupLocation = LatLng(
+      (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.latitude
           : 13.197965663195877,
-      (widget.liveTripData!.tripInfo!.pickupLocation!.longitude != null)
-          ? widget.liveTripData!.tripInfo!.pickupLocation!.longitude!
+      (widget.liveTripData!.tripInfo.pickupLocation.longitude != null)
+          ? widget.liveTripData!.tripInfo.pickupLocation.longitude
           : 77.70646809992469);
-  
-  late LatLng carLocation = LatLng(
-      (widget.liveTripData!.driverLocation!.latitude != null)
-          ? widget.liveTripData!.driverLocation!.latitude!
+
+  late LatLng carCurrentLocation = LatLng(
+      (widget.liveTripData!.driverLocation.latitude != null)
+          ? widget.liveTripData!.driverLocation.latitude
           : 14.063446041067092,
-      (widget.liveTripData!.driverLocation!.longitude != null)
-          ? widget.liveTripData!.driverLocation!.longitude!
+      (widget.liveTripData!.driverLocation.longitude != null)
+          ? widget.liveTripData!.driverLocation.longitude
           : 77.345492878187);
 
+  late LatLng previousLocation = const LatLng(0.0, 0.0);
+  var carMarker, driverStartingLocation ;
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
+
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
+
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-  double distance = 0.0;
+  late double distancecorrectionFactor,googleDistance, duration;
 
   @override
   void initState() {
     //fetch direction polylines from Google API
     super.initState();
-
+    _sessionToken = uuid.v4();
     addMarker();
     getDirections();
-    if (mapController != null) {
-      animateCar(
-        carLocation.latitude,
-        carLocation.longitude,
-        startLocation.latitude,
-        startLocation.longitude,
-        mapMarkerSink,
-        this,
-        mapController!,
-      );
-      setState(() {});
-    }
+
   }
 
   getDirections() async {
-    List<LatLng> polylineCoordinates = [];
+    String request =
+        '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
+    var url = Uri.parse(request);
+    print("url==========>$url");
+    dynamic response = await HTTP.get(url);
+    if (response != null && response != null) {
+      if (response.statusCode == 200) {
+        DirectionModel directionModel =
+            DirectionModel.fromJson(json.decode(response.body));
+        List<PointLatLng> pointLatLng = [];
 
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleAPiKey,
-      PointLatLng(startLocation.latitude, startLocation.longitude),
-      PointLatLng(carLocation.latitude, carLocation.longitude),
-      travelMode: TravelMode.driving,
-    );
+        for (var i = 0; i < directionModel.routes.length; i++) {
+          for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
+            for (var k = 0;
+                k < directionModel.routes[i].legs[j].steps.length;
+                k++) {
+              duration = directionModel.routes[i].legs[j].duration.value.toDouble();
+              googleDistance = directionModel.routes[i].legs[j].distance.value.toDouble();
 
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-
-    } else {
-      print(result.errorMessage);
+              pointLatLng = polylinePoints.decodePolyline(
+                  directionModel.routes[i].legs[j].steps[k].polyline.points);
+              for (var point in pointLatLng) {
+                polylineCoordinates
+                    .add(LatLng(point.latitude, point.longitude));
+              }
+            }
+          }
+        }
+        addPolyLine(polylineCoordinates);
+        distancecorrectionFactor = googleDistance / calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+        startTimer();
+        updatePickupTime();
+      } else {
+        throw Exception('Failed to load predictions');
+      }
     }
-    addPolyLine(polylineCoordinates);
-    startTimer();
-
   }
 
   double calculateDistance(lat1, lon1, lat2, lon2){
     var p = 0.017453292519943295;
-    var a = 0.5 - cos((lat2 - lat1) * p)/2 +
-        cos(lat1 * p) * cos(lat2 * p) *
-            (1 - cos((lon2 - lon1) * p))/2;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
     return 12742 * asin(sqrt(a));
-  }
-
-  addPolyLine(List<LatLng> polylineCoordinates) {
-    PolylineId id = const PolylineId("poly");
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: AppColor.darkGreen,
-      points: polylineCoordinates,
-      width: 5,
-    );
-    polylines[id] = polyline;
-
-    double totalDistance = 0.0;
-    for(var i = 0; i < polylineCoordinates.length-1; i++){
-      totalDistance += calculateDistance(
-          polylineCoordinates[i].latitude,
-          polylineCoordinates[i].longitude,
-          polylineCoordinates[i+1].latitude,
-          polylineCoordinates[i+1].longitude);
-    }
-    print("totalDistance=======>$totalDistance");
-
-    setState(() {
-      distance = totalDistance;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    carCurrentLocation = LatLng(
+        (widget.liveTripData!.driverLocation.latitude != null)
+            ? widget.liveTripData!.driverLocation.latitude
+            : 14.063446041067092,
+        (widget.liveTripData!.driverLocation.longitude != null)
+            ? widget.liveTripData!.driverLocation.longitude
+            : 77.345492878187);
+
+
+    if (previousLocation.latitude!=0.0 && previousLocation!=carCurrentLocation) {
+      animateCar(
+        previousLocation.latitude,
+        previousLocation.longitude,
+        carCurrentLocation.latitude,
+        carCurrentLocation.longitude,
+        mapMarkerSink,
+        this,
+        mapController!,
+      );
+    }
+
     final googleMap = StreamBuilder<List<Marker>>(
         stream: mapMarkerStream,
         builder: (context, snapshot) {
@@ -143,7 +158,7 @@ class _MapDirectionWidgetWithDriverState
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
               //innital position in map
-              target: carLocation, //initial position
+              target: carCurrentLocation, //initial position
               zoom: 15.0, //initial zoom level
             ),
             polylines: Set<Polyline>.of(polylines.values),
@@ -170,11 +185,29 @@ class _MapDirectionWidgetWithDriverState
     );
   }
 
+  addPolyLine(List<LatLng> polylineCoordinates) {
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: AppColor.darkGreen,
+      points: polylineCoordinates,
+      width: 5,
+    );
+    polylines[id] = polyline;
+
+    setState(() {});
+
+    if(previousLocation!=carCurrentLocation) {
+      previousLocation = carCurrentLocation;
+    }
+  }
+
   addMarker() async {
+
     var pickupMarker = Marker(
       //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
+      markerId: MarkerId(pickupLocation.toString()),
+      position: pickupLocation, //position of marker
       infoWindow: const InfoWindow(
         //popup info
         title: 'Pickup Location',
@@ -183,26 +216,42 @@ class _MapDirectionWidgetWithDriverState
           BitmapDescriptor.hueGreen), //Icon for Marker
     );
 
-
     final Uint8List markerIcon =
-    await getBytesFromAsset('assets/images/car-map.png', 70);
+        await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
-        position: carLocation,
+    carMarker = Marker(
+        markerId: MarkerId("Driver Location"),
+        position: carCurrentLocation,
+        infoWindow: const InfoWindow(
+          //popup info
+          title: 'Driver Location',
+        ),
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carLocation,startLocation),
+        rotation: getBearing(pickupLocation, carCurrentLocation),
         draggable: false);
 
 
+      if(driverStartingLocation==null) {
+         driverStartingLocation = Marker(
+          //add start location marker
+          markerId: MarkerId(carCurrentLocation.toString()),
+          position: carCurrentLocation, //position of marker
+          infoWindow: const InfoWindow(
+            //popup info
+            title: 'Driver Starting Location',
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueOrange), //Icon for Marker
+        );
+        markers.add(driverStartingLocation);
+      }
     //Adding a delay and then showing the marker on screen
     await Future.delayed(const Duration(milliseconds: 500));
 
     markers.add(pickupMarker);
     markers.add(carMarker);
-
     mapMarkerSink.add(markers);
   }
 
@@ -228,25 +277,12 @@ class _MapDirectionWidgetWithDriverState
     GoogleMapController controller, //Google map controller of our widget
   ) async {
     final double bearing =
-        getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
+        getBearing(pickupLocation, carCurrentLocation);
 
-    markers.clear();
 
     final Uint8List markerIcon =
-        await getBytesFromAsset('assets/images/car-map.png', 70);
+    await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    var carMarker = Marker(
-        markerId: const MarkerId("driverMarker"),
-        position: LatLng(fromLat, fromLong),
-        icon: BitmapDescriptor.fromBytes(markerIcon),
-        anchor: const Offset(0.5, 0.5),
-        flat: true,
-        rotation: bearing,
-        draggable: false);
-
-    //Adding initial marker to the start location.
-    markers.add(carMarker);
-    mapMarkerSink.add(markers);
 
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
@@ -268,7 +304,7 @@ class _MapDirectionWidgetWithDriverState
 
         //New marker location
         carMarker = Marker(
-            markerId: const MarkerId("driverMarker"),
+            markerId:  MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
@@ -287,8 +323,24 @@ class _MapDirectionWidgetWithDriverState
 
     //Starting the animation
     animationController.forward();
+    if(previousLocation!=carCurrentLocation) {
+      previousLocation = carCurrentLocation;
+    }
+    updatePickupTime();
   }
+  void updatePickupTime() {
 
+    double new_distance = distancecorrectionFactor * calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+    double new_time = (duration / googleDistance) * new_distance;
+
+    int minutes =  new_time ~/ 60;
+    int seconds =  (new_time % 60).toInt();
+    if(minutes>0) {
+      widget.callback("$minutes Minute");
+    }else{
+      widget.callback("$seconds Second");
+    }
+  }
   double getBearing(LatLng begin, LatLng end) {
     double lat = (begin.latitude - end.latitude).abs();
     double lng = (begin.longitude - end.longitude).abs();
@@ -321,4 +373,6 @@ class _MapDirectionWidgetWithDriverState
     timer.cancel();
     super.dispose();
   }
+
+
 }

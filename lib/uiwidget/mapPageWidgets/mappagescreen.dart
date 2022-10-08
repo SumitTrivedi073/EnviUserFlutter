@@ -9,8 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../theme/string.dart';
-import 'frombookschedule.dart';
+import '../../theme/string.dart';
+import '../frombookschedule.dart';
 
 void main() {
   runApp(MaterialApp(home: MyHomePage()));
@@ -82,12 +82,14 @@ class MyMapState extends State {
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
-                await  GetAddressFromLatLong(latlong!);
+                  Timer(const Duration(seconds: 1), () {
+                      GetAddressFromLatLong(latlong!);
+                  });
+
                 },
                 onCameraMove: (CameraPosition position)async {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
-                       await  GetAddressFromLatLong(latlong!);
                 },
               )
             : Container(),
