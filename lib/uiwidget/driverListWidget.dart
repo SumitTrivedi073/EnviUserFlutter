@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_controller.dart';
@@ -22,7 +23,8 @@ class DriverListItem extends StatefulWidget {
   final SearchPlaceModel? toAddress;
   final void Function(String) callback;
 
-  const DriverListItem({Key? key, this.toAddress, this.fromAddress, required this.callback})
+  const DriverListItem(
+      {Key? key, this.toAddress, this.fromAddress, required this.callback})
       : super(key: key);
 
   @override
@@ -81,7 +83,6 @@ class DriverListItemPageState extends State<DriverListItem> {
 
         distance = Distance.fromJson(jsonDecode(res.body)['distance']);
         widget.callback(distance.text.toString());
-
       });
     } else {
       throw "Can't get DriverList.";
@@ -91,134 +92,147 @@ class DriverListItemPageState extends State<DriverListItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    if(DriverList.isNotEmpty) {
+    if (DriverList.isNotEmpty) {
       return Expanded(
           child: Card(
-            elevation: 5,
-            margin: const EdgeInsets.all(5),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        elevation: 5,
+        margin: const EdgeInsets.all(5),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: robotoTextWidget(
+                        textval: '${DriverList.length} Ride Option',
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w800),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        child: robotoTextWidget(
-                            textval: '${DriverList.length} Ride Option',
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(children: [
-                            Container(
-                              width: 1,
-                              color: AppColor.darkgrey,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  if (selectedIndex != 0) {
-                                    carouselController.previousPage();
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.arrow_back_ios,
-                                  color: (selectedIndex != 0)
-                                      ? Colors.green
-                                      : AppColor.grey,
-                                ))
-                          ]),
-                          Row(children: [
-                            Container(
-                              width: 1,
-                              color: AppColor.darkgrey,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  if (selectedIndex != DriverList.length - 1) {
-                                    carouselController.nextPage();
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.green,
-                                )),
-                            Container(
-                              width: 1,
-                              color: AppColor.grey,
-                            ),
-                          ]),
-                        ],
-                      ),
+                      Row(children: [
+                        Container(
+                          width: 1,
+                          color: AppColor.darkgrey,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              if (selectedIndex != 0) {
+                                carouselController.previousPage();
+                              }
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: (selectedIndex != 0)
+                                  ? Colors.green
+                                  : AppColor.grey,
+                            ))
+                      ]),
+                      Row(children: [
+                        Container(
+                          width: 1,
+                          color: AppColor.darkgrey,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              if (selectedIndex != DriverList.length - 1) {
+                                carouselController.nextPage();
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.green,
+                            )),
+                        Container(
+                          width: 1,
+                          color: AppColor.grey,
+                        ),
+                      ]),
                     ],
                   ),
-                ),
-                Container(
-                  height: 1,
-                  color: AppColor.grey,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                    child: CarouselSlider(
-                      items: List.generate(
-                          DriverList.length, (index) => driverListItems(index)),
-                      carouselController: carouselController,
-                      options: CarouselOptions(
-                        onPageChanged: (index, reason) {
-                          selectedIndex = index;
-                        },
-                        autoPlay: false,
-                      ),
-                    )),
-                Container(
-                    height: 40,
-                    margin: const EdgeInsets.all(5),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ConfirmDriver(
-                                      driverDetail: DriverList[selectedIndex!],
-                                      priceDetail:
-                                      vehiclePriceClasses[selectedIndex!],
-                                      fromAddress: widget.fromAddress,
-                                      toAddress: widget.toAddress,
-                                    )),
-                                (Route<dynamic> route) => false);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.greyblack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: bookNow,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ))
-              ],
+                ],
+              ),
             ),
-          ));
+            Container(
+              height: 1,
+              color: AppColor.grey,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: CarouselSlider(
+              items: List.generate(
+                  DriverList.length, (index) => driverListItems(index)),
+              carouselController: carouselController,
+              options: CarouselOptions(
+               
+                onPageChanged: (index, reason) {
+                  selectedIndex = index;
+                },
+                autoPlay: false,
+              ),
+            )),
+            Container(
+                height: 40,
+                margin: const EdgeInsets.all(5),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => ConfirmDriver(
+                                  driverDetail: DriverList[selectedIndex!],
+                                  priceDetail:
+                                      vehiclePriceClasses[selectedIndex!],
+                                  fromAddress: widget.fromAddress,
+                                  toAddress: widget.toAddress,
+                                )),
+                        (Route<dynamic> route) => false);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.greyblack,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                  ),
+                  child: robotoTextWidget(
+                    textval: bookNow,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ))
+          ],
+        ),
+      ));
     }
-    return Container(
-      child: CircularProgressIndicator(),
+    return SizedBox(
+      child: FutureBuilder(
+          future: Future.delayed(const Duration(seconds: 8)),
+          builder: (c, s) => s.connectionState == ConnectionState.done
+              ? Column(
+                  children: const [
+                    Text('No Drivers Found'),
+                  ],
+                )
+              : Column(
+                  children: const [
+                    CircularProgressIndicator(),
+                    Text('Searching for drivers'),
+                  ],
+                )),
     );
   }
 
   Widget driverListItems(int index) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         selectedIndex = index;
       },
       child: Card(
@@ -232,7 +246,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                        '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                            '${DriverList[index].durationToPickUpLocation} Minutes Away',
                         colorval: AppColor.black,
                         sizeval: 16,
                         fontWeight: FontWeight.w600),
@@ -240,14 +254,14 @@ class DriverListItemPageState extends State<DriverListItem> {
                       children: [
                         RatingBar.builder(
                           initialRating:
-                          DriverList[index].driverRating!.toDouble(),
+                              DriverList[index].driverRating!.toDouble(),
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
                           itemCount: 5,
                           itemSize: 14,
                           itemPadding:
-                          const EdgeInsets.symmetric(horizontal: 2.0),
+                              const EdgeInsets.symmetric(horizontal: 2.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: Colors.amber,
@@ -282,7 +296,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                       children: [
                         robotoTextWidget(
                             textval:
-                            DriverList[index].priceClass!.type.toString(),
+                                DriverList[index].priceClass!.type.toString(),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w200),
@@ -300,7 +314,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                                 ),
                                 robotoTextWidget(
                                     textval:
-                                    "${DriverList[index].priceClass!.passengerCapacity} People",
+                                        "${DriverList[index].priceClass!.passengerCapacity} People",
                                     colorval: AppColor.black,
                                     sizeval: 14,
                                     fontWeight: FontWeight.w200)
@@ -365,7 +379,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                        "₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                            "₹${vehiclePriceClasses[index].priceClass.totalFare}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -404,7 +418,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             fontWeight: FontWeight.w800),
                         robotoTextWidget(
                             textval:
-                            '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
+                                '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
                             colorval: AppColor.purple,
                             sizeval: 13,
                             fontWeight: FontWeight.w400),
