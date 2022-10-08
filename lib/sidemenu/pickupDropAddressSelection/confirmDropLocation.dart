@@ -7,11 +7,9 @@ import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme/string.dart';
@@ -19,7 +17,8 @@ import '../../theme/string.dart';
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
   final SearchPlaceModel? location;
-  const ConfirmDropLocation({Key? key, required this.title, this.location})
+  final String isFavourite;
+  const ConfirmDropLocation({Key? key, required this.title, this.location,required this.isFavourite})
       : super(key: key);
 
   @override
@@ -35,6 +34,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   LatLng initialLatLng = LatLng(0, 0);
   bool isFromVerified = false;
   bool isToVerified = false;
+  late String isFavourite;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +43,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         widget.location!.latLng!.latitude, widget.location!.latLng!.longitude);
     _cameraPosition = CameraPosition(target: initialLatLng, zoom: 10.0);
     // getCurrentLocation();
+    isFavourite = widget.isFavourite;
     getLocation(initialLatLng);
   }
 
@@ -179,7 +180,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         id: '',
                         address: Address,
                         title: toAddressName!,
-                        latLng: latlong));
+                        latLng: latlong, isFavourite: isFavourite,));
                 // Navigator.of(context).pushAndRemoveUntil(
                 //     MaterialPageRoute(
                 //         builder: (BuildContext context) => SearchDriver(

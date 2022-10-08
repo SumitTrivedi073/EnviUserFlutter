@@ -46,10 +46,12 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   TextEditingController titlecontroller = new TextEditingController();
   TextEditingController addresscontroller = new TextEditingController();
   CameraPosition? _cameraPosition;
-  String address = "";
+  String address = "",editidentifire = "";
   GoogleMapController? _controller;
   late LatLng latlong;
   late SharedPreferences sharedPreferences;
+  int? editid;
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +66,9 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
           target: LatLng(double.parse(widget.data!.latitude),
               double.parse(widget.data!.longitude)),
           zoom: 10.0);
+      editidentifire = widget.data!.identifier;
+
+      editid = widget.data!.id;
     } else {
       getCurrentLocation();
       _cameraPosition = CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
@@ -317,16 +322,26 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                     }
                   }
                   print("======");
+if(widget.isforedit != "0"){
+  var detail = await dao.findDataByaddressg(address);
 
-                  var detail = await dao.findDataByaddressg(address);
+  if (detail == null) {
+    print("======api");
+    ApiCall_Add_Favorite();
+  } else {
+    print("=====${detail}");
+    ApiCall_update_Favorite(detail.id
+        ,detail.identifier);
+  }
+}else{
+  if(editidentifire == "0"){
 
-                  if (detail == null) {
-                    print("======api");
-                    ApiCall_Add_Favorite();
-                  } else {
-                    print("=====${detail}");
-                    ApiCall_update_Favorite(detail.identifier);
-                  }
+    ApiCall_Add_Favorite();
+  }else{
+  ApiCall_update_Favorite(editid
+      ,editidentifire);}
+}
+
                 },
                 child: robotoTextWidget(
                     textval: savetext,
@@ -416,7 +431,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     }
   }
 
-  Future<void> ApiCall_update_Favorite(String id) async {
+  Future<void> ApiCall_update_Favorite(int? id,String idetifire) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
     final response = await ApiCollection.FavoriateDataUpdate(
@@ -426,7 +441,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         latlong.latitude,
         latlong.longitude,
         "Y",
-        id);
+        idetifire);
     print(response.body);
 
     if (response != null) {
@@ -434,8 +449,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         String addressId = jsonDecode(response.body)['content']['addressId'];
         print(jsonDecode(response.body)['content']);
 
-        final task = FavoritesData.optional(
-            identifier: addressId,
+        final task = FavoritesData.optional(id: id,
+            identifier: idetifire,
             address: address,
             isFavourite: 'Y',
             latitude: latlong.latitude.toString(),

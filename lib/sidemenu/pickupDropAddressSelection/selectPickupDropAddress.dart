@@ -77,22 +77,18 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   bool useGoogleApi = false;
   late SharedPreferences sharedPreferences;
 
-  Future<void> getdata() async {
-    List<FavoritesData> temparr = await dao.getFavoriate();
-    setState(() {
-      arraddress = temparr;
-    });
-  }
+  // Future<void> getdata() async {
+  //   List<FavoritesData> temparr = await dao.getFavoriate();
+  //   setState(() {
+  //     arraddress = temparr;
+  //   });
+  // }
 
   Future<void> loadData() async {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     dao = database.taskDao;
-    //List<FavoritesData>  temparr =  await dao.getFavoriate() ;
-    // setState(() {
-    //
-    // });
-    //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
+
   }
 
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
@@ -104,7 +100,73 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         addressToAdd!.address,
         addressToAdd.latLng!.latitude,
         addressToAdd.latLng!.longitude,
-        "Y");
+        "N");
+    print(response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        String addressId = jsonDecode(response.body)['content']['addressId'];
+        print(jsonDecode(response.body)['content']);
+
+        final task = FavoritesData.optional(
+            identifier: addressId,
+            address: addressToAdd.address,
+            isFavourite: 'N',
+            latitude: addressToAdd.latLng!.latitude.toString(),
+            longitude: addressToAdd.latLng!.longitude.toString(),
+            title: addressToAdd.title);
+        print(task);
+        await dao.insertTask(task);
+        //Navigator.pop(context, {"isbact": true});
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
+  }
+
+  Future<void> apiCallUpdateFavorite(
+      int? Id,String titel, SearchPlaceModel? addressToUpdate,String identifire,String favoriate) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response = await ApiCollection.FavoriateDataUpdate(
+        userid,
+        titel,
+        addressToUpdate!.address,
+        addressToUpdate.latLng!.latitude,
+        addressToUpdate.latLng!.longitude,
+        favoriate,
+        identifire);
+    print("update" +response.body);
+
+    if (response != null) {
+      if (response.statusCode == 200) {
+        String addressId = jsonDecode(response.body)['content']['addressId'];
+        print(jsonDecode(response.body)['content']);
+
+        final task = FavoritesData.optional(
+            id: Id,
+            identifier: identifire,
+            address: addressToUpdate!.address,
+            isFavourite: favoriate,
+            latitude: addressToUpdate!.latLng!.latitude.toString(),
+            longitude: addressToUpdate!.latLng!.longitude.toString(),
+            title: titel);
+        print(task);
+        await dao.updateTask(task);
+        //Navigator.pop(context, {"isbact": true});
+      }
+      showToast((jsonDecode(response.body)['message'].toString()));
+    }
+  }
+  Future<void> apiCallAddFavoritetoaddress(SearchPlaceModel? addressToAdd) async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    dynamic userid = sharedPreferences.getString(LoginID);
+    final response = await ApiCollection.FavoriateDataAdd(
+        userid,
+        ToLocationText.text.toString(),
+        addressToAdd!.address,
+        addressToAdd.latLng!.latitude,
+        addressToAdd.latLng!.longitude,
+        "N");
     print(response.body);
 
     if (response != null) {
@@ -126,20 +188,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
-
-  Future<void> apiCallUpdateFavorite(
-      {String? id, SearchPlaceModel? addressToUpdate}) async {
+  Future<void> apiCallUpdateFavoritetoaddress(
+      int? Id,String titel, SearchPlaceModel? addressToUpdate,String identifire,String favoriate) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
-        FromLocationText.text.toString(),
+        titel,
         addressToUpdate!.address,
         addressToUpdate.latLng!.latitude,
         addressToUpdate.latLng!.longitude,
-        "Y",
-        id);
-    print(response.body);
+        favoriate,
+        identifire);
+    print("update" +response.body);
 
     if (response != null) {
       if (response.statusCode == 200) {
@@ -147,12 +208,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         print(jsonDecode(response.body)['content']);
 
         final task = FavoritesData.optional(
-            identifier: addressId,
-            address: startingAddress!.address,
-            isFavourite: 'Y',
-            latitude: startingAddress!.latLng!.latitude.toString(),
-            longitude: startingAddress!.latLng!.longitude.toString(),
-            title: startingAddress!.title);
+            id: Id,
+            identifier: identifire,
+            address: addressToUpdate!.address,
+            isFavourite: favoriate,
+            latitude: addressToUpdate!.latLng!.latitude.toString(),
+            longitude: addressToUpdate!.latLng!.longitude.toString(),
+            title: titel);
         print(task);
         await dao.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
@@ -161,74 +223,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     }
   }
 
-  Future<dynamic> createOrder() async {
-    var headers = {
-      'x-access-token':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkYjljNDk2LTBmZTItNDc5Mi1hODdlLWI5ZWZhZWUzZmQ1YiIsInR5cGVpZCI6MywicGhvbmVOdW1iZXIiOiI5NDI0ODgwNTgyIiwiaWF0IjoxNjYzODE5NjE3fQ.uLjsbCFkQR9I4WNz5nkzBCCRRCDaASHYP5EJ0W0_kDM',
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request('POST',
-        Uri.parse('https://qausernew.azurewebsites.net/order/createOrder'));
-    request.body = json.encode(
-        {"passengerTripMasterId": "9b20343d-b725-4fc4-80cf-d0c68c4ae860"});
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-    var result;
-    if (response.statusCode == 200) {
-      //print(await response.stream.bytesToString());
-      result = await response.stream.bytesToString();
-      var jres = json.decode(result);
-      print(jres['MID']);
-      await initiateTransaction(jres['ORDER_ID'], jres['amount'].toDouble(),
-          jres['txnToken'], jres['CALLBACK_URL'], jres['MID']);
-    } else {
-      print(response.reasonPhrase);
-    }
-  }
-
-  Future<void> initiateTransaction(String orderId, double amount,
-      String txnToken, String callBackUrl, String miid) async {
-    String result = '';
-    try {
-      var response = AllInOneSdk.startTransaction(
-        miid,
-        orderId,
-        amount.toString(),
-        txnToken,
-        callBackUrl,
-        false,
-        true,
-      );
-      response.then((value) {
-        // Transaction successfull
-        setState(() {
-          result = value.toString();
-        });
-      }).catchError((onError) {
-        if (onError is PlatformException) {
-          result = onError.message! + " \n  " + onError.details.toString();
-          setState(() {
-            result = onError.message.toString() +
-                " \n  " +
-                onError.details.toString();
-          });
-        } else {
-          result = onError.toString();
-          print(result);
-        }
-      });
-    } catch (err) {
-      // Transaction failed
-      result = err.toString();
-      print(result);
-    }
-  }
 
   Future<void> getLocalSuggestions(String val) async {
 // var x =await AutocompleteService().getSuggestions(pattern);
 //  searchPlaceList = x
     searchPlaceList = await AutocompleteService().getdata(val);
+    print("localSearch"+searchPlaceList.toString());
     setState(() {});
   }
 
@@ -318,7 +318,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
             searchPlaceList.add(SearchPlaceModel(
                 id: _placeList[i]["place_id"],
                 address: _placeList[i]["description"],
-                title: _placeList[i]["description"]));
+                title: _placeList[i]["description"], isFavourite: 'N',latLng: LatLng(
+                0.0,
+                0.0),));
           }
         });
       } else {
@@ -356,6 +358,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () async {
+                    print("serch index$index");print("serch index${searchPlaceList[index].isFavourite}");
+                    String isFavourite = searchPlaceList[index].isFavourite;
                     if (useGoogleApi) {
                       final placeId = searchPlaceList[index].id;
                       final details = await googlePlace.details.get(placeId,
@@ -375,7 +379,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 latLng: LatLng(
                                     details.result!.geometry!.location!.lat!,
                                     details.result!.geometry!.location!.lng!),
-                                title: details.result!.name!);
+                                title: details.result!.name!, isFavourite: 'N');
 
                             // _isVisible = false;
                             searchPlaceList = [];
@@ -386,7 +390,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                       builder: (BuildContext context) =>
                                           ConfirmDropLocation(
                                             location: startingAddress,
-                                            title: confirmLocationText,
+                                            title: confirmLocationText, isFavourite: isFavourite.toString(),
                                           )),
                                   (Route<dynamic> route) => true);
                           setState(() {
@@ -406,7 +410,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 latLng: LatLng(
                                     details.result!.geometry!.location!.lat!,
                                     details.result!.geometry!.location!.lng!),
-                                title: details.result!.name!);
+                                title: details.result!.name!, isFavourite: 'N');
                             searchPlaceList = [];
 
                             //
@@ -419,7 +423,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                       builder: (BuildContext context) =>
                                           ConfirmDropLocation(
                                             location: endAddress,
-                                            title: confirmLocationText,
+                                            title: confirmLocationText, isFavourite: isFavourite.toString(),
                                           )),
                                   (Route<dynamic> route) => true);
                           setState(() {
@@ -448,7 +452,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                       builder: (BuildContext context) =>
                                           ConfirmDropLocation(
                                             location: startingAddress,
-                                            title: confirmLocationText,
+                                            title: confirmLocationText, isFavourite: isFavourite.toString(),
                                           )),
                                   (Route<dynamic> route) => true);
                           setState(() {
@@ -477,7 +481,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                       builder: (BuildContext context) =>
                                           ConfirmDropLocation(
                                             location: endAddress,
-                                            title: confirmLocationText,
+                                            title: confirmLocationText, isFavourite: isFavourite.toString(),
                                           )),
                                   (Route<dynamic> route) => true);
                           setState(() {
@@ -546,20 +550,20 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           apiCallAddFavorite(startingAddress);
                         } else {
                           //print("=====${detail}");
-                          apiCallUpdateFavorite(
-                              id: detail.identifier,
-                              addressToUpdate: startingAddress);
+                          apiCallUpdateFavorite(detail.id,detail.title,
+                              startingAddress,detail.identifier,detail
+                          .isFavourite);
                         }
                         var toDetail =
                             await dao.findDataByaddressg(ToLocationText.text);
                         if (toDetail == null) {
-                          //print("======api");
-                          apiCallAddFavorite(endAddress);
+                          print("======api");
+                          apiCallAddFavoritetoaddress(endAddress);
                         } else {
-                          //print("=====${detail}");
-                          apiCallUpdateFavorite(
-                              id: toDetail.identifier,
-                              addressToUpdate: endAddress);
+                          print("=====${detail}");
+                          apiCallUpdateFavoritetoaddress(
+                               toDetail.id,toDetail.title,
+                              endAddress,toDetail.identifier,toDetail.isFavourite);
                         }
                         //createOrder();
 

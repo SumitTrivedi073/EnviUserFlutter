@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/theme/color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Utility {
   _getId() async {
@@ -38,4 +39,13 @@ void showToast(String toast_msg) {
       gravity: ToastGravity.CENTER,
       toastLength: Toast.LENGTH_LONG,
       timeInSecForIosWeb: 9);
+}
+String changeDateFormate(String date) {
+  var inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+  var inputDate = inputFormat.parse(date); // <-- dd/MM 24H format
+
+  var outputFormat = DateFormat('yyyy-MM-dd hh:mm');
+  var outputDate = outputFormat.format(inputDate);
+
+  return outputDate;
 }

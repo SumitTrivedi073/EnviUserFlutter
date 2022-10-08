@@ -9,8 +9,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../appConfig/appConfig.dart';
 import '../../theme/color.dart';
 import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
@@ -18,6 +20,8 @@ import '../../uiwidget/carCategoriesWidget.dart';
 import '../../uiwidget/fromtowidget.dart';
 import '../../uiwidget/mapDirectionWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../utils/utility.dart';
+import '../home/homePage.dart';
 
 class BookScheduleTrip extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
@@ -35,11 +39,18 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   GoogleMapController? _controller;
   String placeName = '';
   String? isoId;
+  bool isverify = false;
+  //String SelectedgoLiveDate = "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
+    DateTime tem =  DateTime.now().add(Duration(hours: AppConfig().getadvance_booking_time_limit()));
+    print(AppConfig().getadvance_booking_time_limit());
+    //SelectedgoLiveDate = tem.toString();
+    _controller2.text = DateFormat('hh:mm').format(tem);
+    _controller1.text = tem.toString();
   }
 
   final TextEditingController _controller1 =
@@ -48,189 +59,403 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return Scaffold(
-        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+        body: Stack( children: <Widget>[
       MapDirectionWidget(
         fromAddress: widget.fromAddress,
         toAddress: widget.toAddress,
       ),
-      SingleChildScrollView(
-        child: Column(children: [
-          AppBarInsideWidget(title: FutureBookingTitel),
-          const SizedBox(height: 5),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              children: [
-                FromToWidget(
-                  fromAddress: widget.fromAddress,
-                  toAddress: widget.toAddress,
-                  tripType: BookingTiming.later,
-                ),
-                CarCategoriesWidget(
-                  fromAddress: widget.fromAddress,
-                  toAddress: widget.toAddress,
-                ),
-              ],
-            ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
-              ),
-            ),
-            child: SizedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+Container(child: AppBarInsideWidget(title: FutureBookingTitel) ,),
+         Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          child: Column(children: [
+
+            const SizedBox(height: 5),
+            Container(
+
+              child: Column(
                 children: [
-                  Expanded(
-                    child: Container(
-                      child: DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'd MMM, yyyy',
-                        controller: _controller1,
-                        //initialValue: _initialValue,
-                        firstDate: DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            DateTime.now().hour),
-                        lastDate: DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day + 10),
-                        icon: const Icon(Icons.event),
-                        dateLabelText: pickupdate,
-                        // timeLabelText: "Hour"
+                  FromToWidget(
+                    fromAddress: widget.fromAddress,
+                    toAddress: widget.toAddress,
+                    tripType: BookingTiming.later,
+                  ),
+                  CarCategoriesWidget(
+                    fromAddress: widget.fromAddress,
+                    toAddress: widget.toAddress,
+                  ),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2.0),
+                      side: const BorderSide(
+                        color: AppColor.border,
+                      ),
+                    ),
+                    child: SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              child: DateTimePicker(
+                                type: DateTimePickerType.date,
+                                dateMask: 'd MMM, yyyy',
+                                controller: _controller1,
+                                //initialValue: SelectedgoLiveDate,
+                                firstDate: DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                    DateTime.now().hour),
+                                lastDate: DateTime(2100),
+                                icon: const Icon(Icons.event),
+                                dateLabelText: pickupdate,
+                                // timeLabelText: "Hour"
 
-                        //use24HourFormat: false,
+                                //use24HourFormat: false,
 
-                        selectableDayPredicate: (date) {
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
-                          return true;
-                        },
+                                selectableDayPredicate: (date) {
+                                  if (date.weekday == 6 || date.weekday == 7) {
+                                    return false;
+                                  }
+                                  return true;
+                                },
 
-                        //  onChanged: (val) => setState(() => _valueChanged1 = val),
-                        // validator: (val) {
-                        //   setState(() => _valueToValidate1 = val ?? '');
-                        //   return null;
-                        // },
-                        //   onSaved: (val) => setState(() => _valueSaved1 = val ?? ''),
+                                //  onChanged: (val) => setState(() => _valueChanged1 = val),
+                                // validator: (val) {
+                                //   setState(() => _valueToValidate1 = val ?? '');
+                                //   return null;
+                                // },
+                                //   onSaved: (val) => setState(() => _valueSaved1 = val ?? ''),
+                              ),
+                            ),
+                          ),
+
+
+                          const SizedBox(width: 10),
+                          Container(
+                            height: 55,
+                            width: 1,
+                            color: AppColor.border,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: DateTimePicker(
+                              type: DateTimePickerType.time,
+                              dateMask: 'hh:mm',
+                              controller: _controller2,
+                              //initialValue: _initialValue,
+                              // firstDate: DateTime(2000),
+                              firstDate: DateTime(
+                                DateTime.now().hour,
+                                DateTime.now().minute,),
+                              lastDate: DateTime(2100),
+
+                              icon: Icon(Icons.access_time),
+                              //dateLabelText: pickuptime,
+                              timeLabelText: pickuptime,
+                              //use24HourFormat: false,
+                              //locale: Locale('pt', 'BR'),
+                              // selectableDayPredicate: (date) {
+                              //   if (date.weekday == 6 || date.weekday == 7) {
+                              //     return false;
+                              //   }
+                              //   return true;
+                              // },
+                              //  onChanged: (val) => setState(() => _valueChanged1 = val),
+                              // validator: (val) {
+                              //   setState(() => _valueToValidate1 = val ?? '');
+                              //   return null;
+                              // },
+                              //   onSaved: (val) => setState(() => _valueSaved1 = val ?? ''),
+                            ),
+                          ),
+
+                        ],
                       ),
                     ),
                   ),
-
-                  // Container(
-                  //   margin: const EdgeInsets.only(left: 10),
-                  //   padding: const EdgeInsets.only(top: 5,bottom: 5),
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children:  [
-                  //       robotoTextWidget(
-                  //           textval:"₹",
-                  //           colorval: AppColor.black,
-                  //           sizeval: 16,
-                  //           fontWeight: FontWeight.w800),
-
-                  //        robotoTextWidget(
-                  //           textval: pickupdate,
-                  //           colorval: AppColor.lightText,
-                  //           sizeval: 16,
-                  //           fontWeight: FontWeight.w400),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  const SizedBox(width: 10),
                   Container(
-                    height: 55,
-                    width: 1,
-                    color: AppColor.border,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      child: DateTimePicker(
-                        type: DateTimePickerType.time,
-                        //  dateMask: 'd MMM, yyyy',
-                        controller: _controller2,
-                        //initialValue: _initialValue,
-                        // firstDate: DateTime(2000),
-                        initialTime: TimeOfDay(
-                            hour: DateTime.now().hour,
-                            minute: DateTime.now().minute),
-                        // lastDate: DateTime(2100),
-                        icon: Icon(Icons.access_time),
-                        //dateLabelText: pickuptime,
-                        timeLabelText: pickuptime,
-                        //use24HourFormat: false,
-                        //locale: Locale('pt', 'BR'),
-                        // selectableDayPredicate: (date) {
-                        //   if (date.weekday == 6 || date.weekday == 7) {
-                        //     return false;
-                        //   }
-                        //   return true;
-                        // },
-                        //  onChanged: (val) => setState(() => _valueChanged1 = val),
-                        // validator: (val) {
-                        //   setState(() => _valueToValidate1 = val ?? '');
-                        //   return null;
-                        // },
-                        //   onSaved: (val) => setState(() => _valueSaved1 = val ?? ''),
-                      ),
-                    ),
-                  ),
-                  // Container(
-                  //     margin: const EdgeInsets.only(right: 10),
-                  //     padding: const EdgeInsets.only(top: 5, bottom: 5),
-                  //     child: Column(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         robotoTextWidget(
-                  //             textval: ' Mins',
-                  //             colorval: AppColor.black,
-                  //             sizeval: 16,
-                  //             fontWeight: FontWeight.w800),
-                  //         robotoTextWidget(
-                  //             textval: pickuptime,
-                  //             colorval: AppColor.lightText,
-                  //             sizeval: 16,
-                  //             fontWeight: FontWeight.w400),
-                  //       ],
-                  //     )),
+                      height: 40,
+                      margin: const EdgeInsets.all(5),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => _buildPopupDialog(context),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.greyblack,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: robotoTextWidget(
+                          textval: bookingConfirmation,
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 230),
-        ]),
-      ),
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-            height: 40,
-            margin: const EdgeInsets.all(5),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                primary: AppColor.greyblack,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-              ),
-              child: robotoTextWidget(
-                textval: bookingConfirmation,
-                colorval: AppColor.white,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            )),
+
+            // const SizedBox(height: 230),
+          ]),
+        ),
+
       ),
     ]));
   }
+  Widget _buildPopupDialog(BuildContext context) {
+    return AlertDialog(
+      content: Container(
+          height: 340,
+          child: Column(children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Text(
+                "You are booking",
+                style: TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
+                ),
+              ),
+              child: Padding(padding: const EdgeInsets.only(top: 5,bottom: 5),
+                child: Column(
+                  children: [
+                    robotoTextWidget(
+                        textval: "driverDetail!.priceClass!.type.toString()",
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset('assets/images/passengers-icon.png',
+                                height: 15, width: 15, fit: BoxFit.cover),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            robotoTextWidget(
+                                textval: "driverDetail!.priceClass!.passengerCapacity People",
+                                colorval: AppColor.black,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w200)
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Row(
+                          children: [
+                            Image.asset('assets/images/weight-icon.png',
+                                height: 15, width: 15, fit: BoxFit.cover),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            robotoTextWidget(
+                                textval:"driverDetail!.priceClass!.bootSpace.toString()",
+                                colorval: AppColor.black,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w200)
+                          ],
+                        ),
+
+                      ],
+                    )
+                  ],
+                ),
+
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
+                ),
+              ),
+              child: SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(top: 5,bottom: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children:  [
+                          robotoTextWidget(
+                              textval:"₹priceClass.totalFare",
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w800),
+
+                          const robotoTextWidget(
+                              textval: "Approx. Fare",
+                              colorval: AppColor.black,
+                              sizeval: 12,
+                              fontWeight: FontWeight.w400),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      height: 55,
+                      width: 1,
+                      color: AppColor.border,
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                        margin: const EdgeInsets.only(right: 10),
+
+                        padding: const EdgeInsets.only(top: 5,bottom: 5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:  [
+                            robotoTextWidget(
+                                textval: 'driverDetail!.durationToPickUpLocation Mins',
+                                colorval: AppColor.black,
+                                sizeval: 16,
+                                fontWeight: FontWeight.w800),
+
+                            const robotoTextWidget(
+                                textval: "Pickup Time",
+                                colorval: AppColor.black,
+                                sizeval: 12,
+                                fontWeight: FontWeight.w400),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+                height: 10
+            ),
+            const Text(
+              "To address",
+              style: TextStyle(
+                  color: AppColor.butgreen,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
+                ),
+              ),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(10) ,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const robotoTextWidget(
+                        textval: "Place Name",
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    robotoTextWidget(
+                        textval:  widget.toAddress!.address.toString(),
+                        colorval: AppColor.black,
+                        sizeval: 12,
+                        fontWeight: FontWeight.w200),
+                  ],
+                ),
+              ),),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    height: 40,
+                    width: 120,
+                    margin: const EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: cancel,
+                        colorval: AppColor.greyblack,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+                Container(
+                    height: 40,
+                    width: 120,
+                    margin: const EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                       // confirmBooking();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: confirm,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+              ],
+            )
+          ])),
+
+    );
+  }
+
 }
 //https://rrtutors.com/tutorials/Show-Current-Location-On-Maps-Flutter-Fetch-Current-Location-Address
 //https://stackoverflow.com/questions/52591556/custom-markers-with-flutter-google-maps-plugin

@@ -43,7 +43,7 @@ class MyMap extends StatefulWidget {
 }
 
 class MyMapState extends State {
-  LatLng? latlong = null;
+  late LatLng latlong ;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
@@ -126,7 +126,7 @@ class MyMapState extends State {
                   address: Address,
                   id: isoId ?? '',
                   title: placeName,
-                  latLng: latlong),
+                  latLng: latlong, isFavourite: 'N'),
             ),
           ),
         )

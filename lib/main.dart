@@ -181,7 +181,7 @@ dynamic userid =sharedPreferences.getString(LoginID);
             title = splitList[1];
 
           }
-         var data =  await dao.findByIdentifier(res["id"]) ;
+         var data =  await dao.findDataByaddressg(res["address"]) ;
           if(data == null) {
             final task = FavoritesData.optional(identifier: res["id"],
                 address: res["address"],
