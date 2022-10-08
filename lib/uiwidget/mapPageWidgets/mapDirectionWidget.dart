@@ -37,7 +37,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
 
-  late LatLng startLocation = LatLng(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude);
+  late LatLng pickupLocation = LatLng(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude);
   late  LatLng destinationLocation =  LatLng(widget.toAddress!.latLng!.latitude, widget.toAddress!.latLng!.longitude);
   late String _sessionToken;
   var uuid = const Uuid();
@@ -48,11 +48,10 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
   void initState() {
     _sessionToken = uuid.v4();
     markers.add(Marker( //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
+      markerId: MarkerId(pickupLocation.toString()),
+      position: pickupLocation, //position of marker
       infoWindow: const InfoWindow( //popup info
-        title: 'Starting Point ',
-        snippet: 'Start Marker',
+        title: 'Pickup Location ',
       ),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen), //Icon for Marker
     ));
@@ -61,8 +60,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
       markerId: MarkerId(destinationLocation.toString()),
       position: destinationLocation, //position of marker
       infoWindow: const InfoWindow( //popup info
-        title: 'Destination Point ',
-        snippet: 'Destination Marker',
+        title: 'Destination Location ',
       ),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed), //Icon for Marker
     ));
@@ -76,7 +74,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
     List<LatLng> polylineCoordinates = [];
 
     String request =
-        '$directionBaseURL?origin=${startLocation.latitude},${startLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
+        '$directionBaseURL?origin=${pickupLocation.latitude},${pickupLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
@@ -120,7 +118,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
       body: GoogleMap( //Map widget from google_maps_flutter package
         zoomGesturesEnabled: true, //enable Zoom in, out on map
         initialCameraPosition: CameraPosition( //innital position in map
-          target: startLocation, //initial position
+          target: pickupLocation, //initial position
           zoom: 10.0, //initial zoom level
         ),
         markers: markers, //markers to show on map
