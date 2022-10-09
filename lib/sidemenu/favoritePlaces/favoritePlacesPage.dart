@@ -307,6 +307,7 @@ void comebackFromADD(String a){
                                     address: "",
                                     longitude: "0.0",
                                     latitude: " 0.0",
+                              identifier:"0"
                                   )
                                 : homeDetail!,
                           )));
@@ -382,7 +383,7 @@ void comebackFromADD(String a){
                         isforedit: "0",
                         titleEditable: "1",
                         data:  homeDetail == null ? FavoritesData.optional(
-                          title: "Work",address: "",longitude: "0.0",latitude:" 0.0",
+                          title: "Work",address: "",longitude: "0.0",latitude:" 0.0",identifier:"0"
                         ):homeDetail!,
                       )));
 getdata();

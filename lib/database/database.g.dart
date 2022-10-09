@@ -319,7 +319,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
   @override
   Future<List<FavoritesData?>> displayAscByAddress(String address) async{
      return _queryAdapter.queryList(
-      'SELECT * FROM FavoritesData WHERE  address LIKE ? ORDER BY timestamp ASC LIMIT 15',
+      'SELECT * FROM FavoritesData WHERE  address LIKE ? ORDER BY timestamp ASC',
       mapper: (Map<String, Object?> row) => FavoritesData(
           row['id'] as int?,
           row['identifier'] as String,
