@@ -49,6 +49,7 @@ class MyMapState extends State {
   String Address = PickUp;
   String placeName = '';
   String? isoId;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -59,11 +60,11 @@ class MyMapState extends State {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return SafeArea(
-        child: Stack(
-      children: [
-        (latlong != null)
-            ? GoogleMap(
+    return (latlong != null)
+        ? SafeArea(
+            child: Stack(
+            children: [
+              GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
@@ -81,9 +82,8 @@ class MyMapState extends State {
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
                   Timer(const Duration(seconds: 1), () {
-                      GetAddressFromLatLong(latlong!);
+                    GetAddressFromLatLong(latlong!);
                   });
-
                 },
                 onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
@@ -92,10 +92,10 @@ class MyMapState extends State {
               ),
               Center(
                   child: SvgPicture.asset(
-                    "assets/svg/from-location-img.svg",
-                    width: 20,
-                    height: 20,
-                  )),
+                "assets/svg/from-location-img.svg",
+                width: 20,
+                height: 20,
+              )),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
@@ -131,7 +131,8 @@ class MyMapState extends State {
                 ),
               )
             ],
-          )): Container();
+          ))
+        : Container();
   }
 
   Future getCurrentLocation() async {
@@ -162,6 +163,7 @@ class MyMapState extends State {
       });
     }
   }
+
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
