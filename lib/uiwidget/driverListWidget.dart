@@ -210,7 +210,7 @@ class DriverListItemPageState extends State<DriverListItem> {
             ),
           ));
     }
-    return Container(
+    return Center(
       child: CircularProgressIndicator(),
     );
   }

@@ -47,7 +47,7 @@ class MyMapState extends State {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
- String placeName = '';
+  String placeName = '';
   String? isoId;
   @override
   void initState() {
@@ -56,15 +56,14 @@ class MyMapState extends State {
     getCurrentLocation();
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-      return  (latlong != null)
-          ? SafeArea(
-          child: Stack(
-            children: [
-             GoogleMap(
+    return SafeArea(
+        child: Stack(
+      children: [
+        (latlong != null)
+            ? GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
@@ -82,10 +81,11 @@ class MyMapState extends State {
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
                   Timer(const Duration(seconds: 1), () {
-                    GetAddressFromLatLong(latlong!);
+                      GetAddressFromLatLong(latlong!);
                   });
+
                 },
-                onCameraMove: (CameraPosition position) async {
+                onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
                 },
@@ -162,19 +162,21 @@ class MyMapState extends State {
       });
     }
   }
-
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
+    //print(placemarks);
     Placemark place = placemarks[0];
-    placeName = (place.subLocality != '')?place.subLocality! :place.subAdministrativeArea!;
+    placeName = (place.subLocality != '')
+        ? place.subLocality!
+        : place.subAdministrativeArea!;
     isoId = place.isoCountryCode;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

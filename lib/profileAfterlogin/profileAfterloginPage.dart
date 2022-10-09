@@ -12,7 +12,7 @@ import '../theme/string.dart';
 import '../web_service/Constant.dart';
 
 class ProfileAfterloginPage extends StatefulWidget {
-LoginModel profiledata;
+  LoginModel profiledata;
   ProfileAfterloginPage({required this.profiledata});
   @override
   State<ProfileAfterloginPage> createState() => _profileAfterloginPageState();
@@ -22,7 +22,6 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _showmobileview = true;
-
 
   Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
@@ -44,8 +43,6 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    
   }
 
   @override
@@ -239,7 +236,8 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               LoginEmail, widget.profiledata.mailid);
                           sharedPreferences.setString(
                               LoginToken, widget.profiledata.token);
-                          sharedPreferences.setString(LoginID, widget.profiledata.id);
+                          sharedPreferences.setString(
+                              LoginID, widget.profiledata.id);
                           sharedPreferences.setString(
                               Loginpropic, widget.profiledata.propic);
                           sharedPreferences.setString(
