@@ -41,6 +41,10 @@ getBaseURL() {
 userLogin() {
   return Uri.parse('${getBaseURL()}/login/userLogin');
 }
+userLogout() {
+  return Uri.parse('${getBaseURL()}/user/userLogout');
+}
+
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }
@@ -66,6 +70,10 @@ cancelTrip() {
 }
 SosApi() {
   return Uri.parse('${getBaseURL()}/user/sos');
+}
+
+SendInvoice() {
+  return Uri.parse('${getBaseURL()}/userTrip/resendInvoice');
 }
 
 EditFavouriteAddressdata(){
