@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-         if (value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
+         if (value.liveTripData!=null && value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
               value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted||
              value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
