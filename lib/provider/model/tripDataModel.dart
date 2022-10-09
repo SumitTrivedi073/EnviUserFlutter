@@ -244,6 +244,7 @@ class PriceClass {
   double totalFare;
   int advancePaid;
   int baseFare;
+  //change baseFare to double
   String skuId;
   double perKmFare;
   String type;

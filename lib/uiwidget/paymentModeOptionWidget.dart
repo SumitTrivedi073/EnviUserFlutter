@@ -7,9 +7,9 @@ import '../theme/string.dart';
 class PaymentModeOptionWidget extends StatefulWidget {
   final String strpaymentOptions;
   final String selectedOption;
-
+  final void Function(String) callback;
   PaymentModeOptionWidget(
-      {required this.strpaymentOptions, required this.selectedOption});
+      {required this.strpaymentOptions, required this.selectedOption,required this.callback});
 
   @override
   State<StatefulWidget> createState() => _PaymentModeOptionWidgetState();
@@ -92,6 +92,8 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
         onTap: () {
           setState(() {
             selectedOption = arroption[index];
+            widget.callback(selectedOption);
+
           });
           print("Tapped a Container");
         },

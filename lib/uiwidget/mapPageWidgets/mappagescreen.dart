@@ -47,7 +47,7 @@ class MyMapState extends State {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
- String placeName = '';
+  String placeName = '';
   String? isoId;
   @override
   void initState() {
@@ -57,15 +57,14 @@ class MyMapState extends State {
     getCurrentLocation();
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-      return  (latlong != null)
-          ? SafeArea(
-          child: Stack(
-            children: [
-             GoogleMap(
+    return SafeArea(
+        child: Stack(
+      children: [
+        (latlong != null)
+            ? GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
@@ -83,57 +82,59 @@ class MyMapState extends State {
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
                   Timer(const Duration(seconds: 1), () {
-                    GetAddressFromLatLong(latlong!);
+                      GetAddressFromLatLong(latlong!);
                   });
+
                 },
-                onCameraMove: (CameraPosition position) async {
+                onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
                 },
-              ),
-
-              Center(
-                  child: SvgPicture.asset(
-                    "assets/svg/from-location-img.svg",
-                    width: 20,
-                    height: 20,
-                  )),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 140),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: FloatingActionButton(
-                      // isExtended: true,
-                      child: const Icon(Icons.my_location_outlined),
-                      backgroundColor: Colors.green,
-                      onPressed: () {
-                        setState(() {
-                          getCurrentLocation();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: FromBookScheduleWidget(
-                    address: Address,
-                    currentLocation: SearchPlaceModel(
-                        address: Address,
-                        id: isoId ?? '',
-                        title: placeName,
-                        latLng: latlong!,
-                        isFavourite: 'N'),
-                  ),
-                ),
               )
-            ],
-          )): Container();
+            : Container(),
+        Center(
+            child: SvgPicture.asset(
+          "assets/svg/from-location-img.svg",
+          width: 20,
+          height: 20,
+        )),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 140),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: FloatingActionButton(
+                // isExtended: true,
+                backgroundColor: Colors.green,
+                onPressed: () {
+                  setState(() {
+                    getCurrentLocation();
+                  });
+                },
+                // isExtended: true,
+                child: const Icon(Icons.my_location_outlined),
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: FromBookScheduleWidget(
+              address: Address,
+              currentLocation: SearchPlaceModel(
+                  address: Address,
+                  id: isoId ?? '',
+                  title: placeName,
+                  isFavourite: 'N',
+                  latLng: latlong!),
+            ),
+          ),
+        )
+      ],
+    ));
   }
 
   Future getCurrentLocation() async {
@@ -164,19 +165,21 @@ class MyMapState extends State {
       });
     }
   }
-
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
+    //print(placemarks);
     Placemark place = placemarks[0];
-    placeName = (place.subLocality != '')?place.subLocality! :place.subAdministrativeArea!;
+    placeName = (place.subLocality != '')
+        ? place.subLocality!
+        : place.subAdministrativeArea!;
     isoId = place.isoCountryCode;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

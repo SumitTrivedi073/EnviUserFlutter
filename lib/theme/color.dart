@@ -29,4 +29,5 @@ class AppColor {
   static const textgray = Color(0XFF909090);
   static const textfieldlightgrey = Color(0XFFEFEFEF);
   static const purple = Color(0XFF6827D1);
+
 }
