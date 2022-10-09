@@ -42,11 +42,12 @@ class AutocompleteService {
             address: element.address,
             title: element.title,
             latLng: LatLng(
-                double.parse(element.latitude), double.parse(element.longitude))));
+                double.parse(element.latitude), double.parse(element.longitude)),isFavourite: element.isFavourite));
           title.add(element.address);
       }
-
+      favPlaceList..sort((a, b) => a.isFavourite.toLowerCase().compareTo(b.isFavourite.toLowerCase()));
     }
+
     return favPlaceList;
   }
 
