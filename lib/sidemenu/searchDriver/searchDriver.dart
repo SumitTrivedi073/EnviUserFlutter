@@ -4,7 +4,6 @@ import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/fromtowidget.dart';
 import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidget.dart';
-import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

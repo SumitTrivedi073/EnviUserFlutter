@@ -1,21 +1,21 @@
-// import 'dart:convert';
+import 'dart:convert';
 
-// import 'package:carousel_slider/carousel_controller.dart';
-// import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
-// import 'package:envi/theme/color.dart';
-// import 'package:envi/uiwidget/robotoTextWidget.dart';
-// import 'package:envi/web_service/Constant.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
+import 'package:envi/theme/color.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
+import 'package:envi/web_service/Constant.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// import '../../../../web_service/HTTP.dart' as HTTP;
-// import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-// import '../sidemenu/searchDriver/model/driverListModel.dart';
-// import '../theme/string.dart';
-// import '../web_service/APIDirectory.dart';
+import '../../../../web_service/HTTP.dart' as HTTP;
+import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
+import '../sidemenu/searchDriver/model/driverListModel.dart';
+import '../theme/string.dart';
+import '../web_service/APIDirectory.dart';
 
 class DriverListItem extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
@@ -39,12 +39,12 @@ class DriverListItemPageState extends State<DriverListItem> {
   int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
 
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     _firstLoad();
-//   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _firstLoad();
+  }
 
   void _firstLoad() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -87,133 +87,133 @@ class DriverListItemPageState extends State<DriverListItem> {
     }
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     if(DriverList.isNotEmpty) {
-//       return Expanded(
-//           child: Card(
-//             elevation: 5,
-//             margin: const EdgeInsets.all(5),
-//             child: Column(
-//               children: [
-//                 SizedBox(
-//                   height: 40,
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Container(
-//                         padding: const EdgeInsets.all(10),
-//                         child: robotoTextWidget(
-//                             textval: '${DriverList.length} Ride Option',
-//                             colorval: AppColor.black,
-//                             sizeval: 14,
-//                             fontWeight: FontWeight.w800),
-//                       ),
-//                       Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                         children: [
-//                           Row(children: [
-//                             Container(
-//                               width: 1,
-//                               color: AppColor.darkgrey,
-//                             ),
-//                             IconButton(
-//                                 onPressed: () {
-//                                   if (selectedIndex != 0) {
-//                                     carouselController.previousPage();
-//                                   }
-//                                 },
-//                                 icon: Icon(
-//                                   Icons.arrow_back_ios,
-//                                   color: (selectedIndex != 0)
-//                                       ? Colors.green
-//                                       : AppColor.grey,
-//                                 ))
-//                           ]),
-//                           Row(children: [
-//                             Container(
-//                               width: 1,
-//                               color: AppColor.darkgrey,
-//                             ),
-//                             IconButton(
-//                                 onPressed: () {
-//                                   if (selectedIndex != DriverList.length - 1) {
-//                                     carouselController.nextPage();
-//                                   }
-//                                 },
-//                                 icon: const Icon(
-//                                   Icons.arrow_forward_ios,
-//                                   color: Colors.green,
-//                                 )),
-//                             Container(
-//                               width: 1,
-//                               color: AppColor.grey,
-//                             ),
-//                           ]),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 Container(
-//                   height: 1,
-//                   color: AppColor.grey,
-//                 ),
-//                 const SizedBox(
-//                   height: 5,
-//                 ),
-//                 Expanded(
-//                     child: CarouselSlider(
-//                       items: List.generate(
-//                           DriverList.length, (index) => driverListItems(index)),
-//                       carouselController: carouselController,
-//                       options: CarouselOptions(
-//                         onPageChanged: (index, reason) {
-//                           selectedIndex = index;
-//                         },
-//                         autoPlay: false,
-//                       ),
-//                     )),
-//                 Container(
-//                     height: 40,
-//                     margin: const EdgeInsets.all(5),
-//                     width: double.infinity,
-//                     child: ElevatedButton(
-//                       onPressed: () {
-//                         Navigator.of(context).pushAndRemoveUntil(
-//                             MaterialPageRoute(
-//                                 builder: (BuildContext context) =>
-//                                     ConfirmDriver(
-//                                       driverDetail: DriverList[selectedIndex!],
-//                                       priceDetail:
-//                                       vehiclePriceClasses[selectedIndex!],
-//                                       fromAddress: widget.fromAddress,
-//                                       toAddress: widget.toAddress,
-//                                     )),
-//                                 (Route<dynamic> route) => false);
-//                       },
-//                       style: ElevatedButton.styleFrom(
-//                         primary: AppColor.greyblack,
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12), // <-- Radius
-//                         ),
-//                       ),
-//                       child: robotoTextWidget(
-//                         textval: bookNow,
-//                         colorval: AppColor.white,
-//                         sizeval: 14,
-//                         fontWeight: FontWeight.w600,
-//                       ),
-//                     ))
-//               ],
-//             ),
-//           ));
-//     }
-//     return Container(
-//       child: CircularProgressIndicator(),
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    if(DriverList.isNotEmpty) {
+      return Expanded(
+          child: Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(5),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: robotoTextWidget(
+                            textval: '${DriverList.length} Ride Option',
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w800),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Row(children: [
+                            Container(
+                              width: 1,
+                              color: AppColor.darkgrey,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  if (selectedIndex != 0) {
+                                    carouselController.previousPage();
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: (selectedIndex != 0)
+                                      ? Colors.green
+                                      : AppColor.grey,
+                                ))
+                          ]),
+                          Row(children: [
+                            Container(
+                              width: 1,
+                              color: AppColor.darkgrey,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  if (selectedIndex != DriverList.length - 1) {
+                                    carouselController.nextPage();
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.green,
+                                )),
+                            Container(
+                              width: 1,
+                              color: AppColor.grey,
+                            ),
+                          ]),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 1,
+                  color: AppColor.grey,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Expanded(
+                    child: CarouselSlider(
+                      items: List.generate(
+                          DriverList.length, (index) => driverListItems(index)),
+                      carouselController: carouselController,
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          selectedIndex = index;
+                        },
+                        autoPlay: false,
+                      ),
+                    )),
+                Container(
+                    height: 40,
+                    margin: const EdgeInsets.all(5),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ConfirmDriver(
+                                      driverDetail: DriverList[selectedIndex!],
+                                      priceDetail:
+                                      vehiclePriceClasses[selectedIndex!],
+                                      fromAddress: widget.fromAddress,
+                                      toAddress: widget.toAddress,
+                                    )),
+                                (Route<dynamic> route) => false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: bookNow,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ))
+              ],
+            ),
+          ));
+    }
+    return Container(
+      child: CircularProgressIndicator(),
+    );
+  }
 
   Widget driverListItems(int index) {
     return GestureDetector(
@@ -417,13 +417,13 @@ class DriverListItemPageState extends State<DriverListItem> {
     );
   }
 
-//   String getTotalPrice(int totalFare, int discount) {
-//     int num1 = totalFare;
+  String getTotalPrice(int totalFare, int discount) {
+    int num1 = totalFare;
 
-//     int num2 = discount;
+    int num2 = discount;
 
-//     int sum = num1 + num2;
-//     print('sum:$sum');
-//     return "₹$sum";
-//   }
-// }
+    int sum = num1 + num2;
+    print('sum:$sum');
+    return "₹$sum";
+  }
+}
