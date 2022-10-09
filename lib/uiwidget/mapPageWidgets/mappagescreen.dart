@@ -53,7 +53,6 @@ class MyMapState extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
   }
 
@@ -91,7 +90,6 @@ class MyMapState extends State {
                       position.target.latitude, position.target.longitude);
                 },
               ),
-
               Center(
                   child: SvgPicture.asset(
                     "assets/svg/from-location-img.svg",

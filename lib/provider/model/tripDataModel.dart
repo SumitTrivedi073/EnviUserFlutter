@@ -235,22 +235,22 @@ class PriceClass {
     required this.amountToBeCollected,
   });
 
-  int passengerCapacity;
-  int discountPercent;
-  int minFare;
-  int distance;
-  int tollCharges;
+  double passengerCapacity;
+  double discountPercent;
+  double minFare;
+  double distance;
+  double tollCharges;
   double sellerDiscount;
   double totalFare;
-  int advancePaid;
-  int baseFare;
+  double advancePaid;
+  double baseFare;
   String skuId;
   double perKmFare;
   String type;
   double stateTax;
-  int maxKmRange;
+  double maxKmRange;
   String bootSpace;
-  int gstp;
+  double gstp;
   String subcategory;
   double amountToBeCollected;
 
