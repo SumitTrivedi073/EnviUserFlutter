@@ -3,7 +3,6 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../enum/BookingTiming.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import '../theme/string.dart';
@@ -12,10 +11,9 @@ class FromToWidget extends StatefulWidget {
 
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
-  final BookingTiming tripType;
   String distance;
 
-   FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.distance,required this.tripType}) : super(key: key);
+   FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.distance}) : super(key: key);
 
 
 
@@ -65,10 +63,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SelectPickupDropAddress(
-                                                title: pickUpLocation,tripType: widget.tripType ,)),
-                                    (route) => true);
+                                        builder: (context) => SelectPickupDropAddress(
+                                            currentLocation: widget.fromAddress,
+                                            title: pickUpLocation)),
+                                        (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -134,11 +132,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SelectPickupDropAddress(
-                                                title: dropLocation,tripType:BookingTiming.now ,
-                                                  currentLocation: widget.fromAddress,)),
-                                    (route) => true);
+                                        builder: (context) => SelectPickupDropAddress(
+                                            currentLocation: widget.fromAddress,
+                                            title: dropLocation)),
+                                        (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),

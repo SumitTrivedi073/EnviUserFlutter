@@ -6,11 +6,8 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../appConfig/appConfig.dart';
-import '../enum/BookingTiming.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../theme/string.dart';
-import '../utils/utility.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
   final String address;
@@ -23,6 +20,7 @@ class FromBookScheduleWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _FromBookScheduleWidgetPageState();
 }
 
+enum BookingTiming { now, later }
 
 late BookingTiming _status;
 
@@ -122,26 +120,20 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                                   //PaymentPage()
                                   SelectPickupDropAddress(
                                       currentLocation: widget.currentLocation,
-                                      title: pickUpLocation,tripType: _status,)),
+                                      title: pickUpLocation)
+                                  ),
                               (route) => true);
                         },
                       ),
                       ElevatedButton(
                         onPressed: () {
-
-                          if(AppConfig().getisScheduleFeatureEnabled() == true) {
-                            _status = BookingTiming.later;
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SelectPickupDropAddress(
-                                            currentLocation: widget
-                                                .currentLocation,
-                                            title: pickUpLocation, tripType: _status,)),
-                                    (route) => true);
-                          }else{
-                            showToast(serviceNotAvailable);
-                          }
+                          _status = BookingTiming.later;
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => SelectPickupDropAddress(
+                                      currentLocation: widget.currentLocation,
+                                      title: pickUpLocation)),
+                              (route) => true);
                         },
                         style: ElevatedButton.styleFrom(
                           primary: AppColor.yellow,
