@@ -143,19 +143,17 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
           const SizedBox(
             height: 5,
           ),
-          Container(
-              child: CarouselSlider(
+          CarouselSlider(
             items: List.generate(
-                vehiclePriceClasses.length, (index) => driverListItems(index)),
+            vehiclePriceClasses.length, (index) => driverListItems(index)),
             carouselController: carouselController,
             options: CarouselOptions(
-              scrollPhysics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index, reason) {
-                selectedIndex = index;
-              },
-              autoPlay: false,
+          onPageChanged: (index, reason) {
+            selectedIndex = index;
+          },
+          autoPlay: false,
             ),
-          )),
+          ),
         ],
       ),
     ));
