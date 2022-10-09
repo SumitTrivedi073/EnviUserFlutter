@@ -3,6 +3,7 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../enum/BookingTiming.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import '../theme/string.dart';
@@ -11,8 +12,10 @@ class FromToWidget extends StatefulWidget {
 
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
-  final double? km;
-  const FromToWidget({Key? key, this.toAddress, this.fromAddress, this.km = 5}) : super(key: key);
+  final BookingTiming tripType;
+  String distance;
+
+   FromToWidget({Key? key, this.toAddress, this.fromAddress,required this.distance,required this.tripType}) : super(key: key);
 
 
 
@@ -62,10 +65,10 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) => SelectPickupDropAddress(
-                                            currentLocation: widget.fromAddress,
-                                            title: pickUpLocation)),
-                                        (route) => true);
+                                        builder: (context) =>
+                                            SelectPickupDropAddress(
+                                                title: pickUpLocation,tripType: widget.tripType ,)),
+                                    (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -102,7 +105,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                           Radius.circular(10.0)), // Set rounded corner radius
                     ),
                     child: robotoTextWidget(
-                      textval: widget.km.toString(),
+                      textval: widget.distance,
                       colorval: AppColor.black,
                       sizeval: 14,
                       fontWeight: FontWeight.normal,
@@ -131,10 +134,11 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               onTap: () {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) => SelectPickupDropAddress(
-                                            currentLocation: widget.fromAddress,
-                                            title: dropLocation)),
-                                        (route) => true);
+                                        builder: (context) =>
+                                            SelectPickupDropAddress(
+                                                title: dropLocation,tripType:BookingTiming.now ,
+                                                  currentLocation: widget.fromAddress,)),
+                                    (route) => true);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),

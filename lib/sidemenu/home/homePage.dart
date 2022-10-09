@@ -1,4 +1,5 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
+import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,19 +35,20 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
+
+
     return Consumer<firestoreLiveTripDataNotifier>(
         builder: (context, value, child) {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          //print("liveTripData===>${value.liveTripData!.tripInfo.tripStatus}");
          if (value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
               value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted||
              value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        const WaitingForDriverScreen()),
+                         WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
           }else if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
            Navigator.of(context).pushAndRemoveUntil(
@@ -69,11 +71,7 @@ class _HomePageState extends State<HomePage> {
                CardBanner(
                   title: 'Welcome $name',
                   image: 'assets/images/welcome_card_dashboard.png'),
-              
-              /*PaymentModeOptionWidget(
-              strpaymentOptions: "qr_code,online,cash",
-              selectedOption: "qr_code",
-            )*/
+
               const ScheduleListAlertConsumer()
             ],
           ),
@@ -84,8 +82,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getUserName() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    name = sharedPreferences.getString(LoginName)!;
     setState(() {
+      name = sharedPreferences.getString(LoginName)!;
 
     });
   }
