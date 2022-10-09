@@ -23,9 +23,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   late SharedPreferences sharedPreferences;
-  late String name="";
+  late String name = "";
 
   @override
   void initState() {
@@ -33,33 +32,30 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getUserName();
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Consumer<firestoreLiveTripDataNotifier>(
         builder: (context, value, child) {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-         if (value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
-              value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted||
-             value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
+        if (mounted && value.liveTripData != null) {
+          if (value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted ||
+              value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                         WaitingForDriverScreen()),
+                        WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
-          }else if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
-           Navigator.of(context).pushAndRemoveUntil(
-               MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                   const OnRideWidget()),
-                   (Route<dynamic> route) => false);
-         }
-
-
-      }
+          } else if (value.liveTripData!.tripInfo.tripStatus ==
+              TripStatusOnboarding) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const OnRideWidget()),
+                (Route<dynamic> route) => false);
+          }
+        }
       });
       return Scaffold(
         drawer: NavigationDrawer(),
@@ -68,10 +64,9 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               AppBarWidget(),
-               CardBanner(
+              CardBanner(
                   title: 'Welcome $name',
                   image: 'assets/images/welcome_card_dashboard.png'),
-
               const ScheduleListAlertConsumer()
             ],
           ),
@@ -84,7 +79,6 @@ class _HomePageState extends State<HomePage> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       name = sharedPreferences.getString(LoginName)!;
-
     });
   }
 }
