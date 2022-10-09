@@ -128,7 +128,8 @@ class MyMapState extends State {
                   address: Address,
                   id: isoId ?? '',
                   title: placeName,
-                  latLng: latlong),
+                  isFavourite: 'N',
+                  latLng: latlong!),
             ),
           ),
         )

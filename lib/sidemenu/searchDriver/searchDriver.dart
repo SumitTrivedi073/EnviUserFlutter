@@ -1,23 +1,13 @@
 // ignore: file_names
-import 'dart:convert';
-
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
-import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/fromtowidget.dart';
 import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidget.dart';
-import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../../theme/color.dart';
+
 import '../../uiwidget/driverListWidget.dart';
-import '../../uiwidget/robotoTextWidget.dart';
-import '../../../../web_service/HTTP.dart' as HTTP;
-import '../../web_service/APIDirectory.dart';
-import 'model/driverListModel.dart';
 
 class SearchDriver extends StatefulWidget {
   final GlobalKey<DriverListItemPageState> _key = GlobalKey();
@@ -49,11 +39,13 @@ class _SearchDriverPageState extends State<SearchDriver> {
         const AppBarInsideWidget(title: "Envi"),
         const SizedBox(height: 5),
         FromToWidget(
-      fromAddress: widget.fromAddress,
-      toAddress: widget.toAddress,
-        distance: distance,),
-        const SizedBox(height: 230),
-       DriverListItem(
+          fromAddress: widget.fromAddress,
+          toAddress: widget.toAddress,
+          distance: distance,
+          tripType: BookingTiming.now,
+        ),
+        Spacer(),
+        DriverListItem(
           key: widget._key,
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
