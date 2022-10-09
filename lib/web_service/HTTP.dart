@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Constant.dart';
 
-
 Response? AccessPermissionHandler(response) {
   if (response.statusCode == 401) {
     Fluttertoast.showToast(
@@ -134,13 +133,13 @@ Future<Object> postDataWithMutipleFiles(url, data, files, fieldName,
     print('Error in postDataWithMutipleFiles $error');
     throw error;
   }
-
 }
+
 Future<Object?> getwithoutHeader(url) async {
   try {
-     const contentType = 'application/json';
+    const contentType = 'application/json';
     Map<String, String> headerstemp = {'Access-Control-Allow-Origin': "*"};
-    var response = await http.get(url,headers: headerstemp);
+    var response = await http.get(url, headers: headerstemp);
     return AccessPermissionHandler(response);
   } catch (error) {
     print('Something went wrong in HTTP Get $error');

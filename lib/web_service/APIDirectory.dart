@@ -4,8 +4,8 @@ import 'ApiConfig.dart' as APICONFIG;
 
 const scheme = 'http';
 const host = 'localhost';
-const port = '3300';
-const mobileHost = '192.168.1.8';
+const port = '5001';
+const mobileHost = '192.168.29.211';
 
 const webBaseUrl = '$scheme://$host:$port';
 const mobileBaseUrl = '$scheme://$mobileHost:$port';
@@ -13,7 +13,6 @@ const mobileBaseUrl = '$scheme://$mobileHost:$port';
 const deployedLambdaUrl = "";
 
 const qaUrl = 'https://qausernew.azurewebsites.net/';
-
 const productionUrl = 'https://qausernew.azurewebsites.net/';
 const directionBaseURL = 'https://maps.googleapis.com/maps/api/directions/json';
 
@@ -25,7 +24,6 @@ getBaseURL() {
       print("1");
       baseUrl = webBaseUrl;
     } else {
-
       print("2");
       baseUrl = mobileBaseUrl;
     }
@@ -36,48 +34,61 @@ getBaseURL() {
     print("4");
     baseUrl = qaUrl;
   }
+  print("Base url ${baseUrl}");
   return baseUrl;
 }
+
 userLogin() {
   return Uri.parse('${getBaseURL()}/login/userLogin');
 }
+
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }
-getfetchLandingPageSettings(){
 
+getfetchLandingPageSettings() {
   return Uri.parse('${getBaseURL()}/login/fetchLandingPageSettings');
 }
-getUserTripHistory(String userid, int pagecount, int limit){
-  print(Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
-  return Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
+
+getUserTripHistory(String userid, int pagecount, int limit) {
+  print(Uri.parse(
+      '${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
+  return Uri.parse(
+      '${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
 }
-GetAllFavouriteAddressdata(String userid){
+
+GetAllFavouriteAddressdata(String userid) {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/getAll/$userid');
 }
+
 searchDriver() {
   return Uri.parse('${getBaseURL()}/userTrip/searchDrivers');
 }
+
 startTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/startUserTrip');
 }
+
 cancelTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/cancelUserTrip');
 }
+
 SosApi() {
   return Uri.parse('${getBaseURL()}/user/sos');
 }
 
-EditFavouriteAddressdata(){
+EditFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
 }
-AddFavouriteAddressdata(){
+
+AddFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
 }
-DeleteFavouriteAddressdata(){
+
+DeleteFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
 }
 
-updatePaymentMode(){
+updatePaymentMode() {
   return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
 }

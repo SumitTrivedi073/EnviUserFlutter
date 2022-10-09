@@ -328,12 +328,11 @@ class _LoginpageState extends State<Loginpage> {
                     setState(() {
                       isLoading = true;
                     });
-                     /* fetchotp(
+                    /* fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
 */
                     signIn();
-
                   }
                 },
                 child: const robotoTextWidget(
@@ -397,8 +396,6 @@ class _LoginpageState extends State<Loginpage> {
         });
         signIn();
       }
-
-
     } on FirebaseAuthException catch (e) {
       print("catch$e");
       setState(() {
@@ -450,13 +447,17 @@ class _LoginpageState extends State<Loginpage> {
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
-     // print("jsonData========>"+jsonData);
+      // print("jsonData========>"+jsonData);
       setState(() {
-     //   _timer.cancel();
+        //   _timer.cancel();
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewProfilePage(
+                        user: users,
+                      )));
         } else {
           Navigator.push(
               context,

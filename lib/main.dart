@@ -7,6 +7,7 @@ import 'package:envi/theme/theme.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,21 +15,49 @@ import 'database/database.dart';
 import 'login/login.dart';
 import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../../../web_service/ApiConfig.dart' as APICONFIG;
+
+Future<void> firestoreInit() async {
+  FirebaseOptions firebaseOptionsQA = FirebaseOptions(
+      measurementId: "G-1CFXP1QDJS",
+      appId: "1:925740058349:web:ea0bad19c7bb459d136ee4",
+      apiKey: "AIzaSyD_wExsQn62RKFj5JLXuqgfibvfJrfDh28",
+      authDomain: "envi-user.firebaseapp.com",
+      projectId: "envi-user",
+      storageBucket: "envi-user.appspot.com",
+      messagingSenderId: "604385937811");
+
+  FirebaseOptions firebaseOptionsProd = FirebaseOptions(
+      measurementId: "G-1CFXP1QDJS",
+      appId: "1:925740058349:web:ea0bad19c7bb459d136ee4",
+      apiKey: "AIzaSyDaVQgOgZ-YsQOuLK1XB1S6J6oxw39xorM",
+      authDomain: "ecabdev-75760.firebaseapp.com",
+      projectId: "ecabdev-75760",
+      storageBucket: "ecabdev-75760.appspot.com",
+      messagingSenderId: "1056599993557");
+
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: APICONFIG.ENVIRONMENT == "QA"
+            ? firebaseOptionsQA
+            : firebaseOptionsProd);
+  } else {
+    await Firebase.initializeApp();
+  }
+}
 
 Future<void> main() async {
-WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
- //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-final database = await $FloorFlutterDatabase
-    .databaseBuilder('envi_uswer.db')
-    .build();
-final dao = database.taskDao;
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+  await firestoreInit();
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  final database =
+      await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+  final dao = database.taskDao;
 
   runApp(const MyApp());
 
-
 // Ideal time to initialize
-
 }
 
 class MyApp extends StatelessWidget {
@@ -41,19 +70,18 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
           ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
-     child: MaterialApp(
-      title: 'Envi',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Malbork',
-        theme: appTheme(),
-        home: MainEntryPoint(),
-      )
-    ));
+        child: MaterialApp(
+            title: 'Envi',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Malbork',
+              theme: appTheme(),
+              home: MainEntryPoint(),
+            )));
   }
 }
 
@@ -76,19 +104,17 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(LoginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
+          MaterialPageRoute(
+              builder: (BuildContext context) => const Loginpage()),
+          (Route<dynamic> route) => false);
     } else {
       GetAllFavouriteAddress();
       getLandingPageSettings();
       // ignore: use_build_context_synchronously
-      context.read<firestoreLiveTripDataNotifier>()
-          .listenToLiveUpdateStream();
-      context.read<firestoreScheduleTripNotifier>()
-          .listenToLiveUpdateStream();
-
+      context.read<firestoreLiveTripDataNotifier>().listenToLiveUpdateStream();
+      context.read<firestoreScheduleTripNotifier>().listenToLiveUpdateStream();
     }
-  /*  Navigator.of(context).pushAndRemoveUntil(
+    /*  Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) =>  MapDirectionWidget()),
             (Route<dynamic> route) => false);*/
   }
@@ -105,58 +131,58 @@ class _MainEntryPointState extends State<MainEntryPoint> {
             fit: BoxFit.fill,
           ),
         ),
-        child: Center(child:  Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
+        child: Center(
+          child: Image.asset(
+            "assets/images/logo.png",
+            width: 276,
+            fit: BoxFit.fill,
+          ),
         ),
       ),
     );
   }
 
-
   void getLandingPageSettings() async {
-
     dynamic response = await HTTP.get(getfetchLandingPageSettings());
     if (response != null && response.statusCode == 200) {
-
-    var  jsonData = convert.jsonDecode(response.body);
-     // print(jsonData);
+      var jsonData = convert.jsonDecode(response.body);
+      // print(jsonData);
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage(title: "title")),
-              (Route<dynamic> route) => false);
+              builder: (BuildContext context) =>
+                  const HomePage(title: "title")),
+          (Route<dynamic> route) => false);
     } else {
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
+
   void GetAllFavouriteAddress() async {
-    final database = await $FloorFlutterDatabase
-        .databaseBuilder('envi_user.db')
-        .build();
+    final database =
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     final dao = database.taskDao;
 
-dynamic userid =sharedPreferences.getString(LoginID);
+    dynamic userid = sharedPreferences.getString(LoginID);
     dynamic response = await HTTP.get(GetAllFavouriteAddressdata(userid));
     if (response != null && response.statusCode == 200) {
-
-      List<dynamic>   jsonData = convert.jsonDecode(response.body)['content']['address'];
-       print(jsonData);
+      List<dynamic> jsonData =
+          convert.jsonDecode(response.body)['content']['address'];
+      print(jsonData);
       for (var res in jsonData) {
-
-        if(res["address"] != null || res["address"] != ""){
+        if (res["address"] != null || res["address"] != "") {
           String title = "";
 
-          if(res["name"] != ""){
+          if (res["name"] != "") {
             title = res["name"];
-          }else{
+          } else {
             final splitList = res["address"].split(",");
             title = splitList[1];
-
           }
-         var data =  await dao.findByIdentifier(res["id"]) ;
-          if(data == null) {
-            final task = FavoritesData.optional(identifier: res["id"],
+          var data = await dao.findByIdentifier(res["id"]);
+          if (data == null) {
+            final task = FavoritesData.optional(
+                identifier: res["id"],
                 address: res["address"],
                 isFavourite: res["isFavourite"],
                 latitude: res["location"]['coordinates'][1].toString(),
@@ -164,18 +190,13 @@ dynamic userid =sharedPreferences.getString(LoginID);
                 title: title);
             print(task);
             await dao.insertTask(task);
-          }
-          else{
+          } else {
             print("data$data");
-
           }
         }
       }
-
     } else {
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 }

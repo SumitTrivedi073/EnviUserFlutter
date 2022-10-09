@@ -1,5 +1,5 @@
 import 'package:envi/web_service/ApiConstants.dart' as ApiConstants;
-var ENVIRONMENT = 'PRO';
-var releaseType = ApiConstants.production;
 
-
+var ENVIRONMENT = 'QA';
+// var releaseType = ApiConstants.production;
+var releaseType = ApiConstants.localhost;

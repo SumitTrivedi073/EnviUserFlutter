@@ -12,8 +12,7 @@ class UserApiService {
       required String token,
       required String name,
       required String gender,
-      required String email
-     }) async {
+      required String email}) async {
     final body = <String, String>{};
     body['name'] = name;
     // body['pro_pic'] = propic;
