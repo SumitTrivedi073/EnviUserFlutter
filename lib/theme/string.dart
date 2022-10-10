@@ -100,14 +100,14 @@ var Invoice = "INVOICE";
 var logoutConfirmation = "Are you sure want to logout?";
 
 var youHaveArrivedText = "You have arrived";
-var rateYourDriverText = "Rate your driver: ";
+var rateYourDriverText = "Rate your driver";
 var yourFareText = "Your Fare";
 var includesdiscountText = "Includes 20% discount";
 var breakdownText = "View Breakdown";
 var distanceTravelledText = "Distance Travelled";
 var ratePerKmText = "rate per km";
 var totalFareText = "Total Fare";
-var lessDiscountText = "Less:Discount";
+var lessDiscountText = "Less Discount";
 var tollsText = "Tolls";
 var taxesText = "Taxes";
 var amountPayableText = "Amount Payable";
