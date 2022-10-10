@@ -2,7 +2,7 @@ import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/appConfig/landingPageSettings.dart';
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
-import 'package:envi/productFlavour/appconfig.dart';
+import 'package:envi/productFlavour/applicationconfig.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/provider/firestoreScheduleTripNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
@@ -18,7 +18,7 @@ import 'login/login.dart';
 import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
 
-Future<Widget> initializeApp(AppConfig appConfig) async {
+Future<Widget> initializeApp(ApplicationConfig appConfig) async {
 WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
@@ -34,7 +34,7 @@ return MyApp(appConfig);
 
 class MyApp extends StatelessWidget {
 
-  final AppConfig appConfig;
+  final ApplicationConfig appConfig;
   const MyApp(this.appConfig);
 
   Widget _flavorBanner(Widget child) {
