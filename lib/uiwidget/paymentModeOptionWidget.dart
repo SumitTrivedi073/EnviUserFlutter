@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:envi/appConfig/appConfig.dart';
+import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -5,33 +9,33 @@ import '../theme/color.dart';
 import '../theme/string.dart';
 
 class PaymentModeOptionWidget extends StatefulWidget {
-  final String strpaymentOptions;
-  final String selectedOption;
+
+  TripDataModel tripDataModel;
   final void Function(String) callback;
+
   PaymentModeOptionWidget(
-      {required this.strpaymentOptions, required this.selectedOption,required this.callback});
+      {Key? key,required this.tripDataModel, required this.callback});
 
   @override
   State<StatefulWidget> createState() => _PaymentModeOptionWidgetState();
 }
 
 class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
-  late String strpaymentOptions;
-  late String selectedOption;
   List<String> arroption = [];
-
-  @override
-  void initState() {
-    selectedOption = widget.selectedOption;
-
-    strpaymentOptions = widget.strpaymentOptions;
-  }
+  late String selectedOption = widget.tripDataModel.tripInfo.paymentMode;
+  String PaymentOption = AppConfig.paymentOptions;
+  
 
   @override
   Widget build(BuildContext context) {
-    arroption = strpaymentOptions.split(",");
-    int listheight = 39 + 57 * arroption.length;
+    PaymentOption = PaymentOption.replaceAll("[", "");
+    PaymentOption = PaymentOption.replaceAll("]", "");
+    PaymentOption = PaymentOption.replaceAll(" ", "");
+    arroption = PaymentOption.split(',');
+    print("arroption$arroption");
+    int listheight = 90 * arroption.length;
     return Container(
+      margin: const EdgeInsets.only(left: 10,right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -59,15 +63,13 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
                     height: 1,
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: listheight.toDouble(),
                   child: ListView.builder(
-                    //controller: _controller,
-
                     itemBuilder: (context, index) {
                       return ListItem(index);
                     },
-                    itemCount: 3,
+                    itemCount: arroption.length,
                   ),
                 ),
               ],
@@ -79,107 +81,104 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
   Card ListItem(index) {
     return Card(
         elevation: 1,
-        child: Container(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-              CellRow2(index),
-            ])));
-  }
-
-  GestureDetector CellRow2(index) {
-    return GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedOption = arroption[index];
-            widget.callback(selectedOption);
-
-          });
-          print("Tapped a Container");
-        },
-        child: Container(
-          height: 57,
-          decoration: selectedOption == arroption[index]
-              ? const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
-                  gradient: LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.centerRight,
-                    colors: [AppColor.white, Colors.lightGreen],
-                  ))
-              : const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
-                ),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 7,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            getpaymentIcon(arroption[index]),
-                            width: 20,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          robotoTextWidget(
-                            textval: getpaymentTitle(arroption[index]),
-                            colorval: AppColor.black,
-                            sizeval: 16.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ],
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+          GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedOption = arroption[index];
+                  widget.callback(selectedOption);
+                });
+                print("Tapped a Container");
+              },
+              child: Container(
+                height: 57,
+                decoration: selectedOption == arroption[index]
+                    ? const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10)),
+                        gradient: LinearGradient(
+                          begin: Alignment.center,
+                          end: Alignment.centerRight,
+                          colors: [AppColor.white, Colors.lightGreen],
+                        ))
+                    : const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10)),
                       ),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 25),
-                          ),
-                          robotoTextWidget(
-                            textval: getpaymentDecription(arroption[index]),
-                            colorval: AppColor.grey,
-                            sizeval: 13.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (arroption[index] == selectedOption)
-                    Center(
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 15),
-                        child: const Icon(
-                          Icons.check,
-                          color: AppColor.darkGreen,
-                            size: 25.0,
-                        ),
-                      ),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 7,
                     ),
-                ],
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-            ],
-          ),
-        ));
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Padding(padding: EdgeInsets.only(left: 10),
+                                child: Image.asset(
+                                  getpaymentIcon(arroption[index]),
+                                  width: 20,
+                                )),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                robotoTextWidget(
+                                  textval:
+                                      getpaymentTitle(arroption[index]),
+                                  colorval: AppColor.black,
+                                  sizeval: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 25),
+                                ),
+                                robotoTextWidget(
+                                  textval: getpaymentDecription(
+                                      arroption[index]),
+                                  colorval: AppColor.grey,
+                                  sizeval: 13.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        if (arroption[index] == selectedOption)
+                          Center(
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 15),
+                              child: const Icon(
+                                Icons.check,
+                                color: AppColor.darkGreen,
+                                size: 25.0,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                  ],
+                ),
+              )),
+        ]));
   }
 
   String getpaymentTitle(String type) {
@@ -223,7 +222,6 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
     print(type);
     switch (type) {
       case "qr_code":
-        // do something
         title = "assets/images/payment_qr_code.png";
         break;
       case "online":

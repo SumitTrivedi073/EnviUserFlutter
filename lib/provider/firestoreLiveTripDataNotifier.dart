@@ -43,9 +43,9 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
             print("tripdata========> ${event.data()}");
             if(jsonData!=null && jsonData.toString().isNotEmpty) {
               liveTripData = TripDataModel.fromJson(jsonData);
-              notifyListeners();
-            }
 
+            }
+            notifyListeners();
           });
         }
 
