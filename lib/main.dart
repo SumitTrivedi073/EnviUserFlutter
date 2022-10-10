@@ -1,3 +1,5 @@
+import 'package:envi/appConfig/appConfig.dart';
+import 'package:envi/appConfig/landingPageSettings.dart';
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
 import 'package:envi/productFlavour/appconfig.dart';
@@ -135,16 +137,41 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     if (response != null && response.statusCode == 200) {
 
     var  jsonData = convert.jsonDecode(response.body);
-     // print(jsonData);
+    //  print(convert.jsonDecode(response.body)['applicationConfig']);
+   // print(convert.jsonDecode(response.body)['landingPageSettings']);
+LandingPageConfig.setshowInfoPopup(jsonData['landingPageSettings']['showInfoPopup']);
+    LandingPageConfig.setinfoPopupType(jsonData['landingPageSettings']['infoPopupType']);
+    LandingPageConfig.setautoExpiryDuration(jsonData['landingPageSettings']['autoExpiryDuration']);
+    LandingPageConfig.setinfoPopupFrequency(jsonData['landingPageSettings']['infoPopupFrequency']);
+    LandingPageConfig.setinfoPopupTitle(jsonData['landingPageSettings']['infoPopupTitle']);
+    LandingPageConfig.setinfoPopupDescription(jsonData['landingPageSettings']['infoPopupDescription']);
+    LandingPageConfig.setinfoPopupImgagedUrl(jsonData['landingPageSettings']['infoPopupImgagedUrl']);
+    LandingPageConfig.setinfoPopupBackGroundColorCode(jsonData['landingPageSettings']['infoPopupBackGroundColorCode']);
+    LandingPageConfig.setisInfoPopUpTransparent(jsonData['landingPageSettings']['isInfoPopUpTransparent']);
+    LandingPageConfig.setisInfoPopUpFullScreen(jsonData['landingPageSettings']['isInfoPopUpFullScreen']);
+LandingPageConfig.setisOnMaintainance(jsonData['landingPageSettings']['isOnMaintainance']);
+    LandingPageConfig.setmaintainanceInfoTouser(jsonData['landingPageSettings']['maintainanceInfoTouser']);
+    LandingPageConfig.setenableReferAndWin(jsonData['landingPageSettings']['enableReferAndWin']);
+    LandingPageConfig.setinfoPopupId(jsonData['landingPageSettings']['infoPopupId']);
+    LandingPageConfig.setcustomerCare(jsonData['landingPageSettings']['customerCare']);
+    AppConfig.setminAndroidVersion(jsonData['applicationConfig']['swVersionConfig']['minAndroidVersion']);
+    AppConfig.setminiOSVersion(jsonData['applicationConfig']['swVersionConfig']['miniOSVersion']);
+    AppConfig.setandroidAppUrl(jsonData['applicationConfig']['swVersionConfig']['androidAppUrl']);
+    AppConfig.setiosAppUrl(jsonData['applicationConfig']['swVersionConfig']['iosAppUrl']);
+    AppConfig.setadvance_booking_time_limit(jsonData['applicationConfig']['scheduleTripConfig']['advance_booking_time_limit']);
+    AppConfig.setdriver_assignment_time_limit(jsonData['applicationConfig']['scheduleTripConfig']['driver_assignment_time_limit']);
+    AppConfig.setisScheduleFeatureEnabled(jsonData['applicationConfig']['scheduleTripConfig']['isScheduleFeatureEnabled']);
+    AppConfig.setscheduleFreeDriverDistance(jsonData['applicationConfig']['scheduleTripConfig']['scheduleFreeDriverDistance']);
+    AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']['scheduleTripConfig']['scheduleAllottedDriverDistance']);
+    AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']['paymentOptions'].toString());
+    AppConfig.setdefaultPaymentMode(jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) => const HomePage(title: "title")),
               (Route<dynamic> route) => false);
     } else {
-      setState(() {
 
-      });
     }
   }
   void GetAllFavouriteAddress() async {
@@ -158,7 +185,7 @@ dynamic userid =sharedPreferences.getString(LoginID);
     if (response != null && response.statusCode == 200) {
 
       List<dynamic>   jsonData = convert.jsonDecode(response.body)['content']['address'];
-       print(jsonData);
+      // print(jsonData);
       for (var res in jsonData) {
 
         if(res["address"] != null || res["address"] != ""){
@@ -171,7 +198,7 @@ dynamic userid =sharedPreferences.getString(LoginID);
             title = splitList[1];
 
           }
-         var data =  await dao.findByIdentifier(res["id"]) ;
+         var data =  await dao.findDataByaddressg(res["address"]) ;
           if(data == null) {
             final task = FavoritesData.optional(identifier: res["id"],
                 address: res["address"],

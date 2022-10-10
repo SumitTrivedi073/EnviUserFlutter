@@ -5,7 +5,9 @@ import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../appConfig/landingPageSettings.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -14,6 +16,7 @@ import '../../web_service/Constant.dart';
 
 import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../onRide/model/SosModel.dart';
 import 'model/rideHistoryModel.dart';
 class RideHistoryPage extends StatefulWidget {
   @override
@@ -33,8 +36,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   @override
   void initState()  {
     super.initState();
-
-   init();
     _firstLoad();
     _controller = new ScrollController()..addListener(_loadMore);
   }
@@ -42,9 +43,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   void dispose() {
     _controller.removeListener(_loadMore);
     super.dispose();
-  }
-  init() async {
-
   }
 
   void _firstLoad() async {
@@ -57,14 +55,13 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     userId = sharedPreferences.getString(LoginID) ;
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    print(res.body);
-    if (res.statusCode == 200) {
+    if (res!=null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-
-
-        arrtrip = (jsonDecode(res.body)['content']['result'] as List)
-            .map((i) => RideHistoryModel.fromJson(i))
-            .toList();
+        if(jsonDecode(res.body)['content']!=null) {
+          arrtrip = (jsonDecode(res.body)['content']['result'] as List)
+              .map((i) => RideHistoryModel.fromJson(i))
+              .toList();
+        }
       });
     } else {
       setState(() {
@@ -346,13 +343,15 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         Align(
           alignment: Alignment.center,
           child: MaterialButton(
-            child: const robotoTextWidget(
-              textval: "INVOICE",
+            child:  robotoTextWidget(
+              textval: Invoice,
               colorval: AppColor.butgreen,
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
-            onPressed: () {},
+            onPressed: () {
+              sendInvoice(arrtrip[index].passengerTripMasterId);
+            },
           ),
         ),
         Container(
@@ -360,13 +359,17 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           color: AppColor.border,
         ),
         MaterialButton(
-          child: const robotoTextWidget(
-            textval: "SUPPORT",
+          child:  robotoTextWidget(
+            textval: Support,
             colorval: AppColor.butgreen,
             sizeval: 14.0,
             fontWeight: FontWeight.bold,
           ),
-          onPressed: () {},
+          onPressed: () {
+            makingPhoneCall(LandingPageConfig().getcustomerCare() != null
+                ? LandingPageConfig().getcustomerCare()
+                : '');
+          },
         ),
       ]),
     );
@@ -445,5 +448,39 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         ),
       ),
     );
+  }
+
+  Future<void> makingPhoneCall(String phone) async {
+    var url = Uri.parse("tel:$phone");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+  Future<void> sendInvoice(String passengerTripMasterId) async {
+    Map data;
+    data = {
+      "mailid": sharedPreferences.getString(LoginEmail),
+      "passengerTripMasterId":passengerTripMasterId
+
+    };
+    print("data=======>$data");
+    var jsonData = null;
+    dynamic res = await HTTP.post(SendInvoice(), data);
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
+
+      setState(() {
+        jsonData = convert.jsonDecode(res.body);
+        print("jsonData=======>$jsonData");
+        SosModel sosModel = SosModel.fromJson(jsonData);
+        showSnackbar(context,sosModel.message);
+      });
+    } else {
+      throw "Driver Not Booked";
+    }
+
   }
 }

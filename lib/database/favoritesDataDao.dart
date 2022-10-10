@@ -46,6 +46,6 @@ abstract class FavoritesDataDao {
   Future<FavoritesData?> findDataByaddressg(String address);
 
   @Query(
-      'Select * FROM FavoritesData WHERE address  LIKE %address% ORDER BY timestamp ASC LIMIT 15 ')
+      'Select * FROM FavoritesData WHERE address  LIKE %address% ORDER BY timestamp ASC')
   Future<List<FavoritesData?>> displayAscByAddress(String address);
 }

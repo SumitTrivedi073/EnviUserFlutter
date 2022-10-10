@@ -21,7 +21,7 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
     final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {
-      final notificationStream = await collectionRef.snapshots();
+      final notificationStream =  collectionRef.snapshots();
       notificationStream.listen((result) {
         var count = 0;
         print("object");
@@ -43,9 +43,9 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
             print("tripdata========> ${event.data()}");
             if(jsonData!=null && jsonData.toString().isNotEmpty) {
               liveTripData = TripDataModel.fromJson(jsonData);
-
+              notifyListeners();
             }
-            notifyListeners();
+
           });
         }
 

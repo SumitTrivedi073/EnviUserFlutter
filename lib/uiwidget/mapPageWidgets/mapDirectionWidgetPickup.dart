@@ -20,16 +20,16 @@ import '../../web_service/Constant.dart';
 
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
-
+  final void Function(String) callback;
   MapDirectionWidgetPickup(
-      {Key? key, this.liveTripData}) : super(key: key);
+      {Key? key, this.liveTripData, required this.callback}) : super(key: key);
 
   @override
-  _MapDirectionWidgetPickupState createState() =>
-      _MapDirectionWidgetPickupState();
+  MapDirectionWidgetPickupState createState() =>
+      MapDirectionWidgetPickupState();
 }
 
-class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
+class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     with TickerProviderStateMixin {
   GoogleMapController? mapController; //contrller for Google map
   PolylinePoints polylinePoints = PolylinePoints();
@@ -59,7 +59,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           : 77.345492878187);
 
   late LatLng previousLocation = const LatLng(0.0, 0.0);
-  var carMarker;
+  var carMarker, driverStartingLocation ;
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
@@ -67,7 +67,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-
+  late double distancecorrectionFactor,googleDistance, duration;
 
   @override
   void initState() {
@@ -83,6 +83,7 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
+    print("url==========>$url");
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
@@ -95,6 +96,9 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             for (var k = 0;
                 k < directionModel.routes[i].legs[j].steps.length;
                 k++) {
+              duration = directionModel.routes[i].legs[j].duration.value.toDouble();
+              googleDistance = directionModel.routes[i].legs[j].distance.value.toDouble();
+
               pointLatLng = polylinePoints.decodePolyline(
                   directionModel.routes[i].legs[j].steps[k].polyline.points);
               for (var point in pointLatLng) {
@@ -105,11 +109,22 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           }
         }
         addPolyLine(polylineCoordinates);
-        //    startTimer();
+        distancecorrectionFactor = googleDistance / calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+        startTimer();
+        updatePickupTime();
       } else {
         throw Exception('Failed to load predictions');
       }
     }
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
   }
 
   @override
@@ -214,9 +229,24 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         icon: BitmapDescriptor.fromBytes(markerIcon),
         anchor: const Offset(0.5, 0.5),
         flat: true,
-        rotation: getBearing(carCurrentLocation, pickupLocation),
+        rotation: getBearing(pickupLocation, carCurrentLocation),
         draggable: false);
 
+
+      if(driverStartingLocation==null) {
+         driverStartingLocation = Marker(
+          //add start location marker
+          markerId: MarkerId(carCurrentLocation.toString()),
+          position: carCurrentLocation, //position of marker
+          infoWindow: const InfoWindow(
+            //popup info
+            title: 'Driver Starting Location',
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueOrange), //Icon for Marker
+        );
+        markers.add(driverStartingLocation);
+      }
     //Adding a delay and then showing the marker on screen
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -247,11 +277,12 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     GoogleMapController controller, //Google map controller of our widget
   ) async {
     final double bearing =
-        getBearing(LatLng(fromLat, fromLong), LatLng(toLat, toLong));
+        getBearing(pickupLocation, carCurrentLocation);
 
 
     final Uint8List markerIcon =
     await getBytesFromAsset('assets/images/car-map.png', 70);
+
 
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
@@ -295,8 +326,21 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     if(previousLocation!=carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
+    updatePickupTime();
   }
+  void updatePickupTime() {
 
+    double new_distance = distancecorrectionFactor * calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+    double new_time = (duration / googleDistance) * new_distance;
+
+    int minutes =  new_time ~/ 60;
+    int seconds =  (new_time % 60).toInt();
+    if(minutes>0) {
+      widget.callback("$minutes Minute");
+    }else{
+      widget.callback("$seconds Second");
+    }
+  }
   double getBearing(LatLng begin, LatLng end) {
     double lat = (begin.latitude - end.latitude).abs();
     double lng = (begin.longitude - end.longitude).abs();
@@ -326,7 +370,9 @@ class _MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   @override
   void dispose() {
-    //timer.cancel();
+    timer.cancel();
     super.dispose();
   }
+
+
 }

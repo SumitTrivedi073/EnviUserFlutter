@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
@@ -7,11 +9,9 @@ import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme/string.dart';
@@ -19,7 +19,8 @@ import '../../theme/string.dart';
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
   final SearchPlaceModel? location;
-  const ConfirmDropLocation({Key? key, required this.title, this.location})
+  final String isFavourite;
+  const ConfirmDropLocation({Key? key, required this.title, this.location,required this.isFavourite})
       : super(key: key);
 
   @override
@@ -32,17 +33,19 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
-  LatLng initialLatLng = LatLng(0, 0);
+  LatLng initialLatLng = const LatLng(0, 0);
   bool isFromVerified = false;
   bool isToVerified = false;
+  late String isFavourite;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initialLatLng = LatLng(
-        widget.location!.latLng!.latitude, widget.location!.latLng!.longitude);
+        widget.location!.latLng.latitude, widget.location!.latLng.longitude);
     _cameraPosition = CameraPosition(target: initialLatLng, zoom: 10.0);
     // getCurrentLocation();
+    isFavourite = widget.isFavourite;
     getLocation(initialLatLng);
   }
 
@@ -68,7 +71,9 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         rotateGesturesEnabled: true,
         zoomControlsEnabled: false,
         onCameraIdle: () {
-          GetAddressFromLatLong(latlong);
+          Timer(const Duration(seconds: 1), () {
+            GetAddressFromLatLong(latlong);
+          });
         },
         onCameraMove: (CameraPosition position) {
           latlong = LatLng(position.target.latitude, position.target.longitude);
@@ -106,7 +111,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             isBackButtonNeeded: false,
           ),
           Card(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 5),
+            margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
             color: Colors.white,
             elevation: 4,
             child: Container(
@@ -154,8 +159,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          const Padding(
+            padding: EdgeInsets.all(20.0),
             child: Text(
               'Move around',
               style: AppTextStyle.robotoRegular16,
@@ -179,7 +184,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         id: '',
                         address: Address,
                         title: toAddressName!,
-                        latLng: latlong));
+                        latLng: latlong, isFavourite: isFavourite,));
                 // Navigator.of(context).pushAndRemoveUntil(
                 //     MaterialPageRoute(
                 //         builder: (BuildContext context) => SearchDriver(
@@ -247,7 +252,9 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    toAddressName = (place.subLocality != '')?place.subLocality : place.subAdministrativeArea;
+    toAddressName = (place.subLocality != '')
+        ? place.subLocality
+        : place.subAdministrativeArea;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';

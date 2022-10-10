@@ -24,7 +24,7 @@ class PaymentService {
 }
 
 
-
+PaymentService paymentService = PaymentService();
 
 
 

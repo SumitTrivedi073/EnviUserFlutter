@@ -367,19 +367,19 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
       "vehicleId": widget.driverDetail!.vehicleId.toString(),
       "driverId": widget.driverDetail!.driverId,
       "location": {
-        "latitude": widget.fromAddress!.latLng!.latitude.toDouble(),
-        "longitude":  widget.fromAddress!.latLng!.longitude.toDouble(),
+        "latitude": widget.fromAddress!.latLng.latitude.toDouble(),
+        "longitude":  widget.fromAddress!.latLng.longitude.toDouble(),
         "address": widget.fromAddress!.address
       },
       "toLocation": {
-        "latitude":  widget.toAddress!.latLng!.latitude.toDouble(),
-        "longitude": widget.toAddress!.latLng!.longitude.toDouble(),
+        "latitude":  widget.toAddress!.latLng.latitude.toDouble(),
+        "longitude": widget.toAddress!.latLng.longitude.toDouble(),
         "address": widget.toAddress!.address
       },
       "paymentMode": "null",
       "driverName": widget.driverDetail!.driverName,
       "driverRating": widget.driverDetail!.driverRating!.toInt(),
-      "driverPhoto": widget.driverDetail!.driverPhoto.toString(),
+      "driverPhoto": widget.driverDetail!.driverPhoto!.toString(),
       "initialPrice": widget.priceDetail!.priceClass.totalFare!.toInt(),
       "initialDistance": widget.priceDetail!.priceClass.distance!.toInt()
 
@@ -392,7 +392,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
         jsonData = convert.jsonDecode(res.body);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (BuildContext context) => const WaitingForDriverScreen()),
+                builder: (BuildContext context) => WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
       });
     } else {

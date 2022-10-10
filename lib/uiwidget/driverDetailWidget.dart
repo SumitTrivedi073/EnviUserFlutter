@@ -8,9 +8,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../provider/firestoreLiveTripDataNotifier.dart';
 import '../theme/color.dart';
+import '../utils/utility.dart';
 import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
+
+  String duration;
+
+  DriverDetailWidget({Key? key, required this.duration,}) : super(key: key);
+
   @override
   // TODO: implement createState
   State<StatefulWidget> createState() => _DriverDetailWidgetState();
@@ -71,8 +77,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                     sizeval: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  const robotoTextWidget(
-                                    textval: "7 Minutes Away",
+                                   robotoTextWidget(
+                                    textval: "${widget.duration} Away",
                                     colorval: AppColor.black,
                                     sizeval: 18,
                                     fontWeight: FontWeight.w600,
@@ -156,12 +162,5 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
     );
   }
 
-  Future<void> makingPhoneCall(String phone) async {
-    var url = Uri.parse("tel:$phone");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+
 }
