@@ -84,3 +84,6 @@ DeleteFavouriteAddressdata(){
 updatePaymentMode(){
   return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
 }
+AddSchedualeTrip(){
+  return Uri.parse('${getBaseURL()}/userTrip/bookScheduleTrip');
+}

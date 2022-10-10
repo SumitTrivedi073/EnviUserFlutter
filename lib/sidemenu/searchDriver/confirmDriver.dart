@@ -189,8 +189,8 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                               sizeval: 16,
                               fontWeight: FontWeight.w800),
 
-                          const robotoTextWidget(
-                              textval: "Approx. Fare",
+                           robotoTextWidget(
+                              textval: ApproxFare,
                               colorval: AppColor.black,
                               sizeval: 12,
                               fontWeight: FontWeight.w400),

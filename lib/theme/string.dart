@@ -93,3 +93,7 @@ var Driverarrived = "Driver has arrived";
 var pickUptime = "Pick-up Time";
 var DriverOnRide = "On Ride";
 var SOS = "SOS";
+var ApproxFare = "Approx. Fare";
+var Toaddress = "To address";
+var Fromaddress = "From address";
+var placeName = "Place Name";

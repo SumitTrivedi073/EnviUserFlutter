@@ -23,8 +23,8 @@ import '../web_service/ApiCollection.dart';
 class CarCategoriesWidget extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
-
-  const CarCategoriesWidget({Key? key, this.toAddress, this.fromAddress})
+  final void Function(vehiclePriceClassesModel) callback;
+  const CarCategoriesWidget({Key? key, this.toAddress, this.fromAddress,required this.callback})
       : super(key: key);
 
   @override
@@ -89,50 +89,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                       sizeval: 14,
                       fontWeight: FontWeight.w800),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(children: [
-                      Container(
-                        width: 1,
-                        color: AppColor.darkgrey,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            if (selectedIndex != 0) {
-                              carouselController.previousPage();
-                            }
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: (selectedIndex != 0)
-                                ? Colors.green
-                                : AppColor.grey,
-                          ))
-                    ]),
-                    Row(children: [
-                      Container(
-                        width: 1,
-                        color: AppColor.darkgrey,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            if (selectedIndex !=
-                                vehiclePriceClasses.length - 1) {
-                              carouselController.nextPage();
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.green,
-                          )),
-                      Container(
-                        width: 1,
-                        color: AppColor.grey,
-                      ),
-                    ]),
-                  ],
-                ),
+
               ],
             ),
           ),
@@ -143,17 +100,29 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
           const SizedBox(
             height: 5,
           ),
-          CarouselSlider(
-            items: List.generate(
-            vehiclePriceClasses.length, (index) => driverListItems(index)),
-            carouselController: carouselController,
-            options: CarouselOptions(
-          onPageChanged: (index, reason) {
-            selectedIndex = index;
-          },
-          autoPlay: false,
-            ),
-          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 2.0),
+            height: 170.0,
+          child:ListView.builder(
+           // controller: _controller,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return driverListItems(index);
+            },
+            itemCount: vehiclePriceClasses.length,
+            padding: const EdgeInsets.all(3),
+          ),)
+          // CarouselSlider(
+          //   items: List.generate(
+          //   vehiclePriceClasses.length, (index) => driverListItems(index)),
+          //   carouselController: carouselController,
+          //   options: CarouselOptions(
+          // onPageChanged: (index, reason) {
+          //   selectedIndex = index;
+          // },
+          // autoPlay: false,
+          //   ),
+          // ),
         ],
       ),
     ));
@@ -162,12 +131,15 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   Widget driverListItems(int index) {
     return GestureDetector(
       onTap: () {
-        selectedIndex = index;
-        print("selectedIndex========>$selectedIndex");
+        setState(() {
+          selectedIndex = index;
+          print("selectedIndex========>$selectedIndex");
+          widget.callback(vehiclePriceClasses![index]);
+        });
       },
       child: Card(
         margin: const EdgeInsets.all(5),
-        color: const Color(0xFFE4F3F5),
+        color: selectedIndex == index ? Colors.grey : const Color(0xFFE4F3F5),
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
