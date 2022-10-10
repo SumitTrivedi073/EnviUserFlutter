@@ -41,14 +41,12 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
             var encodedJson = json.encode(jsonObj, toEncodable: myEncode);
             var jsonData = json.decode(encodedJson);
             print("tripdata========> ${event.data()}");
-            if(jsonData!=null && jsonData.toString().isNotEmpty) {
+            if (jsonData != null && jsonData.toString().isNotEmpty) {
               liveTripData = TripDataModel.fromJson(jsonData);
-
+              notifyListeners();
             }
-            notifyListeners();
           });
         }
-
       });
     } catch (e) {
       debugPrint("ERROR - $e");
