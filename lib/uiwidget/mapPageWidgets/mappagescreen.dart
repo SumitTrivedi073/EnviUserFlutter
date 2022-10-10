@@ -47,25 +47,24 @@ class MyMapState extends State {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   String Address = PickUp;
- String placeName = '';
+  String placeName = '';
   String? isoId;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     getCurrentLocation();
   }
-
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-      return  (latlong != null)
-          ? SafeArea(
-          child: Stack(
+    return (latlong != null)
+        ? SafeArea(
+            child: Stack(
             children: [
-             GoogleMap(
+              GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
@@ -86,18 +85,17 @@ class MyMapState extends State {
                     GetAddressFromLatLong(latlong!);
                   });
                 },
-                onCameraMove: (CameraPosition position) async {
+                onCameraMove: (CameraPosition position) {
                   latlong = LatLng(
                       position.target.latitude, position.target.longitude);
                 },
               ),
-
               Center(
                   child: SvgPicture.asset(
-                    "assets/svg/from-location-img.svg",
-                    width: 20,
-                    height: 20,
-                  )),
+                "assets/svg/from-location-img.svg",
+                width: 20,
+                height: 20,
+              )),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
@@ -133,7 +131,8 @@ class MyMapState extends State {
                 ),
               )
             ],
-          )): Container();
+          ))
+        : Container();
   }
 
   Future getCurrentLocation() async {
@@ -168,15 +167,18 @@ class MyMapState extends State {
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
+    //print(placemarks);
     Placemark place = placemarks[0];
-    placeName = (place.subLocality != '')?place.subLocality! :place.subAdministrativeArea!;
+    placeName = (place.subLocality != '')
+        ? place.subLocality!
+        : place.subAdministrativeArea!;
     isoId = place.isoCountryCode;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

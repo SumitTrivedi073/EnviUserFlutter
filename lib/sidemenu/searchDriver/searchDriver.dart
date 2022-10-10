@@ -44,7 +44,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
           distance: distance,
           tripType: BookingTiming.now,
         ),
-        Spacer(),
+        const SizedBox(height: 230),
         DriverListItem(
           key: widget._key,
           fromAddress: widget.fromAddress,

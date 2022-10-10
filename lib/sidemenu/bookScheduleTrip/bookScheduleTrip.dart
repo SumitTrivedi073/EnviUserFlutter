@@ -41,8 +41,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     _cameraPosition = const CameraPosition(target: LatLng(0, 0), zoom: 10.0);
     DateTime tem = DateTime.now()
         .add(Duration(hours: AppConfig().getadvance_booking_time_limit()));
-    print(AppConfig().getadvance_booking_time_limit());
-    //SelectedgoLiveDate = tem.toString();
     _controller2.text = DateFormat('hh:mm').format(tem);
     _controller1.text = tem.toString();
   }
@@ -56,113 +54,113 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     // TODO: implement build
 
     return Scaffold(
-        body: Stack( children: [
+        body: Stack(children: [
       MapDirectionWidget(
         fromAddress: widget.fromAddress,
         toAddress: widget.toAddress,
       ),
       AppBarInsideWidget(title: FutureBookingTitel),
       Positioned(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end, // start at end/bottom of column
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              FromToWidget(
-                fromAddress: widget.fromAddress,
-                toAddress: widget.toAddress,
-                distance: "5 Km",
-                tripType: BookingTiming.later,
-              ),
-              CarCategoriesWidget(
-                fromAddress: widget.fromAddress,
-                toAddress: widget.toAddress,
-              ),
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
-                  side: const BorderSide(
-                    color: AppColor.border,
-                  ),
-                ),
-                child: SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        child: DateTimePicker(
-                          type: DateTimePickerType.date,
-                          dateMask: 'd MMM, yyyy',
-                          controller: _controller1,
-                          //initialValue: SelectedgoLiveDate,
-                          firstDate: DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day,
-                              DateTime.now().hour),
-                          lastDate: DateTime(2100),
-                          icon: const Icon(Icons.event),
-                          dateLabelText: pickupdate,
-                          selectableDayPredicate: (date) {
-                            if (date.weekday == 6 || date.weekday == 7) {
-                              return false;
-                            }
-                            return true;
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Container(
-                        height: 55,
-                        width: 1,
-                        color: AppColor.border,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: DateTimePicker(
-                          type: DateTimePickerType.time,
-                          dateMask: 'hh:mm',
-                          controller: _controller2,
-                          firstDate: DateTime(
-                            DateTime.now().hour,
-                            DateTime.now().minute,
-                          ),
-                          lastDate: DateTime(2100),
-                          icon: const Icon(Icons.access_time),
-                          timeLabelText: pickuptime,
-                        ),
-                      ),
-                    ],
-                  ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          // start at end/bottom of column
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            FromToWidget(
+              fromAddress: widget.fromAddress,
+              toAddress: widget.toAddress,
+              distance: "5 Km",
+              tripType: BookingTiming.later,
+            ),
+            CarCategoriesWidget(
+              fromAddress: widget.fromAddress,
+              toAddress: widget.toAddress,
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
                 ),
               ),
-              Container(
-                  height: 40,
-                  margin: const EdgeInsets.all(5),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            _buildPopupDialog(context),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.greyblack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
+              child: SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: DateTimePicker(
+                        type: DateTimePickerType.date,
+                        dateMask: 'd MMM, yyyy',
+                        controller: _controller1,
+                        //initialValue: SelectedgoLiveDate,
+                        firstDate: DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            DateTime.now().hour),
+                        lastDate: DateTime(2100),
+                        icon: const Icon(Icons.event),
+                        dateLabelText: pickupdate,
+                        selectableDayPredicate: (date) {
+                          if (date.weekday == 6 || date.weekday == 7) {
+                            return false;
+                          }
+                          return true;
+                        },
                       ),
                     ),
-                    child: robotoTextWidget(
-                      textval: bookingConfirmation,
-                      colorval: AppColor.white,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
+                    const SizedBox(width: 10),
+                    Container(
+                      height: 55,
+                      width: 1,
+                      color: AppColor.border,
                     ),
-                  )),
-            ],
-          ),
-
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DateTimePicker(
+                        type: DateTimePickerType.time,
+                        dateMask: 'hh:mm',
+                        controller: _controller2,
+                        firstDate: DateTime(
+                          DateTime.now().hour,
+                          DateTime.now().minute,
+                        ),
+                        lastDate: DateTime(2100),
+                        icon: const Icon(Icons.access_time),
+                        timeLabelText: pickuptime,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+                height: 40,
+                margin: const EdgeInsets.all(5),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          _buildPopupDialog(context),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.greyblack,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                  ),
+                  child: robotoTextWidget(
+                    textval: bookingConfirmation,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                )),
+          ],
+        ),
       ),
     ]));
   }
