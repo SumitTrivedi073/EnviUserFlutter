@@ -62,9 +62,7 @@ class _HomePageState extends State<HomePage> {
                    const PaymentPage()),
                    (Route<dynamic> route) => false);
          }
-      }else{
-          print("Live trip data is null===========> 2");
-        }
+      }
       });
       return Scaffold(
         drawer: NavigationDrawer(),

@@ -66,7 +66,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                 ),
                 Card(
                   child: Image.network(
-                    placeHolderImage,
+                    loginPic??placeHolderImage,
                     fit: BoxFit.fill,
                     height: 40,
                     width: 40,

@@ -32,8 +32,7 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
     PaymentOption = PaymentOption.replaceAll("]", "");
     PaymentOption = PaymentOption.replaceAll(" ", "");
     arroption = PaymentOption.split(',');
-    print("arroption$arroption");
-    int listheight = 90 * arroption.length;
+    int listheight = 80 * arroption.length;
     return Container(
       margin: const EdgeInsets.only(left: 10,right: 10),
       child: Card(
@@ -52,16 +51,6 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
                   colorval: const Color(0xFF1DCA1D),
                   sizeval: 18,
                   fontWeight: FontWeight.w600,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(
-                      top: 5, left: 10, right: 10, bottom: 5),
-                  height: 1,
-                  width: MediaQuery.of(context).size.width,
-                  child: const Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
                 ),
                 SizedBox(
                   height: listheight.toDouble(),
