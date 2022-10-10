@@ -1,23 +1,22 @@
-import 'dart:convert';
+import 'dart:convert' as convert;
 
-import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/uiwidget/paymentModeOptionWidget.dart';
 import 'package:envi/uiwidget/paymentbreakdown.dart';
 import 'package:envi/uiwidget/ratingWidget.dart';
+import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert' as convert;
+
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../theme/string.dart';
@@ -38,7 +37,7 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String selectedPayOption = '';
   String passangerTripMasterId = '';
-  bool _isLoading=false;
+  bool _isLoading = false;
   late SharedPreferences sharedPreferences;
   late TripDataModel tripDataModel;
   LatLng? latlong = null;
@@ -52,8 +51,9 @@ class _PaymentPageState extends State<PaymentPage> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (value.liveTripData != null) {
               tripDataModel = value.liveTripData!;
-              passangerTripMasterId = value.liveTripData!.tripInfo.passengerTripMasterId;
-              selectedPayOption =  value.liveTripData!.tripInfo.paymentMode;
+              passangerTripMasterId =
+                  value.liveTripData!.tripInfo.passengerTripMasterId;
+              selectedPayOption = value.liveTripData!.tripInfo.paymentMode;
               if (value.liveTripData!.tripInfo.tripStatus == TripStatusFree) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
@@ -66,34 +66,38 @@ class _PaymentPageState extends State<PaymentPage> {
           return value.liveTripData != null
               ? Scaffold(
                   body: Container(
+                      height: double.infinity,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(PageBackgroundImage),
                           fit: BoxFit.cover,
                         ),
                       ),
-                      child: Column(children: [
-                        AppBarInsideWidget(
-                          title: appName,
-                          isBackButtonNeeded: false,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        CardBanner(
-                            title: youHaveArrivedText,
-                            image: "assets/images/driver_arrived_img.png"),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        RatingBarWidget(livetripData: value.liveTripData),
-                        PaymentBreakdownWidget(
-                            livetripData: value.liveTripData),
-                        PaymentModeOptionWidget(
-                          tripDataModel: value.liveTripData!,
-                          callback: selectedOption,
-                        )
-                      ])))
+                      child: SingleChildScrollView(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                            AppBarInsideWidget(
+                              title: appName,
+                              isBackButtonNeeded: false,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            CardBanner(
+                                title: youHaveArrivedText,
+                                image: "assets/images/driver_arrived_img.png"),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            RatingBarWidget(livetripData: value.liveTripData),
+                            PaymentBreakdownWidget(
+                                livetripData: value.liveTripData),
+                            PaymentModeOptionWidget(
+                              tripDataModel: value.liveTripData!,
+                              callback: selectedOption,
+                            )
+                          ]))))
               : Container();
         }),
       ),
@@ -104,18 +108,14 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() {
       selectedPayOption = val;
       if (selectedPayOption == 'online') {
-        updatePayment(selectedPayOption,passangerTripMasterId);
         createOrder();
-
-       }
-       else {
-       updatePayment(selectedPayOption,passangerTripMasterId);
-       }
+      }
+      updatePayment(selectedPayOption, passangerTripMasterId);
     });
   }
 
-
-  Future<void> updatePayment(String selectedPayOption, String passangerTripMasterId) async {
+  Future<void> updatePayment(
+      String selectedPayOption, String passangerTripMasterId) async {
     Map body;
     body = {
       "passengerTripMasterId": passangerTripMasterId,
@@ -124,94 +124,47 @@ class _PaymentPageState extends State<PaymentPage> {
     var jsonData = null;
     dynamic res = await HTTP.post(updatePaymentMode(), body);
     setState(() {
-      _isLoading=true;
+      _isLoading = true;
     });
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-        _isLoading=false;
+        _isLoading = false;
       });
       jsonData = convert.jsonDecode(res.body);
       SosModel sosModel = SosModel.fromJson(jsonData);
-      showSnackbar(context,sosModel.message);
+      showSnackbar(context, sosModel.message);
     } else {
       throw "Can't update.";
     }
   }
-
 
   Future<void> createOrder() async {
     sharedPreferences = await SharedPreferences.getInstance();
     Map body;
     body = {
       "passengerTripMasterId": tripDataModel.tripInfo.passengerTripMasterId,
-      "location": "{fromlatitude:${tripDataModel.driverLocation.latitude}, fromlongitude:${tripDataModel.driverLocation.longitude}}",
-      "stageId": "trippayment",
-      "driverId": tripDataModel.driverInfo.driverId,
-      "MID": "null",
-      "ORDER_ID": tripDataModel.tripInfo.passengerTripMasterId,
-      "CUST_ID": sharedPreferences.getString(LoginID),
-      "INDUSTRY_TYPE_ID": "null",
-      "CHANNEL_ID": "null",
-      "TXN_AMOUNT": "null",
-      "WEBSITE": "null",
-      "CALLBACK_URL": "null",
-      "EMAIL": sharedPreferences.getString(LoginEmail),
-      "MOBILE_NO": sharedPreferences.getString(Loginphone),
-      "driverTripMasterId": tripDataModel.driverInfo.driverId,
-      "userId": sharedPreferences.getString(LoginID),
-      "amount": tripDataModel.tripInfo.priceClass.amountToBeCollected,
-      "paymentMode": "online",
-      "txnToken": "null ",
-      "paytmOutput": "null",
-      "CHECKSUMHASH": "null"
     };
     var jsonData = null;
     dynamic res = await HTTP.post(CreateOrder(), body);
     setState(() {
-      _isLoading=true;
+      _isLoading = true;
     });
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-        _isLoading=false;
+        _isLoading = false;
       });
       jsonData = convert.jsonDecode(res.body);
       print("jsonData=============>$jsonData");
-      await initiateTransaction(jsonData['ORDER_ID'], jsonData['amount'].toDouble(),
-          jsonData['txnToken'], jsonData['CALLBACK_URL'], jsonData['MID']);
+      await initiateTransaction(
+          jsonData['ORDER_ID'],
+          jsonData['amount'].toDouble(),
+          jsonData['txnToken'],
+          jsonData['CALLBACK_URL'],
+          jsonData['MID']);
     } else {
       throw "Can't update.";
     }
   }
-/*
-  Future<dynamic> createOrder() async {
-    var headers = {
-      'x-access-token':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkYjljNDk2LTBmZTItNDc5Mi1hODdlLWI5ZWZhZWUzZmQ1YiIsInR5cGVpZCI6MywicGhvbmVOdW1iZXIiOiI5NDI0ODgwNTgyIiwiaWF0IjoxNjYzODE5NjE3fQ.uLjsbCFkQR9I4WNz5nkzBCCRRCDaASHYP5EJ0W0_kDM',
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request('POST',
-        Uri.parse('https://qausernew.azurewebsites.net/order/createOrder'));
-    request.body = json.encode(
-        {"passengerTripMasterId": "9b20343d-b725-4fc4-80cf-d0c68c4ae860"});
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-    var result;
-    if (response.statusCode == 200) {
-      //print(await response.stream.bytesToString());
-      result = await response.stream.bytesToString();
-      var jres = json.decode(result);
-      print(jres['MID']);
-      await initiateTransaction(jres['ORDER_ID'], jres['amount'].toDouble(),
-          jres['txnToken'], jres['CALLBACK_URL'], jres['MID']);
-    } else {
-      print(response.reasonPhrase);
-    }
-  }
-
-
-*/
-
 
   Future<void> initiateTransaction(String orderId, double amount,
       String txnToken, String callBackUrl, String miid) async {
@@ -267,7 +220,6 @@ class _PaymentPageState extends State<PaymentPage> {
     if (mounted) {
       setState(() {
         latlong = LatLng(position.latitude, position.longitude);
-
       });
     }
   }
