@@ -25,8 +25,9 @@ class DriverListItem extends StatefulWidget {
   const DriverListItem({Key? key, this.toAddress, this.fromAddress, required this.callback})
       : super(key: key);
 
+
+
   @override
-  // TODO: implement createState
   State<StatefulWidget> createState() => DriverListItemPageState();
 }
 
@@ -40,8 +41,13 @@ class DriverListItemPageState extends State<DriverListItem> {
   CarouselController carouselController = CarouselController();
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _firstLoad();
   }
@@ -375,12 +381,12 @@ class DriverListItemPageState extends State<DriverListItem> {
                       getTotalPrice(
                           vehiclePriceClasses[index]
                               .priceClass
-                              .totalFare!
-                              .toInt(),
+                              .totalFare
+                              .toDouble(),
                           vehiclePriceClasses[index]
                               .priceClass
-                              .sellerDiscount!
-                              .toInt()),
+                              .sellerDiscount
+                              .toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -417,12 +423,12 @@ class DriverListItemPageState extends State<DriverListItem> {
     );
   }
 
-  String getTotalPrice(int totalFare, int discount) {
-    int num1 = totalFare;
+  String getTotalPrice(double totalFare, double discount) {
+    double num1 = totalFare;
 
-    int num2 = discount;
+    double num2 = discount;
 
-    int sum = num1 + num2;
+    double sum = num1 + num2;
     print('sum:$sum');
     return "₹$sum";
   }

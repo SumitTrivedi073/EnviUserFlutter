@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUserName();
   }
@@ -78,7 +77,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> getUserName() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      name = sharedPreferences.getString(LoginName)!;
+      name = sharedPreferences.getString(LoginName)?? "test user";
     });
   }
 }

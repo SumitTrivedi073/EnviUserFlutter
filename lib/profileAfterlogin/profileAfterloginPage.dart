@@ -161,16 +161,16 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                             ),
                           ],
                         ),
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(55.0),
-                    child: FadeInImage.assetNetwork(
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.fill,
-                        placeholder:
-                        'assets/images/envi-logo-small.png',
-                        image:
-                        '$imageServerurl${widget.profiledata.propic}')),
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(55.0),
+                            child: FadeInImage.assetNetwork(
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.fill,
+                                placeholder:
+                                    'assets/images/envi-logo-small.png',
+                                image:
+                                    '$imageServerurl${widget.profiledata.propic}')),
                         const SizedBox(
                           height: 5,
                         ),
@@ -244,6 +244,8 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               Logingender, widget.profiledata.gender);
                           sharedPreferences.setString(
                               Loginphone, widget.profiledata.phone);
+                          sharedPreferences.setString(
+                              LoginName, widget.profiledata.name);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

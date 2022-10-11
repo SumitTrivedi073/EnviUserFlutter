@@ -18,19 +18,16 @@ import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
 
 Future<void> main() async {
-WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
- //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-final database = await $FloorFlutterDatabase
-    .databaseBuilder('envi_uswer.db')
-    .build();
-final dao = database.taskDao;
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  final database =
+      await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+  final dao = database.taskDao;
 
   runApp(const MyApp());
 
-
 // Ideal time to initialize
-
 }
 
 class MyApp extends StatelessWidget {
@@ -43,19 +40,18 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: firestoreLiveTripDataNotifier()),
           ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
-     child: MaterialApp(
-      title: 'Envi',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Malbork',
-        theme: appTheme(),
-        home: MainEntryPoint(),
-      )
-    ));
+        child: MaterialApp(
+            title: 'Envi',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Malbork',
+              theme: appTheme(),
+              home: MainEntryPoint(),
+            )));
   }
 }
 
@@ -78,21 +74,18 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(LoginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
+          MaterialPageRoute(
+              builder: (BuildContext context) => const Loginpage()),
+          (Route<dynamic> route) => false);
     } else {
       GetAllFavouriteAddress();
       getLandingPageSettings();
       // ignore: use_build_context_synchronously
-      context.read<firestoreLiveTripDataNotifier>()
-          .listenToLiveUpdateStream();
-      context.read<firestoreScheduleTripNotifier>()
-          .listenToLiveUpdateStream();
-
+      context.read<firestoreLiveTripDataNotifier>().listenToLiveUpdateStream();
+      context.read<firestoreScheduleTripNotifier>().listenToLiveUpdateStream();
+      
     }
-  /*  Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) =>  MapDirectionWidget()),
-            (Route<dynamic> route) => false);*/
+
   }
 
   @override
@@ -107,83 +100,110 @@ class _MainEntryPointState extends State<MainEntryPoint> {
             fit: BoxFit.fill,
           ),
         ),
-        child: Center(child:  Image.asset("assets/images/logo.png",width: 276,fit: BoxFit.fill,),
+        child: Center(
+          child: Image.asset(
+            "assets/images/logo.png",
+            width: 276,
+            fit: BoxFit.fill,
+          ),
         ),
       ),
     );
   }
 
-
   void getLandingPageSettings() async {
-
     dynamic response = await HTTP.get(getfetchLandingPageSettings());
     if (response != null && response.statusCode == 200) {
-
-    var  jsonData = convert.jsonDecode(response.body);
-    //  print(convert.jsonDecode(response.body)['applicationConfig']);
-   // print(convert.jsonDecode(response.body)['landingPageSettings']);
-LandingPageConfig.setshowInfoPopup(jsonData['landingPageSettings']['showInfoPopup']);
-    LandingPageConfig.setinfoPopupType(jsonData['landingPageSettings']['infoPopupType']);
-    LandingPageConfig.setautoExpiryDuration(jsonData['landingPageSettings']['autoExpiryDuration']);
-    LandingPageConfig.setinfoPopupFrequency(jsonData['landingPageSettings']['infoPopupFrequency']);
-    LandingPageConfig.setinfoPopupTitle(jsonData['landingPageSettings']['infoPopupTitle']);
-    LandingPageConfig.setinfoPopupDescription(jsonData['landingPageSettings']['infoPopupDescription']);
-    LandingPageConfig.setinfoPopupImgagedUrl(jsonData['landingPageSettings']['infoPopupImgagedUrl']);
-    LandingPageConfig.setinfoPopupBackGroundColorCode(jsonData['landingPageSettings']['infoPopupBackGroundColorCode']);
-    LandingPageConfig.setisInfoPopUpTransparent(jsonData['landingPageSettings']['isInfoPopUpTransparent']);
-    LandingPageConfig.setisInfoPopUpFullScreen(jsonData['landingPageSettings']['isInfoPopUpFullScreen']);
-LandingPageConfig.setisOnMaintainance(jsonData['landingPageSettings']['isOnMaintainance']);
-    LandingPageConfig.setmaintainanceInfoTouser(jsonData['landingPageSettings']['maintainanceInfoTouser']);
-    LandingPageConfig.setenableReferAndWin(jsonData['landingPageSettings']['enableReferAndWin']);
-    LandingPageConfig.setinfoPopupId(jsonData['landingPageSettings']['infoPopupId']);
-    LandingPageConfig.setcustomerCare(jsonData['landingPageSettings']['customerCare']);
-    AppConfig.setminAndroidVersion(jsonData['applicationConfig']['swVersionConfig']['minAndroidVersion']);
-    AppConfig.setminiOSVersion(jsonData['applicationConfig']['swVersionConfig']['miniOSVersion']);
-    AppConfig.setandroidAppUrl(jsonData['applicationConfig']['swVersionConfig']['androidAppUrl']);
-    AppConfig.setiosAppUrl(jsonData['applicationConfig']['swVersionConfig']['iosAppUrl']);
-    AppConfig.setadvance_booking_time_limit(jsonData['applicationConfig']['scheduleTripConfig']['advance_booking_time_limit']);
-    AppConfig.setdriver_assignment_time_limit(jsonData['applicationConfig']['scheduleTripConfig']['driver_assignment_time_limit']);
-    AppConfig.setisScheduleFeatureEnabled(jsonData['applicationConfig']['scheduleTripConfig']['isScheduleFeatureEnabled']);
-    AppConfig.setscheduleFreeDriverDistance(jsonData['applicationConfig']['scheduleTripConfig']['scheduleFreeDriverDistance']);
-    AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']['scheduleTripConfig']['scheduleAllottedDriverDistance']);
-    AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']['paymentOptions'].toString());
-    AppConfig.setdefaultPaymentMode(jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
+      var jsonData = convert.jsonDecode(response.body);
+      //  print(convert.jsonDecode(response.body)['applicationConfig']);
+      // print(convert.jsonDecode(response.body)['landingPageSettings']);
+      LandingPageConfig.setshowInfoPopup(
+          jsonData['landingPageSettings']['showInfoPopup']);
+      LandingPageConfig.setinfoPopupType(
+          jsonData['landingPageSettings']['infoPopupType']);
+      LandingPageConfig.setautoExpiryDuration(
+          jsonData['landingPageSettings']['autoExpiryDuration']);
+      LandingPageConfig.setinfoPopupFrequency(
+          jsonData['landingPageSettings']['infoPopupFrequency']);
+      LandingPageConfig.setinfoPopupTitle(
+          jsonData['landingPageSettings']['infoPopupTitle']);
+      LandingPageConfig.setinfoPopupDescription(
+          jsonData['landingPageSettings']['infoPopupDescription']);
+      LandingPageConfig.setinfoPopupImgagedUrl(
+          jsonData['landingPageSettings']['infoPopupImgagedUrl']);
+      LandingPageConfig.setinfoPopupBackGroundColorCode(
+          jsonData['landingPageSettings']['infoPopupBackGroundColorCode']);
+      LandingPageConfig.setisInfoPopUpTransparent(
+          jsonData['landingPageSettings']['isInfoPopUpTransparent']);
+      LandingPageConfig.setisInfoPopUpFullScreen(
+          jsonData['landingPageSettings']['isInfoPopUpFullScreen']);
+      LandingPageConfig.setisOnMaintainance(
+          jsonData['landingPageSettings']['isOnMaintainance']);
+      LandingPageConfig.setmaintainanceInfoTouser(
+          jsonData['landingPageSettings']['maintainanceInfoTouser']);
+      LandingPageConfig.setenableReferAndWin(
+          jsonData['landingPageSettings']['enableReferAndWin']);
+      LandingPageConfig.setinfoPopupId(
+          jsonData['landingPageSettings']['infoPopupId']);
+      LandingPageConfig.setcustomerCare(
+          jsonData['landingPageSettings']['customerCare']);
+      AppConfig.setminAndroidVersion(jsonData['applicationConfig']
+          ['swVersionConfig']['minAndroidVersion']);
+      AppConfig.setminiOSVersion(
+          jsonData['applicationConfig']['swVersionConfig']['miniOSVersion']);
+      AppConfig.setandroidAppUrl(
+          jsonData['applicationConfig']['swVersionConfig']['androidAppUrl']);
+      AppConfig.setiosAppUrl(
+          jsonData['applicationConfig']['swVersionConfig']['iosAppUrl']);
+      AppConfig.setadvance_booking_time_limit(jsonData['applicationConfig']
+          ['scheduleTripConfig']['advance_booking_time_limit']);
+      AppConfig.setdriver_assignment_time_limit(jsonData['applicationConfig']
+          ['scheduleTripConfig']['driver_assignment_time_limit']);
+      AppConfig.setisScheduleFeatureEnabled(jsonData['applicationConfig']
+          ['scheduleTripConfig']['isScheduleFeatureEnabled']);
+      AppConfig.setscheduleFreeDriverDistance(jsonData['applicationConfig']
+          ['scheduleTripConfig']['scheduleFreeDriverDistance']);
+      AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
+          ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
+      AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
+              ['paymentOptions']
+          .toString());
+      AppConfig.setdefaultPaymentMode(
+          jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage(title: "title")),
-              (Route<dynamic> route) => false);
-    } else {
-
-    }
+              builder: (BuildContext context) =>
+                  const HomePage(title: "title")),
+          (Route<dynamic> route) => false);
+    } else {}
   }
+
   void GetAllFavouriteAddress() async {
-    final database = await $FloorFlutterDatabase
-        .databaseBuilder('envi_user.db')
-        .build();
+    final database =
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     final dao = database.taskDao;
 
-dynamic userid =sharedPreferences.getString(LoginID);
+    dynamic userid = sharedPreferences.getString(LoginID);
     dynamic response = await HTTP.get(GetAllFavouriteAddressdata(userid));
     if (response != null && response.statusCode == 200) {
-
-      List<dynamic>   jsonData = convert.jsonDecode(response.body)['content']['address'];
+      List<dynamic> jsonData =
+          convert.jsonDecode(response.body)['content']['address'];
       // print(jsonData);
       for (var res in jsonData) {
-
-        if(res["address"] != null || res["address"] != ""){
+        if (res["address"] != null || res["address"] != "") {
           String title = "";
 
-          if(res["name"] != ""){
+          if (res["name"] != "") {
             title = res["name"];
-          }else{
+          } else {
             final splitList = res["address"].split(",");
             title = splitList[1];
-
           }
-         var data =  await dao.findDataByaddressg(res["address"]) ;
-          if(data == null) {
-            final task = FavoritesData.optional(identifier: res["id"],
+          var data = await dao.findDataByaddressg(res["address"]);
+          if (data == null) {
+            final task = FavoritesData.optional(
+                identifier: res["id"],
                 address: res["address"],
                 isFavourite: res["isFavourite"],
                 latitude: res["location"]['coordinates'][1].toString(),
@@ -191,18 +211,13 @@ dynamic userid =sharedPreferences.getString(LoginID);
                 title: title);
             print(task);
             await dao.insertTask(task);
-          }
-          else{
+          } else {
             print("data$data");
-
           }
         }
       }
-
     } else {
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 }

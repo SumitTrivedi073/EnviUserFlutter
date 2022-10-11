@@ -10,9 +10,11 @@ import 'dart:convert';
 
 import 'dart:convert';
 
-DriverListModel driverListModelFromJson(String str) => DriverListModel.fromJson(json.decode(str));
+DriverListModel driverListModelFromJson(String str) =>
+    DriverListModel.fromJson(json.decode(str));
 
-String driverListModelToJson(DriverListModel data) => json.encode(data.toJson());
+String driverListModelToJson(DriverListModel data) =>
+    json.encode(data.toJson());
 
 class DriverListModel {
   DriverListModel({
@@ -29,21 +31,27 @@ class DriverListModel {
   Map<String, double> price;
   List<VehiclePriceClass> vehiclePriceClasses;
 
-  factory DriverListModel.fromJson(Map<String, dynamic> json) => DriverListModel(
-    message: json["message"],
-    content: List<Content>.from(json["content"].map((x) => Content.fromJson(x))),
-    distance: Distance.fromJson(json["distance"]),
-    price: Map.from(json["price"]).map((k, v) => MapEntry<String, double>(k, v.toDouble())),
-    vehiclePriceClasses: List<VehiclePriceClass>.from(json["vehiclePriceClasses"].map((x) => VehiclePriceClass.fromJson(x))),
-  );
+  factory DriverListModel.fromJson(Map<String, dynamic> json) =>
+      DriverListModel(
+        message: json["message"],
+        content:
+            List<Content>.from(json["content"].map((x) => Content.fromJson(x))),
+        distance: Distance.fromJson(json["distance"]),
+        price: Map.from(json["price"])
+            .map((k, v) => MapEntry<String, double>(k, v.toDouble())),
+        vehiclePriceClasses: List<VehiclePriceClass>.from(
+            json["vehiclePriceClasses"]
+                .map((x) => VehiclePriceClass.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "content": List<dynamic>.from(content.map((x) => x.toJson())),
-    "distance": distance.toJson(),
-    "price": Map.from(price).map((k, v) => MapEntry<String, dynamic>(k, v)),
-    "vehiclePriceClasses": List<dynamic>.from(vehiclePriceClasses.map((x) => x.toJson())),
-  };
+        "message": message,
+        "content": List<dynamic>.from(content.map((x) => x.toJson())),
+        "distance": distance.toJson(),
+        "price": Map.from(price).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "vehiclePriceClasses":
+            List<dynamic>.from(vehiclePriceClasses.map((x) => x.toJson())),
+      };
 }
 
 class Content {
@@ -81,101 +89,110 @@ class Content {
   });
 
   Location? location;
-  ContentPriceClass?  priceClass;
-  int?  ekm;
+  ContentPriceClass? priceClass;
+  int? ekm;
   List<dynamic> details;
-  String?  mmtReferenceNumber;
-  String?  id;
-  String?  driverId;
-  int?  v;
-  DateTime?  createdAt;
-  String?  driverName;
-  String?  driverPhoto;
-  int?  driverRating;
-  String?  driverTripMasterId;
-  String?  gender;
-  bool?  isTestDriver;
-  int?  soc;
-  String?  status;
-  DateTime?  updatedAt;
+  String? mmtReferenceNumber;
+  String? id;
+  String? driverId;
+  int? v;
+  DateTime? createdAt;
+  String? driverName;
+  String? driverPhoto;
+  int? driverRating;
+  String? driverTripMasterId;
+  String? gender;
+  bool? isTestDriver;
+  int? soc;
+  String? status;
+  DateTime? updatedAt;
   String? vehicleColor;
-  String?  vehicleId;
-  String?  vehicleModel;
-  String?  vehicleNumber;
-  String?  vin;
-  DateTime?  locationUpdateTime;
-  String?  passengerTripMasterId;
-  DateTime?  paymentInitiateTime;
-  String?  ptmStatus;
-  double?  distanceBwDriverAndPickUpLoc;
-  int?  durationToPickUpLocation;
-  DateTime?  breakInitiateTime;
+  String? vehicleId;
+  String? vehicleModel;
+  String? vehicleNumber;
+  String? vin;
+  DateTime? locationUpdateTime;
+  String? passengerTripMasterId;
+  DateTime? paymentInitiateTime;
+  String? ptmStatus;
+  double? distanceBwDriverAndPickUpLoc;
+  int? durationToPickUpLocation;
+  DateTime? breakInitiateTime;
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
-    location: Location.fromJson(json["location"]),
-    priceClass: ContentPriceClass.fromJson(json["priceClass"]),
-    ekm: json["ekm"],
-    details: List<dynamic>.from(json["details"].map((x) => x)),
-    mmtReferenceNumber: json["mmtReferenceNumber"],
-    id: json["_id"],
-    driverId: json["driverId"],
-    v: json["__v"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    driverName: json["driverName"],
-    driverPhoto: json["driverPhoto"],
-    driverRating: json["driverRating"],
-    driverTripMasterId: json["driverTripMasterId"],
-    gender: json["gender"],
-    isTestDriver: json["isTestDriver"],
-    soc: json["soc"],
-    status: json["status"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    vehicleColor: json["vehicleColor"],
-    vehicleId: json["vehicleId"],
-    vehicleModel: json["vehicleModel"],
-    vehicleNumber: json["vehicleNumber"],
-    vin: json["vin"],
-    locationUpdateTime: DateTime.parse(json["locationUpdateTime"]),
-    passengerTripMasterId: json["passengerTripMasterId"],
-    paymentInitiateTime: json["paymentInitiateTime"] == null ? null : DateTime.parse(json["paymentInitiateTime"]),
-    ptmStatus: json["ptmStatus"],
-    distanceBwDriverAndPickUpLoc: json["distanceBWDriverAndPickUpLoc"].toDouble(),
-    durationToPickUpLocation: json["durationToPickUpLocation"],
-    breakInitiateTime: json["breakInitiateTime"] == null ? null : DateTime.parse(json["breakInitiateTime"]),
-  );
+        location: Location.fromJson(json["location"]),
+        priceClass: ContentPriceClass.fromJson(json["priceClass"]),
+        ekm: json["ekm"],
+        details: List<dynamic>.from(json["details"].map((x) => x)),
+        mmtReferenceNumber: json["mmtReferenceNumber"],
+        id: json["_id"],
+        driverId: json["driverId"],
+        v: json["__v"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        driverName: json["driverName"],
+        driverPhoto: json["driverPhoto"],
+        driverRating: json["driverRating"],
+        driverTripMasterId: json["driverTripMasterId"],
+        gender: json["gender"],
+        isTestDriver: json["isTestDriver"],
+        soc: json["soc"],
+        status: json["status"],
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        vehicleColor: json["vehicleColor"],
+        vehicleId: json["vehicleId"],
+        vehicleModel: json["vehicleModel"],
+        vehicleNumber: json["vehicleNumber"],
+        vin: json["vin"],
+        locationUpdateTime: DateTime.parse(json["locationUpdateTime"]),
+        passengerTripMasterId: json["passengerTripMasterId"],
+        paymentInitiateTime: json["paymentInitiateTime"] == null
+            ? null
+            : DateTime.parse(json["paymentInitiateTime"]),
+        ptmStatus: json["ptmStatus"],
+        distanceBwDriverAndPickUpLoc:
+            json["distanceBWDriverAndPickUpLoc"].toDouble(),
+        durationToPickUpLocation: json["durationToPickUpLocation"],
+        breakInitiateTime: json["breakInitiateTime"] == null
+            ? null
+            : DateTime.parse(json["breakInitiateTime"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "location": location!.toJson(),
-    "priceClass": priceClass!.toJson(),
-    "ekm": ekm,
-    "details": List<dynamic>.from(details.map((x) => x)),
-    "mmtReferenceNumber": mmtReferenceNumber,
-    "_id": id,
-    "driverId": driverId,
-    "__v": v,
-    "createdAt": createdAt!.toIso8601String(),
-    "driverName": driverName,
-    "driverPhoto": driverPhoto,
-    "driverRating": driverRating,
-    "driverTripMasterId": driverTripMasterId,
-    "gender": gender,
-    "isTestDriver": isTestDriver,
-    "soc": soc,
-    "status": status,
-    "updatedAt": updatedAt!.toIso8601String(),
-    "vehicleColor": vehicleColor,
-    "vehicleId": vehicleId,
-    "vehicleModel": vehicleModel,
-    "vehicleNumber": vehicleNumber,
-    "vin": vin,
-    "locationUpdateTime": locationUpdateTime!.toIso8601String(),
-    "passengerTripMasterId": passengerTripMasterId,
-    "paymentInitiateTime": paymentInitiateTime == null ? null : paymentInitiateTime!.toIso8601String(),
-    "ptmStatus": ptmStatus,
-    "distanceBWDriverAndPickUpLoc": distanceBwDriverAndPickUpLoc,
-    "durationToPickUpLocation": durationToPickUpLocation,
-    "breakInitiateTime": breakInitiateTime == null ? null : breakInitiateTime!.toIso8601String(),
-  };
+        "location": location!.toJson(),
+        "priceClass": priceClass!.toJson(),
+        "ekm": ekm,
+        "details": List<dynamic>.from(details.map((x) => x)),
+        "mmtReferenceNumber": mmtReferenceNumber,
+        "_id": id,
+        "driverId": driverId,
+        "__v": v,
+        "createdAt": createdAt!.toIso8601String(),
+        "driverName": driverName,
+        "driverPhoto": driverPhoto,
+        "driverRating": driverRating,
+        "driverTripMasterId": driverTripMasterId,
+        "gender": gender,
+        "isTestDriver": isTestDriver,
+        "soc": soc,
+        "status": status,
+        "updatedAt": updatedAt!.toIso8601String(),
+        "vehicleColor": vehicleColor,
+        "vehicleId": vehicleId,
+        "vehicleModel": vehicleModel,
+        "vehicleNumber": vehicleNumber,
+        "vin": vin,
+        "locationUpdateTime": locationUpdateTime!.toIso8601String(),
+        "passengerTripMasterId": passengerTripMasterId,
+        "paymentInitiateTime": paymentInitiateTime == null
+            ? null
+            : paymentInitiateTime!.toIso8601String(),
+        "ptmStatus": ptmStatus,
+        "distanceBWDriverAndPickUpLoc": distanceBwDriverAndPickUpLoc,
+        "durationToPickUpLocation": durationToPickUpLocation,
+        "breakInitiateTime": breakInitiateTime == null
+            ? null
+            : breakInitiateTime!.toIso8601String(),
+      };
 }
 
 class Location {
@@ -188,14 +205,15 @@ class Location {
   List<double> coordinates;
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
-    type: json["type"],
-    coordinates: List<double>.from(json["coordinates"].map((x) => x.toDouble())),
-  );
+        type: json["type"],
+        coordinates:
+            List<double>.from(json["coordinates"].map((x) => x.toDouble())),
+      );
 
   Map<String, dynamic> toJson() => {
-    "type": type,
-    "coordinates": List<dynamic>.from(coordinates.map((x) => x)),
-  };
+        "type": type,
+        "coordinates": List<dynamic>.from(coordinates.map((x) => x)),
+      };
 }
 
 class ContentPriceClass {
@@ -210,36 +228,37 @@ class ContentPriceClass {
     required this.maxKmRange,
   });
 
-  String?  skuId;
-  String?  type;
-  String?  subcategory;
-  double?  perKmFare;
-  int?  minFare;
-  int?  passengerCapacity;
-  String?  bootSpace;
-  int?  maxKmRange;
+  String? skuId;
+  String? type;
+  String? subcategory;
+  double perKmFare;
+  double minFare;
+  int? passengerCapacity;
+  String? bootSpace;
+  double maxKmRange;
 
-  factory ContentPriceClass.fromJson(Map<String, dynamic> json) => ContentPriceClass(
-    skuId: json["sku_id"],
-    type: json["type"],
-    subcategory: json["subcategory"],
-    perKmFare: json["perKMFare"]??0.0,
-    minFare: json["minFare"],
-    passengerCapacity: json["passengerCapacity"] ?? 0,
-    bootSpace: json["bootSpace"] ?? "MEDIUM",
-    maxKmRange: json["maxKmRange"] ?? 150,
-  );
+  factory ContentPriceClass.fromJson(Map<String, dynamic> json) =>
+      ContentPriceClass(
+        skuId: json["sku_id"],
+        type: json["type"],
+        subcategory: json["subcategory"],
+        perKmFare: json["perKMFare"].toDouble() ?? 0.0,
+        minFare: json["minFare"].toDouble(),
+        passengerCapacity: json["passengerCapacity"] ?? 0,
+        bootSpace: json["bootSpace"] ?? "MEDIUM",
+        maxKmRange: json["maxKmRange"].toDouble() ?? 150,
+      );
 
   Map<String, dynamic> toJson() => {
-    "sku_id": skuId,
-    "type": type,
-    "subcategory": subcategory,
-    "perKMFare": perKmFare,
-    "minFare": minFare,
-    "passengerCapacity": passengerCapacity ?? 0,
-    "bootSpace": bootSpace ?? "MEDIUM",
-    "maxKmRange": maxKmRange ?? 150,
-  };
+        "sku_id": skuId,
+        "type": type,
+        "subcategory": subcategory,
+        "perKMFare": perKmFare,
+        "minFare": minFare,
+        "passengerCapacity": passengerCapacity ?? 0,
+        "bootSpace": bootSpace ?? "MEDIUM",
+        "maxKmRange": maxKmRange,
+      };
 }
 
 class Distance {
@@ -254,16 +273,16 @@ class Distance {
   int? duration;
 
   factory Distance.fromJson(Map<String, dynamic> json) => Distance(
-    text: json["text"],
-    value: json["value"],
-    duration: json["duration"],
-  );
+        text: json["text"],
+        value: json["value"],
+        duration: json["duration"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "text": text,
-    "value": value,
-    "duration": duration,
-  };
+        "text": text,
+        "value": value,
+        "duration": duration,
+      };
 }
 
 class VehiclePriceClass {
@@ -277,17 +296,18 @@ class VehiclePriceClass {
   String? driverId;
   String? driverName;
 
-  factory VehiclePriceClass.fromJson(Map<String, dynamic> json) => VehiclePriceClass(
-    priceClass: VehiclePriceClassPriceClass.fromJson(json["priceClass"]),
-    driverId: json["driverId"],
-    driverName: json["driverName"],
-  );
+  factory VehiclePriceClass.fromJson(Map<String, dynamic> json) =>
+      VehiclePriceClass(
+        priceClass: VehiclePriceClassPriceClass.fromJson(json["priceClass"]),
+        driverId: json["driverId"],
+        driverName: json["driverName"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "priceClass": priceClass.toJson(),
-    "driverId": driverId,
-    "driverName": driverName,
-  };
+        "priceClass": priceClass.toJson(),
+        "driverId": driverId,
+        "driverName": driverName,
+      };
 }
 
 class VehiclePriceClassPriceClass {
@@ -311,52 +331,50 @@ class VehiclePriceClassPriceClass {
   String? skuId;
   String? type;
   String? subcategory;
-  double? perKmFare;
-  int? minFare;
-  double? distance;
-  int? discountPercent;
-  double? sellerDiscount;
-  double? baseFare;
-  int? tollCharges;
-  double? stateTax;
-  int? advancePaid;
-  double? amountToBeCollected;
-  double? totalFare;
+  double perKmFare;
+  double minFare;
+  double distance;
+  double discountPercent;
+  double sellerDiscount;
+  double baseFare;
+  double tollCharges;
+  double stateTax;
+  double advancePaid;
+  double amountToBeCollected;
+  double totalFare;
 
-  factory VehiclePriceClassPriceClass.fromJson(Map<String, dynamic> json) => VehiclePriceClassPriceClass(
-    skuId: json["sku_id"],
-    type: json["type"],
-    subcategory: json["subcategory"],
-    perKmFare: json["perKMFare"],
-    minFare: json["minFare"],
-    distance: json["distance"].toDouble(),
-    discountPercent: json["discountPercent"],
-    sellerDiscount: json["seller_discount"].toDouble(),
-    baseFare: json["base_fare"].toDouble(),
-    tollCharges: json["toll_charges"],
-    stateTax: json["state_tax"].toDouble(),
-    advancePaid: json["advancePaid"],
-    amountToBeCollected: json["amount_to_be_collected"].toDouble(),
-    totalFare: json["total_fare"].toDouble(),
-  );
+  factory VehiclePriceClassPriceClass.fromJson(Map<String, dynamic> json) =>
+      VehiclePriceClassPriceClass(
+        skuId: json["sku_id"],
+        type: json["type"],
+        subcategory: json["subcategory"],
+        perKmFare: json["perKMFare"].toDouble(),
+        minFare: json["minFare"].toDouble(),
+        distance: json["distance"].toDouble(),
+        discountPercent: json["discountPercent"].toDouble(),
+        sellerDiscount: json["seller_discount"].toDouble(),
+        baseFare: json["base_fare"].toDouble(),
+        tollCharges: json["toll_charges"].toDouble(),
+        stateTax: json["state_tax"].toDouble(),
+        advancePaid: json["advancePaid"].toDouble(),
+        amountToBeCollected: json["amount_to_be_collected"].toDouble(),
+        totalFare: json["total_fare"].toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "sku_id": skuId,
-    "type": type,
-    "subcategory": subcategory,
-    "perKMFare": perKmFare,
-    "minFare": minFare,
-    "distance": distance,
-    "discountPercent": discountPercent,
-    "seller_discount": sellerDiscount,
-    "base_fare": baseFare,
-    "toll_charges": tollCharges,
-    "state_tax": stateTax,
-    "advancePaid": advancePaid,
-    "amount_to_be_collected": amountToBeCollected,
-    "total_fare": totalFare,
-  };
+        "sku_id": skuId,
+        "type": type,
+        "subcategory": subcategory,
+        "perKMFare": perKmFare,
+        "minFare": minFare,
+        "distance": distance,
+        "discountPercent": discountPercent,
+        "seller_discount": sellerDiscount,
+        "base_fare": baseFare,
+        "toll_charges": tollCharges,
+        "state_tax": stateTax,
+        "advancePaid": advancePaid,
+        "amount_to_be_collected": amountToBeCollected,
+        "total_fare": totalFare,
+      };
 }
-
-
-

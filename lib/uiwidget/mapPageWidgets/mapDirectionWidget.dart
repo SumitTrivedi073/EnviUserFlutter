@@ -37,8 +37,8 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
 
-  late LatLng pickupLocation = LatLng(widget.fromAddress!.latLng!.latitude, widget.fromAddress!.latLng!.longitude);
-  late  LatLng destinationLocation =  LatLng(widget.toAddress!.latLng!.latitude, widget.toAddress!.latLng!.longitude);
+  late LatLng pickupLocation = LatLng(widget.fromAddress!.latLng.latitude, widget.fromAddress!.latLng.longitude);
+  late  LatLng destinationLocation =  LatLng(widget.toAddress!.latLng.latitude, widget.toAddress!.latLng.longitude);
   late String _sessionToken;
   var uuid = const Uuid();
 
