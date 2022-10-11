@@ -36,7 +36,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
         toAddress: widget.toAddress,
       ),
       Column(children: [
-        const AppBarInsideWidget(title: "Envi"),
+        const AppBarInsideWidget(title: "Envi",isBackButtonNeeded: true,),
         const SizedBox(height: 5),
         FromToWidget(
           fromAddress: widget.fromAddress,

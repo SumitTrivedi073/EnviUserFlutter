@@ -239,7 +239,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           sharedPreferences.setString(
                               LoginID, widget.profiledata.id);
                           sharedPreferences.setString(
-                              Loginpropic, widget.profiledata.propic);
+                              Loginpropic, "https://ecabdevstorage.blob.core.windows.net/ecabdevcontainer/${widget.profiledata.propic}");
                           sharedPreferences.setString(
                               Logingender, widget.profiledata.gender);
                           sharedPreferences.setString(

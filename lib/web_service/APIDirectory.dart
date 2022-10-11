@@ -92,3 +92,6 @@ DeleteFavouriteAddressdata(){
 updatePaymentMode(){
   return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
 }
+CreateOrder(){
+  return Uri.parse('${getBaseURL()}/order/createOrder');
+}

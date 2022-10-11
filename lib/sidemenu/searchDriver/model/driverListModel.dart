@@ -331,35 +331,34 @@ class VehiclePriceClassPriceClass {
   String? skuId;
   String? type;
   String? subcategory;
-  double perKmFare;
-  double minFare;
-  double distance;
-  double discountPercent;
-  double sellerDiscount;
-  double baseFare;
-  double tollCharges;
-  double stateTax;
-  double advancePaid;
-  double amountToBeCollected;
-  double totalFare;
+  double? perKmFare;
+  double? minFare;
+  double? distance;
+  double? discountPercent;
+  double? sellerDiscount;
+  double? baseFare;
+  double? tollCharges;
+  double? stateTax;
+  double? advancePaid;
+  double? amountToBeCollected;
+  double? totalFare;
 
-  factory VehiclePriceClassPriceClass.fromJson(Map<String, dynamic> json) =>
-      VehiclePriceClassPriceClass(
-        skuId: json["sku_id"],
-        type: json["type"],
-        subcategory: json["subcategory"],
-        perKmFare: json["perKMFare"].toDouble(),
-        minFare: json["minFare"].toDouble(),
-        distance: json["distance"].toDouble(),
-        discountPercent: json["discountPercent"].toDouble(),
-        sellerDiscount: json["seller_discount"].toDouble(),
-        baseFare: json["base_fare"].toDouble(),
-        tollCharges: json["toll_charges"].toDouble(),
-        stateTax: json["state_tax"].toDouble(),
-        advancePaid: json["advancePaid"].toDouble(),
-        amountToBeCollected: json["amount_to_be_collected"].toDouble(),
-        totalFare: json["total_fare"].toDouble(),
-      );
+  factory VehiclePriceClassPriceClass.fromJson(Map<String, dynamic> json) => VehiclePriceClassPriceClass(
+    skuId: json["sku_id"],
+    type: json["type"],
+    subcategory: json["subcategory"],
+    perKmFare: json["perKMFare"].toDouble(),
+    minFare: json["minFare"].toDouble(),
+    distance: json["distance"].toDouble(),
+    discountPercent: json["discountPercent"].toDouble(),
+    sellerDiscount: json["seller_discount"].toDouble(),
+    baseFare: json["base_fare"].toDouble(),
+    tollCharges: json["toll_charges"].toDouble(),
+    stateTax: json["state_tax"].toDouble(),
+    advancePaid: json["advancePaid"].toDouble(),
+    amountToBeCollected: json["amount_to_be_collected"].toDouble(),
+    totalFare: json["total_fare"].toDouble(),
+  );
 
   Map<String, dynamic> toJson() => {
         "sku_id": skuId,

@@ -78,7 +78,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
             )
           : Container(),
       Column(children: const [
-        AppBarInsideWidget(title: "Booking Confirmation"),
+        AppBarInsideWidget(title: "Booking Confirmation", isBackButtonNeeded: true,),
         SizedBox(height: 5),
       ])
     ]));
