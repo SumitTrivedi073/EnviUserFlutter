@@ -1,3 +1,5 @@
+import 'dart:convert' as convert;
+
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/appConfig/landingPageSettings.dart';
 import 'package:envi/database/favoritesData.dart';
@@ -12,22 +14,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../web_service/HTTP.dart' as HTTP;
 import 'database/database.dart';
 import 'login/login.dart';
-import 'dart:convert' as convert;
-import '../../../../web_service/HTTP.dart' as HTTP;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   final database =
       await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
   final dao = database.taskDao;
 
   runApp(const MyApp());
-
-// Ideal time to initialize
 }
 
 class MyApp extends StatelessWidget {
@@ -88,41 +87,31 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<firestoreLiveTripDataNotifier>(
-        builder: (context, value, child) {
-      var tripNode = value.liveTripData;
-      print(
-          'FIREBASETEST11 live trip value changed now in main.dart ${tripNode}');
-      print('FIREBASETEST11 ptm in main.dart ${value.passengerTripMasterId}');
-
-      return Scaffold(
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(PageBackgroundImage),
-              fit: BoxFit.fill,
-            ),
-          ),
-          child: Center(
-            child: Image.asset(
-              "assets/images/logo.png",
-              width: 276,
-              fit: BoxFit.fill,
-            ),
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(PageBackgroundImage),
+            fit: BoxFit.fill,
           ),
         ),
-      );
-    });
+        child: Center(
+          child: Image.asset(
+            "assets/images/logo.png",
+            width: 276,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
   }
 
   void getLandingPageSettings() async {
     dynamic response = await HTTP.get(getfetchLandingPageSettings());
     if (response != null && response.statusCode == 200) {
       var jsonData = convert.jsonDecode(response.body);
-      //  print(convert.jsonDecode(response.body)['applicationConfig']);
-      // print(convert.jsonDecode(response.body)['landingPageSettings']);
       LandingPageConfig.setshowInfoPopup(
           jsonData['landingPageSettings']['showInfoPopup']);
       LandingPageConfig.setinfoPopupType(
@@ -227,9 +216,3 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     }
   }
 }
-
-
-
-//https://github.com/humazed/google_map_location_picker
-
-

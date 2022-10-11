@@ -29,7 +29,6 @@ import '../onRide/model/SosModel.dart';
 class PaymentPage extends StatefulWidget {
   const PaymentPage({Key? key}) : super(key: key);
 
-//final String passengerTripId;
   @override
   State<PaymentPage> createState() => _PaymentPageState();
 }
@@ -37,7 +36,6 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String selectedPayOption = '';
   String passangerTripMasterId = '';
-  bool _isLoading = false;
   late SharedPreferences sharedPreferences;
   late TripDataModel tripDataModel;
   LatLng? latlong = null;
@@ -54,13 +52,13 @@ class _PaymentPageState extends State<PaymentPage> {
               passangerTripMasterId =
                   value.liveTripData!.tripInfo.passengerTripMasterId;
               selectedPayOption = value.liveTripData!.tripInfo.paymentMode;
-              if (value.liveTripData!.tripInfo.tripStatus == TripStatusFree) {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const HomePage(title: 'title')),
-                    (Route<dynamic> route) => false);
-              }
+            }else{
+              print("LiveTripData===============>null");
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      const HomePage(title: 'title')),
+                      (Route<dynamic> route) => false);
             }
           });
           return value.liveTripData != null
@@ -74,7 +72,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                       ),
                       child: SingleChildScrollView(
-                          child: Column(
+                          child:  Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                             AppBarInsideWidget(
@@ -123,13 +121,7 @@ class _PaymentPageState extends State<PaymentPage> {
     };
     var jsonData = null;
     dynamic res = await HTTP.post(updatePaymentMode(), body);
-    setState(() {
-      _isLoading = true;
-    });
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        _isLoading = false;
-      });
       jsonData = convert.jsonDecode(res.body);
       SosModel sosModel = SosModel.fromJson(jsonData);
       showSnackbar(context, sosModel.message);
@@ -146,13 +138,7 @@ class _PaymentPageState extends State<PaymentPage> {
     };
     var jsonData = null;
     dynamic res = await HTTP.post(CreateOrder(), body);
-    setState(() {
-      _isLoading = true;
-    });
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        _isLoading = false;
-      });
       jsonData = convert.jsonDecode(res.body);
       print("jsonData=============>$jsonData");
       await initiateTransaction(
