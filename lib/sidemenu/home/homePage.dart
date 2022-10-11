@@ -37,31 +37,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<firestoreLiveTripDataNotifier>(
         builder: (context, value, child) {
+      print("FIREBASETEST11 ptm in home page..${value.passengerTripMasterId}");
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && value.liveTripData!=null) {
-         if ( value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
-              value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted||
-             value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
+        print("RAGHU In trip change home page after addPaost..");
+
+        if (mounted && value.liveTripData != null) {
+          if (value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted ||
+              value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
                         WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
-          }else if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
-           Navigator.of(context).pushAndRemoveUntil(
-               MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                   const OnRideWidget()),
-                   (Route<dynamic> route) => false);
-         }else if (value.liveTripData!.tripInfo.tripStatus==TripStatusCompleted){
-           Navigator.of(context).pushAndRemoveUntil(
-               MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                   const PaymentPage()),
-                   (Route<dynamic> route) => false);
-         }
-      }
+          } else if (value.liveTripData!.tripInfo.tripStatus ==
+              TripStatusOnboarding) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const OnRideWidget()),
+                (Route<dynamic> route) => false);
+          } else if (value.liveTripData!.tripInfo.tripStatus ==
+              TripStatusCompleted) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const PaymentPage()),
+                (Route<dynamic> route) => false);
+          }
+        }
       });
       return Scaffold(
         drawer: NavigationDrawer(),
@@ -84,7 +87,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> getUserName() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      name = sharedPreferences.getString(LoginName)?? "test user";
+      name = sharedPreferences.getString(LoginName) ?? "test user";
     });
   }
 }

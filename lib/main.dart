@@ -83,32 +83,38 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>().listenToLiveUpdateStream();
       context.read<firestoreScheduleTripNotifier>().listenToLiveUpdateStream();
-      
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(PageBackgroundImage),
-            fit: BoxFit.fill,
+    return Consumer<firestoreLiveTripDataNotifier>(
+        builder: (context, value, child) {
+      var tripNode = value.liveTripData;
+      print(
+          'FIREBASETEST11 live trip value changed now in main.dart ${tripNode}');
+      print('FIREBASETEST11 ptm in main.dart ${value.passengerTripMasterId}');
+
+      return Scaffold(
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(PageBackgroundImage),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: Center(
+            child: Image.asset(
+              "assets/images/logo.png",
+              width: 276,
+              fit: BoxFit.fill,
+            ),
           ),
         ),
-        child: Center(
-          child: Image.asset(
-            "assets/images/logo.png",
-            width: 276,
-            fit: BoxFit.fill,
-          ),
-        ),
-      ),
-    );
+      );
+    });
   }
 
   void getLandingPageSettings() async {

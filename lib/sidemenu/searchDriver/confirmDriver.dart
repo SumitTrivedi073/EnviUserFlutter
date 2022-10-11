@@ -380,8 +380,8 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
       "driverName": widget.driverDetail!.driverName,
       "driverRating": widget.driverDetail!.driverRating!.toInt(),
       "driverPhoto": widget.driverDetail!.driverPhoto!.toString(),
-      "initialPrice": widget.priceDetail!.priceClass.totalFare.toDouble(),
-      "initialDistance": widget.priceDetail!.priceClass.distance.toDouble()
+      "initialPrice": widget.priceDetail!.priceClass.totalFare!.toDouble(),
+      "initialDistance": widget.priceDetail!.priceClass.distance!.toDouble()
 
     };
     print("data=======>$data");

@@ -12,6 +12,7 @@ import 'model/tripDataModel.dart';
 
 class firestoreLiveTripDataNotifier extends ChangeNotifier {
   TripDataModel? liveTripData;
+  String passengerTripMasterId = '';
   late SharedPreferences sharedPreferences;
 
   Future<void> listenToLiveUpdateStream() async {
@@ -21,30 +22,36 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
     final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {
-      final notificationStream =  collectionRef.snapshots();
+      final notificationStream = collectionRef.snapshots();
       notificationStream.listen((result) {
         var count = 0;
-        print("object");
+        print("FIREBASETEST object");
         for (var res in result.docChanges) {
           dynamic data = res.doc.data();
 
-          var dstat = data?["passengerTripMasterId"];
-          print("trip data ${dstat}");
+          var passengerTripMasterId = data?["passengerTripMasterId"];
+          print("FIREBASETEST ptm${passengerTripMasterId}");
 
           FirebaseFirestore.instance
               .collection("trips")
-              .doc("passengerTripMasterId:$dstat")
+              .doc("passengerTripMasterId:$passengerTripMasterId")
               .snapshots()
               .listen((event) {
+            dynamic data = res.doc.data();
+
             var jsonObj = event.data();
 
             var encodedJson = json.encode(jsonObj, toEncodable: myEncode);
             var jsonData = json.decode(encodedJson);
-            print("tripdata========> ${event.data()}");
+            // print("FIREBASETEST trripdata========> ${event.data()}");
             if (jsonData != null && jsonData.toString().isNotEmpty) {
               liveTripData = TripDataModel.fromJson(jsonData);
-              notifyListeners();
+              print("FIREBASETEST11 liveTripData ${liveTripData}");
+            } else {
+              liveTripData = null;
             }
+
+            notifyListeners();
           });
         }
       });

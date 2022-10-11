@@ -381,11 +381,11 @@ class DriverListItemPageState extends State<DriverListItem> {
                       getTotalPrice(
                           vehiclePriceClasses[index]
                               .priceClass
-                              .totalFare
+                              .totalFare!
                               .toDouble(),
                           vehiclePriceClasses[index]
                               .priceClass
-                              .sellerDiscount
+                              .sellerDiscount!
                               .toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
