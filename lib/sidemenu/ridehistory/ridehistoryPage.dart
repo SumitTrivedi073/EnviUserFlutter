@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../appConfig/Profiledata.dart';
+import '../../appConfig/landingPageSettings.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -464,7 +465,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   Future<void> sendInvoice(String passengerTripMasterId) async {
     Map data;
     data = {
-      "mailid": sharedPreferences.getString(LoginEmail),
+      "mailid": Profiledata().getmailid(),
       "passengerTripMasterId":passengerTripMasterId
 
     };

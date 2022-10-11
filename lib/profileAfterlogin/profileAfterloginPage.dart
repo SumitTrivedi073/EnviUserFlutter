@@ -239,9 +239,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               loginToken, widget.profiledatamodel.token);
                           sharedPreferences.setString(loginID, widget.profiledatamodel.id);
                           sharedPreferences.setString(
-                              LoginID, widget.profiledata.id);
-                          sharedPreferences.setString(
-                              Loginpropic, "https://ecabdevstorage.blob.core.windows.net/ecabdevcontainer/${widget.profiledata.propic}");
+                              loginpropic, "$imageServerurl${widget.profiledatamodel.propic}");
                           sharedPreferences.setString(
                               logingender, widget.profiledatamodel.gender);
                           sharedPreferences.setString(
@@ -251,7 +249,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           Profiledata.setusreid(widget.profiledatamodel.id);
                           Profiledata.settoken(widget.profiledatamodel.token);
                           Profiledata.setmailid(widget.profiledatamodel.mailid);
-                          Profiledata.setpropic(widget.profiledatamodel.propic);
+                          Profiledata.setpropic(imageServerurl+widget.profiledatamodel.propic);
                           Profiledata.setphone(widget.profiledatamodel.phone);
                           Profiledata.setgender(widget.profiledatamodel.gender);
                           Profiledata.setname(widget.profiledatamodel.name);

@@ -1,3 +1,4 @@
+import 'package:envi/appConfig/Profiledata.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,13 +26,10 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getsharedPrefs();
+
   }
 
-  getsharedPrefs() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    loginPic = sharedPreferences.getString(Loginpropic);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +64,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                 ),
                 Card(
                   child: Image.network(
-                    loginPic??placeHolderImage,
+                    Profiledata().getpropic()!=null?Profiledata().getpropic():placeHolderImage,
                     fit: BoxFit.fill,
                     height: 40,
                     width: 40,
