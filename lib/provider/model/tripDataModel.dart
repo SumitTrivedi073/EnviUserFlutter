@@ -55,12 +55,12 @@ class DriverInfo {
   String driverId;
 
   factory DriverInfo.fromJson(Map<String, dynamic> json) => DriverInfo(
-        driverImgUrl: json["driverImgUrl"]??'',
-        phone: json["phone"]??'',
-        countryCode: json["countryCode"]??'',
-        name: json["name"]??'',
-        vehicleNumber: json["vehicleNumber"]??'',
-        driverId: json["driverId"]??'',
+        driverImgUrl: json["driverImgUrl"] ?? '',
+        phone: json["phone"] ?? '',
+        countryCode: json["countryCode"] ?? '',
+        name: json["name"] ?? '',
+        vehicleNumber: json["vehicleNumber"] ?? '',
+        driverId: json["driverId"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -128,6 +128,7 @@ class TripInfo {
     required this.otp,
     required this.dropLocation,
     required this.pickupLocation,
+    required this.arrivalAtDestination,
   });
 
   PriceClass priceClass;
@@ -139,6 +140,7 @@ class TripInfo {
   String otp;
   DropLocation dropLocation;
   PickupLocation pickupLocation;
+  ArrivalAtDestination arrivalAtDestination;
 
   factory TripInfo.fromJson(Map<String, dynamic> json) => TripInfo(
         priceClass: PriceClass.fromJson(json["priceClass"]),
@@ -150,6 +152,8 @@ class TripInfo {
         otp: json["otp"],
         dropLocation: DropLocation.fromJson(json["dropLocation"]),
         pickupLocation: PickupLocation.fromJson(json["pickupLocation"]),
+        arrivalAtDestination:
+            ArrivalAtDestination.fromJson(json["arrivalAtDestination"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -162,6 +166,7 @@ class TripInfo {
         "otp": otp,
         "dropLocation": dropLocation.toJson(),
         "pickupLocation": pickupLocation.toJson(),
+        "arrivalAtDestination": arrivalAtDestination.toJson(),
       };
 }
 
@@ -213,6 +218,74 @@ class PickupLocation {
       };
 }
 
+class ArrivalAtDestination {
+  ArrivalAtDestination(
+      {required this.advancePaid,
+      required this.amountTobeCollected,
+      required this.cgst,
+      required this.discount,
+      required this.discountedPrice,
+      required this.distanceTravelled,
+      required this.kmFare,
+      required this.minuteFare,
+      required this.paymentStatus,
+      required this.perKMPrice,
+      required this.priceInclusiveOfTax,
+      required this.sgst,
+      required this.tollAmount,
+      required this.totalFare});
+
+  dynamic advancePaid;
+  dynamic amountTobeCollected;
+  dynamic cgst;
+  dynamic discount;
+  dynamic discountedPrice;
+  dynamic distanceTravelled;
+  dynamic kmFare;
+  dynamic minuteFare;
+  String paymentStatus;
+  dynamic perKMPrice;
+  dynamic priceInclusiveOfTax;
+  dynamic sgst;
+  dynamic tollAmount;
+  dynamic totalFare;
+
+  factory ArrivalAtDestination.fromJson(Map<String, dynamic> json) =>
+      ArrivalAtDestination(
+        advancePaid: json["advancePaid"].toDouble(),
+        amountTobeCollected: json["amountTobeCollected"].toDouble(),
+        cgst: json["cgst"].toDouble(),
+        discount: json["discount"].toDouble(),
+        discountedPrice: json["discountedPrice"].toDouble(),
+        distanceTravelled: json["distanceTravelled"].toDouble(),
+        kmFare: json["kmFare"].toDouble(),
+        minuteFare: json["minuteFare"].toDouble(),
+        paymentStatus: json["paymentStatus"],
+        perKMPrice: json["perKMPrice"].toDouble(),
+        priceInclusiveOfTax: json["priceInclusiveOfTax"].toDouble(),
+        sgst: json["sgst"].toDouble(),
+        tollAmount: json["tollAmount"].toDouble(),
+        totalFare: json["totalFare"].toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "advancePaid": advancePaid,
+        "amountTobeCollected": amountTobeCollected,
+        "cgst": cgst,
+        "discount": discount,
+        "discountedPrice": discountedPrice,
+        "distanceTravelled": distanceTravelled,
+        "kmFare": kmFare,
+        "minuteFare": minuteFare,
+        "paymentStatus": paymentStatus,
+        "perKMPrice": perKMPrice,
+        "priceInclusiveOfTax": priceInclusiveOfTax,
+        "sgst": sgst,
+        "tollAmount": tollAmount,
+        "totalFare": totalFare,
+      };
+}
+
 class PriceClass {
   PriceClass({
     required this.passengerCapacity,
@@ -236,23 +309,23 @@ class PriceClass {
   });
 
   int passengerCapacity;
-  double discountPercent;
-  double minFare;
-  double distance;
-  double tollCharges;
-  double sellerDiscount;
-  double totalFare;
-  double advancePaid;
-  double baseFare;
+  dynamic discountPercent;
+  dynamic minFare;
+  dynamic distance;
+  dynamic tollCharges;
+  dynamic sellerDiscount;
+  dynamic totalFare;
+  dynamic advancePaid;
+  dynamic baseFare;
   String skuId;
-  double perKmFare;
+  dynamic perKmFare;
   String type;
-  double stateTax;
-  double maxKmRange;
+  dynamic stateTax;
+  dynamic maxKmRange;
   String bootSpace;
-  double gstp;
+  dynamic gstp;
   String subcategory;
-  double amountToBeCollected;
+  dynamic amountToBeCollected;
 
   factory PriceClass.fromJson(Map<String, dynamic> json) => PriceClass(
         passengerCapacity: json["passengerCapacity"],
