@@ -23,6 +23,7 @@ class AppBarInsideWidget extends StatefulWidget {
 class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   late SharedPreferences sharedPreferences;
   String? loginPic;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,9 +31,9 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
     getsharedPrefs();
   }
 
-  Future<void> getsharedPrefs() async {
+  getsharedPrefs() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    //loginPic = sharedPreferences.getString(Loginpropic);
+    loginPic = sharedPreferences.getString(Loginpropic);
   }
 
   @override
@@ -68,7 +69,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                 ),
                 Card(
                   child: Image.network(
-                    placeHolderImage,
+                    loginPic ?? placeHolderImage,
                     fit: BoxFit.fill,
                     height: 40,
                     width: 40,

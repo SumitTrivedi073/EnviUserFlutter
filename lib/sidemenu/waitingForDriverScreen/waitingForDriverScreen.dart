@@ -37,20 +37,22 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
         child: Consumer<firestoreLiveTripDataNotifier>(
           builder: (context, value, child) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (value.liveTripData!.tripInfo.tripStatus ==
-                    TripStatusOnboarding) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          const OnRideWidget()),
-                          (Route<dynamic> route) => false);
-                } else if (value.liveTripData!.tripInfo.tripStatus ==
-                    TripStatusCancel) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          const HomePage(title: 'title')),
-                          (Route<dynamic> route) => false);
+                if(value.liveTripData!=null) {
+                  if (value.liveTripData!.tripInfo.tripStatus ==
+                      TripStatusOnboarding) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                            const OnRideWidget()),
+                            (Route<dynamic> route) => false);
+                  } else if (value.liveTripData!.tripInfo.tripStatus ==
+                      TripStatusCancel) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                            const HomePage(title: 'title')),
+                            (Route<dynamic> route) => false);
+                  }
                 }
               });
               return value.liveTripData != null
@@ -62,7 +64,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                   callback: retrieveDuration,
                 ),
                 Column(children: [
-                  const AppBarInsideWidget(title: "Envi"),
+                  const AppBarInsideWidget(title: "Envi",isBackButtonNeeded: false,),
                   const SizedBox(height: 5),
                   getCardBanner(value.liveTripData!),
                   Align(

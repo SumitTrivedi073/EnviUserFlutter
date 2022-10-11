@@ -129,6 +129,7 @@ print(userId);
           children: [
             AppBarInsideWidget(
               title: TitelUpcomingRides,
+              isBackButtonNeeded: true,
             ),
             Expanded(
               child:_isFirstLoadRunning

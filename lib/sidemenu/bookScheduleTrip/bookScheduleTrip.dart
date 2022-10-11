@@ -59,7 +59,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         fromAddress: widget.fromAddress,
         toAddress: widget.toAddress,
       ),
-      AppBarInsideWidget(title: FutureBookingTitel),
+      AppBarInsideWidget(title: FutureBookingTitel,isBackButtonNeeded: true,),
       Positioned(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

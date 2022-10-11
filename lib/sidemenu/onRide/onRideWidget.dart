@@ -14,6 +14,7 @@ import '../../uiwidget/mapPageWidgets/mapDirectionWidget_onRide.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/Constant.dart';
 import '../home/homePage.dart';
+import '../payment/payment_page.dart';
 
 class OnRideWidget extends StatefulWidget {
   const OnRideWidget({Key? key}) : super(key: key);
@@ -33,11 +34,11 @@ class _OnRideWidgetState extends State<OnRideWidget> {
             if (value.liveTripData != null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (value.liveTripData!.tripInfo.tripStatus ==
-                    TripStatusCancel) {
+                    TripStatusCompleted) {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              const HomePage(title: 'title')),
+                              const PaymentPage()),
                       (Route<dynamic> route) => false);
                 }
               });
@@ -47,7 +48,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                   liveTripData: value.liveTripData!,
                 ),
                 Column(children: [
-                  const AppBarInsideWidget(title: "Envi"),
+                  const AppBarInsideWidget(title: "Envi",isBackButtonNeeded: false,),
                   const SizedBox(height: 5),
                   CardBanner(
                       title: DriverOnRide,
