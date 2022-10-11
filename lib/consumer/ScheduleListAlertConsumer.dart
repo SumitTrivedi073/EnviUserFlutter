@@ -39,7 +39,6 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
         child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-         // robotoTextWidget(textval: "textval", colorval: AppColor.black, sizeval: 16.0, fontWeight: FontWeight.bold),
           Expanded(
             child: Container(
               height: double.infinity,
