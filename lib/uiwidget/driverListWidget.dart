@@ -230,6 +230,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         selectedIndex = index;
       },
       child: Card(
+
         margin: const EdgeInsets.all(5),
         color: const Color(0xFFE4F3F5),
         shape: selectedIndex != null
@@ -240,14 +241,14 @@ class DriverListItemPageState extends State<DriverListItem> {
                 side: const BorderSide(color: Colors.white, width: 2.0),
                 borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: [
                 Row(
                   children: [
                     robotoTextWidget(
                         textval:
-                            ' ${DriverList[index].durationToPickUpLocation} Minutes Away',
+                            '${DriverList[index].durationToPickUpLocation} Minutes Away',
                         colorval: AppColor.black,
                         sizeval: 16,
                         fontWeight: FontWeight.w600),
@@ -276,7 +277,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             DriverList[index].driverPhoto ?? '',
                             fit: BoxFit.fill,
                             height: 40,
-                            width: 45,
+                            width: 50,
                           ),
                         )
                       ],
@@ -359,7 +360,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval: ' $estimateFare',
+                        textval: estimateFare,
                         colorval: AppColor.darkgrey,
                         sizeval: 12,
                         fontWeight: FontWeight.w600),
@@ -380,7 +381,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                            " ₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                            "₹${vehiclePriceClasses[index].priceClass.totalFare}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
