@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../provider/firestoreLiveTripDataNotifier.dart';
 import '../theme/color.dart';
+import '../utils/utility.dart';
 import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
@@ -161,12 +162,5 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
     );
   }
 
-  Future<void> makingPhoneCall(String phone) async {
-    var url = Uri.parse("tel:$phone");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+
 }

@@ -36,7 +36,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
         toAddress: widget.toAddress,
       ),
       Column(children: [
-        const AppBarInsideWidget(title: "Envi"),
+        const AppBarInsideWidget(title: "Envi",isBackButtonNeeded: true,),
         const SizedBox(height: 5),
         FromToWidget(
           fromAddress: widget.fromAddress,
@@ -44,7 +44,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
           distance: distance,
           tripType: BookingTiming.now,
         ),
-        Spacer(),
+        const SizedBox(height: 230),
         DriverListItem(
           key: widget._key,
           fromAddress: widget.fromAddress,

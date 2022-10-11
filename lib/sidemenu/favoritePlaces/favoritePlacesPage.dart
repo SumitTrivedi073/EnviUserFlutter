@@ -80,6 +80,7 @@ void comebackFromADD(String a){
           children: [
             AppBarInsideWidget(
               title: TitelFavoritePlaces,
+              isBackButtonNeeded: true,
             ),
 
             presetplace(),

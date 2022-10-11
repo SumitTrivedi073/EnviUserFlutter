@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/theme/color.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Utility {
   _getId() async {
@@ -48,4 +49,12 @@ String changeDateFormate(String date) {
   var outputDate = outputFormat.format(inputDate);
 
   return outputDate;
+}
+Future<void> makingPhoneCall(String phone) async {
+  var url = Uri.parse("tel:$phone");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

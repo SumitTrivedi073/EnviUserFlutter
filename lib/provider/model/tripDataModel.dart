@@ -236,41 +236,41 @@ class PriceClass {
   });
 
   int passengerCapacity;
-  int discountPercent;
-  int minFare;
-  int distance;
-  int tollCharges;
+  double discountPercent;
+  double minFare;
+  double distance;
+  double tollCharges;
   double sellerDiscount;
   double totalFare;
-  int advancePaid;
-  int baseFare;
+  double advancePaid;
+  double baseFare;
   String skuId;
   double perKmFare;
   String type;
   double stateTax;
-  int maxKmRange;
+  double maxKmRange;
   String bootSpace;
-  int gstp;
+  double gstp;
   String subcategory;
   double amountToBeCollected;
 
   factory PriceClass.fromJson(Map<String, dynamic> json) => PriceClass(
         passengerCapacity: json["passengerCapacity"],
-        discountPercent: json["discountPercent"],
-        minFare: json["minFare"],
-        distance: json["distance"],
-        tollCharges: json["toll_charges"],
+        discountPercent: json["discountPercent"].toDouble(),
+        minFare: json["minFare"].toDouble(),
+        distance: json["distance"].toDouble(),
+        tollCharges: json["toll_charges"].toDouble(),
         sellerDiscount: json["seller_discount"].toDouble(),
         totalFare: json["total_fare"].toDouble(),
-        advancePaid: json["advancePaid"],
-        baseFare: json["base_fare"],
+        advancePaid: json["advancePaid"].toDouble(),
+        baseFare: json["base_fare"].toDouble(),
         skuId: json["sku_id"],
         perKmFare: json["perKMFare"].toDouble(),
         type: json["type"],
         stateTax: json["state_tax"].toDouble(),
-        maxKmRange: json["maxKmRange"],
+        maxKmRange: json["maxKmRange"].toDouble(),
         bootSpace: json["bootSpace"],
-        gstp: json["gstp"],
+        gstp: json["gstp"].toDouble(),
         subcategory: json["subcategory"],
         amountToBeCollected: json["amount_to_be_collected"].toDouble(),
       );

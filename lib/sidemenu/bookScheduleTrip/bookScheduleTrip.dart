@@ -66,12 +66,12 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     // TODO: implement build
 
     return Scaffold(
-        body: Stack( children: [
+        body: Stack(children: [
       MapDirectionWidget(
         fromAddress: widget.fromAddress,
         toAddress: widget.toAddress,
       ),
-      AppBarInsideWidget(title: FutureBookingTitel),
+      AppBarInsideWidget(title: FutureBookingTitel,isBackButtonNeeded: true,),
       Positioned(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end, // start at end/bottom of column

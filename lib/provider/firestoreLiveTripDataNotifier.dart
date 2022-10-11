@@ -22,7 +22,7 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
     final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection(liveUpdatecollectionName);
     try {
-      final notificationStream = await collectionRef.snapshots();
+      final notificationStream =  collectionRef.snapshots();
       notificationStream.listen((result) {
         var count = 0;
         print("object");

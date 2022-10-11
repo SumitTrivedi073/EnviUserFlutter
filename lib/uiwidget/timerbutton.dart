@@ -244,7 +244,7 @@ class _TimerButtonState extends State<TimerButton>
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              cancelTripAPI();
+                              cancelTripAPI(context);
                             },
                             style: ElevatedButton.styleFrom(
                               primary: AppColor.greyblack,
@@ -267,7 +267,7 @@ class _TimerButtonState extends State<TimerButton>
     });
   }
 
-  Future<void> cancelTripAPI() async {
+  Future<void> cancelTripAPI(BuildContext context) async {
     Map data;
     data = {
       "passengerTripMasterId":
@@ -296,11 +296,6 @@ class _TimerButtonState extends State<TimerButton>
     dynamic res = await HTTP.post(cancelTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       print("CancelTripRes=======>${res.statusCode}");
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage(title: "title")),
-              (Route<dynamic> route) => false);
     } else {
       throw "Trip Not Cancelled";
     }

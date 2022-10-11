@@ -24,7 +24,6 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
   var isLoading = false;
   bool _showmobileview = true;
 
-
   Future<void> _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
@@ -45,8 +44,6 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    
   }
 
   @override
@@ -242,7 +239,9 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               loginToken, widget.profiledatamodel.token);
                           sharedPreferences.setString(loginID, widget.profiledatamodel.id);
                           sharedPreferences.setString(
-                              loginpropic, widget.profiledatamodel.propic);
+                              LoginID, widget.profiledata.id);
+                          sharedPreferences.setString(
+                              Loginpropic, "https://ecabdevstorage.blob.core.windows.net/ecabdevcontainer/${widget.profiledata.propic}");
                           sharedPreferences.setString(
                               logingender, widget.profiledatamodel.gender);
                           sharedPreferences.setString(

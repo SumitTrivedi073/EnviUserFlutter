@@ -252,7 +252,9 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    toAddressName = (place.subLocality != '')?place.subLocality : place.subAdministrativeArea;
+    toAddressName = (place.subLocality != '')
+        ? place.subLocality
+        : place.subAdministrativeArea;
     setState(() {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';

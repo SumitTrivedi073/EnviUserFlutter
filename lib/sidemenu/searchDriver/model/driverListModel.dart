@@ -312,14 +312,14 @@ class VehiclePriceClassPriceClass {
   String? type;
   String? subcategory;
   double? perKmFare;
-  int? minFare;
+  double? minFare;
   double? distance;
-  int? discountPercent;
+  double? discountPercent;
   double? sellerDiscount;
   double? baseFare;
-  int? tollCharges;
+  double? tollCharges;
   double? stateTax;
-  int? advancePaid;
+  double? advancePaid;
   double? amountToBeCollected;
   double? totalFare;
 
@@ -327,15 +327,15 @@ class VehiclePriceClassPriceClass {
     skuId: json["sku_id"],
     type: json["type"],
     subcategory: json["subcategory"],
-    perKmFare: json["perKMFare"],
-    minFare: json["minFare"],
+    perKmFare: json["perKMFare"].toDouble(),
+    minFare: json["minFare"].toDouble(),
     distance: json["distance"].toDouble(),
-    discountPercent: json["discountPercent"],
+    discountPercent: json["discountPercent"].toDouble(),
     sellerDiscount: json["seller_discount"].toDouble(),
     baseFare: json["base_fare"].toDouble(),
-    tollCharges: json["toll_charges"],
+    tollCharges: json["toll_charges"].toDouble(),
     stateTax: json["state_tax"].toDouble(),
-    advancePaid: json["advancePaid"],
+    advancePaid: json["advancePaid"].toDouble(),
     amountToBeCollected: json["amount_to_be_collected"].toDouble(),
     totalFare: json["total_fare"].toDouble(),
   );

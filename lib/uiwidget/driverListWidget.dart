@@ -209,7 +209,7 @@ class DriverListItemPageState extends State<DriverListItem> {
             ),
           ));
     }
-    return Container(
+    return Center(
       child: CircularProgressIndicator(),
     );
   }
@@ -230,7 +230,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                            '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                        '${DriverList[index].durationToPickUpLocation} Minutes Away',
                         colorval: AppColor.black,
                         sizeval: 16,
                         fontWeight: FontWeight.w600),
@@ -238,14 +238,14 @@ class DriverListItemPageState extends State<DriverListItem> {
                       children: [
                         RatingBar.builder(
                           initialRating:
-                              DriverList[index].driverRating!.toDouble(),
+                          DriverList[index].driverRating!.toDouble(),
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
                           itemCount: 5,
                           itemSize: 14,
                           itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 2.0),
+                          const EdgeInsets.symmetric(horizontal: 2.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: Colors.amber,
@@ -280,7 +280,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                       children: [
                         robotoTextWidget(
                             textval:
-                                DriverList[index].priceClass!.type.toString(),
+                            DriverList[index].priceClass!.type.toString(),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w200),
@@ -298,7 +298,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                                 ),
                                 robotoTextWidget(
                                     textval:
-                                        "${DriverList[index].priceClass!.passengerCapacity} People",
+                                    "${DriverList[index].priceClass!.passengerCapacity} People",
                                     colorval: AppColor.black,
                                     sizeval: 14,
                                     fontWeight: FontWeight.w200)
@@ -363,7 +363,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                            "₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                        "₹${vehiclePriceClasses[index].priceClass.totalFare}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -402,7 +402,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             fontWeight: FontWeight.w800),
                         robotoTextWidget(
                             textval:
-                                '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
+                            '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
                             colorval: AppColor.purple,
                             sizeval: 13,
                             fontWeight: FontWeight.w400),
