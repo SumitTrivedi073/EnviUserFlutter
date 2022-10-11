@@ -101,7 +101,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             title: addressToAdd.title);
         await dao!.insertTask(task);
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      //showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -140,7 +140,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await dao!.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      //showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -173,7 +173,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await dao!.insertTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      //showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -211,7 +211,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         print(task);
         await dao!.updateTask(task);
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      //showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
