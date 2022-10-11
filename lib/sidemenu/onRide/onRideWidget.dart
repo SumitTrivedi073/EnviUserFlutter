@@ -68,6 +68,13 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                 ]),
               ]));
               // }
+            }else{
+              print("LiveTripData===============>null");
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      const HomePage(title: 'title')),
+                      (Route<dynamic> route) => false);
             }
             return  Container(
               child: CircularProgressIndicator(),
