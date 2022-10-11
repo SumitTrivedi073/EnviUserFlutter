@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../appConfig/Profiledata.dart';
 import '../../database/database.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
@@ -50,7 +51,6 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   String address = "", editidentifire = "";
   GoogleMapController? _controller;
   late LatLng latlong;
-  late SharedPreferences sharedPreferences;
   int? editid;
 
   @override
@@ -399,8 +399,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   }
 
   Future<void> ApiCall_Add_Favorite() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         titlecontroller.text.toString(),
@@ -431,8 +431,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   }
 
   Future<void> ApiCall_update_Favorite(int? id, String idetifire) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titlecontroller.text.toString(),
@@ -466,8 +465,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   }
 
   Future<void> ApiCall_Delete_Favorite(int? id, String identifire) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response =
         await ApiCollection.FavoriateDataDelete(userid, identifire);
     print(response.body);

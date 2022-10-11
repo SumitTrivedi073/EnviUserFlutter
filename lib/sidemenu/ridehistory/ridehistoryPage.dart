@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../appConfig/Profiledata.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -27,7 +28,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   bool _hasNextPage = true;
   bool _isLoadMoreRunning = false;
   int _limit = 20;
-  late SharedPreferences sharedPreferences;
   late dynamic userId;
   List<RideHistoryModel> arrtrip = [];
   @override
@@ -51,21 +51,21 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     setState(() {
       _isFirstLoadRunning = true;
     });
-    sharedPreferences = await SharedPreferences.getInstance();
 
 
-    userId = sharedPreferences.getString(LoginID) ;
+    userId = Profiledata().getusreid();
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     print(res.body);
-    if (res.statusCode == 200) {
+    if (res!=null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-
-
-        arrtrip = (jsonDecode(res.body)['content']['result'] as List)
-            .map((i) => RideHistoryModel.fromJson(i))
-            .toList();
+        if(jsonDecode(res.body)['content']['result'] !=null) {
+          arrtrip = (jsonDecode(res.body)['content']['result'] as List)
+              .map((i) => RideHistoryModel.fromJson(i))
+              .toList();
+        }
       });
+
     } else {
       setState(() {
         _isFirstLoadRunning = false;

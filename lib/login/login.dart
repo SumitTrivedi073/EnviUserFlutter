@@ -462,7 +462,7 @@ class _LoginpageState extends State<Loginpage> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileAfterloginPage(
-                        profiledata: users,
+                    profiledatamodel: users,
                       )));
         }
       });

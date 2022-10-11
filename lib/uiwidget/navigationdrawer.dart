@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../appConfig/Profiledata.dart';
 import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
@@ -19,7 +20,6 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationDrawer> {
-  late SharedPreferences sharedPreferences;
   String? email;
 
   @override
@@ -30,9 +30,8 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   init() async {
-    sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      email = (sharedPreferences.getString(LoginEmail) ?? '');
+      email = Profiledata().getmailid();
     });
   }
 
@@ -67,7 +66,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
                           child: getsmallNetworkImage(context,
-                              "$imageServerurl${(sharedPreferences.getString(Loginpropic) ?? '')}"),
+                              "$imageServerurl${Profiledata().getpropic()}"),
                         ),
                       ),
                       const SizedBox(

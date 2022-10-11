@@ -1,4 +1,5 @@
 import 'package:envi/Profile/newprofilePage.dart';
+import 'package:envi/appConfig/Profiledata.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,8 +13,8 @@ import '../theme/string.dart';
 import '../web_service/Constant.dart';
 
 class ProfileAfterloginPage extends StatefulWidget {
-LoginModel profiledata;
-  ProfileAfterloginPage({required this.profiledata});
+LoginModel profiledatamodel;
+  ProfileAfterloginPage({required this.profiledatamodel});
   @override
   State<ProfileAfterloginPage> createState() => _profileAfterloginPageState();
 }
@@ -34,7 +35,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
       isLoading = true;
     });
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(LoginID, "1");
+    sharedPreferences.setString(loginID, "1");
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => MainEntryPoint()),
         (Route<dynamic> route) => false);
@@ -88,9 +89,9 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
 
   Form profileContinue() {
     String gender = "";
-    if (widget.profiledata.gender.toString() == "m") {
+    if (widget.profiledatamodel.gender.toString() == "m") {
       gender = "Male";
-    } else if (widget.profiledata.gender.toString() == "f") {
+    } else if (widget.profiledatamodel.gender.toString() == "f") {
       gender = "Female";
     } else {
       gender = "";
@@ -115,7 +116,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: "Wellcome back, ${widget.profiledata.name}!",
+                textval: "Wellcome back, ${widget.profiledatamodel.name}!",
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
@@ -153,7 +154,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => NewProfilePage(
-                                              user: widget.profiledata,
+                                              user: widget.profiledatamodel,
                                             )));
                               },
                               child: const Icon(
@@ -173,12 +174,12 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                         placeholder:
                         'assets/images/envi-logo-small.png',
                         image:
-                        '$imageServerurl${widget.profiledata.propic}')),
+                        '$imageServerurl${widget.profiledatamodel.propic}')),
                         const SizedBox(
                           height: 5,
                         ),
                         robotoTextWidget(
-                            textval: widget.profiledata.name,
+                            textval: widget.profiledatamodel.name,
                             colorval: AppColor.black,
                             sizeval: 18.0,
                             fontWeight: FontWeight.normal),
@@ -194,7 +195,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           height: 5,
                         ),
                         robotoTextWidget(
-                            textval: widget.profiledata.phone,
+                            textval: widget.profiledatamodel.phone,
                             colorval: AppColor.textgray,
                             sizeval: 14.0,
                             fontWeight: FontWeight.normal),
@@ -202,7 +203,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           height: 5,
                         ),
                         robotoTextWidget(
-                            textval: widget.profiledata.mailid,
+                            textval: widget.profiledatamodel.mailid,
                             colorval: AppColor.textgray,
                             sizeval: 14.0,
                             fontWeight: FontWeight.normal),
@@ -236,16 +237,25 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           SharedPreferences sharedPreferences =
                               await SharedPreferences.getInstance();
                           sharedPreferences.setString(
-                              LoginEmail, widget.profiledata.mailid);
+                              loginEmail, widget.profiledatamodel.mailid);
                           sharedPreferences.setString(
-                              LoginToken, widget.profiledata.token);
-                          sharedPreferences.setString(LoginID, widget.profiledata.id);
+                              loginToken, widget.profiledatamodel.token);
+                          sharedPreferences.setString(loginID, widget.profiledatamodel.id);
                           sharedPreferences.setString(
-                              Loginpropic, widget.profiledata.propic);
+                              loginpropic, widget.profiledatamodel.propic);
                           sharedPreferences.setString(
-                              Logingender, widget.profiledata.gender);
+                              logingender, widget.profiledatamodel.gender);
                           sharedPreferences.setString(
-                              Loginphone, widget.profiledata.phone);
+                              loginPhone, widget.profiledatamodel.phone);
+                          sharedPreferences.setString(
+                              loginName, widget.profiledatamodel.name);
+                          Profiledata.setusreid(widget.profiledatamodel.id);
+                          Profiledata.settoken(widget.profiledatamodel.token);
+                          Profiledata.setmailid(widget.profiledatamodel.mailid);
+                          Profiledata.setpropic(widget.profiledatamodel.propic);
+                          Profiledata.setphone(widget.profiledatamodel.phone);
+                          Profiledata.setgender(widget.profiledatamodel.gender);
+                          Profiledata.setname(widget.profiledatamodel.name);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

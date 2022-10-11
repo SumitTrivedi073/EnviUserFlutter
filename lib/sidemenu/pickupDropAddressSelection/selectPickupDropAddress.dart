@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../appConfig/Profiledata.dart';
 import '../../database/database.dart';
 import '../../database/favoritesData.dart';
 import '../../database/favoritesDataDao.dart';
@@ -72,7 +73,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
   bool useGoogleApi = false;
-  late SharedPreferences sharedPreferences;
 
   Future<void> loadData() async {
     final database =
@@ -81,8 +81,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         FromLocationText.text.toString(),
@@ -115,8 +115,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       SearchPlaceModel? addressToUpdate,
       String identifire,
       String favoriate) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titel,
@@ -150,8 +149,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Future<void> apiCallAddFavoritetoaddress(
       SearchPlaceModel? addressToAdd) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         ToLocationText.text.toString(),
@@ -187,8 +185,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       SearchPlaceModel? addressToUpdate,
       String identifire,
       String favoriate) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titel,

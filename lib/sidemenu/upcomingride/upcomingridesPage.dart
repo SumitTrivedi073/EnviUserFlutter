@@ -12,6 +12,7 @@ import '../../../web_service/Constant.dart';
 
 import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../../appConfig/Profiledata.dart';
 import '../../theme/theme.dart';
 import '../../web_service/APIDirectory.dart';
 import '../ridehistory/model/rideHistoryModel.dart';
@@ -28,7 +29,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   bool _hasNextPage = true;
   bool _isLoadMoreRunning = false;
   int _limit = 20;
-  late SharedPreferences sharedPreferences;
   late dynamic userId;
   List<ScheduleTripModel> arrtrip = [];
   @override
@@ -48,19 +48,22 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     setState(() {
       _isFirstLoadRunning = true;
     });
-    sharedPreferences = await SharedPreferences.getInstance();
 
 
-    userId = sharedPreferences.getString(LoginID) ;
+    userId = Profiledata().getusreid() ;
 print(userId);
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     print(jsonDecode(res.body)['schedule_trip_list']);
     if (res.statusCode == 200) {
       setState(() {
-        arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
-            .map((i) => ScheduleTripModel.fromJson(i))
-            .toList();
+
+        if(jsonDecode(res.body)['content']['schedule_trip_list'] !=null) {
+          arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
+              .map((i) => ScheduleTripModel.fromJson(i))
+              .toList();
+        }
       });
+
     } else {
       setState(() {
         _isFirstLoadRunning = false;

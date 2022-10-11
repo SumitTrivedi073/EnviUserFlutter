@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../appConfig/Profiledata.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/searchDriver/model/driverListModel.dart';
 import '../theme/string.dart';
@@ -35,7 +36,6 @@ class DriverListItemPageState extends State<DriverListItem> {
   List<Content> DriverList = [];
   List<VehiclePriceClass> vehiclePriceClasses = [];
   late Distance distance;
-  late SharedPreferences sharedPreferences;
   int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
 
@@ -47,15 +47,14 @@ class DriverListItemPageState extends State<DriverListItem> {
   }
 
   void _firstLoad() async {
-    sharedPreferences = await SharedPreferences.getInstance();
     Map data;
     data = {
       "fromAddress": widget.fromAddress!.address,
       "toAddress": widget.toAddress!.address,
-      "phoneNumber": sharedPreferences.getString(Loginphone),
+      "phoneNumber": Profiledata().getphone(),
       "retry": "0",
-      "userId": sharedPreferences.getString(LoginID),
-      "userName": sharedPreferences.getString(LoginName),
+      "userId": Profiledata().getusreid(),
+      "userName": Profiledata().getname(),
       "location": {
         "latitude": widget.fromAddress!.latLng.latitude,
         "longitude": widget.fromAddress!.latLng.longitude

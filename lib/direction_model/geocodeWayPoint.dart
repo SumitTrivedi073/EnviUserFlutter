@@ -11,7 +11,7 @@ class GeocodedWaypoint {
   List<String> types;
 
   factory GeocodedWaypoint.fromJson(Map<String, dynamic> json) => GeocodedWaypoint(
-    geocoderStatus: json["geocoder_status"],
+    geocoderStatus: json["geocoder_status"]!= ""? json["geocoder_status"]:"",
     placeId: json["place_id"],
     types: List<String>.from(json["types"].map((x) => x)),
   );

@@ -25,7 +25,7 @@ class DirectionModel {
   factory DirectionModel.fromJson(Map<String, dynamic> json) => DirectionModel(
     geocodedWaypoints: List<GeocodedWaypoint>.from(json["geocoded_waypoints"].map((x) => GeocodedWaypoint.fromJson(x))),
     routes: List<Route>.from(json["routes"].map((x) => Route.fromJson(x))),
-    status: json["status"],
+    status: json["status"] !=""? json["status"]:"",
   );
 
   Map<String, dynamic> toJson() => {

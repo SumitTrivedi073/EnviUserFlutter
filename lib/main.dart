@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'appConfig/Profiledata.dart';
 import 'database/database.dart';
 import 'login/login.dart';
 import 'dart:convert' as convert;
@@ -76,13 +77,15 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString(LoginID) == null) {
+    if (sharedPreferences.getString(loginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
+
     } else {
       GetAllFavouriteAddress();
       getLandingPageSettings();
+      SetProfileData();
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>()
           .listenToLiveUpdateStream();
@@ -94,7 +97,15 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         MaterialPageRoute(builder: (BuildContext context) =>  MapDirectionWidget()),
             (Route<dynamic> route) => false);*/
   }
-
+void SetProfileData(){
+  Profiledata.setusreid(sharedPreferences.getString(loginID)??"");
+  Profiledata.settoken(sharedPreferences.getString(loginToken)??"");
+  Profiledata.setmailid(sharedPreferences.getString(loginEmail)??"");
+  Profiledata.setpropic(sharedPreferences.getString(loginpropic)??"");
+  Profiledata.setphone(sharedPreferences.getString(loginPhone)??"");
+  Profiledata.setgender(sharedPreferences.getString(logingender)??"");
+  Profiledata.setname(sharedPreferences.getString(loginName)??"");
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,8 +174,8 @@ LandingPageConfig.setisOnMaintainance(jsonData['landingPageSettings']['isOnMaint
         .build();
     final dao = database.taskDao;
 
-dynamic userid =sharedPreferences.getString(LoginID);
-    dynamic response = await HTTP.get(GetAllFavouriteAddressdata(userid));
+
+    dynamic response = await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
     if (response != null && response.statusCode == 200) {
 
       List<dynamic>   jsonData = convert.jsonDecode(response.body)['content']['address'];
