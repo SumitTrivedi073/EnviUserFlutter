@@ -82,10 +82,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     dao = database.taskDao;
   }
 
-  // checkAddressForNull(SearchPlaceModel fromAddr, toAddr) {
-  //   if (fromAddr.address == '') {}
-  // }
-
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
     sharedPreferences = await SharedPreferences.getInstance();
     dynamic userid = sharedPreferences.getString(LoginID);
@@ -379,7 +375,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             searchPlaceList = [];
                           });
                           if (ToLocationText.text == '') {
-                            startingAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -394,11 +391,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              startingAddress = result[0];
+                            }
+
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
                           } else {
-                            startingAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -413,6 +418,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              startingAddress = result[0];
+                            }
+
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
@@ -433,8 +445,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             searchPlaceList = [];
                           });
                           if (FromLocationText.text == '') {
-                            areBothAddressConfirmed = false;
-                            endAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -449,11 +461,18 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              endAddress = result[0];
+                            }
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
                           } else {
-                            endAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -468,6 +487,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              endAddress = result[0];
+                            }
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
@@ -497,7 +522,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             searchPlaceList = [];
                           });
                           if (ToLocationText.text == '') {
-                            startingAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -512,11 +538,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              startingAddress = result[0];
+                            }
+
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
                           } else {
-                            startingAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -531,6 +565,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              startingAddress = result[0];
+                            }
+
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
@@ -543,7 +584,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             searchPlaceList = [];
                           });
                           if (FromLocationText.text == '') {
-                            endAddress = await Navigator.of(context)
+                            var result;
+
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -558,11 +601,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              endAddress = result[0];
+                            }
+
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
                           } else {
-                            endAddress = await Navigator.of(context)
+                            var result;
+                            result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
@@ -577,6 +628,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+                            if (result.length == 2) {
+                              startingAddress = result[0];
+                              endAddress = result[1];
+                            } else {
+                              endAddress = result[0];
+                            }
+
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
@@ -796,77 +854,3 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     );
   }
 }
-  // (startingAddress != null &&
-            //         endAddress != null &&
-            //         FromLocationText.text != '' &&
-            //         ToLocationText.text != '')
-            //     ? Container(
-            //         height: 40,
-            //         margin: const EdgeInsets.all(5),
-            //         width: double.infinity,
-            //         child: ElevatedButton(
-            //           onPressed: () async {
-            //             searchPlaceList = [];
-            //             var detail =
-            //                 await dao.findDataByaddressg(FromLocationText.text);
-            //             if (detail == null) {
-            //               apiCallAddFavorite(startingAddress);
-            //             } else {
-            //               apiCallUpdateFavorite(
-            //                   detail.id,
-            //                   detail.title,
-            //                   startingAddress,
-            //                   detail.identifier,
-            //                   detail.isFavourite);
-            //             }
-            //             var toDetail =
-            //                 await dao.findDataByaddressg(ToLocationText.text);
-            //             if (toDetail == null) {
-            //               apiCallAddFavoritetoaddress(endAddress);
-            //             } else {
-            //               apiCallUpdateFavoritetoaddress(
-            //                   toDetail.id,
-            //                   toDetail.title,
-            //                   endAddress,
-            //                   toDetail.identifier,
-            //                   toDetail.isFavourite);
-            //             }
-
-            //             if (widget.tripType == BookingTiming.now) {
-            //               Navigator.of(context).pushAndRemoveUntil(
-            //                   MaterialPageRoute(
-            //                       builder: (BuildContext context) =>
-            //                           SearchDriver(
-            //                             fromAddress: startingAddress ??
-            //                                 widget.currentLocation,
-            //                             toAddress: endAddress,
-            //                           )),
-            //                   (Route<dynamic> route) => true);
-            //             } else {
-            //               Navigator.of(context).pushAndRemoveUntil(
-            //                   MaterialPageRoute(
-            //                       builder: (BuildContext context) =>
-            //                           BookScheduleTrip(
-            //                             fromAddress: startingAddress ??
-            //                                 widget.currentLocation,
-            //                             toAddress: endAddress,
-            //                           )),
-            //                   (Route<dynamic> route) => true);
-            //             }
-            //           },
-            //           style: ElevatedButton.styleFrom(
-            //             primary: AppColor.greyblack,
-            //             shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(12), // <-- Radius
-            //             ),
-            //           ),
-            //           child: robotoTextWidget(
-            //             textval: continuebut,
-            //             colorval: AppColor.white,
-            //             sizeval: 14,
-            //             fontWeight: FontWeight.w600,
-            //           ),
-            //         ))
-            //     : const SizedBox(
-            //         height: 20,
-            //       )

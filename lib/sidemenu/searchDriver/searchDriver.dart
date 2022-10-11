@@ -38,7 +38,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
         AppBarInsideWidget(
             onPressBack: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pop(context,[widget.fromAddress,widget.toAddress]);
             },
             title: "Envi"),
         const SizedBox(height: 5),

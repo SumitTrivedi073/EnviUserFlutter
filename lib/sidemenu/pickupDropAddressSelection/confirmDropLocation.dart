@@ -384,16 +384,15 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             child: ElevatedButton(
               onPressed: () {
                 if (widget.status == AddressConfirmation.bothUnconfirmed) {
-                  Navigator.pop(
-                    context,
-                    SearchPlaceModel(
+                  List<SearchPlaceModel> att = [];
+                  att.add( SearchPlaceModel(
                       id: '',
                       address: Address,
                       title: toAddressName!,
                       latLng: latlong,
                       isFavourite: isFavourite,
-                    ),
-                  );
+                    ));
+                  Navigator.pop(context, att);
                 } else {
                   if (widget.status ==
                       AddressConfirmation.fromAddressConfirmed) {
