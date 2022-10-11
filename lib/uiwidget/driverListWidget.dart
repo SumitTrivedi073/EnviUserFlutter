@@ -22,7 +22,8 @@ class DriverListItem extends StatefulWidget {
   final SearchPlaceModel? toAddress;
   final void Function(String) callback;
 
-  const DriverListItem({Key? key, this.toAddress, this.fromAddress, required this.callback})
+  const DriverListItem(
+      {Key? key, this.toAddress, this.fromAddress, required this.callback})
       : super(key: key);
 
   @override
@@ -38,6 +39,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   late SharedPreferences sharedPreferences;
   int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -65,10 +67,15 @@ class DriverListItemPageState extends State<DriverListItem> {
         "longitude": widget.toAddress!.latLng.longitude
       },
     };
+    setState(() {
+      isLoading = true;
+    });
 
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
+        isLoading = false;
+
         DriverList = (jsonDecode(res.body)['content'] as List)
             .map((i) => Content.fromJson(i))
             .toList();
@@ -80,9 +87,12 @@ class DriverListItemPageState extends State<DriverListItem> {
 
         distance = Distance.fromJson(jsonDecode(res.body)['distance']);
         widget.callback(distance.text.toString());
-
       });
     } else {
+      setState(() {
+        isLoading = false;
+      });
+
       throw "Can't get DriverList.";
     }
   }
@@ -90,9 +100,12 @@ class DriverListItemPageState extends State<DriverListItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    if(DriverList.isNotEmpty) {
-      return Expanded(
-          child: Card(
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Expanded(
+            child: Card(
             elevation: 5,
             margin: const EdgeInsets.all(5),
             child: Column(
@@ -165,16 +178,16 @@ class DriverListItemPageState extends State<DriverListItem> {
                 ),
                 Expanded(
                     child: CarouselSlider(
-                      items: List.generate(
-                          DriverList.length, (index) => driverListItems(index)),
-                      carouselController: carouselController,
-                      options: CarouselOptions(
-                        onPageChanged: (index, reason) {
-                          selectedIndex = index;
-                        },
-                        autoPlay: false,
-                      ),
-                    )),
+                  items: List.generate(
+                      DriverList.length, (index) => driverListItems(index)),
+                  carouselController: carouselController,
+                  options: CarouselOptions(
+                    onPageChanged: (index, reason) {
+                      selectedIndex = index;
+                    },
+                    autoPlay: false,
+                  ),
+                )),
                 Container(
                     height: 40,
                     margin: const EdgeInsets.all(5),
@@ -187,11 +200,11 @@ class DriverListItemPageState extends State<DriverListItem> {
                                     ConfirmDriver(
                                       driverDetail: DriverList[selectedIndex!],
                                       priceDetail:
-                                      vehiclePriceClasses[selectedIndex!],
+                                          vehiclePriceClasses[selectedIndex!],
                                       fromAddress: widget.fromAddress,
                                       toAddress: widget.toAddress,
                                     )),
-                                (Route<dynamic> route) => false);
+                            (Route<dynamic> route) => false);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
@@ -209,10 +222,6 @@ class DriverListItemPageState extends State<DriverListItem> {
               ],
             ),
           ));
-    }
-    return Center(
-      child: CircularProgressIndicator(),
-    );
   }
 
   Widget driverListItems(int index) {
@@ -223,15 +232,22 @@ class DriverListItemPageState extends State<DriverListItem> {
       child: Card(
         margin: const EdgeInsets.all(5),
         color: const Color(0xFFE4F3F5),
+        shape: selectedIndex != null
+            ? RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.green, width: 2.0),
+                borderRadius: BorderRadius.circular(5.0))
+            : RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(4),
             child: Column(
               children: [
                 Row(
                   children: [
                     robotoTextWidget(
                         textval:
-                        '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                            ' ${DriverList[index].durationToPickUpLocation} Minutes Away',
                         colorval: AppColor.black,
                         sizeval: 16,
                         fontWeight: FontWeight.w600),
@@ -239,14 +255,14 @@ class DriverListItemPageState extends State<DriverListItem> {
                       children: [
                         RatingBar.builder(
                           initialRating:
-                          DriverList[index].driverRating!.toDouble(),
+                              DriverList[index].driverRating!.toDouble(),
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
                           itemCount: 5,
                           itemSize: 14,
                           itemPadding:
-                          const EdgeInsets.symmetric(horizontal: 2.0),
+                              const EdgeInsets.symmetric(horizontal: 2.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: Colors.amber,
@@ -260,7 +276,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             DriverList[index].driverPhoto ?? '',
                             fit: BoxFit.fill,
                             height: 40,
-                            width: 50,
+                            width: 45,
                           ),
                         )
                       ],
@@ -281,7 +297,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                       children: [
                         robotoTextWidget(
                             textval:
-                            DriverList[index].priceClass!.type.toString(),
+                                DriverList[index].priceClass!.type.toString(),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w200),
@@ -299,7 +315,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                                 ),
                                 robotoTextWidget(
                                     textval:
-                                    "${DriverList[index].priceClass!.passengerCapacity} People",
+                                        "${DriverList[index].priceClass!.passengerCapacity} People",
                                     colorval: AppColor.black,
                                     sizeval: 14,
                                     fontWeight: FontWeight.w200)
@@ -343,7 +359,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval: estimateFare,
+                        textval: ' $estimateFare',
                         colorval: AppColor.darkgrey,
                         sizeval: 12,
                         fontWeight: FontWeight.w600),
@@ -364,7 +380,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                        "₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                            " ₹${vehiclePriceClasses[index].priceClass.totalFare}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -403,7 +419,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             fontWeight: FontWeight.w800),
                         robotoTextWidget(
                             textval:
-                            '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
+                                '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
                             colorval: AppColor.purple,
                             sizeval: 13,
                             fontWeight: FontWeight.w400),

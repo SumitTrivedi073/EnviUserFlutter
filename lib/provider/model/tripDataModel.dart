@@ -140,7 +140,7 @@ class TripInfo {
   String otp;
   DropLocation dropLocation;
   PickupLocation pickupLocation;
-  ArrivalAtDestination arrivalAtDestination;
+  ArrivalAtDestination? arrivalAtDestination;
 
   factory TripInfo.fromJson(Map<String, dynamic> json) => TripInfo(
         priceClass: PriceClass.fromJson(json["priceClass"]),
@@ -152,8 +152,7 @@ class TripInfo {
         otp: json["otp"],
         dropLocation: DropLocation.fromJson(json["dropLocation"]),
         pickupLocation: PickupLocation.fromJson(json["pickupLocation"]),
-        arrivalAtDestination:
-            ArrivalAtDestination.fromJson(json["arrivalAtDestination"]),
+        arrivalAtDestination: json["arrivalAtDestination"] != null ? ArrivalAtDestination.fromJson(json["arrivalAtDestination"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -166,7 +165,7 @@ class TripInfo {
         "otp": otp,
         "dropLocation": dropLocation.toJson(),
         "pickupLocation": pickupLocation.toJson(),
-        "arrivalAtDestination": arrivalAtDestination.toJson(),
+        "arrivalAtDestination": arrivalAtDestination!.toJson(),
       };
 }
 

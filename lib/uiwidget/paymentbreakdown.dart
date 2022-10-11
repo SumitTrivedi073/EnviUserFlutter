@@ -32,16 +32,16 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
   @override
   Widget build(BuildContext context) {
 
-   int totalTex = widget.livetripData!.tripInfo.arrivalAtDestination.cgst.toInt() + widget.livetripData!.tripInfo.arrivalAtDestination.sgst.toInt();
+   int totalTex = widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toInt() + widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toInt();
 
     List<String> breakDownVals = [
-      widget.livetripData!.tripInfo.arrivalAtDestination.distanceTravelled.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination.perKMPrice.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination.kmFare.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination.discount.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination.tollAmount.toString(),
+      widget.livetripData!.tripInfo.arrivalAtDestination!.distanceTravelled.toString(),
+      widget.livetripData!.tripInfo.arrivalAtDestination!.perKMPrice.toString(),
+      widget.livetripData!.tripInfo.arrivalAtDestination!.kmFare.toString(),
+      widget.livetripData!.tripInfo.arrivalAtDestination!.discount.toString(),
+      widget.livetripData!.tripInfo.arrivalAtDestination!.tollAmount.toString(),
       totalTex.toString()!=null?totalTex.toString():'0',
-      widget.livetripData!.tripInfo.arrivalAtDestination.amountTobeCollected.toString(),
+      widget.livetripData!.tripInfo.arrivalAtDestination!.amountTobeCollected.toString(),
     ];
     // TODO: implement build
     return Container(
@@ -70,7 +70,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                       fontWeight: FontWeight.w400),
                   trailing: robotoTextWidget(
                       textval: widget
-                          .livetripData!.tripInfo.arrivalAtDestination.amountTobeCollected
+                          .livetripData!.tripInfo.arrivalAtDestination!.amountTobeCollected
                           .toString(),
                       colorval: AppColor.darkGreen,
                       sizeval: 20,
