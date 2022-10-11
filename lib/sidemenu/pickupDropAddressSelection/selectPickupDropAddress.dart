@@ -39,6 +39,7 @@ class SelectPickupDropAddress extends StatefulWidget {
       : super(key: key);
   final String title;
   final SearchPlaceModel? currentLocation;
+
   final BookingTiming tripType;
 
   @override
@@ -47,6 +48,7 @@ class SelectPickupDropAddress extends StatefulWidget {
 }
 
 class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
+  bool areBothAddressConfirmed = false;
   List<SearchPlaceModel> searchPlaceList = [];
   SearchPlaceModel? startingAddress;
   SearchPlaceModel? endAddress;
@@ -79,6 +81,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     dao = database.taskDao;
   }
+
+  // checkAddressForNull(SearchPlaceModel fromAddr, toAddr) {
+  //   if (fromAddr.address == '') {}
+  // }
 
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -371,22 +377,45 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             // _isVisible = false;
                             searchPlaceList = [];
                           });
-                          startingAddress = await Navigator.of(context)
-                              .pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ConfirmDropLocation(
-                                            location: startingAddress,
-                                            title: confirmLocationText,
-                                            isFavourite: isFavourite.toString(),
-                                          )),
-                                  (Route<dynamic> route) => true);
-                          setState(() {
-                            FromLocationText.text = startingAddress!.address;
-
-                            // _isVisible = false;
-                            // searchPlaceList = [];
-                          });
+                          if (ToLocationText.text == '') {
+                            startingAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              title: confirmLocationText,
+                                              endLocation: endAddress,
+                                              status: AddressConfirmation
+                                                  .bothUnconfirmed,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              FromLocationText.text = startingAddress!.address;
+                            });
+                          } else {
+                            startingAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              title: confirmLocationText,
+                                              endLocation: endAddress,
+                                              status: AddressConfirmation
+                                                  .toAddressConfirmed,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              FromLocationText.text = startingAddress!.address;
+                            });
+                          }
                         } else {
                           setState(() {
                             // endPosition = details.result;
@@ -402,20 +431,59 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 isFavourite: 'N');
                             searchPlaceList = [];
                           });
-
-                          endAddress = await Navigator.of(context)
-                              .pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ConfirmDropLocation(
-                                            location: endAddress,
-                                            title: confirmLocationText,
-                                            isFavourite: isFavourite.toString(),
-                                          )),
-                                  (Route<dynamic> route) => true);
-                          setState(() {
-                            ToLocationText.text = endAddress!.address;
-                          });
+                          if (FromLocationText.text == '') {
+                            areBothAddressConfirmed = false;
+                            endAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              status: AddressConfirmation
+                                                  .bothUnconfirmed,
+                                              endLocation: endAddress,
+                                              title: confirmLocationText,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              ToLocationText.text = endAddress!.address;
+                            });
+                          } else {
+                            endAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              status: AddressConfirmation
+                                                  .fromAddressConfirmed,
+                                              endLocation: endAddress,
+                                              title: confirmLocationText,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              ToLocationText.text = endAddress!.address;
+                            });
+                          }
+                          // endAddress = await Navigator.of(context)
+                          //     .pushAndRemoveUntil(
+                          //         MaterialPageRoute(
+                          //             builder: (BuildContext context) =>
+                          //                 ConfirmDropLocation(
+                          //                   location: endAddress,
+                          //                   title: confirmLocationText,
+                          //                   isFavourite: isFavourite.toString(),
+                          //                 )),
+                          //         (Route<dynamic> route) => true);
+                          // setState(() {
+                          //   ToLocationText.text = endAddress!.address;
+                          // });
                         }
                       }
                     } else {
@@ -427,21 +495,45 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             startingAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
-
-                          startingAddress = await Navigator.of(context)
-                              .pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ConfirmDropLocation(
-                                            location: startingAddress,
-                                            title: confirmLocationText,
-                                            isFavourite: isFavourite.toString(),
-                                          )),
-                                  (Route<dynamic> route) => true);
-                          setState(() {
-                            FromLocationText.text = startingAddress!.address;
-                          });
-
+                          if (ToLocationText.text == '') {
+                            startingAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              title: confirmLocationText,
+                                              endLocation: endAddress,
+                                              status: AddressConfirmation
+                                                  .bothUnconfirmed,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              FromLocationText.text = startingAddress!.address;
+                            });
+                          } else {
+                            startingAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              title: confirmLocationText,
+                                              endLocation: endAddress,
+                                              status: AddressConfirmation
+                                                  .toAddressConfirmed,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              FromLocationText.text = startingAddress!.address;
+                            });
+                          }
                         } else {
                           setState(() {
                             ToLocationText.text =
@@ -449,21 +541,46 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             endAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
-
-                          endAddress = await Navigator.of(context)
-                              .pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ConfirmDropLocation(
-                                            location: endAddress,
-                                            title: confirmLocationText,
-                                            isFavourite: isFavourite.toString(),
-                                          )),
-                                  (Route<dynamic> route) => true);
-                          setState(() {
-                            ToLocationText.text = endAddress!.address;
-                          });
-       }
+                          if (FromLocationText.text == '') {
+                            endAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              status: AddressConfirmation
+                                                  .bothUnconfirmed,
+                                              endLocation: endAddress,
+                                              title: confirmLocationText,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              ToLocationText.text = endAddress!.address;
+                            });
+                          } else {
+                            endAddress = await Navigator.of(context)
+                                .pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ConfirmDropLocation(
+                                              tripType: widget.tripType,
+                                              startLocation: startingAddress,
+                                              status: AddressConfirmation
+                                                  .fromAddressConfirmed,
+                                              endLocation: endAddress,
+                                              title: confirmLocationText,
+                                              isFavourite:
+                                                  isFavourite.toString(),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                            setState(() {
+                              ToLocationText.text = endAddress!.address;
+                            });
+                          }
+                        }
                       }
                     }
                   },
@@ -498,80 +615,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               padding: const EdgeInsets.all(8),
             )),
             (searchPlaceList.isEmpty) ? const Spacer() : const SizedBox(),
-            (startingAddress != null &&
-                    endAddress != null &&
-                    FromLocationText.text != '' &&
-                    ToLocationText.text != '')
-                ? Container(
-                    height: 40,
-                    margin: const EdgeInsets.all(5),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        searchPlaceList = [];
-                        var detail =
-                            await dao.findDataByaddressg(FromLocationText.text);
-                        if (detail == null) {
-                          apiCallAddFavorite(startingAddress);
-                        } else {
-                          apiCallUpdateFavorite(
-                              detail.id,
-                              detail.title,
-                              startingAddress,
-                              detail.identifier,
-                              detail.isFavourite);
-                        }
-                        var toDetail =
-                            await dao.findDataByaddressg(ToLocationText.text);
-                        if (toDetail == null) {
-                          apiCallAddFavoritetoaddress(endAddress);
-                        } else {
-                          apiCallUpdateFavoritetoaddress(
-                              toDetail.id,
-                              toDetail.title,
-                              endAddress,
-                              toDetail.identifier,
-                              toDetail.isFavourite);
-                        }
-
-                        if (widget.tripType == BookingTiming.now) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      SearchDriver(
-                                        fromAddress: startingAddress ??
-                                            widget.currentLocation,
-                                        toAddress: endAddress,
-                                      )),
-                              (Route<dynamic> route) => true);
-                        } else {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      BookScheduleTrip(
-                                        fromAddress: startingAddress ??
-                                            widget.currentLocation,
-                                        toAddress: endAddress,
-                                      )),
-                              (Route<dynamic> route) => true);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.greyblack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: continuebut,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ))
-                : const SizedBox(
-                    height: 20,
-                  )
           ],
         ),
       ),
@@ -705,6 +748,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               : null),
     );
   }
+
   Widget ToTextWidget() {
     return TextField(
       // onSubmitted: (val) {},
@@ -751,3 +795,77 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     );
   }
 }
+  // (startingAddress != null &&
+            //         endAddress != null &&
+            //         FromLocationText.text != '' &&
+            //         ToLocationText.text != '')
+            //     ? Container(
+            //         height: 40,
+            //         margin: const EdgeInsets.all(5),
+            //         width: double.infinity,
+            //         child: ElevatedButton(
+            //           onPressed: () async {
+            //             searchPlaceList = [];
+            //             var detail =
+            //                 await dao.findDataByaddressg(FromLocationText.text);
+            //             if (detail == null) {
+            //               apiCallAddFavorite(startingAddress);
+            //             } else {
+            //               apiCallUpdateFavorite(
+            //                   detail.id,
+            //                   detail.title,
+            //                   startingAddress,
+            //                   detail.identifier,
+            //                   detail.isFavourite);
+            //             }
+            //             var toDetail =
+            //                 await dao.findDataByaddressg(ToLocationText.text);
+            //             if (toDetail == null) {
+            //               apiCallAddFavoritetoaddress(endAddress);
+            //             } else {
+            //               apiCallUpdateFavoritetoaddress(
+            //                   toDetail.id,
+            //                   toDetail.title,
+            //                   endAddress,
+            //                   toDetail.identifier,
+            //                   toDetail.isFavourite);
+            //             }
+
+            //             if (widget.tripType == BookingTiming.now) {
+            //               Navigator.of(context).pushAndRemoveUntil(
+            //                   MaterialPageRoute(
+            //                       builder: (BuildContext context) =>
+            //                           SearchDriver(
+            //                             fromAddress: startingAddress ??
+            //                                 widget.currentLocation,
+            //                             toAddress: endAddress,
+            //                           )),
+            //                   (Route<dynamic> route) => true);
+            //             } else {
+            //               Navigator.of(context).pushAndRemoveUntil(
+            //                   MaterialPageRoute(
+            //                       builder: (BuildContext context) =>
+            //                           BookScheduleTrip(
+            //                             fromAddress: startingAddress ??
+            //                                 widget.currentLocation,
+            //                             toAddress: endAddress,
+            //                           )),
+            //                   (Route<dynamic> route) => true);
+            //             }
+            //           },
+            //           style: ElevatedButton.styleFrom(
+            //             primary: AppColor.greyblack,
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(12), // <-- Radius
+            //             ),
+            //           ),
+            //           child: robotoTextWidget(
+            //             textval: continuebut,
+            //             colorval: AppColor.white,
+            //             sizeval: 14,
+            //             fontWeight: FontWeight.w600,
+            //           ),
+            //         ))
+            //     : const SizedBox(
+            //         height: 20,
+            //       )

@@ -8,10 +8,14 @@ import '../web_service/Constant.dart';
 
 class AppBarInsideWidget extends StatefulWidget {
   const AppBarInsideWidget(
-      {Key? key, required this.title, this.isBackButtonNeeded = true})
+      {Key? key,
+      required this.title,
+      this.isBackButtonNeeded = true,
+      this.onPressBack})
       : super(key: key);
   final String title;
   final bool isBackButtonNeeded;
+  final dynamic onPressBack;
   @override
   State<StatefulWidget> createState() => _AppBarInsidePageState();
 }
@@ -35,7 +39,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      margin: const EdgeInsets.only(top: 30,left: 10,right: 10),
+      margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
       child: Stack(
         children: <Widget>[
           Card(
@@ -51,10 +55,10 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                           width: 22,
                           height: 24,
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      )
+                        onPressed: widget.onPressBack ??
+                            () {
+                              Navigator.pop(context);
+                            })
                     : SizedBox(),
                 robotoTextWidget(
                   textval: widget.title,
