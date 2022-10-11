@@ -5,7 +5,6 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../appConfig/Profiledata.dart';
 import '../provider/model/tripDataModel.dart';

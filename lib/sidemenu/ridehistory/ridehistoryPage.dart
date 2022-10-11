@@ -4,7 +4,6 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../appConfig/Profiledata.dart';

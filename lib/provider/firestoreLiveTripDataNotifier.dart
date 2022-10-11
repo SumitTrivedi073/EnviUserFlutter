@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../appConfig/Profiledata.dart';
 import '../utils/utility.dart';
@@ -13,10 +12,9 @@ import 'model/tripDataModel.dart';
 
 class firestoreLiveTripDataNotifier extends ChangeNotifier {
   TripDataModel? liveTripData;
-  late SharedPreferences sharedPreferences;
 
   Future<void> listenToLiveUpdateStream() async {
-    sharedPreferences = await SharedPreferences.getInstance();
+
     String liveUpdatecollectionName =
         'user/${Profiledata().getusreid()}/running-trip';
     final CollectionReference collectionRef =

@@ -4,7 +4,6 @@ import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';

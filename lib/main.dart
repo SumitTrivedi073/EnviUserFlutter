@@ -83,9 +83,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
               (Route<dynamic> route) => false);
 
     } else {
+      SetProfileData();
       GetAllFavouriteAddress();
       getLandingPageSettings();
-      SetProfileData();
+
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>()
           .listenToLiveUpdateStream();

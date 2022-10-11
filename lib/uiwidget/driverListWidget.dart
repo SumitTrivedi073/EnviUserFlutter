@@ -9,7 +9,6 @@ import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../appConfig/Profiledata.dart';

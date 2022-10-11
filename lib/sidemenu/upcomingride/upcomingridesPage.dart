@@ -4,7 +4,6 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../theme/string.dart';
 import '../../../uiwidget/robotoTextWidget.dart';
@@ -57,7 +56,7 @@ print(userId);
     if (res.statusCode == 200) {
       setState(() {
 
-        if(jsonDecode(res.body)['content']['schedule_trip_list'] !=null) {
+        if(jsonDecode(res.body)['schedule_trip_list'] !=null) {
           arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
               .map((i) => ScheduleTripModel.fromJson(i))
               .toList();
