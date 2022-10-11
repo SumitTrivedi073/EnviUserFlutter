@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/payment/models/payment_type.dart';
 import 'package:envi/web_service/payment.dart';
 import 'package:flutter/material.dart';
@@ -147,8 +148,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
                 paymentBreakDown(breakDownVals),
                 PaymentModeOptionWidget(
-                  strpaymentOptions: "qr_code,online,cash",
-                  selectedOption: "qr_code",
+                  strpaymentOptions: AppConfig().getpaymentOptions(),
+                  selectedOption: AppConfig().getdefaultPaymentMode(),
                   callback: selectedOption,
                 ),
                 Container(

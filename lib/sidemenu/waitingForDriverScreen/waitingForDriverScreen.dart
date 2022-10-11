@@ -28,7 +28,7 @@ class WaitingForDriverScreen extends StatefulWidget {
 
 class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
 
-  late String duration = "5 Minute";
+  late String duration = "0 Minute";
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -36,7 +36,6 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
       body: Center(
         child: Consumer<firestoreLiveTripDataNotifier>(
           builder: (context, value, child) {
-            if (value.liveTripData != null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (value.liveTripData!.tripInfo.tripStatus ==
                     TripStatusOnboarding) {
@@ -54,7 +53,8 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                           (Route<dynamic> route) => false);
                 }
               });
-              return Scaffold(
+              return value.liveTripData != null
+                  ? Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
                 MapDirectionWidgetPickup(
                   key: widget._key,
@@ -76,13 +76,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                   DriverDetailWidget(duration: duration,),
                   FromToData(value.liveTripData!),
                 ]),
-              ]));
+              ])):Container();
             }
-              return  Container(
-                child: CircularProgressIndicator(),
-              );
 
-          },
         ),
       ),
     );

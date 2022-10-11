@@ -36,17 +36,3 @@ class UserApiService {
     }
   }
 }
-
-
-
-// Future<String> uploadImage(filepath, url) async {
-//     var request = http.MultipartRequest('POST', Uri.parse(url));
-//     request.files.add(
-//         http.MultipartFile.fromBytes(
-//             'picture',
-//             File(filepath).readAsBytesSync(),
-//             filename: filepath.split("/").last
-//         )
-//     );
-//     var res = await request.send();
-//   }

@@ -41,6 +41,10 @@ getBaseURL() {
 userLogin() {
   return Uri.parse('${getBaseURL()}/login/userLogin');
 }
+userLogout() {
+  return Uri.parse('${getBaseURL()}/user/userLogout');
+}
+
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }
@@ -68,11 +72,18 @@ SosApi() {
   return Uri.parse('${getBaseURL()}/user/sos');
 }
 
+SendInvoice() {
+  return Uri.parse('${getBaseURL()}/userTrip/resendInvoice');
+}
+
 EditFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
 }
 AddFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
+}
+getScheduleEstimation(){
+  return Uri.parse('${getBaseURL()}/userTrip/getScheduleEstimation');
 }
 DeleteFavouriteAddressdata(){
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');

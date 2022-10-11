@@ -1,31 +1,20 @@
 // ignore: file_names
-import 'dart:convert';
-
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
-import 'package:envi/theme/string.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/fromtowidget.dart';
 import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidget.dart';
-import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../../theme/color.dart';
+
 import '../../uiwidget/driverListWidget.dart';
-import '../../uiwidget/robotoTextWidget.dart';
-import '../../../../web_service/HTTP.dart' as HTTP;
-import '../../web_service/APIDirectory.dart';
-import 'model/driverListModel.dart';
 
 class SearchDriver extends StatefulWidget {
   final GlobalKey<DriverListItemPageState> _key = GlobalKey();
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
-   SearchDriver({Key? key, this.toAddress, this.fromAddress})
-      : super(key: key);
+  SearchDriver({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
 
   @override
   // TODO: implement createState
@@ -46,14 +35,21 @@ class _SearchDriverPageState extends State<SearchDriver> {
         toAddress: widget.toAddress,
       ),
       Column(children: [
-        const AppBarInsideWidget(title: "Envi"),
+        AppBarInsideWidget(
+            onPressBack: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            title: "Envi"),
         const SizedBox(height: 5),
         FromToWidget(
-      fromAddress: widget.fromAddress,
-      toAddress: widget.toAddress,
-        distance: distance,),
+          fromAddress: widget.fromAddress,
+          toAddress: widget.toAddress,
+          distance: distance,
+          tripType: BookingTiming.now,
+        ),
         const SizedBox(height: 230),
-       DriverListItem(
+        DriverListItem(
           key: widget._key,
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
@@ -62,9 +58,10 @@ class _SearchDriverPageState extends State<SearchDriver> {
       ]),
     ]));
   }
-  retrieveDistance(String distanceInKm){
-   setState(() {
-     distance = distanceInKm;
-   });
+
+  retrieveDistance(String distanceInKm) {
+    setState(() {
+      distance = distanceInKm;
+    });
   }
 }
