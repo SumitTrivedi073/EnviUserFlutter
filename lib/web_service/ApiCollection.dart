@@ -76,7 +76,7 @@ class ApiCollection {
     return res;
   }
   static Future<dynamic> AddnewSchedualeTrip(
-       fromLocation,  toLocation, scheduledAt,estimatedPrice,estimatedDistance) async {
+       fromLocation,  toLocation, scheduledAt,estimatedPrice,estimatedDistance,sku_id) async {
 
     Map data = {
       "from_address": fromLocation.address,
@@ -87,7 +87,8 @@ class ApiCollection {
       "to_longitude": toLocation.latLng.longitude,
       "scheduledAt":scheduledAt,
       "estimatedPrice": estimatedPrice,
-      "estimatedDistance": estimatedDistance
+      "estimatedDistance": estimatedDistance,
+      "sku_id":sku_id,
     };
     print(data);
     dynamic res = await HTTP.post(AddSchedualeTrip(), data);

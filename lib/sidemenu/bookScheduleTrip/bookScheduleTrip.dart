@@ -542,6 +542,7 @@ print(outputDate);
       outputDate,
         SelectedVehicle.total_fare,
         SelectedVehicle.distance,
+      SelectedVehicle.sku_id
        );
 
     if (response != null) {
