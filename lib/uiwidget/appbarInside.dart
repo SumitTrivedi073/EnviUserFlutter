@@ -63,7 +63,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                 ),
                 Card(
                     color: AppColor.greyblack,
-                  child: getsmallNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
+                    child: getsmallNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
                 )
               ],
             ),
