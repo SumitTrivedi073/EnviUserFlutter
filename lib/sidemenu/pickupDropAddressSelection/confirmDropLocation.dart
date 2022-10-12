@@ -429,7 +429,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                       title: toAddressName!,
                                       address: Address,
                                       latLng: latlong,
-                                      isFavourite: 'N',
+                                      isFavourite: widget.endLocation!.isFavourite,
                                     )
 
                                     // ToAddressLatLong(
@@ -449,7 +449,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                         title: toAddressName!,
                                         address: Address,
                                         latLng: latlong,
-                                        isFavourite: 'N',
+                                        isFavourite: widget.endLocation!.isFavourite,
                                       ),
                                     )),
                             (Route<dynamic> route) => true);
@@ -475,7 +475,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                       title: toAddressName!,
                                       address: Address,
                                       latLng: latlong,
-                                      isFavourite: 'N',
+                                      isFavourite: widget.startLocation!.isFavourite,
                                     )
 
                                     // ToAddressLatLong(
@@ -495,7 +495,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                           title: toAddressName!,
                                           address: Address,
                                           latLng: latlong,
-                                          isFavourite: 'N',
+                                          isFavourite: widget.startLocation!.isFavourite,
                                         ))),
                             (Route<dynamic> route) => true);
                       }

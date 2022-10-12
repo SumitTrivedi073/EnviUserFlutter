@@ -272,7 +272,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   void googleAPI(String value) {
-    _isVisible = true;
     useGoogleApi = true;
     getSuggestion(value);
   }
@@ -798,7 +797,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 _firstLoad(value);
             // googleAPI(value);
           } else {
-            getLocalSuggestions('');
             setState(() {
               searchPlaceList = [];
               //startPosition = null;

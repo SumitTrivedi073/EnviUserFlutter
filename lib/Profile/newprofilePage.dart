@@ -315,8 +315,9 @@ class _NewProfilePageState extends State<NewProfilePage> {
                         value: updatedSuccessText,
                         context: context,
                         duration: const Duration(seconds: 3));
-                    Future.delayed(const Duration(seconds: 4), () {
+                    Future.delayed(const Duration(seconds: 2), () {
                       Navigator.of(context).pop();
+                      setState(() {});
                     });
                   } else {
                     utility.showInSnackBar(

@@ -36,11 +36,13 @@ class _SearchDriverPageState extends State<SearchDriver> {
       ),
       Column(children: [
         AppBarInsideWidget(
-            onPressBack: () {
-              Navigator.pop(context);
-              Navigator.pop(context,[widget.fromAddress,widget.toAddress]);
-            },
-            title: "Envi",isBackButtonNeeded: true,),
+          onPressBack: () {
+            Navigator.pop(context);
+            Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+          },
+          title: "Envi",
+          isBackButtonNeeded: true,
+        ),
         const SizedBox(height: 5),
         FromToWidget(
           fromAddress: widget.fromAddress,
@@ -48,7 +50,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
           distance: distance,
           tripType: BookingTiming.now,
         ),
-        // const SizedBox(height: 250),
+        SizedBox(height: MediaQuery.of(context).size.height / 3),
         DriverListItem(
           key: widget._key,
           fromAddress: widget.fromAddress,
