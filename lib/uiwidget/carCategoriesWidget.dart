@@ -241,8 +241,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     ),
                     Text(
                       getTotalPrice(
-                          vehiclePriceClasses[index].total_fare!.toInt(),
-                          vehiclePriceClasses[index].seller_discount!.toInt()),
+                          vehiclePriceClasses[index].total_fare!.toDouble(),
+                          vehiclePriceClasses[index].seller_discount!.toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -279,12 +279,12 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
     );
   }
 
-  String getTotalPrice(int totalFare, int discount) {
-    int num1 = totalFare;
+  String getTotalPrice(double totalFare, double discount) {
+    double num1 = totalFare;
 
-    int num2 = discount;
+    double num2 = discount;
 
-    int sum = num1 + num2;
+    double sum = num1 + num2;
     print('sum:$sum');
     return "₹$sum";
   }

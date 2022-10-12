@@ -12,10 +12,12 @@ import '../utils/utility.dart';
 import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
-
   String duration;
 
-  DriverDetailWidget({Key? key, required this.duration,}) : super(key: key);
+  DriverDetailWidget({
+    Key? key,
+    required this.duration,
+  }) : super(key: key);
 
   @override
   // TODO: implement createState
@@ -25,7 +27,6 @@ class DriverDetailWidget extends StatefulWidget {
 class _DriverDetailWidgetState extends State<DriverDetailWidget> {
   bool isButtonPressed = false;
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -34,7 +35,7 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
         if (value.liveTripData == null) {
           return const CircularProgressIndicator();
         } else {
-          return  Container(
+          return Container(
             margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
             child: Card(
                 semanticContainer: true,
@@ -54,9 +55,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                             ClipRRect(
                                 borderRadius: BorderRadius.circular(50.0),
                                 child: Image.network(
-                                  value.liveTripData!.driverInfo.driverImgUrl.toString() != null
-                                      ? value.liveTripData!.driverInfo.driverImgUrl.toString()
-                                      : placeHolderImage,
+                                  encodeImgURLString(value
+                                      .liveTripData!.driverInfo.driverImgUrl),
                                   fit: BoxFit.fill,
                                   height: 50,
                                   width: 50,
@@ -69,15 +69,17 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   robotoTextWidget(
-                                    textval:
-                                    value.liveTripData!.driverInfo.name.toString() != null
-                                        ? value.liveTripData!.driverInfo.name.toString()
+                                    textval: value.liveTripData!.driverInfo.name
+                                                .toString() !=
+                                            null
+                                        ? value.liveTripData!.driverInfo.name
+                                            .toString()
                                         : '',
                                     colorval: AppColor.grey,
                                     sizeval: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                   robotoTextWidget(
+                                  robotoTextWidget(
                                     textval: "${widget.duration} Away",
                                     colorval: AppColor.black,
                                     sizeval: 18,
@@ -87,41 +89,47 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                           ],
                         ),
                       ),
-                      Stack(alignment: Alignment.centerRight, children: <Widget>[
-                        const SizedBox(
-                          height: 2,
-                          child: Divider(
-                            color: AppColor.grey,
-                            height: 2,
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: AppColor.lightwhite,
-                            border: Border.all(
-                                color: AppColor.grey, // Set border color
-                                width: 1.0), // Set border width
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(5.0)), // Set rounded corner radius
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.call,
-                                color: Colors.green,
+                      Stack(
+                          alignment: Alignment.centerRight,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 2,
+                              child: Divider(
+                                color: AppColor.grey,
+                                height: 2,
                               ),
-                              onPressed: () {
-                                makingPhoneCall(
-                                    value.liveTripData!.driverInfo.phone.toString() != null
-                                        ? value.liveTripData!.driverInfo.phone.toString()
-                                        : '');
-                              },
                             ),
-                          ),
-                        ),
-                      ]),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: AppColor.lightwhite,
+                                border: Border.all(
+                                    color: AppColor.grey, // Set border color
+                                    width: 1.0), // Set border width
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(
+                                        5.0)), // Set rounded corner radius
+                              ),
+                              child: Center(
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.call,
+                                    color: Colors.green,
+                                  ),
+                                  onPressed: () {
+                                    makingPhoneCall(value
+                                                .liveTripData!.driverInfo.phone
+                                                .toString() !=
+                                            null
+                                        ? value.liveTripData!.driverInfo.phone
+                                            .toString()
+                                        : '');
+                                  },
+                                ),
+                              ),
+                            ),
+                          ]),
                       Row(
                         children: [
                           SvgPicture.asset(
@@ -135,16 +143,22 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                           Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children:  [
+                              children: [
                                 robotoTextWidget(
-                                  textval: '${value.liveTripData!.tripInfo.priceClass.type.toString()} - ${value.liveTripData!.tripInfo.priceClass.passengerCapacity.toString()} People',
+                                  textval:
+                                      '${value.liveTripData!.tripInfo.priceClass.type.toString()} - ${value.liveTripData!.tripInfo.priceClass.passengerCapacity.toString()} People',
                                   colorval: AppColor.grey,
                                   sizeval: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
-                                 robotoTextWidget(
-                                  textval:  value.liveTripData!.driverInfo.vehicleNumber.toString() != null
-                                      ? value.liveTripData!.driverInfo.vehicleNumber.toString()
+                                robotoTextWidget(
+                                  textval: value.liveTripData!.driverInfo
+                                              .vehicleNumber
+                                              .toString() !=
+                                          null
+                                      ? value.liveTripData!.driverInfo
+                                          .vehicleNumber
+                                          .toString()
                                       : '',
                                   colorval: AppColor.black,
                                   sizeval: 18,
@@ -161,6 +175,4 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
       },
     );
   }
-
-
 }

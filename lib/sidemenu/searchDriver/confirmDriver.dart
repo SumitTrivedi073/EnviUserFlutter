@@ -376,7 +376,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
       },
       "paymentMode": "null",
       "driverName": widget.driverDetail!.driverName,
-      "driverRating": widget.driverDetail!.driverRating!.toInt(),
+      "driverRating": widget.driverDetail!.driverRating!.toDouble(),
       "driverPhoto": widget.driverDetail!.driverPhoto!.toString(),
       "initialPrice": widget.priceDetail!.priceClass.totalFare!.toDouble(),
       "initialDistance": widget.priceDetail!.priceClass.distance!.toDouble()
