@@ -1,5 +1,3 @@
-import 'package:envi/web_service/Constant.dart';
-
 class LoginModel {
   late String token;
   late String id,name,propic,gender,phone,mailid;
@@ -11,7 +9,7 @@ class LoginModel {
     token = json['token'];
     id = json['userid'];
     name = json['name'];
-    propic = json["propic"]!=null?imageServerurl+json["propic"]:placeHolderImage;
+    propic = json["propic"];
     gender = json["gender"];
     phone = json["phone"];
     mailid= json["mailid"];

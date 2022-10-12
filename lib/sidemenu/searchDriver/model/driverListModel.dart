@@ -210,25 +210,26 @@ class ContentPriceClass {
     required this.maxKmRange,
   });
 
-  String?  skuId;
-  String?  type;
-  String?  subcategory;
-  double?  perKmFare;
-  int?  minFare;
-  int?  passengerCapacity;
-  String?  bootSpace;
-  int?  maxKmRange;
+  String? skuId;
+  String? type;
+  String? subcategory;
+  double perKmFare;
+  double minFare;
+  int? passengerCapacity;
+  String? bootSpace;
+  double maxKmRange;
 
-  factory ContentPriceClass.fromJson(Map<String, dynamic> json) => ContentPriceClass(
-    skuId: json["sku_id"],
-    type: json["type"],
-    subcategory: json["subcategory"],
-    perKmFare: json["perKMFare"]??0.0,
-    minFare: json["minFare"],
-    passengerCapacity: json["passengerCapacity"] ?? 0,
-    bootSpace: json["bootSpace"] ?? "MEDIUM",
-    maxKmRange: json["maxKmRange"] ?? 150,
-  );
+  factory ContentPriceClass.fromJson(Map<String, dynamic> json) =>
+      ContentPriceClass(
+        skuId: json["sku_id"],
+        type: json["type"],
+        subcategory: json["subcategory"],
+        perKmFare: json["perKMFare"].toDouble() ?? 0.0,
+        minFare: json["minFare"].toDouble(),
+        passengerCapacity: json["passengerCapacity"] ?? 0,
+        bootSpace: json["bootSpace"] ?? "MEDIUM",
+        maxKmRange: json["maxKmRange"].toDouble() ?? 150,
+      );
 
   Map<String, dynamic> toJson() => {
     "sku_id": skuId,

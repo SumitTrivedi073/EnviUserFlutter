@@ -438,7 +438,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   Future<void> confirmLogout(BuildContext context) async {
-    sharedPreferences = await SharedPreferences.getInstance();
     dynamic res = await HTTP.get(userLogout());
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       showToast("Logout SuccessFully");

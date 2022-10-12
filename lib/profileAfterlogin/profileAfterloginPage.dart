@@ -117,7 +117,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: "Wellcome back, ${widget.profiledatamodel.name}!",
+                textval: "Welcome back, ${widget.profiledatamodel.name}!",
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
