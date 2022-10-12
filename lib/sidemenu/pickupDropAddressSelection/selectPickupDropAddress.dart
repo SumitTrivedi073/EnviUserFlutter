@@ -69,10 +69,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late FocusNode endFocusNode;
   late GooglePlace googlePlace;
   late final FavoritesDataDao dao;
-  List<FavoritesData> arraddress = [];
 
   Timer? _debounce;
-  List<AutocompletePrediction> predictions = [];
+
   bool useGoogleApi = false;
   late SharedPreferences sharedPreferences;
 
@@ -779,10 +778,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 _firstLoad(value);
             // googleAPI(value);
           } else {
+            getLocalSuggestions('');
             setState(() {
               searchPlaceList = [];
               //startPosition = null;
               startingAddress = null;
+              getLocalSuggestions('');
             });
           }
         });
@@ -801,6 +802,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     setState(() {
                       FromLocationText.clear();
                       searchPlaceList = [];
+                      getLocalSuggestions('');
                     });
                   },
                 )
@@ -830,6 +832,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               searchPlaceList = [];
               //endPosition = null;
               endAddress = null;
+              getLocalSuggestions('');
             });
           }
         });
@@ -847,6 +850,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     setState(() {
                       ToLocationText.clear();
                       searchPlaceList = [];
+                      getLocalSuggestions('');
                     });
                   },
                 )
