@@ -53,8 +53,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<dynamic> _placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
-
-  // late SharedPreferences sharedPreferences;
   String SearchFromLocation = "", SearchToLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   TextEditingController ToLocationText = TextEditingController();

@@ -132,7 +132,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         setState(() {
           selectedIndex = index;
           print("selectedIndex========>$selectedIndex");
-          widget.callback(vehiclePriceClasses![index]);
+          widget.callback(vehiclePriceClasses[index]);
         });
       },
       child: Card(

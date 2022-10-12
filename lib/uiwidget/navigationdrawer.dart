@@ -74,7 +74,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
                           child: getsmallNetworkImage(context,
-                              "${Profiledata().getpropic()}"),
+                              "${Profiledata.propic!=null?Profiledata.propic:placeHolderImage}"),
                         ),
                       ),
                       const SizedBox(

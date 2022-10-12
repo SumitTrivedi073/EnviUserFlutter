@@ -1,4 +1,5 @@
 
+import 'package:envi/appConfig/Profiledata.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
@@ -69,7 +70,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ),
 
                         Card(
-                          child: Image.network(loginPic??placeHolderImage,
+                          child: Image.network(Profiledata.propic!=null?Profiledata.propic:placeHolderImage,
                             fit: BoxFit.fill,height: 40,
                             width: 50,),
                         )

@@ -8,8 +8,6 @@ import '../web_service/Constant.dart';
 
 class firestoreScheduleTripNotifier extends ChangeNotifier {
   dynamic scheduleFailureSream = [];
- // late SharedPreferences sharedPreferences;
-
   Future<void> listenToLiveUpdateStream() async {
     String liveUpdatecollectionName =
         'user/${Profiledata().getusreid()}/scheduled-trips';
