@@ -11,7 +11,7 @@ class LoginModel {
     token = json['token'];
     id = json['userid'];
     name = json['name'];
-    propic = json["propic"]!=null?imageServerurl+json["propic"]:placeHolderImage;
+    propic = json["propic"].toString()!=""?imageServerurl+json["propic"]:placeHolderImage;
     gender = json["gender"];
     phone = json["phone"];
     mailid= json["mailid"];
