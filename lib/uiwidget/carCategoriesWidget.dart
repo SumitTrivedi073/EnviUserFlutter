@@ -256,8 +256,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     ),
                     Text(
                       getTotalPrice(
-                          vehiclePriceClasses[index].total_fare!.toDouble(),
-                          vehiclePriceClasses[index].seller_discount!.toDouble()),
+                          vehiclePriceClasses[index].total_fare.toDouble(),
+                          vehiclePriceClasses[index].seller_discount.toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
