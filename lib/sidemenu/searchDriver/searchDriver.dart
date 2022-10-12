@@ -40,7 +40,7 @@ class _SearchDriverPageState extends State<SearchDriver> {
               Navigator.pop(context);
               Navigator.pop(context,[widget.fromAddress,widget.toAddress]);
             },
-            title: "Envi"),
+            title: "Envi",isBackButtonNeeded: true,),
         const SizedBox(height: 5),
         FromToWidget(
           fromAddress: widget.fromAddress,
