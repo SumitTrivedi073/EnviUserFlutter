@@ -555,9 +555,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
+                                  getLocalSuggestions('');
                             });
                             endFocusNode.requestFocus();
-                            getLocalSuggestions('');
+                        
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -798,10 +799,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 _firstLoad(value);
             // googleAPI(value);
           } else {
-            getLocalSuggestions('');
             setState(() {
               searchPlaceList = [];
-              //startPosition = null;
               startingAddress = null;
               getLocalSuggestions('');
             });
