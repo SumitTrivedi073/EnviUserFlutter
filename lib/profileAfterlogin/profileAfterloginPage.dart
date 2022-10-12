@@ -171,7 +171,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                         placeholder:
                         'assets/images/envi-logo-small.png',
                         image:
-                        '$imageServerurl${widget.profiledatamodel.propic}')),
+                        '$imageServerurl${widget.profiledatamodel.propic.trim()}')),
                         const SizedBox(
                           height: 5,
                         ),
@@ -239,7 +239,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               loginToken, widget.profiledatamodel.token);
                           sharedPreferences.setString(loginID, widget.profiledatamodel.id);
                           sharedPreferences.setString(
-                              loginpropic, "$imageServerurl${widget.profiledatamodel.propic}");
+                              loginpropic, "$imageServerurl${widget.profiledatamodel.propic.trim()}");
                           sharedPreferences.setString(
                               logingender, widget.profiledatamodel.gender);
                           sharedPreferences.setString(
@@ -249,7 +249,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           Profiledata.setusreid(widget.profiledatamodel.id);
                           Profiledata.settoken(widget.profiledatamodel.token);
                           Profiledata.setmailid(widget.profiledatamodel.mailid);
-                          Profiledata.setpropic(imageServerurl+widget.profiledatamodel.propic);
+                          Profiledata.setpropic(imageServerurl+widget.profiledatamodel.propic.trim());
                           Profiledata.setphone(widget.profiledatamodel.phone);
                           Profiledata.setgender(widget.profiledatamodel.gender);
                           Profiledata.setname(widget.profiledatamodel.name);

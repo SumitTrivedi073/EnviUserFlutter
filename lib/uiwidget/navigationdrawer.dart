@@ -301,20 +301,20 @@ class _NavigationPageState extends State<NavigationDrawer> {
   Column userDetails() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          SizedBox(
+        children:  [
+          const SizedBox(
             height: 10,
           ),
           robotoTextWidget(
-            textval: 'Nitesh Gupta',
+            textval: Profiledata().getname().toString(),
             colorval: AppColor.grey,
             fontWeight: FontWeight.w800,
             sizeval: 20.0,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          robotoTextWidget(
+          const robotoTextWidget(
             textval: 'SILVER LEVEL',
             colorval: AppColor.lightgreen,
             fontWeight: FontWeight.w600,
