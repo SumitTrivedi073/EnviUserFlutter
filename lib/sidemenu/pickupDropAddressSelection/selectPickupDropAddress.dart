@@ -390,6 +390,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
+
                             if (result.length == 2) {
                               startingAddress = result[0];
                               endAddress = result[1];
@@ -400,6 +401,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
+                            endFocusNode.requestFocus();
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -547,6 +549,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
+                            endFocusNode.requestFocus();
+                            getLocalSuggestions('');
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -610,6 +614,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
+                            
                           } else {
                             var result;
                             result = await Navigator.of(context)
