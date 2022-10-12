@@ -53,7 +53,6 @@ class _PaymentPageState extends State<PaymentPage> {
                   value.liveTripData!.tripInfo.passengerTripMasterId;
               selectedPayOption = value.liveTripData!.tripInfo.paymentMode;
             }else{
-              print("LiveTripData===============>null");
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
