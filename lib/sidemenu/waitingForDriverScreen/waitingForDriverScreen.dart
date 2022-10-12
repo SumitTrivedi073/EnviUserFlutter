@@ -47,7 +47,6 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             (Route<dynamic> route) => false);
                   }
                 }else{
-                  print("LiveTripData===============>null");
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
