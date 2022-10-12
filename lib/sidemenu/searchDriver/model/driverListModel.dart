@@ -213,21 +213,21 @@ class ContentPriceClass {
   String?  skuId;
   String?  type;
   String?  subcategory;
-  dynamic?  perKmFare;
-  dynamic?  minFare;
-  dynamic?  passengerCapacity;
+  double?  perKmFare;
+  int?  minFare;
+  int?  passengerCapacity;
   String?  bootSpace;
-  dynamic?  maxKmRange;
+  int?  maxKmRange;
 
   factory ContentPriceClass.fromJson(Map<String, dynamic> json) => ContentPriceClass(
     skuId: json["sku_id"],
     type: json["type"],
     subcategory: json["subcategory"],
-    perKmFare: json["perKMFare"].toDouble(),
-    minFare: json["minFare"].toDouble(),
-    passengerCapacity: json["passengerCapacity"].toDouble(),
+    perKmFare: json["perKMFare"]??0.0,
+    minFare: json["minFare"],
+    passengerCapacity: json["passengerCapacity"] ?? 0,
     bootSpace: json["bootSpace"] ?? "MEDIUM",
-    maxKmRange: json["maxKmRange"].toDouble(),
+    maxKmRange: json["maxKmRange"] ?? 150,
   );
 
   Map<String, dynamic> toJson() => {
@@ -250,8 +250,8 @@ class Distance {
   });
 
   String? text;
-  dynamic? value;
-  dynamic? duration;
+  int? value;
+  int? duration;
 
   factory Distance.fromJson(Map<String, dynamic> json) => Distance(
     text: json["text"],
@@ -311,17 +311,17 @@ class VehiclePriceClassPriceClass {
   String? skuId;
   String? type;
   String? subcategory;
-  dynamic? perKmFare;
-  dynamic? minFare;
-  dynamic? distance;
-  dynamic? discountPercent;
-  dynamic? sellerDiscount;
-  dynamic? baseFare;
-  dynamic? tollCharges;
-  dynamic? stateTax;
-  dynamic? advancePaid;
-  dynamic? amountToBeCollected;
-  dynamic? totalFare;
+  double? perKmFare;
+  double? minFare;
+  double? distance;
+  double? discountPercent;
+  double? sellerDiscount;
+  double? baseFare;
+  double? tollCharges;
+  double? stateTax;
+  double? advancePaid;
+  double? amountToBeCollected;
+  double? totalFare;
 
   factory VehiclePriceClassPriceClass.fromJson(Map<String, dynamic> json) => VehiclePriceClassPriceClass(
     skuId: json["sku_id"],
