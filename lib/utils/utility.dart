@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/Constant.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +20,18 @@ class Utility {
       return androidDeviceInfo.id; // Unique ID on Android
     }
   }
+
+  void showInSnackBar({required String value, context, Duration? duration}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(value),
+        duration: duration ?? const Duration(milliseconds: 3000),
+      ),
+    );
+  }
 }
+
+Utility utility = Utility();
 
 _getId() async {
   var deviceInfo = DeviceInfoPlugin();
