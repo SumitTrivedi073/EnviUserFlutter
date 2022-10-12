@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,14 +5,13 @@ import '../theme/color.dart';
 import '../web_service/Constant.dart';
 import 'navigationdrawer.dart';
 
-
-class AppBarWidget extends StatefulWidget{
- @override
-   State<StatefulWidget> createState() => _AppBarPageState();
-  }
+class AppBarWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _AppBarPageState();
+}
 
 class _AppBarPageState extends State<AppBarWidget> {
-  late SharedPreferences sharedPreferences ;
+  late SharedPreferences sharedPreferences;
   String? loginPic;
 
   @override
@@ -21,7 +19,6 @@ class _AppBarPageState extends State<AppBarWidget> {
     // TODO: implement initState
     super.initState();
     init();
-
   }
 
   init() async {
@@ -31,63 +28,70 @@ class _AppBarPageState extends State<AppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var driverImage =
+        loginPic != null && loginPic != '' ? Uri.encodeFull(loginPic!) : null;
+
+    print("RAGHU PROFILE ${driverImage}, ${loginPic}");
     // TODO: implement build
     return Container(
-          height: 150,
-          margin: EdgeInsets.only(left: 10,right: 10),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                top: 80.0,
-                left: 0.0,
-                right: 0.0,
-                child: Card(
-                  elevation: 4,
-                  color: AppColor.greyblack,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      height: 150,
+      margin: EdgeInsets.only(left: 10, right: 10),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: 80.0,
+            left: 0.0,
+            right: 0.0,
+            child: Card(
+              elevation: 4,
+              color: AppColor.greyblack,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        print("your menu action here");
 
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.menu,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            print("your menu action here");
-
-                            Scaffold.of(context).openDrawer();
-                          },
-                        ),
-
-                        Container(
-                          alignment: Alignment.center,
-                          child: Row(
-                            children: const [
-                              Text("ENVI",
-                                style: TextStyle(color: Colors.white,
-                                    fontFamily: 'SFCompactText',
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 18),),
-                             ],
-                          ),
-                        ),
-
-                        Card(
-                          child: Image.network(loginPic??placeHolderImage,
-                            fit: BoxFit.fill,height: 40,
-                            width: 50,),
-                        )
-                      ],
+                        Scaffold.of(context).openDrawer();
+                      },
                     ),
-                  ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: const [
+                          Text(
+                            "ENVI",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'SFCompactText',
+                                fontWeight: FontWeight.w200,
+                                fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (driverImage != null)
+                      Card(
+                        child: Image.network(
+                          driverImage,
+                          fit: BoxFit.fill,
+                          height: 40,
+                          width: 50,
+                        ),
+                      )
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        );
-
+        ],
+      ),
+    );
   }
 }

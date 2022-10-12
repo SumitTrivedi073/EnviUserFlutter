@@ -47,6 +47,7 @@ class DriverListItemPageState extends State<DriverListItem> {
       super.setState(fn);
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -230,12 +231,16 @@ class DriverListItemPageState extends State<DriverListItem> {
   }
 
   Widget driverListItems(int index) {
+    var tmp = DriverList[index].driverPhoto;
+
+    var driverImage = Uri.encodeFull(tmp!);
+    print(" URL encoding  ${tmp} ${driverImage}");
+
     return GestureDetector(
       onTap: () {
         selectedIndex = index;
       },
       child: Card(
-
         margin: const EdgeInsets.all(5),
         color: const Color(0xFFE4F3F5),
         shape: selectedIndex != null
@@ -277,14 +282,15 @@ class DriverListItemPageState extends State<DriverListItem> {
                             print(rating);
                           },
                         ),
-                        Card(
-                          child: Image.network(
-                            DriverList[index].driverPhoto ?? '',
-                            fit: BoxFit.fill,
-                            height: 40,
-                            width: 50,
-                          ),
-                        )
+                        if (driverImage != null)
+                          Card(
+                            child: Image.network(
+                              driverImage,
+                              fit: BoxFit.fill,
+                              height: 40,
+                              width: 50,
+                            ),
+                          )
                       ],
                     ),
                   ],

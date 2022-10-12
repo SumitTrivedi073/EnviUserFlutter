@@ -6,11 +6,11 @@ class Distance {
   });
 
   String text;
-  int value;
+  double value;
 
   factory Distance.fromJson(Map<String, dynamic> json) => Distance(
     text: json["text"],
-    value: json["value"],
+    value: json["value"].toDouble(),
   );
 
   Map<String, dynamic> toJson() => {

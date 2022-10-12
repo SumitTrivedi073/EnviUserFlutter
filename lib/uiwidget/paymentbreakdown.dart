@@ -32,7 +32,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
   @override
   Widget build(BuildContext context) {
 
-   int totalTex = widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toInt() + widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toInt();
+   double totalTex = widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toInt() + widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toInt();
 
     List<String> breakDownVals = [
       widget.livetripData!.tripInfo.arrivalAtDestination!.distanceTravelled.toString(),

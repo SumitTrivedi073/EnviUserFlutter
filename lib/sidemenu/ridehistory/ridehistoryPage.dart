@@ -18,6 +18,7 @@ import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../onRide/model/SosModel.dart';
 import 'model/rideHistoryModel.dart';
+
 class RideHistoryPage extends StatefulWidget {
   @override
   State<RideHistoryPage> createState() => _RideHistoryPageState();
@@ -34,11 +35,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   late dynamic userId;
   List<RideHistoryModel> arrtrip = [];
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     _firstLoad();
     _controller = new ScrollController()..addListener(_loadMore);
   }
+
   @override
   void dispose() {
     _controller.removeListener(_loadMore);
@@ -51,13 +53,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     });
     sharedPreferences = await SharedPreferences.getInstance();
 
-
-    userId = sharedPreferences.getString(LoginID) ;
+    userId = sharedPreferences.getString(LoginID);
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    if (res!=null && res.statusCode != null && res.statusCode == 200) {
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-        if(jsonDecode(res.body)['content']!=null) {
+        if (jsonDecode(res.body)['content'] != null) {
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
               .map((i) => RideHistoryModel.fromJson(i))
               .toList();
@@ -84,13 +85,13 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       });
       pagecount += 1;
       dynamic res =
-      await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
 
       if (res.statusCode == 200) {
         final List<RideHistoryModel> fetchedPosts =
-        (jsonDecode(res.body)['content']['result'] as List)
-            .map((i) => RideHistoryModel.fromJson(i))
-            .toList();
+            (jsonDecode(res.body)['content']['result'] as List)
+                .map((i) => RideHistoryModel.fromJson(i))
+                .toList();
         if (fetchedPosts.length > 0) {
           setState(() {
             if (fetchedPosts.length != _limit) {
@@ -138,11 +139,11 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
             Expanded(
               child: _isFirstLoadRunning
                   ? const Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  child: _buildPosts(context)),
+                      margin: const EdgeInsets.only(right: 10.0),
+                      child: _buildPosts(context)),
             ),
             // when the _loadMore function is running
             if (_isLoadMoreRunning == true)
@@ -179,7 +180,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         },
         child: ListView.builder(
           controller: _controller,
-
           itemBuilder: (context, index) {
             return ListItem(index);
           },
@@ -220,19 +220,20 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children:  [
+          Row(children: [
             const Icon(
               Icons.nights_stay_sharp,
               color: AppColor.black,
             ),
             robotoTextWidget(
-              textval: "${getdayTodayTomarrowYesterday(arrtrip[index].start_time)}",
+              textval:
+                  "${getdayTodayTomarrowYesterday(arrtrip[index].start_time)}",
               colorval: AppColor.black,
               sizeval: 15.0,
               fontWeight: FontWeight.bold,
             ),
           ]),
-           robotoTextWidget(
+          robotoTextWidget(
             textval: "₹ ${arrtrip[index].price.totalFare}",
             colorval: AppColor.black,
             sizeval: 18.0,
@@ -244,6 +245,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   }
 
   Container CellRow2(int index) {
+    var driverImage = Uri.encodeFull(arrtrip[index].driverPhoto);
+
     return Container(
       color: AppColor.white,
       height: 94,
@@ -258,7 +261,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children:  [
+                    children: [
                       const Icon(
                         Icons.star,
                         color: AppColor.butgreen,
@@ -267,7 +270,9 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       robotoTextWidget(
-                        textval: arrtrip[index].toAddress.length > 30 ? arrtrip[index].toAddress.substring(0, 30) : arrtrip[index].toAddress,
+                        textval: arrtrip[index].toAddress.length > 30
+                            ? arrtrip[index].toAddress.substring(0, 30)
+                            : arrtrip[index].toAddress,
                         colorval: AppColor.black,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
@@ -278,12 +283,14 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                     height: 3,
                   ),
                   Row(
-                    children:  [
+                    children: [
                       const Padding(
                         padding: EdgeInsets.only(left: 25),
                       ),
                       robotoTextWidget(
-                        textval: arrtrip[index].fromAddress.length > 30 ? arrtrip[index].fromAddress.substring(0, 30) : arrtrip[index].fromAddress,
+                        textval: arrtrip[index].fromAddress.length > 30
+                            ? arrtrip[index].fromAddress.substring(0, 30)
+                            : arrtrip[index].fromAddress,
                         colorval: AppColor.greyblack,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
@@ -293,7 +300,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 ],
               ),
               Image.network(
-                arrtrip[index].driverPhoto,
+                driverImage,
                 fit: BoxFit.fill,
                 height: 40,
                 width: 40,
@@ -306,7 +313,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(children:  [
+              Row(children: [
                 const Padding(
                   padding: EdgeInsets.only(left: 25),
                 ),
@@ -317,7 +324,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   fontWeight: FontWeight.w800,
                 ),
               ]),
-               robotoTextWidget(
+              robotoTextWidget(
                 textval: arrtrip[index].vehicle.Vnumber,
                 colorval: AppColor.darkgrey,
                 sizeval: 13.0,
@@ -344,7 +351,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         Align(
           alignment: Alignment.center,
           child: MaterialButton(
-            child:  robotoTextWidget(
+            child: robotoTextWidget(
               textval: Invoice,
               colorval: AppColor.butgreen,
               sizeval: 14.0,
@@ -360,7 +367,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           color: AppColor.border,
         ),
         MaterialButton(
-          child:  robotoTextWidget(
+          child: robotoTextWidget(
             textval: Support,
             colorval: AppColor.butgreen,
             sizeval: 14.0,
@@ -396,18 +403,18 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
             children: [
               Expanded(
                   child: Column(
-                    children: const [
-                      RotatedBox(
-                        quarterTurns: 3,
-                        child: robotoTextWidget(
-                          textval: "YOUR\nSTATS",
-                          colorval: AppColor.greyblack,
-                          sizeval: 13.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      )
-                    ],
-                  )),
+                children: const [
+                  RotatedBox(
+                    quarterTurns: 3,
+                    child: robotoTextWidget(
+                      textval: "YOUR\nSTATS",
+                      colorval: AppColor.greyblack,
+                      sizeval: 13.0,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  )
+                ],
+              )),
               Expanded(
                   flex: 2,
                   child: Column(
@@ -460,28 +467,24 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     }
   }
 
-
   Future<void> sendInvoice(String passengerTripMasterId) async {
     Map data;
     data = {
       "mailid": sharedPreferences.getString(LoginEmail),
-      "passengerTripMasterId":passengerTripMasterId
-
+      "passengerTripMasterId": passengerTripMasterId
     };
     print("data=======>$data");
     var jsonData = null;
     dynamic res = await HTTP.post(SendInvoice(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-
       setState(() {
         jsonData = convert.jsonDecode(res.body);
         print("jsonData=======>$jsonData");
         SosModel sosModel = SosModel.fromJson(jsonData);
-        showSnackbar(context,sosModel.message);
+        showSnackbar(context, sosModel.message);
       });
     } else {
       throw "Driver Not Booked";
     }
-
   }
 }

@@ -92,6 +92,10 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
     } else {
       gender = "";
     }
+    var tmp = widget.profiledata.propic;
+    var ImageName = tmp != '' ? Uri.encodeFull(tmp) : null;
+
+    print("RAGHU PROFILE ${ImageName}.  profiledata propic");
     return Form(
       key: _formKey,
       child: Center(
@@ -112,7 +116,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: "Wellcome back, ${widget.profiledata.name}!",
+                textval: "Welcome back, ${widget.profiledata.name}!",
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
@@ -161,16 +165,16 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                             ),
                           ],
                         ),
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(55.0),
-                    child: FadeInImage.assetNetwork(
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.fill,
-                        placeholder:
-                        'assets/images/envi-logo-small.png',
-                        image:
-                        '$imageServerurl${widget.profiledata.propic}')),
+                        if (ImageName != null)
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(55.0),
+                              child: FadeInImage.assetNetwork(
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.fill,
+                                  placeholder:
+                                      'assets/images/envi-logo-small.png',
+                                  image: ImageName!)),
                         const SizedBox(
                           height: 5,
                         ),
@@ -239,7 +243,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           sharedPreferences.setString(
                               LoginID, widget.profiledata.id);
                           sharedPreferences.setString(
-                              Loginpropic, "https://ecabdevstorage.blob.core.windows.net/ecabdevcontainer/${widget.profiledata.propic}");
+                              Loginpropic, widget.profiledata.propic);
                           sharedPreferences.setString(
                               Logingender, widget.profiledata.gender);
                           sharedPreferences.setString(

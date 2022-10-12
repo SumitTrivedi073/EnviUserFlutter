@@ -35,6 +35,8 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var driverImage = Uri.encodeFull(loginPic ?? placeHolderImage);
+
     // TODO: implement build
     return Container(
       margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
@@ -66,7 +68,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                 ),
                 Card(
                   child: Image.network(
-                    loginPic??placeHolderImage,
+                    driverImage,
                     fit: BoxFit.fill,
                     height: 40,
                     width: 40,
