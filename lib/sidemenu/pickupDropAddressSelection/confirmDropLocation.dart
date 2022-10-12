@@ -18,8 +18,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../appConfig/Profiledata.dart';
 import '../../database/database.dart';
 import '../../database/favoritesData.dart';
 import '../../database/favoritesDataDao.dart';
@@ -66,7 +66,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   // bool isToVerified = false;
   late String isFavourite;
 
-  late SharedPreferences sharedPreferences;
   void checkAddressStatus() {
     if (widget.status == AddressConfirmation.fromAddressConfirmed) {
       locationToSearch = widget.endLocation;
@@ -80,8 +79,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   }
 
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
+
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         addressToAdd!.address,
@@ -98,7 +97,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         final task = FavoritesData.optional(
             identifier: addressId,
             address: addressToAdd.address,
-            isFavourite: 'N',
+            isFavourite: addressToAdd.isFavourite,
             latitude: addressToAdd.latLng.latitude.toString(),
             longitude: addressToAdd.latLng.longitude.toString(),
             title: addressToAdd.title);
@@ -114,8 +113,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       SearchPlaceModel? addressToUpdate,
       String identifire,
       String favoriate) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
+
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titel,
@@ -149,8 +148,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
   Future<void> apiCallAddFavoritetoaddress(
       SearchPlaceModel? addressToAdd) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
+
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         addressToAdd!.address,
@@ -186,8 +185,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       SearchPlaceModel? addressToUpdate,
       String identifire,
       String favoriate) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
+
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titel,
@@ -240,7 +239,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(value),
-        duration: Duration(milliseconds: 3000),
+        duration: const Duration(milliseconds: 3000),
       ),
     );
   }
@@ -560,9 +559,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             position.latitude, position.longitude);
       } catch (e) {
         showInSnackBar('Unable to retrieve location , please try later');
-        Future.delayed(const Duration(seconds: 4));
+        await Future.delayed(const Duration(seconds: 4), () {
+          Navigator.of(context).pop();
+        });
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+
       }
     }
 

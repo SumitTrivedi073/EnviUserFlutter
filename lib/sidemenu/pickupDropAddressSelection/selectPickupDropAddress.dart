@@ -79,7 +79,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
-
     dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
@@ -141,7 +140,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         await dao.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -210,7 +209,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         print(task);
         await dao.updateTask(task);
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -384,18 +383,20 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              startingAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                startingAddress = result[0];
+                              }
                             }
 
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
                             });
                             endFocusNode.requestFocus();
+                            getLocalSuggestions('');
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -413,11 +414,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              startingAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                startingAddress = result[0];
+                              }
                             }
 
                             setState(() {
@@ -456,15 +459,20 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              endAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                endAddress = result[0];
+                              }
                             }
+
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
+                            startFocusNode.requestFocus();
+                            getLocalSuggestions('');
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -482,12 +490,15 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              endAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                endAddress = result[0];
+                              }
                             }
+
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
@@ -533,11 +544,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              startingAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                startingAddress = result[0];
+                              }
                             }
 
                             setState(() {
@@ -562,11 +575,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              startingAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                startingAddress = result[0];
+                              }
                             }
 
                             setState(() {
@@ -598,17 +613,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              endAddress = result[0];
+
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                endAddress = result[0];
+                              }
                             }
 
                             setState(() {
                               ToLocationText.text = endAddress!.address;
                             });
-                            
+                            startFocusNode.requestFocus();
+                            getLocalSuggestions('');
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -626,11 +645,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                                   isFavourite.toString(),
                                             )),
                                     (Route<dynamic> route) => true);
-                            if (result.length == 2) {
-                              startingAddress = result[0];
-                              endAddress = result[1];
-                            } else {
-                              endAddress = result[0];
+                            if (result != null) {
+                              if (result.length == 2) {
+                                startingAddress = result[0];
+                                endAddress = result[1];
+                              } else {
+                                endAddress = result[0];
+                              }
                             }
 
                             setState(() {
