@@ -14,11 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../appConfig/Profiledata.dart';
 import '../../database/database.dart';
 import '../../database/favoritesData.dart';
 import '../../database/favoritesDataDao.dart';
@@ -53,8 +53,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<dynamic> _placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
-
-  // late SharedPreferences sharedPreferences;
   String SearchFromLocation = "", SearchToLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   TextEditingController ToLocationText = TextEditingController();
@@ -72,7 +70,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   Timer? _debounce;
   List<AutocompletePrediction> predictions = [];
   bool useGoogleApi = false;
-  late SharedPreferences sharedPreferences;
 
   Future<void> loadData() async {
     final database =
@@ -81,8 +78,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         FromLocationText.text.toString(),
@@ -105,7 +102,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
             title: addressToAdd.title);
         await dao.insertTask(task);
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      //showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -115,8 +112,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       SearchPlaceModel? addressToUpdate,
       String identifire,
       String favoriate) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titel,
@@ -144,14 +140,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         await dao.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+     // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
   Future<void> apiCallAddFavoritetoaddress(
       SearchPlaceModel? addressToAdd) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
         ToLocationText.text.toString(),
@@ -177,7 +172,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         await dao.insertTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      //showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -187,8 +182,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       SearchPlaceModel? addressToUpdate,
       String identifire,
       String favoriate) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    dynamic userid = sharedPreferences.getString(LoginID);
+    dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataUpdate(
         userid,
         titel,
@@ -215,7 +209,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         print(task);
         await dao.updateTask(task);
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+     // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 

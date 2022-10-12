@@ -147,7 +147,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                       ),
                       child: robotoTextWidget(
                         textval:
-                            '${liveTripData.tripInfo.priceClass.distance} Km',
+                            '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.normal,

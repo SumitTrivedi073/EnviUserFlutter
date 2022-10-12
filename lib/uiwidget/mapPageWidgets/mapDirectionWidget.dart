@@ -20,8 +20,6 @@ class MapDirectionWidget extends StatefulWidget{
 
   const MapDirectionWidget({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
 
-
-
   @override
   _MapDirectionWidgetState createState() => _MapDirectionWidgetState();
 }

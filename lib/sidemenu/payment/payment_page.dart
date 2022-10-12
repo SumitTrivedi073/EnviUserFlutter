@@ -15,7 +15,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
@@ -36,7 +35,7 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String selectedPayOption = '';
   String passangerTripMasterId = '';
-  late SharedPreferences sharedPreferences;
+  bool _isLoading = false;
   late TripDataModel tripDataModel;
   LatLng? latlong = null;
 
@@ -130,7 +129,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future<void> createOrder() async {
-    sharedPreferences = await SharedPreferences.getInstance();
+
     Map body;
     body = {
       "passengerTripMasterId": tripDataModel.tripInfo.passengerTripMasterId,

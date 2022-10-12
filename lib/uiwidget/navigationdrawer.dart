@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../appConfig/Profiledata.dart';
 import '../appConfig/landingPageSettings.dart';
 import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
@@ -25,8 +26,8 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationDrawer> {
-  late SharedPreferences sharedPreferences;
   String? email;
+  late SharedPreferences sharedPreferences;
 
   @override
   void initState() {
@@ -36,9 +37,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   init() async {
-    sharedPreferences = await SharedPreferences.getInstance();
+
     setState(() {
-      email = (sharedPreferences.getString(LoginEmail) ?? '');
+      email = Profiledata().getmailid();
     });
   }
 
@@ -73,7 +74,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
                           child: getsmallNetworkImage(context,
-                              "$imageServerurl${(sharedPreferences.getString(Loginpropic) ?? '')}"),
+                              "${Profiledata.propic!=null?Profiledata.propic:placeHolderImage}"),
                         ),
                       ),
                       const SizedBox(
@@ -300,20 +301,20 @@ class _NavigationPageState extends State<NavigationDrawer> {
   Column userDetails() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          SizedBox(
+        children:  [
+          const SizedBox(
             height: 10,
           ),
           robotoTextWidget(
-            textval: 'Nitesh Gupta',
+            textval: Profiledata().getname().toString(),
             colorval: AppColor.grey,
             fontWeight: FontWeight.w800,
             sizeval: 20.0,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          robotoTextWidget(
+          const robotoTextWidget(
             textval: 'SILVER LEVEL',
             colorval: AppColor.lightgreen,
             fontWeight: FontWeight.w600,
@@ -435,6 +436,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   Future<void> confirmLogout(BuildContext context) async {
+    sharedPreferences = await SharedPreferences.getInstance();
     dynamic res = await HTTP.get(userLogout());
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       showToast("Logout SuccessFully");
