@@ -385,7 +385,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                            "₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                            "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -445,6 +445,6 @@ class DriverListItemPageState extends State<DriverListItem> {
 
     double sum = num1 + num2;
     print('sum:$sum');
-    return "₹$sum";
+    return sum.toStringAsFixed(0);
   }
 }
