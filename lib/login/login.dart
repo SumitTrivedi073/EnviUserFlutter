@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../Profile/newprofilePage.dart';
@@ -450,7 +449,7 @@ class _LoginpageState extends State<Loginpage> {
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
-     // print("jsonData========>"+jsonData);
+      print("jsonData========>$jsonData['content']");
       setState(() {
      //   _timer.cancel();
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
@@ -462,7 +461,7 @@ class _LoginpageState extends State<Loginpage> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileAfterloginPage(
-                        profiledata: users,
+                    profiledatamodel: users,
                       )));
         }
       });

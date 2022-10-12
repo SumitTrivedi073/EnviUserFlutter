@@ -1,9 +1,10 @@
+import 'package:envi/appConfig/Profiledata.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
+import '../theme/theme.dart';
 import '../web_service/Constant.dart';
 
 class AppBarInsideWidget extends StatefulWidget {
@@ -21,20 +22,16 @@ class AppBarInsideWidget extends StatefulWidget {
 }
 
 class _AppBarInsidePageState extends State<AppBarInsideWidget> {
-  late SharedPreferences sharedPreferences;
   String? loginPic;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getsharedPrefs();
+
   }
 
-  getsharedPrefs() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    loginPic = sharedPreferences.getString(Loginpropic);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +65,8 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                   fontWeight: FontWeight.w800,
                 ),
                 Card(
-                  child: Image.network(
-                    loginPic ?? placeHolderImage,
-                    fit: BoxFit.fill,
-                    height: 40,
-                    width: 40,
-                  ),
+                    color: AppColor.greyblack,
+                  child: getsmallNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
                 )
               ],
             ),

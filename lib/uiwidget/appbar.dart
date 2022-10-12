@@ -1,6 +1,6 @@
 
+import 'package:envi/appConfig/Profiledata.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
 import '../web_service/Constant.dart';
@@ -13,21 +13,15 @@ class AppBarWidget extends StatefulWidget{
   }
 
 class _AppBarPageState extends State<AppBarWidget> {
-  late SharedPreferences sharedPreferences ;
-  String? loginPic;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    init();
+
 
   }
 
-  init() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    loginPic = sharedPreferences.getString(Loginpropic);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +70,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ),
 
                         Card(
-                          child: Image.network(loginPic??placeHolderImage,
+                          child: Image.network(Profiledata.propic!=null?Profiledata.propic:placeHolderImage,
                             fit: BoxFit.fill,height: 40,
                             width: 50,),
                         )

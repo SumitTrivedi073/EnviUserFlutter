@@ -5,8 +5,8 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../appConfig/Profiledata.dart';
 import '../provider/model/tripDataModel.dart';
 import '../theme/string.dart';
 import '../theme/theme.dart';
@@ -27,7 +27,6 @@ class SOSView extends StatefulWidget {
 
 class _SOSViewPageState extends State<SOSView> {
 
-  late SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -74,13 +73,12 @@ class _SOSViewPageState extends State<SOSView> {
 
   sosApi() async {
 
-    sharedPreferences = await SharedPreferences.getInstance();
     Map data;
     data = {
-      "id": sharedPreferences.getString(LoginID),
+      "id": Profiledata().getusreid(),
       "passengerTripmasterId": widget.liveTripData!.tripInfo.passengerTripMasterId,
-      "name": sharedPreferences.getString(LoginName),
-      "phone": sharedPreferences.getString(Loginphone),
+      "name": Profiledata().getname(),
+      "phone": Profiledata().getphone(),
       "vehicleNumber":  widget.liveTripData!.driverInfo.vehicleNumber,
       "driverName": widget.liveTripData!.driverInfo.name,
       "driverNumber": widget.liveTripData!.driverInfo.phone,

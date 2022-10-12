@@ -4,9 +4,9 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../appConfig/Profiledata.dart';
 import '../../appConfig/landingPageSettings.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
@@ -30,7 +30,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   bool _hasNextPage = true;
   bool _isLoadMoreRunning = false;
   int _limit = 20;
-  late SharedPreferences sharedPreferences;
   late dynamic userId;
   List<RideHistoryModel> arrtrip = [];
   @override
@@ -49,20 +48,21 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     setState(() {
       _isFirstLoadRunning = true;
     });
-    sharedPreferences = await SharedPreferences.getInstance();
 
 
-    userId = sharedPreferences.getString(LoginID) ;
+    userId = Profiledata().getusreid();
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+    print(res.body);
     if (res!=null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-        if(jsonDecode(res.body)['content']!=null) {
+        if(jsonDecode(res.body)['content']['result'] !=null) {
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
               .map((i) => RideHistoryModel.fromJson(i))
               .toList();
         }
       });
+
     } else {
       setState(() {
         _isFirstLoadRunning = false;
@@ -464,7 +464,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   Future<void> sendInvoice(String passengerTripMasterId) async {
     Map data;
     data = {
-      "mailid": sharedPreferences.getString(LoginEmail),
+      "mailid": Profiledata().getmailid(),
       "passengerTripMasterId":passengerTripMasterId
 
     };
