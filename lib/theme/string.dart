@@ -111,3 +111,7 @@ var lessDiscountText = "Less Discount";
 var tollsText = "Tolls";
 var taxesText = "Taxes";
 var amountPayableText = "Amount Payable";
+var ApproxFare = "Approx. Fare";
+var Toaddress = "To address";
+var Fromaddress = "From address";
+var placeName = "Place Name";

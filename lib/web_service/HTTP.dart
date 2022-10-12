@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../appConfig/Profiledata.dart';
 import 'Constant.dart';
 
 
@@ -32,9 +32,8 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
   const contentType = 'application/json';
   Map<String, String> headers = {'Content-Type': contentType};
 
-  var sharedPreferences = await SharedPreferences.getInstance();
 
-  dynamic token = sharedPreferences.getString(LoginToken);
+  dynamic token = Profiledata().gettoken();
   print("token$token");
   dynamic extra = additionalHeaders != null ? additionalHeaders : {};
 

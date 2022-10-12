@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../appConfig/Profiledata.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
@@ -42,7 +42,6 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   LatLng? latlong = null;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  late SharedPreferences sharedPreferences;
    late UserTripModel userTripModel;
 
   @override
@@ -189,8 +188,8 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                               sizeval: 16,
                               fontWeight: FontWeight.w800),
 
-                          const robotoTextWidget(
-                              textval: "Approx. Fare",
+                           robotoTextWidget(
+                              textval: ApproxFare,
                               colorval: AppColor.black,
                               sizeval: 12,
                               fontWeight: FontWeight.w400),
@@ -332,7 +331,6 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   }
 
   Future getCurrentLocation() async {
-    sharedPreferences = await SharedPreferences.getInstance();
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission != PermissionStatus.granted) {
       LocationPermission permission = await Geolocator.requestPermission();
@@ -363,7 +361,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
     Map data;
     data = {
       "driverTripMasterId": widget.driverDetail!.driverTripMasterId,
-      "userId":sharedPreferences.get(LoginID),
+      "userId":Profiledata().getusreid(),
       "vehicleId": widget.driverDetail!.vehicleId.toString(),
       "driverId": widget.driverDetail!.driverId,
       "location": {

@@ -1,5 +1,6 @@
+
+import 'package:envi/appConfig/Profiledata.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../theme/color.dart';
 import '../web_service/Constant.dart';
@@ -11,27 +12,22 @@ class AppBarWidget extends StatefulWidget {
 }
 
 class _AppBarPageState extends State<AppBarWidget> {
-  late SharedPreferences sharedPreferences;
-  String? loginPic;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    init();
+
+
   }
 
-  init() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    loginPic = sharedPreferences.getString(Loginpropic);
-  }
 
   @override
   Widget build(BuildContext context) {
     var driverImage =
-        loginPic != null && loginPic != '' ? Uri.encodeFull(loginPic!) : null;
+        Profiledata.propic != null && Profiledata.propic != '' ? Uri.encodeFull(Profiledata.propic) : null;
 
-    print("RAGHU PROFILE ${driverImage}, ${loginPic}");
+    print("RAGHU PROFILE ${driverImage}, ${Profiledata.propic}");
     // TODO: implement build
     return Container(
       height: 150,

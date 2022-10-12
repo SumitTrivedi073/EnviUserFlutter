@@ -47,7 +47,6 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             (Route<dynamic> route) => false);
                   }
                 }else{
-                  print("LiveTripData===============>null");
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
@@ -170,7 +169,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                       ),
                       child: robotoTextWidget(
                         textval:
-                        '${liveTripData.tripInfo.priceClass.distance} Km',
+                        '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.normal,
