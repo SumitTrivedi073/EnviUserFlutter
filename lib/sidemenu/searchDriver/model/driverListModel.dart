@@ -210,36 +210,37 @@ class ContentPriceClass {
     required this.maxKmRange,
   });
 
-  String?  skuId;
-  String?  type;
-  String?  subcategory;
-  double?  perKmFare;
-  int?  minFare;
-  int?  passengerCapacity;
-  String?  bootSpace;
-  int?  maxKmRange;
+  String? skuId;
+  String? type;
+  String? subcategory;
+  double perKmFare;
+  double minFare;
+  int? passengerCapacity;
+  String? bootSpace;
+  double maxKmRange;
 
-  factory ContentPriceClass.fromJson(Map<String, dynamic> json) => ContentPriceClass(
-    skuId: json["sku_id"],
-    type: json["type"],
-    subcategory: json["subcategory"],
-    perKmFare: json["perKMFare"]??0.0,
-    minFare: json["minFare"],
-    passengerCapacity: json["passengerCapacity"] ?? 0,
-    bootSpace: json["bootSpace"] ?? "MEDIUM",
-    maxKmRange: json["maxKmRange"] ?? 150,
-  );
+  factory ContentPriceClass.fromJson(Map<String, dynamic> json) =>
+      ContentPriceClass(
+        skuId: json["sku_id"],
+        type: json["type"],
+        subcategory: json["subcategory"],
+        perKmFare: json["perKMFare"].toDouble() ?? 0.0,
+        minFare: json["minFare"].toDouble(),
+        passengerCapacity: json["passengerCapacity"] ?? 0,
+        bootSpace: json["bootSpace"] ?? "MEDIUM",
+        maxKmRange: json["maxKmRange"].toDouble() ?? 150,
+      );
 
   Map<String, dynamic> toJson() => {
-    "sku_id": skuId,
-    "type": type,
-    "subcategory": subcategory,
-    "perKMFare": perKmFare,
-    "minFare": minFare,
-    "passengerCapacity": passengerCapacity ?? 0,
-    "bootSpace": bootSpace ?? "MEDIUM",
-    "maxKmRange": maxKmRange ?? 150,
-  };
+        "sku_id": skuId,
+        "type": type,
+        "subcategory": subcategory,
+        "perKMFare": perKmFare,
+        "minFare": minFare,
+        "passengerCapacity": passengerCapacity ?? 0,
+        "bootSpace": bootSpace ?? "MEDIUM",
+        "maxKmRange": maxKmRange,
+      };
 }
 
 class Distance {
@@ -254,16 +255,16 @@ class Distance {
   int? duration;
 
   factory Distance.fromJson(Map<String, dynamic> json) => Distance(
-    text: json["text"],
-    value: json["value"],
-    duration: json["duration"],
-  );
+        text: json["text"],
+        value: json["value"],
+        duration: json["duration"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "text": text,
-    "value": value,
-    "duration": duration,
-  };
+        "text": text,
+        "value": value,
+        "duration": duration,
+      };
 }
 
 class VehiclePriceClass {
@@ -277,17 +278,18 @@ class VehiclePriceClass {
   String? driverId;
   String? driverName;
 
-  factory VehiclePriceClass.fromJson(Map<String, dynamic> json) => VehiclePriceClass(
-    priceClass: VehiclePriceClassPriceClass.fromJson(json["priceClass"]),
-    driverId: json["driverId"],
-    driverName: json["driverName"],
-  );
+  factory VehiclePriceClass.fromJson(Map<String, dynamic> json) =>
+      VehiclePriceClass(
+        priceClass: VehiclePriceClassPriceClass.fromJson(json["priceClass"]),
+        driverId: json["driverId"],
+        driverName: json["driverName"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "priceClass": priceClass.toJson(),
-    "driverId": driverId,
-    "driverName": driverName,
-  };
+        "priceClass": priceClass.toJson(),
+        "driverId": driverId,
+        "driverName": driverName,
+      };
 }
 
 class VehiclePriceClassPriceClass {
