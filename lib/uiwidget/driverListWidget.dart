@@ -42,8 +42,13 @@ class DriverListItemPageState extends State<DriverListItem> {
   bool isLoading = false;
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _firstLoad();
   }
@@ -393,11 +398,11 @@ class DriverListItemPageState extends State<DriverListItem> {
                           vehiclePriceClasses[index]
                               .priceClass
                               .totalFare!
-                              .toInt(),
+                              .toDouble(),
                           vehiclePriceClasses[index]
                               .priceClass
                               .sellerDiscount!
-                              .toInt()),
+                              .toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -434,12 +439,12 @@ class DriverListItemPageState extends State<DriverListItem> {
     );
   }
 
-  String getTotalPrice(int totalFare, int discount) {
-    int num1 = totalFare;
+  String getTotalPrice(double totalFare, double discount) {
+    double num1 = totalFare;
 
-    int num2 = discount;
+    double num2 = discount;
 
-    int sum = num1 + num2;
+    double sum = num1 + num2;
     print('sum:$sum');
     return "₹$sum";
   }
