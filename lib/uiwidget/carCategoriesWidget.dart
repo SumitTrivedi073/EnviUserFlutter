@@ -110,17 +110,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             itemCount: vehiclePriceClasses.length,
             padding: const EdgeInsets.all(3),
           ),)
-          // CarouselSlider(
-          //   items: List.generate(
-          //   vehiclePriceClasses.length, (index) => driverListItems(index)),
-          //   carouselController: carouselController,
-          //   options: CarouselOptions(
-          // onPageChanged: (index, reason) {
-          //   selectedIndex = index;
-          // },
-          // autoPlay: false,
-          //   ),
-          // ),
         ],
       ),
     ));
@@ -137,7 +126,14 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
       },
       child: Card(
         margin: const EdgeInsets.all(5),
-        color: selectedIndex == index ? Colors.grey : const Color(0xFFE4F3F5),
+        color:const Color(0xFFE4F3F5),
+        shape: selectedIndex == index
+            ? RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.green, width: 2.0),
+            borderRadius: BorderRadius.circular(5.0))
+            : RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.white, width: 2.0),
+            borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(

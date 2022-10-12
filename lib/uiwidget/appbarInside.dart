@@ -64,7 +64,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                     child: getsmallNetworkImage(
                         context, encodeImgURLString(Profiledata.propic)))
               ],
-            ),
+            )
           ),
         ],
       ),

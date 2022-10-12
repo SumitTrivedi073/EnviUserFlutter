@@ -21,6 +21,7 @@ getPadding({@required context, top: 0.0, right: 0.0, bottom: 0.0, left: 0.0}) {
 
 getsmallNetworkImage(context, path) {
   if (path != null && path != null) {
+    print(path);
     return CircleAvatar(
         radius: 18,
         foregroundImage: NetworkImage(encodeImgURLString(
@@ -37,7 +38,22 @@ getsmallNetworkImage(context, path) {
     );
   }
 }
-
+getheaderNetworkImage(context, path) {
+  if (path != null && path != null) {
+    print(path);
+    return Image.network(path, height: 40, width: 50, fit: BoxFit.cover);//Image.network(path,height: 40, fit: BoxFit.cover);
+  } else {
+    return Container(
+      color: AppColor.white,
+      alignment: Alignment.center,
+      child: const Text(
+        'No Image Uploaded',
+        style: TextStyle(
+            fontSize: 5, fontWeight: FontWeight.bold, color: AppColor.black),
+      ),
+    );
+  }
+}
 getNetworkImage(context, path) {
   if (path != null && path != null) {
     return Image.network(encodeImgURLString(path),
