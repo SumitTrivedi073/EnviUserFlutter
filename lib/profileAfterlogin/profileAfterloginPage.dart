@@ -10,10 +10,11 @@ import '../login/model/LoginModel.dart';
 import '../main.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
 import '../web_service/Constant.dart';
 
 class ProfileAfterloginPage extends StatefulWidget {
-LoginModel profiledatamodel;
+  LoginModel profiledatamodel;
   ProfileAfterloginPage({required this.profiledatamodel});
   @override
   State<ProfileAfterloginPage> createState() => _profileAfterloginPageState();
@@ -162,16 +163,16 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                             ),
                           ],
                         ),
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(55.0),
-                    child: FadeInImage.assetNetwork(
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.fill,
-                        placeholder:
-                        'assets/images/envi-logo-small.png',
-                        image:
-                        widget.profiledatamodel.propic.trim()!=null?widget.profiledatamodel.propic.trim():placeHolderImage)),
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(55.0),
+                            child: FadeInImage.assetNetwork(
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.fill,
+                                placeholder:
+                                    'assets/images/envi-logo-small.png',
+                                image: encodeImgURLString(
+                                    widget.profiledatamodel.propic))),
                         const SizedBox(
                           height: 5,
                         ),
@@ -237,9 +238,12 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               loginEmail, widget.profiledatamodel.mailid);
                           sharedPreferences.setString(
                               loginToken, widget.profiledatamodel.token);
-                          sharedPreferences.setString(loginID, widget.profiledatamodel.id);
                           sharedPreferences.setString(
-                              loginpropic, widget.profiledatamodel.propic.trim());
+                              loginID, widget.profiledatamodel.id);
+                          sharedPreferences.setString(
+                              loginpropic,
+                              encodeImgURLString(
+                                  widget.profiledatamodel.propic));
                           sharedPreferences.setString(
                               logingender, widget.profiledatamodel.gender);
                           sharedPreferences.setString(
@@ -249,7 +253,8 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           Profiledata.setusreid(widget.profiledatamodel.id);
                           Profiledata.settoken(widget.profiledatamodel.token);
                           Profiledata.setmailid(widget.profiledatamodel.mailid);
-                          Profiledata.setpropic(widget.profiledatamodel.propic.trim());
+                          Profiledata.setpropic(encodeImgURLString(
+                              widget.profiledatamodel.propic));
                           Profiledata.setphone(widget.profiledatamodel.phone);
                           Profiledata.setgender(widget.profiledatamodel.gender);
                           Profiledata.setname(widget.profiledatamodel.name);

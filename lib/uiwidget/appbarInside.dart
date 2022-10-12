@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../theme/color.dart';
 import '../theme/theme.dart';
+import '../utils/utility.dart';
 import '../web_service/Constant.dart';
 
 class AppBarInsideWidget extends StatefulWidget {
@@ -25,10 +26,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +60,9 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                   fontWeight: FontWeight.w800,
                 ),
                 Card(
-
-                    child: getheaderNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
-                )
+                    color: AppColor.greyblack,
+                    child: getsmallNetworkImage(
+                        context, encodeImgURLString(Profiledata.propic)))
               ],
             )
           ),
