@@ -29,6 +29,7 @@ class WaitingForDriverScreen extends StatefulWidget {
 class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
 
   late String duration = "0 Minute";
+  bool isLoaded = false;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -38,6 +39,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
           builder: (context, value, child) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if(value.liveTripData!=null) {
+                  isLoaded = true;
                   if (value.liveTripData!.tripInfo.tripStatus ==
                       TripStatusOnboarding) {
                     Navigator.of(context).pushAndRemoveUntil(
@@ -47,11 +49,13 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             (Route<dynamic> route) => false);
                   }
                 }else{
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          const HomePage(title: 'title')),
-                          (Route<dynamic> route) => false);
+                  if(isLoaded) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                            const HomePage(title: 'title')),
+                            (Route<dynamic> route) => false);
+                  }
                 }
               });
               return value.liveTripData != null
