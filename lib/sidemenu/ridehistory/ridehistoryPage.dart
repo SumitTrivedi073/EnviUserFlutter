@@ -53,7 +53,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     userId = Profiledata().getusreid();
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    print(res.body);
     if (res!=null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
         if(jsonDecode(res.body)['content']['result'] !=null) {
@@ -67,7 +66,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       setState(() {
         _isFirstLoadRunning = false;
       });
-      throw "Can't get subjects.";
     }
     setState(() {
       _isFirstLoadRunning = false;
@@ -109,7 +107,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         setState(() {
           _isLoadMoreRunning = false;
         });
-        throw "Can't get subjects.";
       }
       setState(() {
         _isLoadMoreRunning = false;

@@ -67,7 +67,6 @@ print(userId);
       setState(() {
         _isFirstLoadRunning = false;
       });
-      throw "Can't get subjects.";
     }
     setState(() {
       _isFirstLoadRunning = false;
@@ -109,7 +108,6 @@ print(userId);
         setState(() {
           _isLoadMoreRunning = false;
         });
-        throw "Can't get subjects.";
       }
       setState(() {
         _isLoadMoreRunning = false;
