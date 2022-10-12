@@ -53,9 +53,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
   }
 
   final _profileForm = GlobalKey<FormState>();
-  // var _image;
-  // var imagePicker;
-  // var type;
   void updateUser() {
     _emailController.text = widget.user.mailid;
     _phoneNoController.text = widget.user.phone;
@@ -140,12 +137,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                // var source = ImageSource.gallery;
-                                // XFile image = await imagePicker!
-                                //     .getImage(source: source);
-                                // setState(() {
-                                //   _image = File(image.path);
-                                // });
                                 getImage();
                               },
                               child: (_image != null)
@@ -279,24 +270,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
               ),
               MaterialButton(
                 onPressed: () async {
-                  // Uri uri = Uri.parse(
-                  //     'https://qausernew.azurewebsites.net/user/updateProfile');
-                  // var data = {
-                  //   "name": _firstNameController.text,
-                  //   "gender": selectedGender
-                  // };
-                  // var res;
-                  // res = await HTTP.postToAcceptMultipartRequest(
-                  //     uri,
-                  //     data,
-                  //     File(_image!.path).readAsBytesSync(),
-                  //     _image!.path.split("/").last,
-                  //     "pro_pic");
-                  // if (res != null) {
-                  //   print(res);
-                  // } else {
-                  //   print(res);
-                  // }
                   UserApiService userApi = UserApiService();
                   final response = await userApi.userEditProfile(
                       image: _image!,
@@ -304,12 +277,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                       name: _firstNameController.text,
                       gender: selectedGender!,
                       email: _emailController.text);
-                  // var res;
-                  // res = await userApi.userEditProfile(
-                  //     token: widget.user.token,
-                  //     name: _firstNameController.text,
-                  //     gender: selectedGender!,
-                  //     propic: '$_image.path');
+
                   if (response) {
                     utility.showInSnackBar(
                         value: updatedSuccessText,
@@ -325,19 +293,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
                         context: context,
                         duration: const Duration(seconds: 3));
                   }
-
-                  //  if (response2) {
-                  //           utility.showInSnackBar(
-                  //               'Updated successfully', _officeHourScaffoldKey);
-                  //           Future.delayed(showMessageTime, () {
-                  //             Navigator.of(context).pop();
-                  //             Navigator.of(context).pop();
-                  //             setState(() {});
-                  //           });
-                  //         } else {
-                  //           utility.showInSnackBar(
-                  //               'Failed', _officeHourScaffoldKey);
-                  //         }
                 },
                 height: 48,
                 minWidth: double.infinity,

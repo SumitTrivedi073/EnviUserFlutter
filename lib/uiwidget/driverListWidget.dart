@@ -230,6 +230,8 @@ class DriverListItemPageState extends State<DriverListItem> {
   }
 
   Widget driverListItems(int index) {
+    var tmp = DriverList[index].driverName ?? '';
+    var driverName = tmp.length > 10 ? '${tmp.substring(0, 9)}..' : tmp;
     return GestureDetector(
       onTap: () {
         selectedIndex = index;
@@ -250,12 +252,21 @@ class DriverListItemPageState extends State<DriverListItem> {
               children: [
                 Row(
                   children: [
-                    robotoTextWidget(
-                        textval:
-                            '${DriverList[index].durationToPickUpLocation} Minutes Away',
-                        colorval: AppColor.black,
-                        sizeval: 16,
-                        fontWeight: FontWeight.w600),
+                    Column(
+                      children: [
+                        robotoTextWidget(
+                            textval: driverName,
+                            colorval: AppColor.black,
+                            sizeval: 10,
+                            fontWeight: FontWeight.normal),
+                        robotoTextWidget(
+                            textval:
+                                '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                            colorval: AppColor.black,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w600),
+                      ],
+                    ),
                     Row(
                       children: [
                         RatingBar.builder(
