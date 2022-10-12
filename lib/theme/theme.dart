@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/utility.dart';
 import 'color.dart';
 
 ThemeData appTheme() {
@@ -22,8 +23,8 @@ getsmallNetworkImage(context, path) {
   if (path != null && path != null) {
     return CircleAvatar(
         radius: 18,
-        foregroundImage: NetworkImage(
-            path)); //Image.network(path,height: 40, fit: BoxFit.cover);
+        foregroundImage: NetworkImage(encodeImgURLString(
+            path))); //Image.network(path,height: 40, fit: BoxFit.cover);
   } else {
     return Container(
       color: AppColor.white,
@@ -39,7 +40,8 @@ getsmallNetworkImage(context, path) {
 
 getNetworkImage(context, path) {
   if (path != null && path != null) {
-    return Image.network(path, height: 100, width: 100, fit: BoxFit.fitWidth);
+    return Image.network(encodeImgURLString(path),
+        height: 100, width: 100, fit: BoxFit.fitWidth);
   } else {
     return Container(
       color: AppColor.white,
@@ -55,29 +57,30 @@ getNetworkImage(context, path) {
 
 int calculateDifference(DateTime date) {
   DateTime now = DateTime.now();
-  return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+  return DateTime(date.year, date.month, date.day)
+      .difference(DateTime(now.year, now.month, now.day))
+      .inDays;
 }
-getdayTodayTomarrowYesterday(String strdate){
-  DateTime parseDt = DateTime.parse(strdate).toLocal();
-  if(calculateDifference(parseDt) == -1){
-return "Yesterday ${convertTimeFromString(strdate)}";
-  }
- else if(calculateDifference(parseDt) == 0){
-    return "Today ${convertTimeFromString(strdate)}";
-  }
-  else if(calculateDifference(parseDt) == 1){
-    return "Tomorrow ${convertTimeFromString(strdate)}";
-  }
 
-  else {
+getdayTodayTomarrowYesterday(String strdate) {
+  DateTime parseDt = DateTime.parse(strdate).toLocal();
+  if (calculateDifference(parseDt) == -1) {
+    return "Yesterday ${convertTimeFromString(strdate)}";
+  } else if (calculateDifference(parseDt) == 0) {
+    return "Today ${convertTimeFromString(strdate)}";
+  } else if (calculateDifference(parseDt) == 1) {
+    return "Tomorrow ${convertTimeFromString(strdate)}";
+  } else {
     return "${convertDateFromString(strdate)} ${convertTimeFromString(strdate)}";
   }
 }
+
 String convertDateFromString(String strDate) {
   DateTime parseDt = DateTime.parse(strDate).toLocal();
   var date1 = formatDate(parseDt, [dd, ' ', M, ',', yyyy]);
   return date1;
 }
+
 String convertTimeFromString(String strDate) {
   var timeFormatter = DateFormat('hh:mm');
   DateTime parseDt = DateTime.parse(strDate).toLocal();
@@ -86,48 +89,50 @@ String convertTimeFromString(String strDate) {
   var timeString = hourMinString + ' ' + temp.split(' ')[3];
   return timeString;
 }
+
 void showSnackbar(BuildContext context, String message) {
   final scaffold = ScaffoldMessenger.of(context);
   scaffold.showSnackBar(
     SnackBar(
-      content:  Text(message),
+      content: Text(message),
     ),
   );
 }
+
 List decodePolyline(String input) {
-  var list=input.codeUnits;
+  var list = input.codeUnits;
   List lList = [];
-  int index=0;
-  int len=input.length;
-  int c=0;
+  int index = 0;
+  int len = input.length;
+  int c = 0;
   List<LatLng> positions = [];
   // repeating until all attributes are decoded
   do {
-    var shift=0;
-    int result=0;
+    var shift = 0;
+    int result = 0;
 
     // for decoding value of one attribute
     do {
-      c=list[index]-63;
-      result|=(c & 0x1F)<<(shift*5);
+      c = list[index] - 63;
+      result |= (c & 0x1F) << (shift * 5);
       index++;
       shift++;
-    } while(c>=32);
+    } while (c >= 32);
     /* if value is negetive then bitwise not the value */
-    if(result & 1==1) {
-      result=~result;
+    if (result & 1 == 1) {
+      result = ~result;
     }
     var result1 = (result >> 1) * 0.00001;
     lList.add(result1);
-  } while(index<len);
+  } while (index < len);
 
   /*adding to previous value as done in encoding */
-  for(int i=2;i<lList.length;i++) {
-    lList[i]+=lList[i-2];
+  for (int i = 2; i < lList.length; i++) {
+    lList[i] += lList[i - 2];
   }
 
-  for(int i=0; i<lList.length; i+=2) {
-    positions.add(LatLng(lList[i], lList[i+1]));
+  for (int i = 0; i < lList.length; i += 2) {
+    positions.add(LatLng(lList[i], lList[i + 1]));
   }
 
   return positions;

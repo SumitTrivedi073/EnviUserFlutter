@@ -4,7 +4,12 @@
 
 import 'dart:convert';
 
-UserTripModel userTripModelFromJson(String str) => UserTripModel.fromJson(json.decode(str));
+import 'package:envi/web_service/Constant.dart';
+
+import '../../../utils/utility.dart';
+
+UserTripModel userTripModelFromJson(String str) =>
+    UserTripModel.fromJson(json.decode(str));
 
 String userTripModelToJson(UserTripModel data) => json.encode(data.toJson());
 
@@ -18,14 +23,14 @@ class UserTripModel {
   Content content;
 
   factory UserTripModel.fromJson(Map<String, dynamic> json) => UserTripModel(
-    message: json["message"],
-    content: Content.fromJson(json["content"]),
-  );
+        message: json["message"],
+        content: Content.fromJson(json["content"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "content": content.toJson(),
-  };
+        "message": message,
+        "content": content.toJson(),
+      };
 }
 
 class Content {
@@ -40,16 +45,17 @@ class Content {
   List<Driver> driver;
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
-    passengerTripMasterId: json["passengerTripMasterId"],
-    otp: json["otp"],
-    driver: List<Driver>.from(json["driver"].map((x) => Driver.fromJson(x))),
-  );
+        passengerTripMasterId: json["passengerTripMasterId"],
+        otp: json["otp"],
+        driver:
+            List<Driver>.from(json["driver"].map((x) => Driver.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "passengerTripMasterId": passengerTripMasterId,
-    "otp": otp,
-    "driver": List<dynamic>.from(driver.map((x) => x.toJson())),
-  };
+        "passengerTripMasterId": passengerTripMasterId,
+        "otp": otp,
+        "driver": List<dynamic>.from(driver.map((x) => x.toJson())),
+      };
 }
 
 class Driver {
@@ -98,48 +104,48 @@ class Driver {
   double rating;
 
   factory Driver.fromJson(Map<String, dynamic> json) => Driver(
-    usertype: json["usertype"],
-    status: json["status"],
-    ratingCount: json["ratingCount"],
-    isArcheived: json["isArcheived"],
-    isTestUser: json["isTestUser"],
-    isFirstTripCompleted: json["isFirstTripCompleted"],
-    role: json["role"],
-    id: json["_id"],
-    driverId: json["id"],
-    name: json["name"],
-    countrycode: json["countrycode"],
-    phone: json["phone"],
-    mailid: json["mailid"],
-    gender: json["gender"],
-    propic: json["propic"],
-    createdon: DateTime.parse(json["createdon"]),
-    fcmToken: json["FcmToken"],
-    deviceId: json["deviceId"],
-    v: json["__v"],
-    rating: json["rating"].toDouble(),
-  );
+        usertype: json["usertype"],
+        status: json["status"],
+        ratingCount: json["ratingCount"],
+        isArcheived: json["isArcheived"],
+        isTestUser: json["isTestUser"],
+        isFirstTripCompleted: json["isFirstTripCompleted"],
+        role: json["role"],
+        id: json["_id"],
+        driverId: json["id"],
+        name: json["name"],
+        countrycode: json["countrycode"],
+        phone: json["phone"],
+        mailid: json["mailid"],
+        gender: json["gender"],
+        propic: encodeImgURLString(json["propic"]),
+        createdon: DateTime.parse(json["createdon"]),
+        fcmToken: json["FcmToken"],
+        deviceId: json["deviceId"],
+        v: json["__v"],
+        rating: json["rating"].toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "usertype": usertype,
-    "status": status,
-    "ratingCount": ratingCount,
-    "isArcheived": isArcheived,
-    "isTestUser": isTestUser,
-    "isFirstTripCompleted": isFirstTripCompleted,
-    "role": role,
-    "_id": id,
-    "id": driverId,
-    "name": name,
-    "countrycode": countrycode,
-    "phone": phone,
-    "mailid": mailid,
-    "gender": gender,
-    "propic": propic,
-    "createdon": createdon.toIso8601String(),
-    "FcmToken": fcmToken,
-    "deviceId": deviceId,
-    "__v": v,
-    "rating": rating,
-  };
+        "usertype": usertype,
+        "status": status,
+        "ratingCount": ratingCount,
+        "isArcheived": isArcheived,
+        "isTestUser": isTestUser,
+        "isFirstTripCompleted": isFirstTripCompleted,
+        "role": role,
+        "_id": id,
+        "id": driverId,
+        "name": name,
+        "countrycode": countrycode,
+        "phone": phone,
+        "mailid": mailid,
+        "gender": gender,
+        "propic": propic,
+        "createdon": createdon.toIso8601String(),
+        "FcmToken": fcmToken,
+        "deviceId": deviceId,
+        "__v": v,
+        "rating": rating,
+      };
 }

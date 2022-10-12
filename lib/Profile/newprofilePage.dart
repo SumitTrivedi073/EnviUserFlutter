@@ -289,12 +289,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
                     gender: selectedGender!,
                     email: _emailController.text
                   );
-                  // var res;
-                  // res = await userApi.userEditProfile(
-                  //     token: widget.user.token,
-                  //     name: _firstNameController.text,
-                  //     gender: selectedGender!,
-                  //     propic: '$_image.path');
                 },
                 height: 48,
                 minWidth: double.infinity,

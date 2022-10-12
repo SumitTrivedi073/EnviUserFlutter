@@ -37,7 +37,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   init() async {
-
     setState(() {
       email = Profiledata().getmailid();
     });
@@ -73,8 +72,8 @@ class _NavigationPageState extends State<NavigationDrawer> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
-                          child: getsmallNetworkImage(context,
-                              "${Profiledata.propic!=null?Profiledata.propic:placeHolderImage}"),
+                          child: getsmallNetworkImage(
+                              context, encodeImgURLString(Profiledata.propic)),
                         ),
                       ),
                       const SizedBox(
@@ -299,28 +298,26 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   Column userDetails() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:  [
-          const SizedBox(
-            height: 10,
-          ),
-          robotoTextWidget(
-            textval: Profiledata().getname().toString(),
-            colorval: AppColor.grey,
-            fontWeight: FontWeight.w800,
-            sizeval: 20.0,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const robotoTextWidget(
-            textval: 'SILVER LEVEL',
-            colorval: AppColor.lightgreen,
-            fontWeight: FontWeight.w600,
-            sizeval: 14.0,
-          ),
-        ]);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const SizedBox(
+        height: 10,
+      ),
+      robotoTextWidget(
+        textval: Profiledata().getname().toString(),
+        colorval: AppColor.grey,
+        fontWeight: FontWeight.w800,
+        sizeval: 20.0,
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      const robotoTextWidget(
+        textval: 'SILVER LEVEL',
+        colorval: AppColor.lightgreen,
+        fontWeight: FontWeight.w600,
+        sizeval: 14.0,
+      ),
+    ]);
   }
 
   Row footerView() {
@@ -359,7 +356,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       content: SizedBox(
           height: 100,
           child: Column(children: [
-             Padding(
+            Padding(
               padding: EdgeInsets.only(top: 5),
               child: Text(
                 appName,
@@ -373,7 +370,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
             const SizedBox(
               height: 10,
             ),
-             Text(
+            Text(
               logoutConfirmation,
               style: const TextStyle(
                   color: AppColor.butgreen,
@@ -436,21 +433,15 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   Future<void> confirmLogout(BuildContext context) async {
-    sharedPreferences = await SharedPreferences.getInstance();
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    await _auth.signOut();
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+        (Route<dynamic> route) => false);
+
     dynamic res = await HTTP.get(userLogout());
-    if (res != null && res.statusCode != null && res.statusCode == 200) {
-      showToast("Logout SuccessFully");
-
-      final FirebaseAuth _auth = FirebaseAuth.instance;
-      await _auth.signOut();
-      sharedPreferences.clear();
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
-
-    } else {
-      throw "Not Logged Out";
-    }
+    showToast("Logout SuccessFully");
+    sharedPreferences.clear();
   }
 }
