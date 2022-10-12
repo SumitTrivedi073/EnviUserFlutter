@@ -71,8 +71,8 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ),
 
                         Card(
-                            color: AppColor.greyblack,
-                            child: getsmallNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
+
+                            child: getheaderNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
 
                         )
                       ],
