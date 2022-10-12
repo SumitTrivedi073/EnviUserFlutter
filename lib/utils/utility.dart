@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/theme/color.dart';
 import 'package:flutter/material.dart';
+import 'package:envi/web_service/Constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -77,4 +78,10 @@ Future<void> makingPhoneCall(String phone) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+
+String encodeImgURLString(tmp) {
+  String endStr =
+      tmp != null && tmp != '' ? Uri.encodeFull(tmp).trim() : placeHolderImage;
+  return endStr;
 }

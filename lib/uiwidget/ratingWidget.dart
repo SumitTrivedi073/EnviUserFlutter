@@ -4,9 +4,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../theme/color.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
 import 'robotoTextWidget.dart';
 import '../web_service/Constant.dart';
-
 
 class RatingBarWidget extends StatefulWidget {
   final TripDataModel? livetripData;
@@ -40,9 +40,8 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                 ClipRRect(
                     borderRadius: BorderRadius.circular(50.0),
                     child: Image.network(
-                      widget.livetripData!.driverInfo.driverImgUrl.toString() != null
-                          ? widget.livetripData!.driverInfo.driverImgUrl.toString()
-                          : placeHolderImage,
+                      encodeImgURLString(
+                          widget.livetripData!.driverInfo.driverImgUrl),
                       fit: BoxFit.fill,
                       height: 50,
                       width: 50,
@@ -68,8 +67,7 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                       itemCount: 5,
                       itemSize: 27,
                       unratedColor: AppColor.border,
-                      itemPadding:
-                      const EdgeInsets.symmetric(horizontal: 2.0),
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -85,6 +83,4 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
           )),
     );
   }
-
-  
 }

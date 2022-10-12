@@ -15,6 +15,7 @@ import '../appConfig/Profiledata.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/searchDriver/model/driverListModel.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 
 class DriverListItem extends StatefulWidget {
@@ -46,6 +47,7 @@ class DriverListItemPageState extends State<DriverListItem> {
       super.setState(fn);
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -233,10 +235,9 @@ class DriverListItemPageState extends State<DriverListItem> {
         selectedIndex = index;
       },
       child: Card(
-
         margin: const EdgeInsets.all(5),
         color: const Color(0xFFE4F3F5),
-        shape: selectedIndex != null
+        shape: selectedIndex == index
             ? RoundedRectangleBorder(
                 side: const BorderSide(color: Colors.green, width: 2.0),
                 borderRadius: BorderRadius.circular(5.0))
@@ -277,7 +278,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                         ),
                         Card(
                           child: Image.network(
-                            DriverList[index].driverPhoto ?? '',
+                            encodeImgURLString(DriverList[index].driverPhoto),
                             fit: BoxFit.fill,
                             height: 40,
                             width: 50,
@@ -384,7 +385,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   children: [
                     robotoTextWidget(
                         textval:
-                            "₹${vehiclePriceClasses[index].priceClass.totalFare}",
+                            "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -444,6 +445,6 @@ class DriverListItemPageState extends State<DriverListItem> {
 
     double sum = num1 + num2;
     print('sum:$sum');
-    return "₹$sum";
+    return sum.toStringAsFixed(0);
   }
 }
