@@ -69,7 +69,7 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ),
 
                         Card(
-                          child: Image.network(placeHolderImage,
+                          child: Image.network(loginPic??placeHolderImage,
                             fit: BoxFit.fill,height: 40,
                             width: 50,),
                         )

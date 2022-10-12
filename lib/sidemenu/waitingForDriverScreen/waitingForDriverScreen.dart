@@ -45,14 +45,13 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             builder: (BuildContext context) =>
                             const OnRideWidget()),
                             (Route<dynamic> route) => false);
-                  } else if (value.liveTripData!.tripInfo.tripStatus ==
-                      TripStatusCancel) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                            const HomePage(title: 'title')),
-                            (Route<dynamic> route) => false);
                   }
+                }else{
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                          const HomePage(title: 'title')),
+                          (Route<dynamic> route) => false);
                 }
               });
               return value.liveTripData != null

@@ -253,6 +253,9 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           Profiledata.setphone(widget.profiledatamodel.phone);
                           Profiledata.setgender(widget.profiledatamodel.gender);
                           Profiledata.setname(widget.profiledatamodel.name);
+                              Loginphone, widget.profiledata.phone);
+                          sharedPreferences.setString(
+                              LoginName, widget.profiledata.name);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
