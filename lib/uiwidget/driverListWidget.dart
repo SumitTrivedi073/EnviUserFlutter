@@ -236,7 +236,7 @@ class DriverListItemPageState extends State<DriverListItem> {
 
         margin: const EdgeInsets.all(5),
         color: const Color(0xFFE4F3F5),
-        shape: selectedIndex != null
+        shape: selectedIndex == index
             ? RoundedRectangleBorder(
                 side: const BorderSide(color: Colors.green, width: 2.0),
                 borderRadius: BorderRadius.circular(5.0))

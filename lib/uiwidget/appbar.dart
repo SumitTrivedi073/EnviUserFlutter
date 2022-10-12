@@ -3,6 +3,7 @@ import 'package:envi/appConfig/Profiledata.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
+import '../theme/theme.dart';
 import '../web_service/Constant.dart';
 import 'navigationdrawer.dart';
 
@@ -70,9 +71,9 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ),
 
                         Card(
-                          child: Image.network(Profiledata.propic!=null?Profiledata.propic:placeHolderImage,
-                            fit: BoxFit.fill,height: 40,
-                            width: 50,),
+                            color: AppColor.greyblack,
+                            child: getsmallNetworkImage(context,Profiledata.propic!=null?Profiledata.propic:placeHolderImage)
+
                         )
                       ],
                     ),
