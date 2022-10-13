@@ -381,52 +381,56 @@ class _NavigationPageState extends State<NavigationDrawer> {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                    height: 40,
-                    width: 120,
-                    margin: EdgeInsets.only(right: 5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      height: 38,
+                      width: 120,
+                      margin: EdgeInsets.only(right: 5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
+                          ),
                         ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: cancel,
-                        colorval: AppColor.greyblack,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-                Container(
-                    height: 40,
-                    width: 120,
-                    margin: EdgeInsets.only(left: 5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        confirmLogout(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.greyblack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        child: robotoTextWidget(
+                          textval: cancel,
+                          colorval: AppColor.greyblack,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: confirm,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-              ],
+                      )),
+                  Container(
+                      height: 40,
+                      width: 120,
+                      margin: EdgeInsets.only(left: 5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          confirmLogout(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.greyblack,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: robotoTextWidget(
+                          textval: confirm,
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
+                ],
+              ),
             )
           ])),
     );
