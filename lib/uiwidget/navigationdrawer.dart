@@ -440,7 +440,11 @@ class _NavigationPageState extends State<NavigationDrawer> {
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);
 
-    dynamic res = await HTTP.get(userLogout());
+    try {
+      dynamic res = await HTTP.get(userLogout());
+    } catch (e) {}
+
+    
     showToast("Logout SuccessFully");
     sharedPreferences.clear();
   }

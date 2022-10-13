@@ -22,7 +22,8 @@ class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
   final void Function(String) callback;
   MapDirectionWidgetPickup(
-      {Key? key, this.liveTripData, required this.callback}) : super(key: key);
+      {Key? key, this.liveTripData, required this.callback})
+      : super(key: key);
 
   @override
   MapDirectionWidgetPickupState createState() =>
@@ -59,7 +60,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           : 77.345492878187);
 
   late LatLng previousLocation = const LatLng(0.0, 0.0);
-  var carMarker, driverStartingLocation ;
+  var carMarker, driverStartingLocation;
   final List<Marker> markers = <Marker>[];
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
@@ -67,7 +68,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-  late double distancecorrectionFactor,googleDistance, duration;
+  late double distancecorrectionFactor, googleDistance, duration;
 
   @override
   void initState() {
@@ -76,7 +77,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     _sessionToken = uuid.v4();
     addMarker();
     getDirections();
-
   }
 
   getDirections() async {
@@ -96,8 +96,10 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             for (var k = 0;
                 k < directionModel.routes[i].legs[j].steps.length;
                 k++) {
-              duration = directionModel.routes[i].legs[j].duration.value.toDouble();
-              googleDistance = directionModel.routes[i].legs[j].distance.value.toDouble();
+              duration =
+                  directionModel.routes[i].legs[j].duration.value.toDouble();
+              googleDistance =
+                  directionModel.routes[i].legs[j].distance.value.toDouble();
 
               pointLatLng = polylinePoints.decodePolyline(
                   directionModel.routes[i].legs[j].steps[k].polyline.points);
@@ -109,7 +111,12 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           }
         }
         addPolyLine(polylineCoordinates);
-        distancecorrectionFactor = googleDistance / calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+        distancecorrectionFactor = googleDistance /
+            calculateDistance(
+                carCurrentLocation.latitude,
+                carCurrentLocation.longitude,
+                pickupLocation.latitude,
+                pickupLocation.longitude);
         startTimer();
         updatePickupTime();
       } else {
@@ -118,18 +125,17 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     }
   }
 
-  double calculateDistance(lat1, lon1, lat2, lon2){
+  double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
-    var a = 0.5 - c((lat2 - lat1) * p)/2 +
-        c(lat1 * p) * c(lat2 * p) *
-            (1 - c((lon2 - lon1) * p))/2;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
 
   @override
   Widget build(BuildContext context) {
-
     carCurrentLocation = LatLng(
         (widget.liveTripData!.driverLocation.latitude != null)
             ? widget.liveTripData!.driverLocation.latitude
@@ -138,8 +144,8 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             ? widget.liveTripData!.driverLocation.longitude
             : 77.345492878187);
 
-
-    if (previousLocation.latitude!=0.0 && previousLocation!=carCurrentLocation) {
+    if (previousLocation.latitude != 0.0 &&
+        previousLocation != carCurrentLocation) {
       animateCar(
         previousLocation.latitude,
         previousLocation.longitude,
@@ -197,13 +203,12 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     setState(() {});
 
-    if(previousLocation!=carCurrentLocation) {
+    if (previousLocation != carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
   }
 
   addMarker() async {
-
     var pickupMarker = Marker(
       //add start location marker
       markerId: MarkerId(pickupLocation.toString()),
@@ -232,21 +237,20 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         rotation: getBearing(pickupLocation, carCurrentLocation),
         draggable: false);
 
-
-      if(driverStartingLocation==null) {
-         driverStartingLocation = Marker(
-          //add start location marker
-          markerId: MarkerId(carCurrentLocation.toString()),
-          position: carCurrentLocation, //position of marker
-          infoWindow: const InfoWindow(
-            //popup info
-            title: 'Driver Starting Location',
-          ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueOrange), //Icon for Marker
-        );
-        markers.add(driverStartingLocation);
-      }
+    if (driverStartingLocation == null) {
+      driverStartingLocation = Marker(
+        //add start location marker
+        markerId: MarkerId(carCurrentLocation.toString()),
+        position: carCurrentLocation, //position of marker
+        infoWindow: const InfoWindow(
+          //popup info
+          title: 'Driver Starting Location',
+        ),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueOrange), //Icon for Marker
+      );
+      markers.add(driverStartingLocation);
+    }
     //Adding a delay and then showing the marker on screen
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -276,13 +280,10 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         provider, //Ticker provider of the widget. This is used for animation
     GoogleMapController controller, //Google map controller of our widget
   ) async {
-    final double bearing =
-        getBearing(pickupLocation, carCurrentLocation);
-
+    final double bearing = getBearing(pickupLocation, carCurrentLocation);
 
     final Uint8List markerIcon =
-    await getBytesFromAsset('assets/images/car-map.png', 70);
-
+        await getBytesFromAsset('assets/images/car-map.png', 70);
 
     final animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
@@ -304,7 +305,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
         //New marker location
         carMarker = Marker(
-            markerId:  MarkerId("Driver Location"),
+            markerId: MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
@@ -323,24 +324,30 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     //Starting the animation
     animationController.forward();
-    if(previousLocation!=carCurrentLocation) {
+    if (previousLocation != carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
     updatePickupTime();
   }
-  void updatePickupTime() {
 
-    double new_distance = distancecorrectionFactor * calculateDistance(carCurrentLocation.latitude, carCurrentLocation.longitude, pickupLocation.latitude, pickupLocation.longitude);
+  void updatePickupTime() {
+    double new_distance = distancecorrectionFactor *
+        calculateDistance(
+            carCurrentLocation.latitude,
+            carCurrentLocation.longitude,
+            pickupLocation.latitude,
+            pickupLocation.longitude);
     double new_time = (duration / googleDistance) * new_distance;
 
-    int minutes =  new_time ~/ 60;
-    int seconds =  (new_time % 60).toInt();
-    if(minutes>0) {
+    int minutes = new_time ~/ 60;
+    int seconds = (new_time % 60).toInt();
+    if (minutes > 0) {
       widget.callback("$minutes Minute");
-    }else{
+    } else {
       widget.callback("$seconds Second");
     }
   }
+
   double getBearing(LatLng begin, LatLng end) {
     double lat = (begin.latitude - end.latitude).abs();
     double lng = (begin.longitude - end.longitude).abs();
@@ -370,9 +377,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   @override
   void dispose() {
-    timer.cancel();
+    if (timer != null) timer.cancel();
     super.dispose();
   }
-
-
 }
