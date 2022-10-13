@@ -60,9 +60,13 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                   fontWeight: FontWeight.w800,
                 ),
                 Card(
-                    color: AppColor.greyblack,
-                    child: getsmallNetworkImage(
-                        context, encodeImgURLString(Profiledata.propic)))
+                  child: Image.network(
+                    encodeImgURLString(Profiledata.propic),
+                    fit: BoxFit.fill,
+                    height: 40,
+                    width: 50,
+                  ),
+                )
               ],
             )
           ),

@@ -1,11 +1,15 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:envi/database/favoritesData.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../database/database.dart';
+import '../database/favoritesDataDao.dart';
 
 class Utility {
   _getId() async {
@@ -71,4 +75,16 @@ String encodeImgURLString(tmp) {
   String endStr =
       tmp != null && tmp != '' ? Uri.encodeFull(tmp).trim() : placeHolderImage;
   return endStr;
+}
+Future<void> deleteAlldata() async {
+  final database =
+      await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
+  FavoritesDataDao dao = database.taskDao;
+  List<FavoritesData> data = await dao.findAllTasks();
+  FavoritesData res;
+  for(res in data){
+    print("datadelete${res}");
+    await dao.deleteTask(res);
+  }
+  //await dao.deleteTasks(data);
 }
