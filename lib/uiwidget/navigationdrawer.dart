@@ -435,10 +435,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.signOut();
 
-
-
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    dynamic res = await HTTP.get(userLogout());
     try {
       dynamic res = await HTTP.get(userLogout());
     } catch (e) {}

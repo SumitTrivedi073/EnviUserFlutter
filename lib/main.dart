@@ -74,12 +74,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(loginID) == null) {
-
-      final database =
-      await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
-       dao = database.taskDao;
-      List<FavoritesData> data = await dao.findAllTasks();
-      print("local ${data.length}");
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
