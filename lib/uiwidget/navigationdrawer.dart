@@ -27,7 +27,6 @@ class NavigationDrawer extends StatefulWidget {
 
 class _NavigationPageState extends State<NavigationDrawer> {
   String? email;
-  late SharedPreferences sharedPreferences;
 
   @override
   void initState() {
@@ -436,16 +435,26 @@ class _NavigationPageState extends State<NavigationDrawer> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.signOut();
 
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-        (Route<dynamic> route) => false);
-
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       dynamic res = await HTTP.get(userLogout());
     } catch (e) {}
 
-    
+
     showToast("Logout SuccessFully");
     sharedPreferences.clear();
+
+    Profiledata.setusreid("");
+    Profiledata.settoken("");
+    Profiledata.setmailid("");
+    Profiledata.setpropic("");
+    Profiledata.setphone("");
+    Profiledata.setgender("");
+    Profiledata.setname("");
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+        (Route<dynamic> route) => false);
+
+
   }
 }

@@ -122,6 +122,7 @@ void SetProfileData(){
 
   void getLandingPageSettings() async {
     dynamic response = await HTTP.get(getfetchLandingPageSettings());
+    print(convert.jsonDecode(response.body));
     if (response != null && response.statusCode == 200) {
       var jsonData = convert.jsonDecode(response.body);
 
