@@ -439,6 +439,11 @@ class _NavigationPageState extends State<NavigationDrawer> {
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     dynamic res = await HTTP.get(userLogout());
+    try {
+      dynamic res = await HTTP.get(userLogout());
+    } catch (e) {}
+
+
     showToast("Logout SuccessFully");
     sharedPreferences.clear();
 

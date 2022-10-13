@@ -1,10 +1,14 @@
 class vehiclePriceClassesModel {
-  late String sku_id, type, subcategory, bootSpace;
-  late double minFare, perKMFare, maxKmRange;
+  late String sku_id, type, subcategory, bootSpace, discountPercent;
+  late double minFare,
+      perKMFare,
+      maxKmRange,
+      amount_to_be_collected,
+      total_fare,
+      seller_discount,
+      distance;
   int? passengerCapacity;
-  double? total_fare, seller_discount, distance;
-  String? discountPercent;
-  double? amount_to_be_collected;
+
   vehiclePriceClassesModel(
       this.sku_id,
       this.type,
@@ -24,8 +28,7 @@ class vehiclePriceClassesModel {
     sku_id = json['sku_id'];
     type = json['type'];
     subcategory = json['subcategory'];
-    amount_to_be_collected =
-        double.parse(json["amount_to_be_collected"].toString());
+    amount_to_be_collected = json["amount_to_be_collected"].toDouble();
     bootSpace = json["bootSpace"];
     distance = double.parse(json["distance"].toString());
     minFare = json["minFare"].toDouble();
@@ -36,6 +39,7 @@ class vehiclePriceClassesModel {
     seller_discount = double.parse(json['seller_discount'].toString());
     discountPercent = json['discountPercent'].toString();
   }
+
   Map<String, dynamic> toJson() => {
         "sku_id": sku_id,
         "type": type,
