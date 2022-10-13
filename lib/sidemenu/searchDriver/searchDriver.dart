@@ -54,7 +54,6 @@ class _SearchDriverPageState extends State<SearchDriver> {
           Align(
               alignment: Alignment.bottomCenter,
               child:SizedBox(
-                height:330,
                 child: DriverListItem(
                   key: widget._key,
                   fromAddress: widget.fromAddress,
