@@ -34,35 +34,37 @@ class _SearchDriverPageState extends State<SearchDriver> {
         fromAddress: widget.fromAddress,
         toAddress: widget.toAddress,
       ),
-      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            AppBarInsideWidget(
-              onPressBack: () {
-                Navigator.pop(context);
-                Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
-              },
-              title: "Envi",
-              isBackButtonNeeded: true,
-            ),
-            FromToWidget(
-              fromAddress: widget.fromAddress,
-              toAddress: widget.toAddress,
-              distance: distance,
-              tripType: BookingTiming.now,
-            ),
-          ],
+      Column(children: [
+        AppBarInsideWidget(
+          onPressBack: () {
+            Navigator.pop(context);
+            Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+          },
+          title: "Envi",
+          isBackButtonNeeded: true,
         ),
-        const SizedBox(height: 5),
-        DriverListItem(
-          key: widget._key,
+        FromToWidget(
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
-          callback: retrieveDistance,
+          distance: distance,
+          tripType: BookingTiming.now,
         ),
+
       ]),
-    ]));
+          Align(
+              alignment: Alignment.bottomCenter,
+              child:SizedBox(
+                height:330,
+                child: DriverListItem(
+                  key: widget._key,
+                  fromAddress: widget.fromAddress,
+                  toAddress: widget.toAddress,
+                  callback: retrieveDistance,
+                ),
+              )
+          ),
+
+        ]));
   }
 
   retrieveDistance(String distanceInKm) {
