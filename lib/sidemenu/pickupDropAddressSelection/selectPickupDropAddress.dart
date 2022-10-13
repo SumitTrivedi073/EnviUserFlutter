@@ -219,24 +219,24 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     setState(() {});
   }
 
-  getTrimmedAddress(String val) {
-    final split = val.split(',');
-    final Map<int, String> values = {
-      for (int i = 0; i < split.length; i++) i: split[i]
-    };
-    print(values); // {0: grubs, 1:  sheep}
+  // getTrimmedAddress(String val) {
+  //   final split = val.split(',');
+  //   final Map<int, String> values = {
+  //     for (int i = 0; i < split.length; i++) i: split[i]
+  //   };
+  //   print(values); // {0: grubs, 1:  sheep}
 
-    final value1 = values[0];
-    final value2 = values[1];
-    final value3 = values[2];
-    return '$value1,$value2,$value3';
-  }
+  //   final value1 = values[0];
+  //   final value2 = values[1];
+  //   final value3 = values[2];
+  //   return '$value1,$value2,$value3';
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FromLocationText.text = getTrimmedAddress(widget.currentLocation!.address);
+    FromLocationText.text = widget.currentLocation!.address;
     _sessionToken = uuid.v4();
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
@@ -366,8 +366,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         if (startFocusNode.hasFocus) {
                           setState(() {
                             // startPosition = details.result;
-                            FromLocationText.text = getTrimmedAddress(
-                                details.result!.formattedAddress!);
+                            FromLocationText.text =
+                                details.result!.formattedAddress!;
                             startingAddress = SearchPlaceModel(
                                 id: searchPlaceList[index].id,
                                 address: details.result!.formattedAddress!,
@@ -407,8 +407,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              FromLocationText.text =
-                                  getTrimmedAddress(startingAddress!.address);
+                              FromLocationText.text = startingAddress!.address;
                             });
                             endFocusNode.requestFocus();
                             getLocalSuggestions('');
@@ -439,15 +438,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              FromLocationText.text =
-                                  getTrimmedAddress(startingAddress!.address);
+                              FromLocationText.text = startingAddress!.address;
                             });
                           }
                         } else {
                           setState(() {
                             // endPosition = details.result;
-                            ToLocationText.text = getTrimmedAddress(
-                                details.result!.formattedAddress!);
+                            ToLocationText.text =
+                                details.result!.formattedAddress!;
                             endAddress = SearchPlaceModel(
                                 id: searchPlaceList[index].id,
                                 address: details.result!.formattedAddress!,
@@ -485,8 +483,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              ToLocationText.text =
-                                  getTrimmedAddress(endAddress!.address);
+                              ToLocationText.text = endAddress!.address;
                             });
                             startFocusNode.requestFocus();
                             getLocalSuggestions('');
@@ -517,8 +514,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              ToLocationText.text =
-                                  getTrimmedAddress(endAddress!.address);
+                              ToLocationText.text = endAddress!.address;
                             });
                           }
                           // endAddress = await Navigator.of(context)
@@ -540,8 +536,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       if (mounted) {
                         if (startFocusNode.hasFocus) {
                           setState(() {
-                            FromLocationText.text = getTrimmedAddress(
-                                searchPlaceList[index].address);
+                            FromLocationText.text =
+                                searchPlaceList[index].address;
                             startingAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
@@ -572,8 +568,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              FromLocationText.text =
-                                  getTrimmedAddress(startingAddress!.address);
+                              FromLocationText.text = startingAddress!.address;
                               getLocalSuggestions('');
                             });
                             endFocusNode.requestFocus();
@@ -604,14 +599,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              FromLocationText.text =
-                                  getTrimmedAddress(startingAddress!.address);
+                              FromLocationText.text = startingAddress!.address;
                             });
                           }
                         } else {
                           setState(() {
-                            ToLocationText.text = getTrimmedAddress(
-                                searchPlaceList[index].address);
+                            ToLocationText.text =
+                                searchPlaceList[index].address;
                             endAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
@@ -644,8 +638,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              ToLocationText.text =
-                                  getTrimmedAddress(endAddress!.address);
+                              ToLocationText.text = endAddress!.address;
                             });
                             startFocusNode.requestFocus();
                             getLocalSuggestions('');
@@ -676,8 +669,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
 
                             setState(() {
-                              ToLocationText.text =
-                                  getTrimmedAddress(endAddress!.address);
+                              ToLocationText.text = endAddress!.address;
                             });
                           }
                         }
