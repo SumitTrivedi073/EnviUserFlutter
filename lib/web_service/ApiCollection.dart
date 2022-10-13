@@ -71,7 +71,7 @@ class ApiCollection {
       "to_longitude":to_longitude
 
     };
-    print(data);
+    print("SheduleEstimationdata==========>$data");
     dynamic res = await HTTP.post(getScheduleEstimation(), data);
     return res;
   }
