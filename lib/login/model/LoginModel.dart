@@ -13,7 +13,7 @@ class LoginModel {
     token = json['token'];
     id = json['userid'];
     name = json['name'];
-    propic = encodeImgURLString(json["propic"]);
+    propic = encodeImgURLString(imageServerurl+json["propic"]);
     gender = json["gender"];
     phone = json["phone"];
     mailid = json["mailid"];
