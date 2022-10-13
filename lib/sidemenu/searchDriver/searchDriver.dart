@@ -34,21 +34,27 @@ class _SearchDriverPageState extends State<SearchDriver> {
         fromAddress: widget.fromAddress,
         toAddress: widget.toAddress,
       ),
-      Column(children: [
-        AppBarInsideWidget(
-            onPressBack: () {
-              Navigator.pop(context);
-              Navigator.pop(context,[widget.fromAddress,widget.toAddress]);
-            },
-            title: "Envi",isBackButtonNeeded: true,),
-        const SizedBox(height: 5),
-        FromToWidget(
-          fromAddress: widget.fromAddress,
-          toAddress: widget.toAddress,
-          distance: distance,
-          tripType: BookingTiming.now,
+      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            AppBarInsideWidget(
+              onPressBack: () {
+                Navigator.pop(context);
+                Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+              },
+              title: "Envi",
+              isBackButtonNeeded: true,
+            ),
+            FromToWidget(
+              fromAddress: widget.fromAddress,
+              toAddress: widget.toAddress,
+              distance: distance,
+              tripType: BookingTiming.now,
+            ),
+          ],
         ),
-       const SizedBox(height: 250),
+        const SizedBox(height: 5),
         DriverListItem(
           key: widget._key,
           fromAddress: widget.fromAddress,
