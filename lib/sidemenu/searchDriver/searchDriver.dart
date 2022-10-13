@@ -43,22 +43,28 @@ class _SearchDriverPageState extends State<SearchDriver> {
           title: "Envi",
           isBackButtonNeeded: true,
         ),
-        const SizedBox(height: 5),
         FromToWidget(
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
           distance: distance,
           tripType: BookingTiming.now,
         ),
-       const SizedBox(height: 250),
-        DriverListItem(
-          key: widget._key,
-          fromAddress: widget.fromAddress,
-          toAddress: widget.toAddress,
-          callback: retrieveDistance,
-        ),
+
       ]),
-    ]));
+          Align(
+              alignment: Alignment.bottomCenter,
+              child:SizedBox(
+                height:330,
+                child: DriverListItem(
+                  key: widget._key,
+                  fromAddress: widget.fromAddress,
+                  toAddress: widget.toAddress,
+                  callback: retrieveDistance,
+                ),
+              )
+          ),
+
+        ]));
   }
 
   retrieveDistance(String distanceInKm) {

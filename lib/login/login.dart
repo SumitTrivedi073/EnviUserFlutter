@@ -49,6 +49,7 @@ class _LoginpageState extends State<Loginpage> {
     checkPermission();
     plushcontroller.text = "+";
     countrycontroller.text = "91";
+    deleteAlldata();
   }
 
   Future checkPermission() async {
