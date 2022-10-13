@@ -74,14 +74,15 @@ class _NewProfilePageState extends State<NewProfilePage> {
     super.initState();
   }
 
-  Future<File> getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load('assets/$path');
+  Future<File> getImageFileFromAssets() async {
+  
 
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+  var bytes = await rootBundle.load('assets/images/logo.png');
+   String tempPath = (await getTemporaryDirectory()).path;
+  File file = File('$tempPath/profile.png');
+  await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
 
-    return file;
+  return file;
   }
 
   @override
@@ -272,7 +273,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                 onPressed: () async {
                   UserApiService userApi = UserApiService();
                   final response = await userApi.userEditProfile(
-                      image: _image!,
+                      image: _image??await getImageFileFromAssets(),
                       token: widget.user.token,
                       name: _firstNameController.text,
                       gender: selectedGender!,

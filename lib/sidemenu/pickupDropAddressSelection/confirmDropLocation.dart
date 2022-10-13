@@ -167,7 +167,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         final task = FavoritesData.optional(
             identifier: addressId,
             address: addressToAdd.address,
-            isFavourite: 'Y',
+            isFavourite: addressToAdd.isFavourite,
             latitude: addressToAdd.latLng.latitude.toString(),
             longitude: addressToAdd.latLng.longitude.toString(),
             title: addressToAdd.title);
