@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart' ;
+import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart';
 import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 
 import 'package:envi/web_service/Constant.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../appConfig/Profiledata.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
@@ -30,7 +30,12 @@ class ConfirmDriver extends StatefulWidget {
   final DriverListModel.Content? driverDetail;
   final DriverListModel.VehiclePriceClass? priceDetail;
 
-  const ConfirmDriver({Key? key, this.driverDetail, this.priceDetail,this.toAddress, this.fromAddress})
+  const ConfirmDriver(
+      {Key? key,
+      this.driverDetail,
+      this.priceDetail,
+      this.toAddress,
+      this.fromAddress})
       : super(key: key);
 
   @override
@@ -42,8 +47,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   LatLng? latlong = null;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  late SharedPreferences sharedPreferences;
-   late UserTripModel userTripModel;
+  late UserTripModel userTripModel;
 
   @override
   void initState() {
@@ -78,7 +82,10 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
             )
           : Container(),
       Column(children: const [
-        AppBarInsideWidget(title: "Booking Confirmation"),
+        AppBarInsideWidget(
+          title: "Booking Confirmation",
+          isBackButtonNeeded: true,
+        ),
         SizedBox(height: 5),
       ])
     ]));
@@ -110,11 +117,13 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                   color: AppColor.border,
                 ),
               ),
-              child: Padding(padding: const EdgeInsets.only(top: 5,bottom: 5),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: Column(
                   children: [
-                     robotoTextWidget(
-                        textval: widget.driverDetail!.priceClass!.type.toString(),
+                    robotoTextWidget(
+                        textval:
+                            widget.driverDetail!.priceClass!.type.toString(),
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w200),
@@ -131,8 +140,9 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                             const SizedBox(
                               width: 5,
                             ),
-                             robotoTextWidget(
-                                textval: "${widget.driverDetail!.priceClass!.passengerCapacity} People",
+                            robotoTextWidget(
+                                textval:
+                                    "${widget.driverDetail!.priceClass!.passengerCapacity} People",
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w200)
@@ -148,19 +158,19 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                             const SizedBox(
                               width: 5,
                             ),
-                             robotoTextWidget(
-                                textval:widget.driverDetail!.priceClass!.bootSpace.toString(),
+                            robotoTextWidget(
+                                textval: widget
+                                    .driverDetail!.priceClass!.bootSpace
+                                    .toString(),
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w200)
                           ],
                         ),
-
                       ],
                     )
                   ],
                 ),
-
               ),
             ),
             const SizedBox(
@@ -179,18 +189,18 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                   children: [
                     Container(
                       margin: const EdgeInsets.only(left: 10),
-                      padding: const EdgeInsets.only(top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children:  [
+                        children: [
                           robotoTextWidget(
-                              textval:"₹${widget.priceDetail!.priceClass.totalFare.toString()}",
+                              textval:
+                                  "₹${widget.priceDetail!.priceClass.totalFare.toString()}",
                               colorval: AppColor.black,
                               sizeval: 16,
                               fontWeight: FontWeight.w800),
-
-                          const robotoTextWidget(
-                              textval: "Approx. Fare",
+                          robotoTextWidget(
+                              textval: ApproxFare,
                               colorval: AppColor.black,
                               sizeval: 12,
                               fontWeight: FontWeight.w400),
@@ -204,33 +214,30 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                       color: AppColor.border,
                     ),
                     const SizedBox(width: 10),
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-
-                  padding: const EdgeInsets.only(top: 5,bottom: 5),
-                child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
-                        robotoTextWidget(
-                            textval: '${widget.driverDetail!.durationToPickUpLocation} Mins',
-                            colorval: AppColor.black,
-                            sizeval: 16,
-                            fontWeight: FontWeight.w800),
-
-                        const robotoTextWidget(
-                            textval: "Pickup Time",
-                            colorval: AppColor.black,
-                            sizeval: 12,
-                            fontWeight: FontWeight.w400),
-                      ],
-                    )),
+                    Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            robotoTextWidget(
+                                textval:
+                                    '${widget.driverDetail!.durationToPickUpLocation} Mins',
+                                colorval: AppColor.black,
+                                sizeval: 16,
+                                fontWeight: FontWeight.w800),
+                            const robotoTextWidget(
+                                textval: "Pickup Time",
+                                colorval: AppColor.black,
+                                sizeval: 12,
+                                fontWeight: FontWeight.w400),
+                          ],
+                        )),
                   ],
                 ),
               ),
             ),
-            const SizedBox(
-                height: 10
-            ),
+            const SizedBox(height: 10),
             const Text(
               "To address",
               style: TextStyle(
@@ -242,16 +249,16 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
             const SizedBox(
               height: 5,
             ),
-        Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0),
+                side: const BorderSide(
+                  color: AppColor.border,
+                ),
               ),
-            ),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(10) ,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -264,13 +271,14 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                       height: 5,
                     ),
                     robotoTextWidget(
-                        textval:  widget.toAddress!.address.toString(),
+                        textval: widget.toAddress!.address.toString(),
                         colorval: AppColor.black,
                         sizeval: 12,
                         fontWeight: FontWeight.w200),
                   ],
                 ),
-            ),),
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -278,7 +286,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  height: 40,
+                    height: 40,
                     width: 120,
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
@@ -286,8 +294,9 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                         Navigator.of(context).pop();
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (BuildContext context) => const HomePage(title: "title")),
-                                (Route<dynamic> route) => false);
+                                builder: (BuildContext context) =>
+                                    const HomePage(title: "title")),
+                            (Route<dynamic> route) => false);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.white,
@@ -303,7 +312,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
                       ),
                     )),
                 Container(
-                  height: 40,
+                    height: 40,
                     width: 120,
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
@@ -327,12 +336,10 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
               ],
             )
           ])),
-
     );
   }
 
   Future getCurrentLocation() async {
-    sharedPreferences = await SharedPreferences.getInstance();
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission != PermissionStatus.granted) {
       LocationPermission permission = await Geolocator.requestPermission();
@@ -363,41 +370,42 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
     Map data;
     data = {
       "driverTripMasterId": widget.driverDetail!.driverTripMasterId,
-      "userId":sharedPreferences.get(LoginID),
+      "userId": Profiledata().getusreid(),
       "vehicleId": widget.driverDetail!.vehicleId.toString(),
       "driverId": widget.driverDetail!.driverId,
       "location": {
         "latitude": widget.fromAddress!.latLng.latitude.toDouble(),
-        "longitude":  widget.fromAddress!.latLng.longitude.toDouble(),
+        "longitude": widget.fromAddress!.latLng.longitude.toDouble(),
         "address": widget.fromAddress!.address
       },
       "toLocation": {
-        "latitude":  widget.toAddress!.latLng.latitude.toDouble(),
+        "latitude": widget.toAddress!.latLng.latitude.toDouble(),
         "longitude": widget.toAddress!.latLng.longitude.toDouble(),
         "address": widget.toAddress!.address
       },
       "paymentMode": "null",
       "driverName": widget.driverDetail!.driverName,
-      "driverRating": widget.driverDetail!.driverRating!.toInt(),
+      "driverRating": widget.driverDetail!.driverRating!.toDouble(),
       "driverPhoto": widget.driverDetail!.driverPhoto!.toString(),
-      "initialPrice": widget.priceDetail!.priceClass.totalFare!.toInt(),
-      "initialDistance": widget.priceDetail!.priceClass.distance!.toInt()
-
+      "initialPrice": widget.priceDetail!.priceClass.totalFare!.toDouble(),
+      "initialDistance": widget.priceDetail!.priceClass.distance!.toDouble()
     };
     print("data=======>$data");
-    var jsonData = null;
+    // var jsonData = null;
     dynamic res = await HTTP.post(startTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        jsonData = convert.jsonDecode(res.body);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitingForDriverScreen()),
-                (Route<dynamic> route) => false);
-      });
+      print("RVT TEST: Received response after booking ");
+      // setState(() {
+      // jsonData = convert.jsonDecode(res.body);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) => WaitingForDriverScreen()),
+          (Route<dynamic> route) => false);
+      // });
+            print("RVT TEST: Navigating for WaitingForDriverScreen ");
+
     } else {
       throw "Driver Not Booked";
     }
-
   }
 }

@@ -36,8 +36,6 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
   List<dynamic> _placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
-
-  // late SharedPreferences sharedPreferences;
   String SearchFromLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   late String _sessionToken;
@@ -162,6 +160,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
           children: [
             AppBarInsideWidget(
               title: widget.title,
+              isBackButtonNeeded: true,
             ),
             Container(
                 margin: const EdgeInsets.only(left: 5, right: 5),

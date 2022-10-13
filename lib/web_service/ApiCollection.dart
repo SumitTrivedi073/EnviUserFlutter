@@ -2,6 +2,7 @@ import 'dart:convert';
 // import 'dart:ffi';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'APIDirectory.dart';
 
 
@@ -70,9 +71,27 @@ class ApiCollection {
       "to_longitude":to_longitude
 
     };
-    print(data);
+    print("SheduleEstimationdata==========>$data");
     dynamic res = await HTTP.post(getScheduleEstimation(), data);
     return res;
   }
+  static Future<dynamic> AddnewSchedualeTrip(
+       fromLocation,  toLocation, scheduledAt,estimatedPrice,estimatedDistance,sku_id) async {
 
+    Map data = {
+      "from_address": fromLocation.address,
+      "from_latitude": fromLocation.latLng.latitude,
+      "from_longitude": fromLocation.latLng.longitude,
+      "to_address": toLocation.address,
+      "to_latitude": toLocation.latLng.latitude,
+      "to_longitude": toLocation.latLng.longitude,
+      "scheduledAt":scheduledAt,
+      "estimatedPrice": estimatedPrice,
+      "estimatedDistance": estimatedDistance,
+      "sku_id":sku_id,
+    };
+    print(data);
+    dynamic res = await HTTP.post(AddSchedualeTrip(), data);
+    return res;
+  }
 }

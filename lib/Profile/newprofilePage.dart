@@ -5,14 +5,20 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/dropdown.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:envi/web_service/ApiServices/user_api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import '../web_service/Constant.dart';
+
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'package:path_provider/path_provider.dart';
 
 class NewProfilePage extends StatefulWidget {
   const NewProfilePage({Key? key, required this.user}) : super(key: key);
@@ -47,9 +53,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
   }
 
   final _profileForm = GlobalKey<FormState>();
-  // var _image;
-  // var imagePicker;
-  // var type;
   void updateUser() {
     _emailController.text = widget.user.mailid;
     _phoneNoController.text = widget.user.phone;
@@ -69,6 +72,16 @@ class _NewProfilePageState extends State<NewProfilePage> {
     // imagePicker = ImagePicker();
     updateUser();
     super.initState();
+  }
+
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('assets/$path');
+
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
   }
 
   @override
@@ -124,12 +137,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                // var source = ImageSource.gallery;
-                                // XFile image = await imagePicker!
-                                //     .getImage(source: source);
-                                // setState(() {
-                                //   _image = File(image.path);
-                                // });
                                 getImage();
                               },
                               child: (_image != null)
@@ -263,38 +270,28 @@ class _NewProfilePageState extends State<NewProfilePage> {
               ),
               MaterialButton(
                 onPressed: () async {
-                  // Uri uri = Uri.parse(
-                  //     'https://qausernew.azurewebsites.net/user/updateProfile');
-                  // var data = {
-                  //   "name": _firstNameController.text,
-                  //   "gender": selectedGender
-                  // };
-                  // var res;
-                  // res = await HTTP.postToAcceptMultipartRequest(
-                  //     uri,
-                  //     data,
-                  //     File(_image!.path).readAsBytesSync(),
-                  //     _image!.path.split("/").last,
-                  //     "pro_pic");
-                  // if (res != null) {
-                  //   print(res);
-                  // } else {
-                  //   print(res);
-                  // }
                   UserApiService userApi = UserApiService();
                   final response = await userApi.userEditProfile(
-                    image: _image!,
-                    token: widget.user.token,
-                    name: _firstNameController.text,
-                    gender: selectedGender!,
-                    email: _emailController.text
-                  );
-                  // var res;
-                  // res = await userApi.userEditProfile(
-                  //     token: widget.user.token,
-                  //     name: _firstNameController.text,
-                  //     gender: selectedGender!,
-                  //     propic: '$_image.path');
+                      image: _image!,
+                      token: widget.user.token,
+                      name: _firstNameController.text,
+                      gender: selectedGender!,
+                      email: _emailController.text);
+
+                  if (response) {
+                    utility.showInSnackBar(
+                        value: updatedSuccessText,
+                        context: context,
+                        duration: const Duration(seconds: 3));
+                    Future.delayed(const Duration(seconds: 4), () {
+                      Navigator.of(context).pop();
+                    });
+                  } else {
+                    utility.showInSnackBar(
+                        value: failedToUpdateText,
+                        context: context,
+                        duration: const Duration(seconds: 3));
+                  }
                 },
                 height: 48,
                 minWidth: double.infinity,

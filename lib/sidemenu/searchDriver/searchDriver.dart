@@ -14,8 +14,7 @@ class SearchDriver extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
 
-   SearchDriver({Key? key, this.toAddress, this.fromAddress})
-      : super(key: key);
+  SearchDriver({Key? key, this.toAddress, this.fromAddress}) : super(key: key);
 
   @override
   // TODO: implement createState
@@ -36,27 +35,41 @@ class _SearchDriverPageState extends State<SearchDriver> {
         toAddress: widget.toAddress,
       ),
       Column(children: [
-        const AppBarInsideWidget(title: "Envi"),
-        const SizedBox(height: 5),
+        AppBarInsideWidget(
+          onPressBack: () {
+            Navigator.pop(context);
+            Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+          },
+          title: "Envi",
+          isBackButtonNeeded: true,
+        ),
         FromToWidget(
           fromAddress: widget.fromAddress,
           toAddress: widget.toAddress,
           distance: distance,
           tripType: BookingTiming.now,
         ),
-        const SizedBox(height: 230),
-        DriverListItem(
-          key: widget._key,
-          fromAddress: widget.fromAddress,
-          toAddress: widget.toAddress,
-          callback: retrieveDistance,
-        ),
+
       ]),
-    ]));
+          Align(
+              alignment: Alignment.bottomCenter,
+              child:SizedBox(
+                height:330,
+                child: DriverListItem(
+                  key: widget._key,
+                  fromAddress: widget.fromAddress,
+                  toAddress: widget.toAddress,
+                  callback: retrieveDistance,
+                ),
+              )
+          ),
+
+        ]));
   }
-  retrieveDistance(String distanceInKm){
-   setState(() {
-     distance = distanceInKm;
-   });
+
+  retrieveDistance(String distanceInKm) {
+    setState(() {
+      distance = distanceInKm;
+    });
   }
 }

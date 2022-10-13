@@ -2,29 +2,28 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
-import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../web_service/HTTP.dart' as HTTP;
 import '../sidemenu/bookScheduleTrip/model/vehiclePriceClasses.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import '../sidemenu/searchDriver/model/driverListModel.dart';
 import '../theme/string.dart';
-import '../utils/utility.dart';
-import '../web_service/APIDirectory.dart';
 import '../web_service/ApiCollection.dart';
 
 class CarCategoriesWidget extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
   final SearchPlaceModel? toAddress;
+  final void Function(vehiclePriceClassesModel) callback;
+  final void Function(String) callback2;
 
-  const CarCategoriesWidget({Key? key, this.toAddress, this.fromAddress})
+  const CarCategoriesWidget(
+      {Key? key,
+      this.toAddress,
+      this.fromAddress,
+      required this.callback,
+      required this.callback2})
       : super(key: key);
 
   @override
@@ -34,12 +33,18 @@ class CarCategoriesWidget extends StatefulWidget {
 
 class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   var listItemCount = 0;
-
+  var distance;
   List<vehiclePriceClassesModel> vehiclePriceClasses = [];
-  late SharedPreferences sharedPreferences;
   int? selectedIndex;
   CarouselController carouselController = CarouselController();
+  bool isLoading = false;
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -48,30 +53,38 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   }
 
   void _firstLoad() async {
+    setState(() {
+      isLoading = true;
+    });
     final response = await ApiCollection.getScheduleEstimationdata(
         widget.fromAddress!.latLng.latitude,
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
         widget.toAddress!.latLng.longitude);
-    if (response != null) {
-      if (response.statusCode == 200) {
+    if (response != null&&response.statusCode == 200) {
         setState(() {
+          isLoading = false;
           vehiclePriceClasses = (jsonDecode(response.body)['content']
                   ['vehiclePriceClasses'] as List)
               .map((i) => vehiclePriceClassesModel.fromJson(i))
               .toList();
-          print(vehiclePriceClasses.length);
+          distance = jsonDecode(response.body)['content']['estimatedDistance'];
+          widget.callback2(distance.toString());
         });
-      }
-      showToast((jsonDecode(response.body)['message'].toString()));
+
+    }else{
+      setState(() { isLoading == false;});
     }
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-        child: Card(
+    return isLoading
+        ? const Center(
+      child: CircularProgressIndicator(),
+    )
+        :Card(
       elevation: 5,
       margin: const EdgeInsets.all(5),
       child: Column(
@@ -89,50 +102,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                       sizeval: 14,
                       fontWeight: FontWeight.w800),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(children: [
-                      Container(
-                        width: 1,
-                        color: AppColor.darkgrey,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            if (selectedIndex != 0) {
-                              carouselController.previousPage();
-                            }
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: (selectedIndex != 0)
-                                ? Colors.green
-                                : AppColor.grey,
-                          ))
-                    ]),
-                    Row(children: [
-                      Container(
-                        width: 1,
-                        color: AppColor.darkgrey,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            if (selectedIndex !=
-                                vehiclePriceClasses.length - 1) {
-                              carouselController.nextPage();
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.green,
-                          )),
-                      Container(
-                        width: 1,
-                        color: AppColor.grey,
-                      ),
-                    ]),
-                  ],
-                ),
               ],
             ),
           ),
@@ -143,31 +112,43 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
           const SizedBox(
             height: 5,
           ),
-          CarouselSlider(
-            items: List.generate(
-            vehiclePriceClasses.length, (index) => driverListItems(index)),
-            carouselController: carouselController,
-            options: CarouselOptions(
-          onPageChanged: (index, reason) {
-            selectedIndex = index;
-          },
-          autoPlay: false,
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 2.0),
+            height: 170.0,
+            child: ListView.builder(
+              // controller: _controller,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return driverListItems(index);
+              },
+              itemCount: vehiclePriceClasses.length,
+              padding: const EdgeInsets.all(3),
             ),
-          ),
+          )
         ],
       ),
-    ));
+    );
   }
 
   Widget driverListItems(int index) {
     return GestureDetector(
       onTap: () {
-        selectedIndex = index;
-        print("selectedIndex========>$selectedIndex");
+        setState(() {
+          selectedIndex = index;
+          print("selectedIndex========>$selectedIndex");
+          widget.callback(vehiclePriceClasses[index]);
+        });
       },
       child: Card(
         margin: const EdgeInsets.all(5),
         color: const Color(0xFFE4F3F5),
+        shape: selectedIndex == index
+            ? RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.green, width: 2.0),
+                borderRadius: BorderRadius.circular(5.0))
+            : RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
@@ -275,8 +256,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     ),
                     Text(
                       getTotalPrice(
-                          vehiclePriceClasses[index].total_fare!.toInt(),
-                          vehiclePriceClasses[index].seller_discount!.toInt()),
+                          vehiclePriceClasses[index].total_fare.toDouble(),
+                          vehiclePriceClasses[index].seller_discount.toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -313,12 +294,12 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
     );
   }
 
-  String getTotalPrice(int totalFare, int discount) {
-    int num1 = totalFare;
+  String getTotalPrice(double totalFare, double discount) {
+    double num1 = totalFare;
 
-    int num2 = discount;
+    double num2 = discount;
 
-    int sum = num1 + num2;
+    double sum = num1 + num2;
     print('sum:$sum');
     return "₹$sum";
   }

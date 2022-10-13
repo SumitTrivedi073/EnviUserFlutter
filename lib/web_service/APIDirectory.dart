@@ -4,8 +4,8 @@ import 'ApiConfig.dart' as APICONFIG;
 
 const scheme = 'http';
 const host = 'localhost';
-const port = '3300';
-const mobileHost = '192.168.1.8';
+const port = '5001';
+const mobileHost = '192.168.29.211';
 
 const webBaseUrl = '$scheme://$host:$port';
 const mobileBaseUrl = '$scheme://$mobileHost:$port';
@@ -91,4 +91,10 @@ DeleteFavouriteAddressdata(){
 
 updatePaymentMode(){
   return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
+}
+AddSchedualeTrip(){
+  return Uri.parse('${getBaseURL()}/userTrip/bookScheduleTrip');
+}
+CreateOrder(){
+  return Uri.parse('${getBaseURL()}/order/createOrder');
 }

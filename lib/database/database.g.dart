@@ -281,6 +281,7 @@ class _$FavoritesDataDao extends FavoritesDataDao {
   @override
   Future<void> deleteTasks(List<FavoritesData> tasks) async {
     await _taskDeletionAdapter.deleteList(tasks);
+
   }
 
   @override
