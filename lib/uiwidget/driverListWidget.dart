@@ -40,7 +40,8 @@ class DriverListItemPageState extends State<DriverListItem> {
   int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
   bool isLoading = false;
-
+  bool isForwardArrowGreen = true;
+  bool isBackArrowGreen = true;
   @override
   void setState(fn) {
     if (mounted) {
@@ -160,9 +161,12 @@ class DriverListItemPageState extends State<DriverListItem> {
                                     carouselController.nextPage();
                                   }
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.arrow_forward_ios,
-                                  color: Colors.green,
+                                  color:
+                                      (selectedIndex != DriverList.length - 1)
+                                          ? Colors.green
+                                          : AppColor.grey,
                                 )),
                             Container(
                               width: 1,
@@ -187,8 +191,24 @@ class DriverListItemPageState extends State<DriverListItem> {
                       DriverList.length, (index) => driverListItems(index)),
                   carouselController: carouselController,
                   options: CarouselOptions(
+                    viewportFraction: 0.8,
+                    enableInfiniteScroll: false,
+                    scrollPhysics: const ClampingScrollPhysics(),
                     onPageChanged: (index, reason) {
                       selectedIndex = index;
+                      setState(() {
+                          if (selectedIndex == 0) {
+                        isBackArrowGreen = false;
+                      } else {
+                        isBackArrowGreen = true;
+                      }
+                      if (selectedIndex == DriverList.length - 1) {
+                        isForwardArrowGreen = false;
+                      } else {
+                        isForwardArrowGreen = true;
+                      }
+                      });
+                    
                     },
                     autoPlay: false,
                   ),
