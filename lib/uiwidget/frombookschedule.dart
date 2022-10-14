@@ -129,39 +129,44 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                         },
                       ),
                       AppConfig().getisScheduleFeatureEnabled()
-                          ? ElevatedButton(
-                              onPressed: () {
-                                if (AppConfig().getisScheduleFeatureEnabled() ==
-                                    true) {
-                                  _status = BookingTiming.later;
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SelectPickupDropAddress(
-                                                currentLocation:
-                                                    widget.currentLocation,
-                                                title: pickUpLocation,
-                                                tripType: _status,
-                                              )),
-                                      (route) => true);
-                                } else {
-                                  showToast(serviceNotAvailable);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                primary: AppColor.yellow,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(12), // <-- Radius
-                                ),
+                          ? TextButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(8), // <-- Radius
                               ),
-                              child: robotoTextWidget(
-                                textval: BookForLater,
-                                colorval: AppColor.white,
-                                sizeval: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
+                            ),
+                            backgroundColor:
+                            MaterialStateProperty.all(AppColor.alfaorange)),
+                        child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: robotoTextWidget(
+                            textval: BookForLater,
+                            colorval: AppColor.black,
+                            sizeval: 16.0,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        onPressed: () {
+                          if (AppConfig().getisScheduleFeatureEnabled() ==
+                              true) {
+                            _status = BookingTiming.later;
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SelectPickupDropAddress(
+                                          currentLocation:
+                                          widget.currentLocation,
+                                          title: pickUpLocation,
+                                          tripType: _status,
+                                        )),
+                                    (route) => true);
+                          } else {
+                            showToast(serviceNotAvailable);
+                          }
+                        },
+                      )
                           : Container()
                     ],
                   ),

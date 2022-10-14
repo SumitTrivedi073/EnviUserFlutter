@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                CardBanner(
                   title: 'Welcome $name',
                   image: 'assets/images/welcome_card_dashboard.png'),
+              const ScheduleListAlertConsumer(),
             ],
           ),
         ]),

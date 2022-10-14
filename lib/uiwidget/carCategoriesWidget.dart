@@ -198,7 +198,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                                 ),
                                 robotoTextWidget(
                                     textval:
-                                        "${vehiclePriceClasses[index].passengerCapacity} People $index",
+                                        "${vehiclePriceClasses[index].passengerCapacity} People",
                                     colorval: AppColor.black,
                                     sizeval: 14,
                                     fontWeight: FontWeight.w200)
@@ -261,7 +261,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval: "₹${vehiclePriceClasses[index].total_fare}",
+                        textval: "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(2)}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -317,6 +317,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
 
     double sum = num1 + num2;
     print('sum:$sum');
-    return "₹$sum";
+    return "₹${sum.toStringAsFixed(2)}";
   }
 }
