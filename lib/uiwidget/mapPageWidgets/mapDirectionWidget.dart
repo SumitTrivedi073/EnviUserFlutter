@@ -122,8 +122,8 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
         markers: markers, //markers to show on map
         polylines: Set<Polyline>.of(polylines.values), //polylines
         mapType: MapType.normal,
-        rotateGesturesEnabled: true,
-        zoomControlsEnabled: false,//map type
+        rotateGesturesEnabled: false,
+        zoomControlsEnabled: true,
         onMapCreated: (controller) { //method called when map is created
           setState(() {
             mapController = controller;

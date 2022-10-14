@@ -1,5 +1,4 @@
 import 'package:envi/sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
-import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ class FromBookScheduleWidget extends StatefulWidget {
   final String address;
 
   final SearchPlaceModel? currentLocation;
+
   FromBookScheduleWidget({required this.address, this.currentLocation});
 
   @override
@@ -22,11 +22,11 @@ class FromBookScheduleWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _FromBookScheduleWidgetPageState();
 }
 
-
 late BookingTiming _status;
 
 class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   bool isButtonPressed = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,7 +38,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
     // TODO: implement build
     return Container(
       height: 140,
-      margin: EdgeInsets.only(left: 10,right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -102,58 +102,67 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.circular(10), // <-- Radius
+                                    BorderRadius.circular(8), // <-- Radius
                               ),
                             ),
                             backgroundColor:
                                 MaterialStateProperty.all(AppColor.darkGreen)),
-                        child: robotoTextWidget(
-                          textval: BookNow,
-                          colorval: AppColor.black,
-                          sizeval: 18.0,
-                          fontWeight: FontWeight.w800,
+                        child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: robotoTextWidget(
+                            textval: BookNow,
+                            colorval: AppColor.white,
+                            sizeval: 16.0,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         onPressed: () {
                           _status = BookingTiming.now;
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => SelectPickupDropAddress(
-                                      currentLocation: widget.currentLocation,
-                                      title: pickUpLocation,tripType: _status,)),
+                                        currentLocation: widget.currentLocation,
+                                        title: pickUpLocation,
+                                        tripType: _status,
+                                      )),
                               (route) => true);
                         },
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-
-                          if(AppConfig().getisScheduleFeatureEnabled() == true) {
-                            _status = BookingTiming.later;
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SelectPickupDropAddress(
-                                            currentLocation: widget
-                                                .currentLocation,
-                                            title: pickUpLocation, tripType: _status,)),
-                                    (route) => true);
-                          }else{
-                            showToast(serviceNotAvailable);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: AppColor.yellow,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(12), // <-- Radius
-                          ),
-                        ),
-                        child: robotoTextWidget(
-                          textval: BookForLater,
-                          colorval: AppColor.white,
-                          sizeval: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
+                      AppConfig().getisScheduleFeatureEnabled()
+                          ? ElevatedButton(
+                              onPressed: () {
+                                if (AppConfig().getisScheduleFeatureEnabled() ==
+                                    true) {
+                                  _status = BookingTiming.later;
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SelectPickupDropAddress(
+                                                currentLocation:
+                                                    widget.currentLocation,
+                                                title: pickUpLocation,
+                                                tripType: _status,
+                                              )),
+                                      (route) => true);
+                                } else {
+                                  showToast(serviceNotAvailable);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: AppColor.yellow,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(12), // <-- Radius
+                                ),
+                              ),
+                              child: robotoTextWidget(
+                                textval: BookForLater,
+                                colorval: AppColor.white,
+                                sizeval: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          : Container()
                     ],
                   ),
                 )
