@@ -380,7 +380,6 @@ class DriverListItemPageState extends State<DriverListItem> {
                                   carouselController.previousPage();
                                 }
                               },
-                              
                               icon: Icon(
                                 Icons.arrow_back_ios,
                                 color: (selectedIndex != 0)
@@ -399,10 +398,11 @@ class DriverListItemPageState extends State<DriverListItem> {
                                   carouselController.nextPage();
                                 }
                               },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.green,
-                              )),
+                              icon: Icon(Icons.arrow_forward_ios,
+                                  color:
+                                      (selectedIndex != DriverList.length - 1)
+                                          ? Colors.green
+                                          : AppColor.grey)),
                           Container(
                             width: 1,
                             color: AppColor.grey,
@@ -422,18 +422,30 @@ class DriverListItemPageState extends State<DriverListItem> {
               ),
               Expanded(
                   child: CarouselSlider(
-                    items: List.generate(
-                        DriverList.length, (index) => driverListItems(index)),
-                    carouselController: carouselController,
-                    options: CarouselOptions(
-                      enableInfiniteScroll: false,
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: (index, reason) {
-                        selectedIndex = index;
-                      },
-                      autoPlay: false,
-                    ),
-                  )),
+                items: List.generate(
+                    DriverList.length, (index) => driverListItems(index)),
+                carouselController: carouselController,
+                options: CarouselOptions(
+                  enableInfiniteScroll: false,
+                  scrollDirection: Axis.horizontal,
+                  onPageChanged: (index, reason) {
+                    selectedIndex = index;
+                    setState(() {
+                      if (selectedIndex == 0) {
+                        isBackArrowGreen = false;
+                      } else {
+                        isBackArrowGreen = true;
+                      }
+                      if (selectedIndex == DriverList.length - 1) {
+                        isForwardArrowGreen = false;
+                      } else {
+                        isForwardArrowGreen = true;
+                      }
+                    });
+                  },
+                  autoPlay: false,
+                ),
+              )),
               Container(
                   height: 40,
                   margin: const EdgeInsets.all(5),
@@ -443,13 +455,13 @@ class DriverListItemPageState extends State<DriverListItem> {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) => ConfirmDriver(
-                                driverDetail: DriverList[selectedIndex!],
-                                priceDetail:
-                                vehiclePriceClasses[selectedIndex!],
-                                fromAddress: widget.fromAddress,
-                                toAddress: widget.toAddress,
-                              )),
-                              (Route<dynamic> route) => true);
+                                    driverDetail: DriverList[selectedIndex!],
+                                    priceDetail:
+                                        vehiclePriceClasses[selectedIndex!],
+                                    fromAddress: widget.fromAddress,
+                                    toAddress: widget.toAddress,
+                                  )),
+                          (Route<dynamic> route) => true);
                     },
                     style: ElevatedButton.styleFrom(
                       primary: AppColor.greyblack,
@@ -469,7 +481,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         ),
       );
     } else {
-      return  Container(
+      return Container(
         margin: EdgeInsets.all(10),
         height: 80,
         child: Card(
@@ -486,6 +498,38 @@ class DriverListItemPageState extends State<DriverListItem> {
     }
   }
 }
+
+// IconButton(
+//                                 onPressed: () {
+//                                   if (selectedIndex != 0) {
+//                                     carouselController.previousPage();
+//                                   }
+//                                 },
+//                                 icon: Icon(
+//                                   Icons.arrow_back_ios,
+//                                   color: (selectedIndex != 0)
+//                                       ? Colors.green
+//                                       : AppColor.grey,
+//                                 ))
+//                           ]),
+//                           Row(children: [
+//                             Container(
+//                               width: 1,
+//                               color: AppColor.darkgrey,
+//                             ),
+//                             IconButton(
+//                                 onPressed: () {
+//                                   if (selectedIndex != DriverList.length - 1) {
+//                                     carouselController.nextPage();
+//                                   }
+//                                 },
+//                                 icon: Icon(
+//                                   Icons.arrow_forward_ios,
+//                                   color:
+//                                       (selectedIndex != DriverList.length - 1)
+//                                           ? Colors.green
+//                                           : AppColor.grey,
+
 
 
 
