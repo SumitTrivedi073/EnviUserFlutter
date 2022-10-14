@@ -15,7 +15,7 @@ var TripStatusOnboarding ="onboarding";
 var TripStatusCompleted ="completed";
 var TripStatusCancel ="cancel";
 var TripStatusFree ="free";
-var ScheduleTripRequestedStatus ="request";
+var ScheduleTripRequestedStatus ="requested";
 var TripStatusConfirmedStatus ="confirmed";
 var TripStatusRejectStatus ="rejected";
 
