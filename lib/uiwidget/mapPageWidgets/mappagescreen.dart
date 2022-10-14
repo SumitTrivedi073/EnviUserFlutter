@@ -70,7 +70,6 @@ class MyMapState extends State {
                 onMapCreated: (GoogleMapController controller) {
                   controller.setMapStyle(MapStyle.mapStyles);
                   _controller = (controller);
-
                   _controller?.animateCamera(
                       CameraUpdate.newCameraPosition(_cameraPosition!));
                 },
