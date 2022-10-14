@@ -36,7 +36,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   LatLng? latlong = null;
   String? isoId;
   bool isverify = false;
-  late vehiclePriceClassesModel SelectedVehicle;
+  vehiclePriceClassesModel? SelectedVehicle;
   late DateTime mindatime;
 
   final TextEditingController _controller1 =
@@ -155,7 +155,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (SelectedVehicle.type != "") {
+                    if (SelectedVehicle!=null &&  SelectedVehicle!.type != "") {
                       DateTime dt =
                           DateTime.parse(_controller1.text.toString());
                       print(
@@ -172,13 +172,16 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                                   .format(inputDate)),
                         );
                       } else {
-                        print(
-                            "time not right ${mindatime.difference(inputDate).inMinutes}");
-                        showToast(
-                            "Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.");
+                        utility.showInSnackBar(
+                            value: 'Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.")',
+                            context: context,
+                            duration: const Duration(seconds: 3));
                       }
-                    } else {
-                      showToast("Please select car");
+                    } else { utility.showInSnackBar(
+                        value: 'Please select car',
+                        context: context,
+                        duration: const Duration(seconds: 3));
+
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -231,7 +234,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   children: [
                     robotoTextWidget(
-                        textval: SelectedVehicle.type.toString(),
+                        textval: SelectedVehicle!.type.toString(),
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w200),
@@ -250,7 +253,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                             ),
                             robotoTextWidget(
                                 textval:
-                                    "${SelectedVehicle.passengerCapacity} People",
+                                    "${SelectedVehicle!.passengerCapacity} People",
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w200)
@@ -267,7 +270,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                               width: 5,
                             ),
                             robotoTextWidget(
-                                textval: SelectedVehicle.bootSpace.toString(),
+                                textval: SelectedVehicle!.bootSpace.toString(),
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w200)
@@ -280,7 +283,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               ),
             ),
             const SizedBox(height: 10),
-            Text(
+            const Text(
               "Schedual At",
               style: TextStyle(
                   color: AppColor.butgreen,
@@ -346,7 +349,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         children: [
                           robotoTextWidget(
                               textval:
-                                  "₹${SelectedVehicle.total_fare.toString()}",
+                                  "₹${SelectedVehicle!.total_fare.toString()}",
                               colorval: AppColor.black,
                               sizeval: 16,
                               fontWeight: FontWeight.w800),
@@ -372,7 +375,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             robotoTextWidget(
-                                textval: '${SelectedVehicle.distance} KM',
+                                textval: '${SelectedVehicle!.distance} KM',
                                 colorval: AppColor.black,
                                 sizeval: 16,
                                 fontWeight: FontWeight.w800),
@@ -390,7 +393,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             const SizedBox(height: 10),
             Text(
               Fromaddress,
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColor.butgreen,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w600,
@@ -435,7 +438,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             const SizedBox(height: 10),
             Text(
               Toaddress,
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColor.butgreen,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w600,
@@ -544,16 +547,16 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         widget.fromAddress,
         widget.toAddress,
         outputDate,
-        SelectedVehicle.total_fare,
-        SelectedVehicle.distance,
-        SelectedVehicle.sku_id);
+        SelectedVehicle!.total_fare,
+        SelectedVehicle!.distance,
+        SelectedVehicle!.sku_id);
 
     if (response != null) {
       print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (BuildContext context) => HomePage(
+                builder: (BuildContext context) => const HomePage(
                       title: "",
                     )),
             (Route<dynamic> route) => true);

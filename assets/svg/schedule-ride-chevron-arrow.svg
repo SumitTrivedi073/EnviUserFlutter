@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="7.859" height="14" viewBox="0 0 7.859 14">
+  <defs>
+    <style>
+      .cls-1 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="schedule-ride-chevron-arrow" class="cls-1" d="M7.608,6.371,1.488.251a.886.886,0,0,0-1.237,0,.886.886,0,0,0,0,1.237L5.763,7,.251,12.512a.886.886,0,0,0,0,1.237.886.886,0,0,0,1.237,0l6.12-6.141A.886.886,0,0,0,7.608,6.371Z"/>
+</svg>
