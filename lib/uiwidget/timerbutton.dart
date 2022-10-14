@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert' as convert;
 
+import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/web_service/APIDirectory.dart';
@@ -43,8 +44,10 @@ class _TimerButtonState extends State<TimerButton>
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (state == 0) {
-      animateButton();
+    if(AppConfig().getisCancellationFeeApplicable()== true) {
+      if (state == 0) {
+        animateButton();
+      }
     }
     getCurrentLocation();
   }
@@ -78,7 +81,14 @@ class _TimerButtonState extends State<TimerButton>
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
             child: MaterialButton(
-              onPressed: () {},
+              onPressed: () => {
+                //payment not charge that's whywhen cancel booking provide false
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      cancelBooking(context, false),
+                )
+              },
               elevation: 4.0,
               minWidth: double.infinity,
               height: 48.0,
@@ -99,7 +109,8 @@ class _TimerButtonState extends State<TimerButton>
         width: double.infinity,
         child: MaterialButton(
             onPressed: () => {
-                  showDialog(
+              //payment not charge that's whywhen cancel booking provide false
+              showDialog(
                     context: context,
                     builder: (BuildContext context) =>
                         cancelBooking(context, false),
@@ -126,7 +137,9 @@ class _TimerButtonState extends State<TimerButton>
         width: double.infinity,
         child: MaterialButton(
             onPressed: () => {
-                  showDialog(
+              //payment charge that's why when cancel booking provide true
+
+              showDialog(
                     context: context,
                     builder: (BuildContext context) =>
                         cancelBooking(context, true),
@@ -143,7 +156,7 @@ class _TimerButtonState extends State<TimerButton>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    cancelBookingText("$CancelBooking- ₹50"),
+                    cancelBookingText("$CancelBooking - ₹${AppConfig().getcancellationFee().toString()}"),
                   ],
                 ),
               ],

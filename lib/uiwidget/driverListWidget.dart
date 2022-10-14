@@ -41,6 +41,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   bool isLoading = false;
   bool isForwardArrowGreen = true;
   bool isBackArrowGreen = true;
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -51,16 +52,16 @@ class DriverListItemPageState extends State<DriverListItem> {
   @override
   void initState() {
     super.initState();
-    _firstLoad();
+    _firstLoad("0");
   }
 
-  void _firstLoad() async {
+  void _firstLoad(String retry) async {
     Map data;
     data = {
       "fromAddress": widget.fromAddress!.address,
       "toAddress": widget.toAddress!.address,
       "phoneNumber": Profiledata().getphone(),
-      "retry": "0",
+      "retry": retry,
       "userId": Profiledata().getusreid(),
       "userName": Profiledata().getname(),
       "location": {
@@ -347,7 +348,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   Widget getDriverList(List<Content> driverList) {
     if (driverList.isNotEmpty) {
       return Container(
-        height: 330,
+        height: MediaQuery.of(context).size.height / 2.5,
         child: Card(
           elevation: 5,
           margin: const EdgeInsets.all(5),
@@ -482,55 +483,44 @@ class DriverListItemPageState extends State<DriverListItem> {
       );
     } else {
       return Container(
-        margin: EdgeInsets.all(10),
-        height: 80,
+        height: MediaQuery.of(context).size.height/8,
+        margin: const EdgeInsets.all(10),
         child: Card(
             elevation: 5,
-            margin: EdgeInsets.all(5),
             child: Center(
-              child: robotoTextWidget(
-                  textval: 'No Driver Available',
-                  colorval: AppColor.darkGreen,
-                  sizeval: 16,
-                  fontWeight: FontWeight.w800),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  robotoTextWidget(
+                      textval: noDriverAvailable,
+                      colorval: AppColor.darkGreen,
+                      sizeval: 16,
+                      fontWeight: FontWeight.w800),
+                  Container(
+                      height: 40,
+                      width: 120,
+                      margin: const EdgeInsets.all(5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _firstLoad("1");
+                          },
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.greyblack,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: robotoTextWidget(
+                          textval: retry,
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ))
+                ],
+              ),
             )),
       );
     }
   }
 }
-
-// IconButton(
-//                                 onPressed: () {
-//                                   if (selectedIndex != 0) {
-//                                     carouselController.previousPage();
-//                                   }
-//                                 },
-//                                 icon: Icon(
-//                                   Icons.arrow_back_ios,
-//                                   color: (selectedIndex != 0)
-//                                       ? Colors.green
-//                                       : AppColor.grey,
-//                                 ))
-//                           ]),
-//                           Row(children: [
-//                             Container(
-//                               width: 1,
-//                               color: AppColor.darkgrey,
-//                             ),
-//                             IconButton(
-//                                 onPressed: () {
-//                                   if (selectedIndex != DriverList.length - 1) {
-//                                     carouselController.nextPage();
-//                                   }
-//                                 },
-//                                 icon: Icon(
-//                                   Icons.arrow_forward_ios,
-//                                   color:
-//                                       (selectedIndex != DriverList.length - 1)
-//                                           ? Colors.green
-//                                           : AppColor.grey,
-
-
-
-
-
