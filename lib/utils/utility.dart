@@ -85,6 +85,7 @@ Future<void> makingPhoneCall(String phone) async {
 }
 
 String encodeImgURLString(tmp) {
+  print("tmp=============>${tmp.toString()}");
   String endStr =
       tmp != null && tmp != '' ? Uri.encodeFull(tmp).trim() : placeHolderImage;
   return endStr;

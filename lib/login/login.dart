@@ -291,6 +291,7 @@ class _LoginpageState extends State<Loginpage> {
                   flex: 5, // wrap your Column in Expanded
                   child: TextFormField(
                     controller: phoneController,
+                    maxLength: 12,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(color: AppColor.black),
                     decoration: const InputDecoration(
