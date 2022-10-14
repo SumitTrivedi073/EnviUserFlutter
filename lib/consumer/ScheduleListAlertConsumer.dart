@@ -26,7 +26,7 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
   @override
   Widget build(BuildContext context) {
       return Consumer<firestoreScheduleTripNotifier>(builder: (context, value, child) {
-    return value.scheduleTrip != null
+        return value.scheduleTrip != null
         ?  Flexible(
       child: Wrap(children: [
         GestureDetector(
@@ -62,7 +62,7 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: robotoTextWidget(
-                          textval: getText(value.scheduleTrip!.status,value.scheduleTrip!.scheduledAt),
+                          textval: getText(value.scheduleTrip!.status),
                           colorval: AppColor.white,
                           sizeval: 14,
                           fontWeight: FontWeight.w800,
@@ -84,7 +84,7 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
      });
   }
 
-  getText(String status, String scheduledAt) {
+  getText(String status) {
    if(status==ScheduleTripRequestedStatus){
      return  'Your schedule trip is in process';
    }else if (status==TripStatusConfirmedStatus){
