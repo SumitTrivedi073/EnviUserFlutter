@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -6,10 +7,13 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../sidemenu/bookScheduleTrip/model/vehiclePriceClasses.dart';
+import '../sidemenu/home/homePage.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
 import '../web_service/ApiCollection.dart';
 
 class CarCategoriesWidget extends StatefulWidget {
@@ -45,6 +49,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
       super.setState(fn);
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -61,19 +66,27 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
         widget.toAddress!.latLng.longitude);
-    if (response != null&&response.statusCode == 200) {
-        setState(() {
-          isLoading = false;
-          vehiclePriceClasses = (jsonDecode(response.body)['content']
-                  ['vehiclePriceClasses'] as List)
-              .map((i) => vehiclePriceClassesModel.fromJson(i))
-              .toList();
-          distance = jsonDecode(response.body)['content']['estimatedDistance'];
-          widget.callback2(distance.toString());
-        });
-
-    }else{
-      setState(() { isLoading == false;});
+    if (response != null && response.statusCode == 200) {
+      setState(() {
+        isLoading = false;
+        vehiclePriceClasses = (jsonDecode(response.body)['content']
+                ['vehiclePriceClasses'] as List)
+            .map((i) => vehiclePriceClassesModel.fromJson(i))
+            .toList();
+        distance = jsonDecode(response.body)['content']['estimatedDistance'];
+        widget.callback2(distance.toString());
+      });
+    } else {
+      var errmsg = jsonDecode(response.body)['msg'];
+      showToast(errmsg);
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  const HomePage(title: "title")),
+          (Route<dynamic> route) => false);
     }
   }
 
@@ -82,52 +95,53 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
     // TODO: implement build
     return isLoading
         ? const Center(
-      child: CircularProgressIndicator(),
-    )
-        :Card(
-      elevation: 5,
-      margin: const EdgeInsets.all(5),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: CircularProgressIndicator(),
+          )
+        : Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(5),
+            child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: robotoTextWidget(
-                      textval: '${vehiclePriceClasses.length} Ride Option',
-                      colorval: AppColor.black,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w800),
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: robotoTextWidget(
+                            textval:
+                                '${vehiclePriceClasses.length} Ride Option',
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w800),
+                      ),
+                    ],
+                  ),
                 ),
+                Container(
+                  height: 1,
+                  color: AppColor.grey,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 2.0),
+                  height: 170.0,
+                  child: ListView.builder(
+                    // controller: _controller,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return driverListItems(index);
+                    },
+                    itemCount: vehiclePriceClasses.length,
+                    padding: const EdgeInsets.all(3),
+                  ),
+                )
               ],
             ),
-          ),
-          Container(
-            height: 1,
-            color: AppColor.grey,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 2.0),
-            height: 170.0,
-            child: ListView.builder(
-              // controller: _controller,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return driverListItems(index);
-              },
-              itemCount: vehiclePriceClasses.length,
-              padding: const EdgeInsets.all(3),
-            ),
-          )
-        ],
-      ),
-    );
+          );
   }
 
   Widget driverListItems(int index) {
@@ -257,7 +271,9 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     Text(
                       getTotalPrice(
                           vehiclePriceClasses[index].total_fare.toDouble(),
-                          vehiclePriceClasses[index].seller_discount.toDouble()),
+                          vehiclePriceClasses[index]
+                              .seller_discount
+                              .toDouble()),
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,

@@ -46,6 +46,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   void getSelectvehicle(vehiclePriceClassesModel object) {
     SelectedVehicle = object;
   }
+
   late String distance = "";
 
   @override
@@ -53,7 +54,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     // TODO: implement initState
     super.initState();
     mindatime = DateTime.now()
-        .add(Duration(hours: AppConfig().getadvance_booking_time_limit()));
+        .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
     print(AppConfig().getadvance_booking_time_limit());
     _controller2.text = DateFormat('HH:mm').format(mindatime);
     _controller1.text = mindatime.toString();
@@ -86,11 +87,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               tripType: BookingTiming.later,
             ),
             CarCategoriesWidget(
-              fromAddress: widget.fromAddress,
-              toAddress: widget.toAddress,
-              callback: getSelectvehicle,
-                callback2: retrieveDistance
-            ),
+                fromAddress: widget.fromAddress,
+                toAddress: widget.toAddress,
+                callback: getSelectvehicle,
+                callback2: retrieveDistance),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2.0),
