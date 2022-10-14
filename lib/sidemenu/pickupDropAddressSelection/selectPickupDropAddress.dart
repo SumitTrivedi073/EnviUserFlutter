@@ -748,7 +748,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               padding: const EdgeInsets.only(right: 8),
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: FromTextWidget(),
+                              child: fromTextWidget(),
                             ),
                           ),
                         ])),
@@ -785,7 +785,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               padding: const EdgeInsets.only(right: 8),
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: ToTextWidget(),
+                              child: toTextWidget(),
                             ),
                           ),
                         ])),
@@ -797,7 +797,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         ));
   }
 
-  TextField FromTextWidget() {
+  TextField fromTextWidget() {
     return TextField(
       autofocus: false,
       focusNode: startFocusNode,
@@ -838,6 +838,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     setState(() {
                       FromLocationText.clear();
                       searchPlaceList = [];
+                      startingAddress = null;
                       getLocalSuggestions('');
                     });
                   },
@@ -846,15 +847,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     );
   }
 
-  Widget ToTextWidget() {
+  Widget toTextWidget() {
     return TextField(
-      // onSubmitted: (val) {},
       autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,
-
       onSubmitted: (value) {
-        startingAddress = null;
+        endAddress = null;
+        endFocusNode.requestFocus();
       },
       onChanged: (value) {
         if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -890,6 +890,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     setState(() {
                       ToLocationText.clear();
                       searchPlaceList = [];
+                      endAddress = null;
                       getLocalSuggestions('');
                     });
                   },

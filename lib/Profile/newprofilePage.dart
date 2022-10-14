@@ -21,8 +21,10 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
 class NewProfilePage extends StatefulWidget {
-  const NewProfilePage({Key? key, required this.user}) : super(key: key);
+  const NewProfilePage({Key? key, required this.user, required this.isUpdate})
+      : super(key: key);
   final LoginModel user;
+  final bool isUpdate;
   @override
   State<NewProfilePage> createState() => _NewProfilePageState();
 }
@@ -75,14 +77,13 @@ class _NewProfilePageState extends State<NewProfilePage> {
   }
 
   Future<File> getImageFileFromAssets() async {
-  
+    var bytes = await rootBundle.load('assets/images/logo.png');
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/profile.png');
+    await file.writeAsBytes(
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
 
-  var bytes = await rootBundle.load('assets/images/logo.png');
-   String tempPath = (await getTemporaryDirectory()).path;
-  File file = File('$tempPath/profile.png');
-  await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-
-  return file;
+    return file;
   }
 
   @override
@@ -273,7 +274,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                 onPressed: () async {
                   UserApiService userApi = UserApiService();
                   final response = await userApi.userEditProfile(
-                      image: _image??await getImageFileFromAssets(),
+                      image: _image ?? await getImageFileFromAssets(),
                       token: widget.user.token,
                       name: _firstNameController.text,
                       gender: selectedGender!,
@@ -285,6 +286,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                         context: context,
                         duration: const Duration(seconds: 3));
                     Future.delayed(const Duration(seconds: 2), () {
+                      Navigator.of(context).pop();
                       Navigator.of(context).pop();
                       setState(() {});
                     });
@@ -299,7 +301,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                 minWidth: double.infinity,
                 color: AppColor.greyblack,
                 child: Text(
-                  createAccountText,
+                  (widget.isUpdate) ? 'Update Account' : createAccountText,
                   style: AppTextStyle.robotoBold20White,
                 ),
               )
