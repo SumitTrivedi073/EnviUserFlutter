@@ -49,21 +49,17 @@ class _SearchDriverPageState extends State<SearchDriver> {
           distance: distance,
           tripType: BookingTiming.now,
         ),
-
+        SizedBox(
+          height: MediaQuery.of(context).size.height / 3,
+        ),
+        DriverListItem(
+          key: widget._key,
+          fromAddress: widget.fromAddress,
+          toAddress: widget.toAddress,
+          callback: retrieveDistance,
+        ),
       ]),
-          Align(
-              alignment: Alignment.bottomCenter,
-              child:SizedBox(
-                child: DriverListItem(
-                  key: widget._key,
-                  fromAddress: widget.fromAddress,
-                  toAddress: widget.toAddress,
-                  callback: retrieveDistance,
-                ),
-              )
-          ),
-
-        ]));
+    ]));
   }
 
   retrieveDistance(String distanceInKm) {

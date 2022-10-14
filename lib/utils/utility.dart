@@ -5,6 +5,7 @@ import 'package:envi/database/favoritesData.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
+import 'package:envi/web_service/Constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -84,7 +85,6 @@ Future<void> makingPhoneCall(String phone) async {
 }
 
 String encodeImgURLString(tmp) {
-  print("tmp=============>${tmp.toString()}");
   String endStr =
       tmp != null && tmp != '' ? Uri.encodeFull(tmp).trim() : placeHolderImage;
   return endStr;

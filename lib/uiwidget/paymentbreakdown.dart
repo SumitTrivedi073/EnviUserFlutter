@@ -32,7 +32,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
   @override
   Widget build(BuildContext context) {
 
-   int totalTex = widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toDuble() + widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toDouble();
+   double totalTax = widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toDouble() + widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toDouble();
 
     List<String> breakDownVals = [
       widget.livetripData!.tripInfo.arrivalAtDestination!.distanceTravelled.toString(),
@@ -40,7 +40,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
       widget.livetripData!.tripInfo.arrivalAtDestination!.kmFare.toString(),
       widget.livetripData!.tripInfo.arrivalAtDestination!.discount.toString(),
       widget.livetripData!.tripInfo.arrivalAtDestination!.tollAmount.toString(),
-      totalTex.toString()!=null?totalTex.toString():'0',
+      totalTax.toString()!=null?totalTax.toString():'0',
       widget.livetripData!.tripInfo.arrivalAtDestination!.amountTobeCollected.toString(),
     ];
     // TODO: implement build

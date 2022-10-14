@@ -103,7 +103,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             title: addressToAdd.title);
         await dao!.insertTask(task);
       }
-      //showToast((jsonDecode(response.body)['message'].toString()));
+     // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -142,7 +142,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await dao!.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-      //showToast((jsonDecode(response.body)['message'].toString()));
+     // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -156,7 +156,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         addressToAdd.address,
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
-        "N");
+        addressToAdd.isFavourite);
     print(response.body);
 
     if (response != null) {
@@ -167,7 +167,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         final task = FavoritesData.optional(
             identifier: addressId,
             address: addressToAdd.address,
-            isFavourite: 'Y',
+            isFavourite: addressToAdd.isFavourite,
             latitude: addressToAdd.latLng.latitude.toString(),
             longitude: addressToAdd.latLng.longitude.toString(),
             title: addressToAdd.title);
@@ -213,7 +213,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         print(task);
         await dao!.updateTask(task);
       }
-      //showToast((jsonDecode(response.body)['message'].toString()));
+     // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -391,130 +391,166 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         ),
         Align(
           alignment: Alignment.bottomCenter,
-          child: Container(
-              height: 40,
-              margin: const EdgeInsets.all(5),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (widget.status == AddressConfirmation.bothUnconfirmed) {
-                    List<SearchPlaceModel> att = [];
-                    att.add(SearchPlaceModel(
-                      id: '',
-                      address: Address,
-                      title: toAddressName!,
-                      latLng: latlong,
-                      isFavourite: isFavourite,
-                    ));
-                    Navigator.pop(context, att);
-                  } else {
-                    if (widget.status ==
-                        AddressConfirmation.fromAddressConfirmed) {
-                      localDbModifications(
-                          widget.startLocation!,
-                          SearchPlaceModel(
-                            id: '',
-                            title: toAddressName!,
-                            address: Address,
-                            latLng: latlong,
-                            isFavourite: widget.endLocation!.isFavourite,
-                          ));
-                      if (widget.tripType == BookingTiming.now) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => SearchDriver(
-                                    fromAddress: widget.startLocation,
-                                    toAddress: SearchPlaceModel(
-                                      id: '',
-                                      title: toAddressName!,
-                                      address: Address,
-                                      latLng: latlong,
-                                      isFavourite: 'N',
-                                    )
-
-                                    // ToAddressLatLong(
-                                    //   address: Address,
-                                    //   position: latlong,
-                                    // ),
-                                    )),
-                            (Route<dynamic> route) => true);
-                      } else {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    BookScheduleTrip(
-                                      fromAddress: widget.startLocation,
-                                      toAddress: SearchPlaceModel(
-                                        id: '',
-                                        title: toAddressName!,
-                                        address: Address,
-                                        latLng: latlong,
-                                        isFavourite: 'N',
-                                      ),
-                                    )),
-                            (Route<dynamic> route) => true);
-                      }
-                    } else {
-                      localDbModifications(
-                          SearchPlaceModel(
-                            id: '',
-                            title: toAddressName!,
-                            address: Address,
-                            latLng: latlong,
-                            isFavourite: widget.startLocation!.isFavourite,
-                          ),
-                          widget.endLocation!);
-
-                      if (widget.tripType == BookingTiming.now) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => SearchDriver(
-                                    toAddress: widget.endLocation,
-                                    fromAddress: SearchPlaceModel(
-                                      id: '',
-                                      title: toAddressName!,
-                                      address: Address,
-                                      latLng: latlong,
-                                      isFavourite: 'N',
-                                    )
-
-                                    // ToAddressLatLong(
-                                    //   address: Address,
-                                    //   position: latlong,
-                                    // ),
-                                    )),
-                            (Route<dynamic> route) => true);
-                      } else {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    BookScheduleTrip(
-                                        toAddress: widget.endLocation,
-                                        fromAddress: SearchPlaceModel(
-                                          id: '',
-                                          title: toAddressName!,
-                                          address: Address,
-                                          latLng: latlong,
-                                          isFavourite: 'N',
-                                        ))),
-                            (Route<dynamic> route) => true);
-                      }
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: AppColor.greyblack,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
+          child: Row(
+            children: [
+              Expanded(
+                  child: Container(
+                height: 40,
+                margin: const EdgeInsets.all(5),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.greyblack,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                  ),
+                  child: robotoTextWidget(
+                    textval: cancel,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                child: robotoTextWidget(
-                  textval: confirmText,
-                  colorval: AppColor.white,
-                  sizeval: 14,
-                  fontWeight: FontWeight.w600,
-                ),
               )),
+              Expanded(
+                child: Container(
+                    height: 40,
+                    margin: const EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (widget.status ==
+                            AddressConfirmation.bothUnconfirmed) {
+                          List<SearchPlaceModel> att = [];
+                          att.add(SearchPlaceModel(
+                            id: '',
+                            address: Address,
+                            title: toAddressName!,
+                            latLng: latlong,
+                            isFavourite: isFavourite,
+                          ));
+                          Navigator.pop(context, att);
+                        } else {
+                          if (widget.status ==
+                              AddressConfirmation.fromAddressConfirmed) {
+                            localDbModifications(
+                                widget.startLocation!,
+                                SearchPlaceModel(
+                                  id: '',
+                                  title: toAddressName!,
+                                  address: Address,
+                                  latLng: latlong,
+                                  isFavourite: widget.endLocation!.isFavourite,
+                                ));
+                            if (widget.tripType == BookingTiming.now) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SearchDriver(
+                                              fromAddress: widget.startLocation,
+                                              toAddress: SearchPlaceModel(
+                                                id: '',
+                                                title: toAddressName!,
+                                                address: Address,
+                                                latLng: latlong,
+                                                isFavourite: widget
+                                                    .endLocation!.isFavourite,
+                                              )
+
+                                              // ToAddressLatLong(
+                                              //   address: Address,
+                                              //   position: latlong,
+                                              // ),
+                                              )),
+                                  (Route<dynamic> route) => true);
+                            } else {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          BookScheduleTrip(
+                                            fromAddress: widget.startLocation,
+                                            toAddress: SearchPlaceModel(
+                                              id: '',
+                                              title: toAddressName!,
+                                              address: Address,
+                                              latLng: latlong,
+                                              isFavourite: widget
+                                                  .endLocation!.isFavourite,
+                                            ),
+                                          )),
+                                  (Route<dynamic> route) => true);
+                            }
+                          } else {
+                            localDbModifications(
+                                SearchPlaceModel(
+                                  id: '',
+                                  title: toAddressName!,
+                                  address: Address,
+                                  latLng: latlong,
+                                  isFavourite:
+                                      widget.startLocation!.isFavourite,
+                                ),
+                                widget.endLocation!);
+
+                            if (widget.tripType == BookingTiming.now) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SearchDriver(
+                                              toAddress: widget.endLocation,
+                                              fromAddress: SearchPlaceModel(
+                                                id: '',
+                                                title: toAddressName!,
+                                                address: Address,
+                                                latLng: latlong,
+                                                isFavourite: widget
+                                                    .startLocation!.isFavourite,
+                                              )
+
+                                              // ToAddressLatLong(
+                                              //   address: Address,
+                                              //   position: latlong,
+                                              // ),
+                                              )),
+                                  (Route<dynamic> route) => true);
+                            } else {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          BookScheduleTrip(
+                                              toAddress: widget.endLocation,
+                                              fromAddress: SearchPlaceModel(
+                                                id: '',
+                                                title: toAddressName!,
+                                                address: Address,
+                                                latLng: latlong,
+                                                isFavourite: widget
+                                                    .startLocation!.isFavourite,
+                                              ))),
+                                  (Route<dynamic> route) => true);
+                            }
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: confirmText,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+              ),
+            ],
+          ),
         ),
       ]),
     ));

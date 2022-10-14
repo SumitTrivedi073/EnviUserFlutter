@@ -219,6 +219,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     setState(() {});
   }
 
+  // getTrimmedAddress(String val) {
+  //   final split = val.split(',');
+  //   final Map<int, String> values = {
+  //     for (int i = 0; i < split.length; i++) i: split[i]
+  //   };
+  //   print(values); // {0: grubs, 1:  sheep}
+
+  //   final value1 = values[0];
+  //   final value2 = values[1];
+  //   final value3 = values[2];
+  //   return '$value1,$value2,$value3';
+  // }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -237,6 +250,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   @override
   void dispose() {
     super.dispose();
+    FromLocationText.dispose();
+    ToLocationText.dispose();
     startFocusNode.dispose();
     endFocusNode.dispose();
   }
@@ -272,7 +287,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   void googleAPI(String value) {
-    _isVisible = true;
     useGoogleApi = true;
     getSuggestion(value);
   }
@@ -366,7 +380,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             // _isVisible = false;
                             searchPlaceList = [];
                           });
-                          if (ToLocationText.text == '') {
+                          if (endAddress == null) {
                             var result;
                             result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
@@ -442,7 +456,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 isFavourite: 'N');
                             searchPlaceList = [];
                           });
-                          if (FromLocationText.text == '') {
+                          if (startingAddress == null) {
                             var result;
                             result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
@@ -527,7 +541,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             startingAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
-                          if (ToLocationText.text == '') {
+                          if (endAddress == null) {
                             var result;
                             result = await Navigator.of(context)
                                 .pushAndRemoveUntil(
@@ -555,10 +569,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
                             setState(() {
                               FromLocationText.text = startingAddress!.address;
-                                  getLocalSuggestions('');
+                              getLocalSuggestions('');
                             });
                             endFocusNode.requestFocus();
-                        
                           } else {
                             var result;
                             result = await Navigator.of(context)
@@ -596,7 +609,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             endAddress = searchPlaceList[index];
                             searchPlaceList = [];
                           });
-                          if (FromLocationText.text == '') {
+                          if (startingAddress == null) {
                             var result;
 
                             result = await Navigator.of(context)
@@ -788,6 +801,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     return TextField(
       autofocus: false,
       focusNode: startFocusNode,
+      onSubmitted: (value) {
+        startingAddress = null;
+        startFocusNode.requestFocus();
+      },
       onChanged: (value) {
         if (_debounce?.isActive ?? false) _debounce!.cancel();
         _debounce = Timer(const Duration(milliseconds: 1000), () {
@@ -835,6 +852,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,
+
+      onSubmitted: (value) {
+        startingAddress = null;
+      },
       onChanged: (value) {
         if (_debounce?.isActive ?? false) _debounce!.cancel();
         _debounce = Timer(const Duration(milliseconds: 1000), () {
