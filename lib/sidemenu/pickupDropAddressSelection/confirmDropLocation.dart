@@ -378,11 +378,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             const SizedBox(
               height: 10,
             ),
-            const Padding(
-              padding: EdgeInsets.all(20.0),
+          Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Text(
-                'Move around',
-                style: AppTextStyle.robotoRegular16,
+                moveText,
+                style: AppTextStyle.robotoBold20Black,
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
