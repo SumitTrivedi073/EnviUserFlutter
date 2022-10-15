@@ -55,7 +55,13 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                             () {
                               Navigator.pop(context);
                             })
-                    : const SizedBox(),
+                    : SizedBox(),
+                robotoTextWidget(
+                  textval: widget.title,
+                  colorval: AppColor.lightwhite,
+                  sizeval: 18.0,
+                  fontWeight: FontWeight.w800,
+                ),
                 Card(
                   child: Image.network(
                     encodeImgURLString(Profiledata.propic),
@@ -67,17 +73,6 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
               ],
             )
           ),
-          Center(
-            child: Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: robotoTextWidget(
-                textval: widget.title,
-                colorval: AppColor.lightwhite,
-                sizeval: 18.0,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          )
         ],
       ),
     );
