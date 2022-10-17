@@ -33,7 +33,7 @@ class AutocompleteService {
     //     title.add(temparr[i].address);
     //   }
     // }
-    List<FavoritesData?> favData = await dao.displayAscByAddress(pat);
+    List<FavoritesData?> favData = await dao.displayDescByAddress(pat);
 
     if (favData.isNotEmpty) {
       for (var element in favData) {

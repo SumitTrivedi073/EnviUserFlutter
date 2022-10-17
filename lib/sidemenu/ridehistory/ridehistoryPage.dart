@@ -55,7 +55,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     userId = Profiledata().getusreid();
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    if (res!=null && res.statusCode != null && res.statusCode == 200) {
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
         if (jsonDecode(res.body)['content']['result'] != null) {
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
@@ -386,7 +386,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       color: AppColor.detailheader,
       child: Container(
         color: AppColor.detailheader,
-        height: 56,
+        // height: 66,
         margin: const EdgeInsets.only(left: 5, right: 5),
         padding: const EdgeInsets.only(top: 9, bottom: 5, right: 5),
         foregroundDecoration: const BoxDecoration(
@@ -441,7 +441,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       robotoTextWidget(
                         textval: "CO2 Emission Prevented",
                         colorval: AppColor.lightwhite,
-                        sizeval: 13.0,
+                        sizeval: 10.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ],
