@@ -694,9 +694,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           fontWeight: FontWeight.w400,
                         ),
                         leading: SvgPicture.asset(
-                          Images.toLocationImage,
+                          (searchPlaceList[index].title == 'Work')
+                              ? "assets/svg/place-work.svg"
+                              : (searchPlaceList[index].title == 'Home')
+                                  ? "assets/svg/place-home.svg"
+                                  : Images.toLocationImage,
                           width: 20,
                           height: 20,
+                          color: AppColor.darkGreen,
                         ),
                       ),
                     ),
