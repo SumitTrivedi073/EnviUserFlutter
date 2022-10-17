@@ -356,7 +356,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           height: 100,
           child: Column(children: [
             Padding(
-              padding: EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(top: 5),
               child: Text(
                 appName,
                 style: const TextStyle(

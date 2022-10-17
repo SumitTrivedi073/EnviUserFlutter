@@ -18,7 +18,6 @@ class FavoritePlacesPage extends StatefulWidget {
 }
 
 class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
-
   bool _isFirstLoadRunning = false;
   int pagecount = 1;
   late ScrollController _controller;
@@ -28,8 +27,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
   List<FavoritesData> arraddress = [];
   late final FavoritesDataDao dao;
- FavoritesData? homeDetail = null;
-   FavoritesData? workDetail = null;
+  FavoritesData? homeDetail = null;
+  FavoritesData? workDetail = null;
   @override
   void initState() {
     super.initState();
@@ -38,12 +37,26 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
     // _controller = new ScrollController()..addListener(_loadMore);
   }
 
-Future<void> getdata() async {
-  List<FavoritesData> temparr = await dao.getFavoriate();
-  setState(() {
-    arraddress = temparr;
-  });
-}
+  getTrimmedAddress(String val) {
+    final split = val.split(',');
+    final Map<int, String> values = {
+      for (int i = 0; i < split.length; i++) i: split[i]
+    };
+    print(values); // {0: grubs, 1:  sheep}
+
+    final value1 = values[0];
+    final value2 = values[1] ?? '';
+    //final value3 = values[2] ?? '';
+    return (values.length != 1) ? '$value1,$value2' : '$value1';
+  }
+
+  Future<void> getdata() async {
+    List<FavoritesData> temparr = await dao.getFavoriate();
+    setState(() {
+      arraddress = temparr;
+    });
+  }
+
   Future<void> loadData() async {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
@@ -57,9 +70,8 @@ Future<void> getdata() async {
     //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
     print("==========${arraddress}");
   }
-void comebackFromADD(String a){
 
-}
+  void comebackFromADD(String a) {}
   @override
   void dispose() {
     // _controller.removeListener(_loadMore);
@@ -104,14 +116,15 @@ void comebackFromADD(String a){
                     color: AppColor.butgreen,
                     height: 40,
                     onPressed: () async {
-                     var come = await Navigator.push(
+                      var come = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddEditFavoritePlacesPage(
-                                  isforedit: "1",
-                                  titleEditable: "0",
-                                  data: null,)));
-                     getdata();
+                                    isforedit: "1",
+                                    titleEditable: "0",
+                                    data: null,
+                                  )));
+                      getdata();
                     },
                     child: Row(children: [
                       SvgPicture.asset(
@@ -190,7 +203,7 @@ void comebackFromADD(String a){
           //CellRow2(index),
           GestureDetector(
             onTap: () async {
-              var come = await  Navigator.push(
+              var come = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
@@ -218,6 +231,7 @@ void comebackFromADD(String a){
         color: AppColor.white.withOpacity(0.1),
         padding: const EdgeInsets.only(left: 18, right: 18),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -229,11 +243,11 @@ void comebackFromADD(String a){
                     height: 24,
                     color: AppColor.darkGreen,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   robotoTextWidget(
-                    textval: arraddress[index].title,
+                    textval: getTrimmedAddress(arraddress[index].title),
                     colorval: AppColor.black,
                     sizeval: 14.0,
                     fontWeight: FontWeight.bold,
@@ -308,8 +322,7 @@ void comebackFromADD(String a){
                                     address: "",
                                     longitude: "0.0",
                                     latitude: " 0.0",
-                              identifier:"0"
-                                  )
+                                    identifier: "0")
                                 : homeDetail!,
                           )));
               print("Tapped a Container");
@@ -381,13 +394,18 @@ void comebackFromADD(String a){
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
-                        isforedit: "0",
-                        titleEditable: "1",
-                        data:  homeDetail == null ? FavoritesData.optional(
-                          title: "Work",address: "",longitude: "0.0",latitude:" 0.0",identifier:"0"
-                        ):homeDetail!,
-                      )));
-getdata();
+                            isforedit: "0",
+                            titleEditable: "1",
+                            data: homeDetail == null
+                                ? FavoritesData.optional(
+                                    title: "Work",
+                                    address: "",
+                                    longitude: "0.0",
+                                    latitude: " 0.0",
+                                    identifier: "0")
+                                : homeDetail!,
+                          )));
+              getdata();
               print("Tapped a Container");
             },
             child: Container(
