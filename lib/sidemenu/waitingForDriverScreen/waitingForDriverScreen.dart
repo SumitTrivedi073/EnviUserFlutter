@@ -74,6 +74,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
+                        //Do not remove this height otherwise map is not scrolling
                           height: MediaQuery.of(context).size.height/2,
                           margin: EdgeInsets.only(left: 10, right: 10),
                         child: ExpandableBottomSheet(
