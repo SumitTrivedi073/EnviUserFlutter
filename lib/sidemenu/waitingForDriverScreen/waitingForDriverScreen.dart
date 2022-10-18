@@ -74,7 +74,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
-                          height: getHeight(),
+                          height: MediaQuery.of(context).size.height/2,
                           margin: EdgeInsets.only(left: 10, right: 10),
                         child: ExpandableBottomSheet(
                           //use the key to get access to expand(), contract() and expansionStatus
@@ -96,6 +96,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                           //required
                           //This is the widget which will be overlapped by the bottom sheet.
                           background: Container(
+                            height: 1,
                             color: Colors.transparent,
                           ),
 
@@ -156,11 +157,8 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                               DriverDetailWidget(
                                 duration: duration,
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 5),
-                                child: TimerButton(
-                                  liveTripData: value.liveTripData!,
-                                ),
+                              TimerButton(
+                                liveTripData: value.liveTripData!,
                               ),],
                           ),
                         ),
@@ -317,12 +315,4 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
     });
   }
 
-  getHeight() {
-    print("============>$_expansionStatus");
-    if(_expansionStatus==ExpansionStatus.expanded){
-      return MediaQuery.of(context).size.height/2;
-    }else{
-      return MediaQuery.of(context).size.height/2;
-    }
-  }
 }
