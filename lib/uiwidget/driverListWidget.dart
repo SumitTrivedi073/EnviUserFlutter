@@ -5,7 +5,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
-import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,6 +39,8 @@ class DriverListItemPageState extends State<DriverListItem> {
   int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
   bool isLoading = false;
+  bool isForwardArrowGreen = true;
+  bool isBackArrowGreen = true;
 
   @override
   void setState(fn) {
@@ -51,16 +52,16 @@ class DriverListItemPageState extends State<DriverListItem> {
   @override
   void initState() {
     super.initState();
-    _firstLoad();
+    _firstLoad("0");
   }
 
-  void _firstLoad() async {
+  void _firstLoad(String retry) async {
     Map data;
     data = {
       "fromAddress": widget.fromAddress!.address,
       "toAddress": widget.toAddress!.address,
       "phoneNumber": Profiledata().getphone(),
-      "retry": "0",
+      "retry": retry,
       "userId": Profiledata().getusreid(),
       "userName": Profiledata().getname(),
       "location": {
@@ -97,8 +98,6 @@ class DriverListItemPageState extends State<DriverListItem> {
       setState(() {
         isLoading = false;
       });
-
-      throw "Can't get DriverList.";
     }
   }
 
@@ -109,124 +108,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Expanded(
-            child: Card(
-            elevation: 5,
-            margin: const EdgeInsets.all(5),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        child: robotoTextWidget(
-                            textval: '${DriverList.length} Ride Option',
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(children: [
-                            Container(
-                              width: 1,
-                              color: AppColor.darkgrey,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  if (selectedIndex != 0) {
-                                    carouselController.previousPage();
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.arrow_back_ios,
-                                  color: (selectedIndex != 0)
-                                      ? Colors.green
-                                      : AppColor.grey,
-                                ))
-                          ]),
-                          Row(children: [
-                            Container(
-                              width: 1,
-                              color: AppColor.darkgrey,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  if (selectedIndex != DriverList.length - 1) {
-                                    carouselController.nextPage();
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.green,
-                                )),
-                            Container(
-                              width: 1,
-                              color: AppColor.grey,
-                            ),
-                          ]),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 1,
-                  color: AppColor.grey,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                    child: CarouselSlider(
-                  items: List.generate(
-                      DriverList.length, (index) => driverListItems(index)),
-                  carouselController: carouselController,
-                  options: CarouselOptions(
-                    onPageChanged: (index, reason) {
-                      selectedIndex = index;
-                    },
-                    autoPlay: false,
-                  ),
-                )),
-                Container(
-                    height: 40,
-                    margin: const EdgeInsets.all(5),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ConfirmDriver(
-                                      driverDetail: DriverList[selectedIndex!],
-                                      priceDetail:
-                                          vehiclePriceClasses[selectedIndex!],
-                                      fromAddress: widget.fromAddress,
-                                      toAddress: widget.toAddress,
-                                    )),
-                            (Route<dynamic> route) => false);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.greyblack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: bookNow,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ))
-              ],
-            ),
-          ));
+        : Container(child: getDriverList(DriverList));
   }
 
   Widget driverListItems(int index) {
@@ -234,7 +116,9 @@ class DriverListItemPageState extends State<DriverListItem> {
     var driverName = tmp.length > 10 ? '${tmp.substring(0, 9)}..' : tmp;
     return GestureDetector(
       onTap: () {
-        selectedIndex = index;
+        setState(() {
+          selectedIndex = index;
+        });
       },
       child: Card(
         margin: const EdgeInsets.all(5),
@@ -247,7 +131,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                 side: const BorderSide(color: Colors.white, width: 2.0),
                 borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 Row(
@@ -372,7 +256,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   height: 5,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     robotoTextWidget(
                         textval: estimateFare,
@@ -392,7 +276,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     robotoTextWidget(
                         textval:
@@ -426,6 +310,8 @@ class DriverListItemPageState extends State<DriverListItem> {
                     const SizedBox(
                       width: 25,
                     ),
+                    vehiclePriceClasses[index].priceClass.discountPercent.toString()!=null
+                        && vehiclePriceClasses[index].priceClass.discountPercent!=0.0?
                     Column(
                       children: [
                         const robotoTextWidget(
@@ -440,7 +326,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             sizeval: 13,
                             fontWeight: FontWeight.w400),
                       ],
-                    )
+                    ):Container()
                   ],
                 ),
               ],
@@ -457,5 +343,183 @@ class DriverListItemPageState extends State<DriverListItem> {
     double sum = num1 + num2;
     print('sum:$sum');
     return sum.toStringAsFixed(0);
+  }
+
+  Widget getDriverList(List<Content> driverList) {
+    if (driverList.isNotEmpty) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 2.5,
+        child: Card(
+          elevation: 5,
+          margin: const EdgeInsets.all(5),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: robotoTextWidget(
+                          textval: '${DriverList.length} Ride Option',
+                          colorval: AppColor.black,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w800),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(children: [
+                          Container(
+                            width: 1,
+                            color: AppColor.darkgrey,
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                if (selectedIndex != 0) {
+                                  carouselController.previousPage();
+                                }
+                              },
+                              icon: Icon(
+                                Icons.arrow_back_ios,
+                                color: (selectedIndex != 0)
+                                    ? Colors.green
+                                    : AppColor.grey,
+                              ))
+                        ]),
+                        Row(children: [
+                          Container(
+                            width: 1,
+                            color: AppColor.darkgrey,
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                if (selectedIndex != DriverList.length - 1) {
+                                  carouselController.nextPage();
+                                }
+                              },
+                              icon: Icon(Icons.arrow_forward_ios,
+                                  color:
+                                      (selectedIndex != DriverList.length - 1)
+                                          ? Colors.green
+                                          : AppColor.grey)),
+                          Container(
+                            width: 1,
+                            color: AppColor.grey,
+                          ),
+                        ]),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 1,
+                color: AppColor.grey,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              CarouselSlider(
+                items: List.generate(
+                DriverList.length, (index) => driverListItems(index)),
+                carouselController: carouselController,
+                options: CarouselOptions(
+              enableInfiniteScroll: false,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) {
+                selectedIndex = index;
+                setState(() {
+                  if (selectedIndex == 0) {
+                    isBackArrowGreen = false;
+                  } else {
+                    isBackArrowGreen = true;
+                  }
+                  if (selectedIndex == DriverList.length - 1) {
+                    isForwardArrowGreen = false;
+                  } else {
+                    isForwardArrowGreen = true;
+                  }
+                });
+              },
+              autoPlay: false,
+                ),
+              ),
+              Container(
+                  height: 40,
+                  margin: const EdgeInsets.all(5),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => ConfirmDriver(
+                                    driverDetail: DriverList[selectedIndex!],
+                                    priceDetail:
+                                        vehiclePriceClasses[selectedIndex!],
+                                    fromAddress: widget.fromAddress,
+                                    toAddress: widget.toAddress,
+                                  )),
+                          (Route<dynamic> route) => true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.greyblack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                    ),
+                    child: robotoTextWidget(
+                      textval: bookNow,
+                      colorval: AppColor.white,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        height: MediaQuery.of(context).size.height/8,
+        margin: const EdgeInsets.all(10),
+        child: Card(
+            elevation: 5,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  robotoTextWidget(
+                      textval: noDriverAvailable,
+                      colorval: AppColor.darkGreen,
+                      sizeval: 16,
+                      fontWeight: FontWeight.w800),
+                  Container(
+                      height: 40,
+                      width: 120,
+                      margin: const EdgeInsets.all(5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _firstLoad("1");
+                          },
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.greyblack,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: robotoTextWidget(
+                          textval: retry,
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ))
+                ],
+              ),
+            )),
+      );
+    }
   }
 }

@@ -50,9 +50,8 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
 
 
     userId = Profiledata().getusreid() ;
-print(userId);
+
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    print(jsonDecode(res.body)['schedule_trip_list']);
     if (res.statusCode == 200) {
       setState(() {
 

@@ -64,7 +64,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                   EstimateFareWidget(
                       amountTobeCollected: value
                           .liveTripData!.tripInfo.priceClass.amountToBeCollected
-                          .toString())
+                          .toStringAsFixed(2))
                 ]),
               ]));
               // }

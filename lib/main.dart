@@ -145,6 +145,7 @@ void SetProfileData(){
     print(convert.jsonDecode(response.body));
     if (response != null && response.statusCode == 200) {
       var jsonData = convert.jsonDecode(response.body);
+       print("jsonData==========>${jsonData.toString()}");
 
       LandingPageConfig.setshowInfoPopup(
           jsonData['landingPageSettings']['showInfoPopup']);
@@ -199,7 +200,10 @@ void SetProfileData(){
           .toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
-
+      AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']['priceConfig']
+      ['isCancellationFeeApplicable']);
+      AppConfig.setcancellationFee(jsonData['applicationConfig']['priceConfig']
+      ['cancellationFee']);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) =>
