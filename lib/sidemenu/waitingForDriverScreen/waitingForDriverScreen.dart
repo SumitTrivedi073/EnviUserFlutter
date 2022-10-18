@@ -66,106 +66,108 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
           return value.liveTripData != null
               ? Scaffold(
                   body: Stack(alignment: Alignment.center, children: <Widget>[
-
-                    MapDirectionWidgetPickup(
+                  MapDirectionWidgetPickup(
                     key: widget._key,
                     liveTripData: value.liveTripData!,
                     callback: retrieveDuration,
                   ),
-                    ExpandableBottomSheet(
-                      //use the key to get access to expand(), contract() and expansionStatus
-                      key: key,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                          height: getHeight(),
+                          margin: EdgeInsets.only(left: 10, right: 10),
+                        child: ExpandableBottomSheet(
+                          //use the key to get access to expand(), contract() and expansionStatus
+                          key: key,
 
-                      //optional
-                      //callbacks (use it for example for an animation in your header)
-                      onIsContractedCallback: () => print('contracted'),
-                      onIsExtendedCallback: () => print('extended'),
+                          //optional
+                          //callbacks (use it for example for an animation in your header)
+                          onIsContractedCallback: () => print('contracted'),
+                          onIsExtendedCallback: () => print('extended'),
 
-                      //optional; default: Duration(milliseconds: 250)
-                      //The durations of the animations.
-                      animationDurationExtend: const Duration(milliseconds: 500),
-                      animationDurationContract:
-                      const Duration(milliseconds: 250),
+                          //optional; default: Duration(milliseconds: 250)
+                          //The durations of the animations.
+                          /* animationDurationExtend: const Duration(milliseconds: 500),
+                        animationDurationContract:
+                        const Duration(milliseconds: 250),
+                        animationCurveExpand: Curves.bounceOut,
+                        animationCurveContract: Curves.ease,*/
 
-                      //optional; default: Curves.ease
-                      //The curves of the animations.
-                      animationCurveExpand: Curves.bounceOut,
-                      animationCurveContract: Curves.ease,
+                          //required
+                          //This is the widget which will be overlapped by the bottom sheet.
+                          background: Container(
+                            color: Colors.transparent,
+                          ),
 
-                      //optional
-                      //The content extend will be at least this height. If the content
-                      //height is smaller than the persistentContentHeight it will be
-                      //animated on a height change.
-                      //You can use it for example if you have no header.
-
-                      //required
-                      //This is the widget which will be overlapped by the bottom sheet.
-                      background: Container(
-                        color: Colors.transparent,
-                      ),
-
-                      //optional
-                      //This widget is sticking above the content and will never be contracted.
-                      persistentHeader: GestureDetector(
-                        onTap: () {
-                          if (_expansionStatus == ExpansionStatus.contracted) {
-                            setState(() {
-                              key.currentState!.expand();
-                              _expansionStatus =
-                                  key.currentState!.expansionStatus;
-                            });
-                          } else {
-                            setState(() {
-                              key.currentState!.contract();
-                              _expansionStatus =
-                                  key.currentState!.expansionStatus;
-                            });
-                          }
-                        },
-                        child: Container(
-                          color: Colors.green,
-                          constraints: const BoxConstraints.expand(height: 40),
-                          child: Center(
+                          //For showing some content below green banner provide this height
+                       //   persistentContentHeight: 50,
+                          //optional
+                          //This widget is sticking above the content and will never be contracted.
+                          persistentHeader: GestureDetector(
+                            onTap: () {
+                              if (_expansionStatus == ExpansionStatus.contracted) {
+                                setState(() {
+                                  key.currentState!.expand();
+                                  _expansionStatus =
+                                      key.currentState!.expansionStatus;
+                                });
+                              } else {
+                                setState(() {
+                                  key.currentState!.contract();
+                                  _expansionStatus =
+                                      key.currentState!.expansionStatus;
+                                });
+                              }
+                            },
                             child: Container(
-                              height: 8.0,
-                              width: 50.0,
-                              color:
-                              Color.fromARGB((0.25 * 255).round(), 0, 0, 0),
+                              color: Colors.green,
+                              constraints: const BoxConstraints.expand(height: 40),
+                              child: Center(
+                                child: Container(
+                                  height: 8.0,
+                                  width: 50.0,
+                                  color:
+                                  Color.fromARGB((0.25 * 255).round(), 0, 0, 0),
+                                ),
+                              ),
                             ),
+                          ),
+
+                          //required
+                          //This is the content of the bottom sheet which will be extendable by dragging.
+                          expandableContent:SingleChildScrollView(
+                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              FromToData(value.liveTripData!),])
+                          ),
+
+
+                          // optional
+                          // This will enable tap to toggle option on header.
+                          enableToggle: true,
+
+                          //optional
+                          //This is a widget aligned to the bottom of the screen and stays there.
+                          //You can use this for example for navigation.
+                          persistentFooter: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              DriverDetailWidget(
+                                duration: duration,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 5),
+                                child: TimerButton(
+                                  liveTripData: value.liveTripData!,
+                                ),
+                              ),],
                           ),
                         ),
                       ),
-
-                      //required
-                      //This is the content of the bottom sheet which will be extendable by dragging.
-                      expandableContent: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(top: 10),
-                              child: TimerButton(
-                                liveTripData: value.liveTripData!,
-                              ),
-                            ),
-                            DriverDetailWidget(
-                              duration: duration,
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // optional
-                      // This will enable tap to toggle option on header.
-                      enableToggle: true,
-
-                      //optional
-                      //This is a widget aligned to the bottom of the screen and stays there.
-                      //You can use this for example for navigation.
-                      persistentFooter: FromToData(value.liveTripData!),
                     ),
 
-                    Column(children: [
+                  Column(children: [
                     const AppBarInsideWidget(
                       title: "Envi",
                       isBackButtonNeeded: false,
@@ -177,6 +179,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                       child: OTPView(otp: value.liveTripData!.tripInfo.otp),
                     ),
                   ]),
+
                 ]))
               : Container();
         }),
@@ -312,5 +315,14 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
     setState(() {
       duration = durationToPickupLocation;
     });
+  }
+
+  getHeight() {
+    print("============>$_expansionStatus");
+    if(_expansionStatus==ExpansionStatus.expanded){
+      return MediaQuery.of(context).size.height/2;
+    }else{
+      return MediaQuery.of(context).size.height/2;
+    }
   }
 }
