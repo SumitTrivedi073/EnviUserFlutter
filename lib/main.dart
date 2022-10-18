@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             title: 'Envi',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.green,
             ),
             home: MaterialApp(
               debugShowCheckedModeBanner: false,
