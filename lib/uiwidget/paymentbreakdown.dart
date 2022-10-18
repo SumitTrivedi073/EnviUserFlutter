@@ -40,7 +40,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
       widget.livetripData!.tripInfo.arrivalAtDestination!.kmFare.toString(),
       widget.livetripData!.tripInfo.arrivalAtDestination!.discount.toString(),
       widget.livetripData!.tripInfo.arrivalAtDestination!.tollAmount.toString(),
-      totalTax.toString()!=null?totalTax.toString():'0',
+      totalTax.round().toString()!=null?totalTax.round().toString():'0',
       widget.livetripData!.tripInfo.arrivalAtDestination!.amountTobeCollected.toString(),
     ];
     // TODO: implement build
