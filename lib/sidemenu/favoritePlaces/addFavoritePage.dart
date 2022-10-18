@@ -399,7 +399,6 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   }
 
   Future<void> ApiCall_Add_Favorite() async {
-
     dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,

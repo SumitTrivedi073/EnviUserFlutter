@@ -153,6 +153,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                                     MaterialPageRoute(
                                         builder: (context) => NewProfilePage(
                                               user: widget.profiledatamodel,
+                                              isUpdate: true,
                                             )));
                               },
                               child: const Icon(

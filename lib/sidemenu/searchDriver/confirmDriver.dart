@@ -1,26 +1,21 @@
-import 'dart:convert';
-
 import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart';
 import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
-
-import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
+import '../../uiwidget/confirmDriverPopup.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/APIDirectory.dart';
 import '../home/homePage.dart';
 import '../pickupDropAddressSelection/model/searchPlaceModel.dart';
-
-import '../../../../web_service/HTTP.dart' as HTTP;
-import 'dart:convert' as convert;
-
 import 'model/driverListModel.dart' as DriverListModel;
 
 class ConfirmDriver extends StatefulWidget {
@@ -48,6 +43,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
   late UserTripModel userTripModel;
+
 
   @override
   void initState() {
@@ -77,267 +73,36 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
               myLocationButtonEnabled: false,
               mapToolbarEnabled: false,
               zoomGesturesEnabled: false,
-              rotateGesturesEnabled: true,
+              rotateGesturesEnabled: false,
               zoomControlsEnabled: false,
             )
           : Container(),
+
       Column(children: const [
         AppBarInsideWidget(
           title: "Booking Confirmation",
           isBackButtonNeeded: true,
         ),
         SizedBox(height: 5),
-      ])
+      ]),
+          Container(
+            color: Color(0xFFB0000000),
+          ),
+          Align(
+              alignment: Alignment.center,
+              child:SizedBox(
+                child: ConfirmDriverPopup(
+                  driverDetail: widget.driverDetail,
+                  priceDetail: widget.priceDetail,
+                  fromAddress: widget.fromAddress,
+                  toAddress: widget.toAddress,
+
+                ),
+              )
+          ),
     ]));
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
-    return AlertDialog(
-      content: Container(
-          height: 340,
-          child: Column(children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: Text(
-                "You are booking",
-                style: TextStyle(
-                    color: AppColor.butgreen,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: Column(
-                  children: [
-                    robotoTextWidget(
-                        textval:
-                            widget.driverDetail!.priceClass!.type.toString(),
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Image.asset('assets/images/passengers-icon.png',
-                                height: 15, width: 15, fit: BoxFit.cover),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            robotoTextWidget(
-                                textval:
-                                    "${widget.driverDetail!.priceClass!.passengerCapacity} People",
-                                colorval: AppColor.black,
-                                sizeval: 14,
-                                fontWeight: FontWeight.w200)
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Row(
-                          children: [
-                            Image.asset('assets/images/weight-icon.png',
-                                height: 15, width: 15, fit: BoxFit.cover),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            robotoTextWidget(
-                                textval: widget
-                                    .driverDetail!.priceClass!.bootSpace
-                                    .toString(),
-                                colorval: AppColor.black,
-                                sizeval: 14,
-                                fontWeight: FontWeight.w200)
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 10),
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          robotoTextWidget(
-                              textval:
-                                  "₹${widget.priceDetail!.priceClass.totalFare.toString()}",
-                              colorval: AppColor.black,
-                              sizeval: 16,
-                              fontWeight: FontWeight.w800),
-                          robotoTextWidget(
-                              textval: ApproxFare,
-                              colorval: AppColor.black,
-                              sizeval: 12,
-                              fontWeight: FontWeight.w400),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 55,
-                      width: 1,
-                      color: AppColor.border,
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            robotoTextWidget(
-                                textval:
-                                    '${widget.driverDetail!.durationToPickUpLocation} Mins',
-                                colorval: AppColor.black,
-                                sizeval: 16,
-                                fontWeight: FontWeight.w800),
-                            const robotoTextWidget(
-                                textval: "Pickup Time",
-                                colorval: AppColor.black,
-                                sizeval: 12,
-                                fontWeight: FontWeight.w400),
-                          ],
-                        )),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "To address",
-              style: TextStyle(
-                  color: AppColor.butgreen,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const robotoTextWidget(
-                        textval: "Place Name",
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    robotoTextWidget(
-                        textval: widget.toAddress!.address.toString(),
-                        colorval: AppColor.black,
-                        sizeval: 12,
-                        fontWeight: FontWeight.w200),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                    height: 40,
-                    width: 120,
-                    margin: const EdgeInsets.all(5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const HomePage(title: "title")),
-                            (Route<dynamic> route) => false);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: cancel,
-                        colorval: AppColor.greyblack,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-                Container(
-                    height: 40,
-                    width: 120,
-                    margin: const EdgeInsets.all(5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        confirmBooking();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.greyblack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: confirm,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-              ],
-            )
-          ])),
-    );
-  }
 
   Future getCurrentLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -360,52 +125,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
         zoom: 14.0,
       );
     });
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => _buildPopupDialog(context),
-    );
+
   }
 
-  Future<void> confirmBooking() async {
-    Map data;
-    data = {
-      "driverTripMasterId": widget.driverDetail!.driverTripMasterId,
-      "userId": Profiledata().getusreid(),
-      "vehicleId": widget.driverDetail!.vehicleId.toString(),
-      "driverId": widget.driverDetail!.driverId,
-      "location": {
-        "latitude": widget.fromAddress!.latLng.latitude.toDouble(),
-        "longitude": widget.fromAddress!.latLng.longitude.toDouble(),
-        "address": widget.fromAddress!.address
-      },
-      "toLocation": {
-        "latitude": widget.toAddress!.latLng.latitude.toDouble(),
-        "longitude": widget.toAddress!.latLng.longitude.toDouble(),
-        "address": widget.toAddress!.address
-      },
-      "paymentMode": "null",
-      "driverName": widget.driverDetail!.driverName,
-      "driverRating": widget.driverDetail!.driverRating!.toDouble(),
-      "driverPhoto": widget.driverDetail!.driverPhoto!.toString(),
-      "initialPrice": widget.priceDetail!.priceClass.totalFare!.toDouble(),
-      "initialDistance": widget.priceDetail!.priceClass.distance!.toDouble()
-    };
-    print("data=======>$data");
-    // var jsonData = null;
-    dynamic res = await HTTP.post(startTrip(), data);
-    if (res != null && res.statusCode != null && res.statusCode == 200) {
-      print("RVT TEST: Received response after booking ");
-      // setState(() {
-      // jsonData = convert.jsonDecode(res.body);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => WaitingForDriverScreen()),
-          (Route<dynamic> route) => false);
-      // });
-            print("RVT TEST: Navigating for WaitingForDriverScreen ");
-
-    } else {
-      throw "Driver Not Booked";
-    }
-  }
 }

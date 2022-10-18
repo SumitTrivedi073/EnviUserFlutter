@@ -117,3 +117,6 @@ var Fromaddress = "From address";
 var placeName = "Place Name";
 var updatedSuccessText = "Updated Successfully";
 var failedToUpdateText = "Failed To Update";
+var noDriverAvailable = "No Driver Available";
+var retry = "Retry";
+var moveText = "Move marker around to set address";

@@ -4,6 +4,7 @@ import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/appConfig/landingPageSettings.dart';
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
+import 'package:envi/productFlavour/applicationconfig.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/provider/firestoreScheduleTripNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
@@ -17,7 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'appConfig/Profiledata.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
-import 'applicationconfig.dart';
 import 'database/database.dart';
 import 'login/login.dart';
 
@@ -145,6 +145,7 @@ void SetProfileData(){
     print(convert.jsonDecode(response.body));
     if (response != null && response.statusCode == 200) {
       var jsonData = convert.jsonDecode(response.body);
+       print("jsonData==========>${jsonData.toString()}");
 
       LandingPageConfig.setshowInfoPopup(
           jsonData['landingPageSettings']['showInfoPopup']);
@@ -199,7 +200,10 @@ void SetProfileData(){
           .toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
-
+      AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']['priceConfig']
+      ['isCancellationFeeApplicable']);
+      AppConfig.setcancellationFee(jsonData['applicationConfig']['priceConfig']
+      ['cancellationFee']);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) =>

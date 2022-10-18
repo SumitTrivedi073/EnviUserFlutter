@@ -18,7 +18,8 @@ class AppConfig {
   static int scheduleAllottedDriverDistance = 0;
   static String paymentOptions = "";
   static String defaultPaymentMode = "";
-
+  static bool isCancellationFeeApplicable = false;
+  static int cancellationFee = 0;
 
   static void setminAndroidVersion(int val){minAndroidVersion = val;}
   int getminAndroidVersion(){
@@ -68,6 +69,12 @@ class AppConfig {
     return scheduleAllottedDriverDistance;
   }
 
-
-
+  static setisCancellationFeeApplicable(bool val){isCancellationFeeApplicable = val;}
+  bool getisCancellationFeeApplicable(){
+    return isCancellationFeeApplicable;
+  }
+  static setcancellationFee(int val){cancellationFee = val;}
+  int getcancellationFee(){
+    return cancellationFee;
+  }
 }
