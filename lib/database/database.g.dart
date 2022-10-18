@@ -318,9 +318,9 @@ class _$FavoritesDataDao extends FavoritesDataDao {
  
 
   @override
-  Future<List<FavoritesData?>> displayAscByAddress(String address) async{
+  Future<List<FavoritesData?>> displayDescByAddress(String address) async{
      return _queryAdapter.queryList(
-      'SELECT * FROM FavoritesData WHERE  address LIKE ? ORDER BY timestamp ASC',
+      'SELECT * FROM FavoritesData WHERE  address LIKE ? ORDER BY timestamp DESC',
       mapper: (Map<String, Object?> row) => FavoritesData(
           row['id'] as int?,
           row['identifier'] as String,

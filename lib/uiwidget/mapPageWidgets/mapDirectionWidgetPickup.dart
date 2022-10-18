@@ -7,6 +7,8 @@ import 'dart:ui' as ui;
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';

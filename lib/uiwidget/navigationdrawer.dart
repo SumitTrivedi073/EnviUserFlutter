@@ -356,7 +356,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           height: 100,
           child: Column(children: [
             Padding(
-              padding: EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(top: 5),
               child: Text(
                 appName,
                 style: const TextStyle(
@@ -380,13 +380,11 @@ class _NavigationPageState extends State<NavigationDrawer> {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                    height: 40,
-                    width: 120,
-                    margin: EdgeInsets.only(right: 5),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -403,11 +401,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
                         sizeval: 14,
                         fontWeight: FontWeight.w600,
                       ),
-                    )),
-                Container(
-                    height: 40,
-                    width: 120,
-                    margin: EdgeInsets.only(left: 5),
+                    ),
+                  ),
+                  Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         confirmLogout(context);
@@ -424,8 +420,10 @@ class _NavigationPageState extends State<NavigationDrawer> {
                         sizeval: 14,
                         fontWeight: FontWeight.w600,
                       ),
-                    )),
-              ],
+                    ),
+                  ),
+                ],
+              ),
             )
           ])),
     );
@@ -440,7 +438,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
       dynamic res = await HTTP.get(userLogout());
     } catch (e) {}
 
-
     showToast("Logout SuccessFully");
     sharedPreferences.clear();
 
@@ -454,7 +451,5 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);
-
-
   }
 }

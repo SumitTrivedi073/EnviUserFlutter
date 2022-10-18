@@ -105,7 +105,9 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if(_timer!=null) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
@@ -291,6 +293,7 @@ class _LoginpageState extends State<Loginpage> {
                   flex: 5, // wrap your Column in Expanded
                   child: TextFormField(
                     controller: phoneController,
+                    maxLength: 12,
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(color: AppColor.black),
                     decoration: const InputDecoration(
@@ -456,7 +459,7 @@ class _LoginpageState extends State<Loginpage> {
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,)));
+              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,isUpdate: false,)));
         } else {
           Navigator.push(
               context,
