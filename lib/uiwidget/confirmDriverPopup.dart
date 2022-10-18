@@ -152,7 +152,7 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                         children: [
                           robotoTextWidget(
                               textval:
-                              "₹${widget.priceDetail!.priceClass.totalFare.toString()}",
+                              "₹${widget.priceDetail!.priceClass.totalFare!.toStringAsFixed(0)}",
                               colorval: AppColor.black,
                               sizeval: 16,
                               fontWeight: FontWeight.w800),
@@ -219,14 +219,6 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const robotoTextWidget(
-                        textval: "Place Name",
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     robotoTextWidget(
                         textval: widget.toAddress!.address.toString(),
                         colorval: AppColor.black,
