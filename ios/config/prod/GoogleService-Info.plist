@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>887812704655-ql1ulpc6hp7rosvcj3s8v4qm2qr8148m.apps.googleusercontent.com</string>
+	<string>1056599993557-ncnghb2cmgun7emtqk7e595fjsveq1rk.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.887812704655-ql1ulpc6hp7rosvcj3s8v4qm2qr8148m</string>
+	<string>com.googleusercontent.apps.1056599993557-ncnghb2cmgun7emtqk7e595fjsveq1rk</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1056599993557-010f7lk55d2mo478vtuek7290u12h03o.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAboV0uE0igsaFLmx0ri3n7gAFKHfNCP2o</string>
+	<string>AIzaSyA3qni3Zo6_lN5m5pNjEo7vHP5tzIc6NEo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>887812704655</string>
+	<string>1056599993557</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.pcc.counterapp.prod</string>
+	<string>in.malbork.envi.app.user</string>
 	<key>PROJECT_ID</key>
-	<string>counterapp-prod</string>
+	<string>ecabdev-75760</string>
 	<key>STORAGE_BUCKET</key>
-	<string>counterapp-prod.appspot.com</string>
+	<string>ecabdev-75760.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:887812704655:ios:15acd011fd150f268ee3fa</string>
+	<string>1:1056599993557:ios:f8527dbb9d99d87a65c65c</string>
 	<key>DATABASE_URL</key>
-	<string>https://counterapp-prod-default-rtdb.firebaseio.com</string>
+	<string>https://ecabdev-75760.firebaseio.com</string>
 </dict>
 </plist>
