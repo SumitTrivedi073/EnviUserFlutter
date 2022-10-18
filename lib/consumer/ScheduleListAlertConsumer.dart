@@ -48,7 +48,6 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-
                   child: SvgPicture.asset(
                     "assets/svg/schedule-ride-panel-icon.svg",
                     width: 20,
@@ -87,22 +86,25 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
   getText(String status) {
    if(status==ScheduleTripRequestedStatus){
      return  'Your schedule trip is in process';
-   }else if (status==TripStatusConfirmedStatus){
+   }else if (status==ScheduleTripConfirmedStatus){
      return  'Your schedule trip is $status';
-   }else if (status==TripStatusRejectStatus){
+   }else if (status==ScheduleTripRejectStatus){
      return 'We are extremely sorry your scheduled trip is rejected';
+   }else if (status==ScheduleTripDriverAssignedStatus){
+     return 'Driver assigned for your schedule trip';
    }
 
 
 
- }
+
+  }
 
    getColor(String status) {
     if(status==ScheduleTripRequestedStatus){
       return AppColor.alfaorange;
-    }else if(status==TripStatusConfirmedStatus){
+    }else if(status==ScheduleTripConfirmedStatus||status==ScheduleTripDriverAssignedStatus){
       return AppColor.darkGreen;
-    }else if(status==TripStatusRejectStatus){
+    }else if(status==ScheduleTripRejectStatus){
       return AppColor.red;
     }
   }
