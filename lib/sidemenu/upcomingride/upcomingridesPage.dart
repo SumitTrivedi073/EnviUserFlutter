@@ -53,9 +53,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res.statusCode == 200) {
+      print(jsonDecode(res.body)['schedule_trip_list']);
       setState(() {
 
-        if(jsonDecode(res.body)['schedule_trip_list'] !=null) {
+        if(jsonDecode(res.body)['schedule_trip_list'] !=null && jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
+
           arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
               .map((i) => ScheduleTripModel.fromJson(i))
               .toList();
@@ -308,6 +310,19 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                   robotoTextWidget(
                     textval: "${arrtrip[index].estimatedDistance} Kms",
                     colorval: AppColor.greyblack,
+                    sizeval: 13.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children:  [
+                  robotoTextWidget(
+                    textval: arrtrip[index].status,
+                    colorval: AppColor.red,
                     sizeval: 13.0,
                     fontWeight: FontWeight.bold,
                   ),

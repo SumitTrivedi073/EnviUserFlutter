@@ -205,11 +205,15 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
 
   Widget _buildPopupDialog(BuildContext context, String schedualTime) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       content: Container(
-          height: 555,
+          height: 470,
+
           child: Column(children: [
             const Padding(
-              padding: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.only(top: 10),
               child: Text(
                 "You are booking",
                 style: TextStyle(
@@ -233,13 +237,16 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: Column(
                   children: [
-                    robotoTextWidget(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ robotoTextWidget(
                         textval: SelectedVehicle!.type.toString(),
                         colorval: AppColor.black,
                         sizeval: 14,
-                        fontWeight: FontWeight.w200),
+                        fontWeight: FontWeight.w200),],),
+
                     const SizedBox(
-                      height: 10,
+                      width: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -307,14 +314,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const robotoTextWidget(
-                        textval: "Time",
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     robotoTextWidget(
                         textval: schedualTime.toString(),
                         colorval: AppColor.black,
@@ -327,9 +326,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             const SizedBox(
               height: 10,
             ),
-            const SizedBox(
-              height: 10,
-            ),
+
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2.0),
@@ -349,10 +346,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         children: [
                           robotoTextWidget(
                               textval:
-                                  "₹${SelectedVehicle!.total_fare.toString()}",
+                                  "₹${SelectedVehicle!.total_fare.toStringAsFixed(0)}",
                               colorval: AppColor.black,
-                              sizeval: 16,
-                              fontWeight: FontWeight.w800),
+                              sizeval: 12,
+                              fontWeight: FontWeight.w200),
                           robotoTextWidget(
                               textval: ApproxFare,
                               colorval: AppColor.black,
@@ -375,10 +372,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             robotoTextWidget(
-                                textval: '${SelectedVehicle!.distance} KM',
+                                textval: '${SelectedVehicle!.distance.toStringAsFixed(0)} KM',
                                 colorval: AppColor.black,
-                                sizeval: 16,
-                                fontWeight: FontWeight.w800),
+                                sizeval: 12,
+                                fontWeight: FontWeight.w200),
                             const robotoTextWidget(
                                 textval: "Pickup Distance",
                                 colorval: AppColor.black,
@@ -415,14 +412,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    robotoTextWidget(
-                        textval: placeName,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
+
                     robotoTextWidget(
                         textval: widget.fromAddress!.address.toString(),
                         colorval: AppColor.black,
@@ -435,7 +425,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             const SizedBox(
               height: 10,
             ),
-            const SizedBox(height: 10),
+
             Text(
               Toaddress,
               style: const TextStyle(
@@ -460,14 +450,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    robotoTextWidget(
-                        textval: placeName,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     robotoTextWidget(
                         textval: widget.toAddress!.address.toString(),
                         colorval: AppColor.black,

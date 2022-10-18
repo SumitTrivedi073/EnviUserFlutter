@@ -78,16 +78,81 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
       });
     } else {
       var errmsg = jsonDecode(response.body)['msg'];
-      showToast(errmsg);
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const HomePage(title: "title")),
-          (Route<dynamic> route) => false);
+      // setState(() {
+      //   isLoading = false;
+      // });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => dialogueLogout(context,errmsg),
+      );
+
     }
+  }
+  Widget dialogueLogout(BuildContext context,String msg) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      content: SizedBox(
+          height: 100,
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                appName,
+                style: const TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              msg,
+              style: const TextStyle(
+                  color: AppColor.butgreen,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                const HomePage(title: "title")),
+                                (Route<dynamic> route) => false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: confirm,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ])),
+    );
   }
 
   @override
@@ -261,7 +326,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval: "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(2)}",
+                        textval: "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
@@ -317,6 +382,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
 
     double sum = num1 + num2;
     print('sum:$sum');
-    return "₹${sum.toStringAsFixed(2)}";
+    return "₹${sum.toStringAsFixed(0)}";
   }
 }

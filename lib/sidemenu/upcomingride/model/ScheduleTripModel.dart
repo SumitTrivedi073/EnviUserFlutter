@@ -11,10 +11,10 @@ class ScheduleTripModel {
     _id = json['_id'];
 
     toAddress = json["toAddress"];
-    estimatedDistance = json["estimatedDistance"].toString();
+    estimatedDistance = json["estimatedDistance"].toStringAsFixed(0).toString();
     status= json["status"];
     scheduledAt = json["scheduledAt"];
-    estimatedPrice = json["estimatedPrice"].toString();
+    estimatedPrice = json["estimatedPrice"].toStringAsFixed(0).toString();
   }
   Map<String, dynamic> toJson() => {
     "fromAddress": fromAddress,
