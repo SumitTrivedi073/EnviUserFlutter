@@ -396,17 +396,16 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                       builder: (context) => AddEditFavoritePlacesPage(
                             isforedit: "0",
                             titleEditable: "1",
-                            data: homeDetail == null
+                            data: workDetail == null
                                 ? FavoritesData.optional(
                                     title: "Work",
                                     address: "",
                                     longitude: "0.0",
                                     latitude: " 0.0",
                                     identifier: "0")
-                                : homeDetail!,
+                                : workDetail!,
                           )));
               getdata();
-              print("Tapped a Container");
             },
             child: Container(
                 color: AppColor.white.withOpacity(0.1),
