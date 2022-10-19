@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../appConfig/Profiledata.dart';
 import '../appConfig/landingPageSettings.dart';
@@ -83,48 +84,48 @@ class _NavigationPageState extends State<NavigationDrawer> {
                   ]),
             ),
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/book-ride.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuBookaRide,
-              colorval: AppColor.lightwhite,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(title: 'title')),
-                  (route) => true);
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/schedule-ride.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuScheduleaRide,
-              colorval: AppColor.lightwhite,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/book-ride.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuBookaRide,
+          //     colorval: AppColor.lightwhite,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //     Navigator.of(context).pushAndRemoveUntil(
+          //         MaterialPageRoute(
+          //             builder: (context) => HomePage(title: 'title')),
+          //         (route) => true);
+          //   },
+          // ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/schedule-ride.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuScheduleaRide,
+          //     colorval: AppColor.lightwhite,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
           const SizedBox(
             height: 10,
           ),
-          const Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Divider(color: Colors.white)),
+          // const Padding(
+          //     padding: EdgeInsets.only(left: 70),
+          //     child: Divider(color: Colors.white)),
           const SizedBox(
             height: 10,
           ),
@@ -262,6 +263,23 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
             onTap: () {
               closeDrawer();
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.privacy_tip,
+              size: 24,
+              color: Color(0xFF567b6b),
+            ),
+            title: robotoTextWidget(
+              textval: MenuPrivacyPolicy,
+              colorval: AppColor.lightText,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            onTap: () {
+              closeDrawer();
+             launchUrlString('https://www.malbork.in/#/privacy');
             },
           ),
           ListTile(

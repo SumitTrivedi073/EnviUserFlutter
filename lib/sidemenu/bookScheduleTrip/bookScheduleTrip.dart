@@ -412,7 +412,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     robotoTextWidget(
                         textval: widget.fromAddress!.address.toString(),
                         colorval: AppColor.black,
