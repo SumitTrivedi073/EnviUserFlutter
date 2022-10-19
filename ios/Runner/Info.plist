@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<key>NSPhotoLibraryUsageDescription</key>
 
-<string>Need to upload image</string>
-
-<key>NSCameraUsageDescription</key>
-
-<string>Need to upload image</string>
-
-<key>NSMicrophoneUsageDescription</key>
-
-<string>Need to upload image</string>
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
@@ -80,5 +70,16 @@
     <array>
         <string>tel</string>
     </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+
+    <string>Need to upload image</string>
+
+    <key>NSCameraUsageDescription</key>
+
+    <string>Need to upload image</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+
+    <string>Need to upload image</string>
 </dict>
 </plist>
