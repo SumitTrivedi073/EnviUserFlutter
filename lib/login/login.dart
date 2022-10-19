@@ -67,37 +67,39 @@ class _LoginpageState extends State<Loginpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //body
-      body: Container(
-        // height: MediaQuery.of(context).size.height,
-        // width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(PageBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          // Vertically center the widget inside the column
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 30, right: 30),
-              width: MediaQuery.of(context).size.width > 400
-                  ? 400
-                  : MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.white.withOpacity(.5),
-                  blurRadius: 20.0, // soften the shadow
-                )
-              ]),
-              child: isLoading
-                  ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview
-                      ? loginview()
-                      : verifyview(),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(PageBackgroundImage),
+              fit: BoxFit.cover,
             ),
-          ],
+          ),
+          child: Column(
+            // Vertically center the widget inside the column
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 30, right: 30),
+                width: MediaQuery.of(context).size.width > 400
+                    ? 400
+                    : MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(.5),
+                    blurRadius: 20.0, // soften the shadow
+                  )
+                ]),
+                child: isLoading
+                    ? const Center(child: const CircularProgressIndicator())
+                    : _showmobileview
+                        ? loginview()
+                        : verifyview(),
+              ),
+            ],
+          ),
         ),
       ),
     );
