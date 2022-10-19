@@ -35,9 +35,8 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String selectedPayOption = '';
   String passangerTripMasterId = '';
-  bool _isLoading = false;
   late TripDataModel tripDataModel;
-  LatLng? latlong = null;
+  LatLng? latlong;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +116,7 @@ class _PaymentPageState extends State<PaymentPage> {
       "passengerTripMasterId": passangerTripMasterId,
       "paymentMode": selectedPayOption
     };
-    var jsonData = null;
+    var jsonData;
     dynamic res = await HTTP.post(updatePaymentMode(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);
@@ -134,7 +133,7 @@ class _PaymentPageState extends State<PaymentPage> {
     body = {
       "passengerTripMasterId": tripDataModel.tripInfo.passengerTripMasterId,
     };
-    var jsonData = null;
+    var jsonData;
     dynamic res = await HTTP.post(CreateOrder(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);
