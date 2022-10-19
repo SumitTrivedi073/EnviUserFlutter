@@ -67,37 +67,39 @@ class _LoginpageState extends State<Loginpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //body
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(PageBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          // Vertically center the widget inside the column
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 30, right: 30),
-              width: MediaQuery.of(context).size.width > 400
-                  ? 400
-                  : MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.white.withOpacity(.5),
-                  blurRadius: 20.0, // soften the shadow
-                )
-              ]),
-              child: isLoading
-                  ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview
-                      ? loginview()
-                      : verifyview(),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(PageBackgroundImage),
+              fit: BoxFit.cover,
             ),
-          ],
+          ),
+          child: Column(
+            // Vertically center the widget inside the column
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 30, right: 30),
+                width: MediaQuery.of(context).size.width > 400
+                    ? 400
+                    : MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(.5),
+                    blurRadius: 20.0, // soften the shadow
+                  )
+                ]),
+                child: isLoading
+                    ? const Center(child: const CircularProgressIndicator())
+                    : _showmobileview
+                        ? loginview()
+                        : verifyview(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -105,7 +107,7 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    if(_timer!=null) {
+    if (_timer != null) {
       _timer.cancel();
     }
     super.dispose();
@@ -331,12 +333,11 @@ class _LoginpageState extends State<Loginpage> {
                     setState(() {
                       isLoading = true;
                     });
-                     /* fetchotp(
+                    /* fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
 */
                     signIn();
-
                   }
                 },
                 child: const robotoTextWidget(
@@ -400,8 +401,6 @@ class _LoginpageState extends State<Loginpage> {
         });
         signIn();
       }
-
-
     } on FirebaseAuthException catch (e) {
       print("catch$e");
       setState(() {
@@ -455,17 +454,22 @@ class _LoginpageState extends State<Loginpage> {
       jsonData = convert.jsonDecode(response.body);
       print("jsonData========>$jsonData['content']");
       setState(() {
-     //   _timer.cancel();
+        //   _timer.cancel();
         LoginModel users = new LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,isUpdate: false,)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewProfilePage(
+                        user: users,
+                        isUpdate: false,
+                      )));
         } else {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileAfterloginPage(
-                    profiledatamodel: users,
+                        profiledatamodel: users,
                       )));
         }
       });

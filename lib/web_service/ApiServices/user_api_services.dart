@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:envi/login/model/LoginModel.dart';
@@ -7,13 +8,13 @@ class UserApiService {
   late LoginModel user;
 
   Uri uri = Uri.parse('https://qausernew.azurewebsites.net/user/updateProfile');
-  Future<bool> userEditProfile(
-      {required File image,
-      required String token,
-      required String name,
-      required String gender,
-      required String email
-     }) async {
+  Future<dynamic> userEditProfile({
+    required File image,
+    required String token,
+    required String name,
+    required String gender,
+    required String email,
+  }) async {
     final body = <String, String>{};
     body['name'] = name;
     // body['pro_pic'] = propic;
@@ -29,10 +30,15 @@ class UserApiService {
     ));
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
+    try {
+      if (response.statusCode == 200) {
+        var res = jsonDecode(await response.stream.bytesToString());
+        print(res['pro_pic']);
+        return res;
+      }
+    } catch (e) {
+      print(response.reasonPhrase);
+      return;
     }
   }
 }
