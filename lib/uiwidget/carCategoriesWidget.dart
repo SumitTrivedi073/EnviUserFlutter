@@ -112,9 +112,9 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             Text(
               msg,
               style: const TextStyle(
-                  color: AppColor.butgreen,
+                  color: AppColor.black,
                   fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w200,
                   fontSize: 14),
             ),
             const SizedBox(
@@ -140,8 +140,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                           borderRadius: BorderRadius.circular(12), // <-- Radius
                         ),
                       ),
-                      child: robotoTextWidget(
-                        textval: confirm,
+                      child: const robotoTextWidget(
+                        textval: "Ok",
                         colorval: AppColor.white,
                         sizeval: 14,
                         fontWeight: FontWeight.w600,
@@ -333,6 +333,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     const SizedBox(
                       width: 25,
                     ),
+                    if(vehiclePriceClasses[index].discountPercent != "0")
                     Text(
                       getTotalPrice(
                           vehiclePriceClasses[index].total_fare.toDouble(),
@@ -352,6 +353,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     const SizedBox(
                       width: 25,
                     ),
+
+                    if(vehiclePriceClasses[index].discountPercent != "0")
                     Column(
                       children: [
                         const robotoTextWidget(

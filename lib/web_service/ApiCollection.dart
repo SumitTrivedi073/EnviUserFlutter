@@ -94,4 +94,11 @@ class ApiCollection {
     dynamic res = await HTTP.post(AddSchedualeTrip(), data);
     return res;
   }
+  static Future<dynamic> cancelSchedualeTrip(
+      passengerTripMasterId) async {
+
+
+    dynamic res = await HTTP.get(cancleSchedule(passengerTripMasterId));
+    return res;
+  }
 }
