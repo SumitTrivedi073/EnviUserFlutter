@@ -8,6 +8,7 @@ var MenuFareCharges = "Fare & Charges";
 var MenuFavoritePlaces = "Favorite Places";
 var MenuCustomerCare = "Customer Care";
 var MenuSettings = "Settings";
+var MenuPrivacyPolicy = "Privacy Policy";
 var MenuLogout = "Logout";
 var BookNow = "Book Now";
 var BookForLater = "Book for later?";

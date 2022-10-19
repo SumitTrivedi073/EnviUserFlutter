@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:envi/sidemenu/searchDriver/model/driverListModel.dart' as DriverListModel;
 import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart';
 import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
@@ -332,6 +334,7 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
     });
     dynamic res = await HTTP.post(startTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
+
       setState(() {
         isLoading = false;
 
@@ -341,7 +344,9 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
               (Route<dynamic> route) => false);
       });
     } else {
-      throw "Driver Not Booked";
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

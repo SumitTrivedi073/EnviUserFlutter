@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -79,7 +80,7 @@ class DriverListItemPageState extends State<DriverListItem> {
 
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
+     setState(() {
         isLoading = false;
 
         DriverList = (jsonDecode(res.body)['content'] as List)
@@ -95,6 +96,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
+      showSnackbar(context,jsonDecode(res.body)['msg']);
       setState(() {
         isLoading = false;
       });
@@ -287,7 +289,9 @@ class DriverListItemPageState extends State<DriverListItem> {
                     const SizedBox(
                       width: 25,
                     ),
-                    Text(
+                    vehiclePriceClasses[index]
+                        .priceClass
+                        .sellerDiscount!.toDouble()!=0.0? Text(
                       getTotalPrice(
                           vehiclePriceClasses[index]
                               .priceClass
@@ -306,7 +310,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Roboto',
                           decoration: TextDecoration.lineThrough),
-                    ),
+                    ):Container(),
                     const SizedBox(
                       width: 25,
                     ),
