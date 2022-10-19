@@ -34,18 +34,6 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
     double totalTax =
         widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toDouble() +
             widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toDouble();
-
-    List<String> breakDownVals = [
-      widget.livetripData!.tripInfo.arrivalAtDestination!.distanceTravelled
-          .toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination!.perKMPrice.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination!.kmFare.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination!.discount.toString(),
-      widget.livetripData!.tripInfo.arrivalAtDestination!.tollAmount.toString(),
-      totalTax.round().toString() != null ? totalTax.round().toString() : '0',
-      widget.livetripData!.tripInfo.arrivalAtDestination!.amountTobeCollected
-          .toString(),
-    ];
     // TODO: implement build
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10),
@@ -66,11 +54,12 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                       colorval: AppColor.black,
                       sizeval: 16,
                       fontWeight: FontWeight.w600),
-                  subtitle: robotoTextWidget(
-                      textval: includesdiscountText,
+                  subtitle:  widget.livetripData!.tripInfo
+                      .priceClass.discountPercent.toDouble()!=0.0? robotoTextWidget(
+                      textval: 'Includes ${widget.livetripData!.tripInfo.priceClass.discountPercent}% discount',
                       colorval: AppColor.textgray,
                       sizeval: 14,
-                      fontWeight: FontWeight.w400),
+                      fontWeight: FontWeight.w400):Container(),
                   trailing: robotoTextWidget(
                       textval: widget.livetripData!.tripInfo
                           .arrivalAtDestination!.amountTobeCollected
