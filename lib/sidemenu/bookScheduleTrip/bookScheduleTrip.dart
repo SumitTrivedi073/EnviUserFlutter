@@ -307,14 +307,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const robotoTextWidget(
-                        textval: "Time",
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     robotoTextWidget(
                         textval: schedualTime.toString(),
                         colorval: AppColor.black,
@@ -416,14 +408,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     robotoTextWidget(
-                        textval: placeName,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    robotoTextWidget(
                         textval: widget.fromAddress!.address.toString(),
                         colorval: AppColor.black,
                         sizeval: 12,
@@ -460,14 +444,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    robotoTextWidget(
-                        textval: placeName,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     robotoTextWidget(
                         textval: widget.toAddress!.address.toString(),
                         colorval: AppColor.black,

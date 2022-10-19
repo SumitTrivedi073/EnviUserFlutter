@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../appConfig/Profiledata.dart';
 import '../appConfig/landingPageSettings.dart';
@@ -262,6 +263,23 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
             onTap: () {
               closeDrawer();
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.privacy_tip,
+              size: 24,
+              color: Color(0xFF567b6b),
+            ),
+            title: robotoTextWidget(
+              textval: MenuPrivacyPolicy,
+              colorval: AppColor.lightText,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            onTap: () {
+              closeDrawer();
+             launchUrlString('https://www.malbork.in/#/privacy');
             },
           ),
           ListTile(
