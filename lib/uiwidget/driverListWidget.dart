@@ -352,7 +352,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   Widget getDriverList(List<Content> driverList) {
     if (driverList.isNotEmpty) {
       return SizedBox(
-        height: MediaQuery.of(context).size.height / 2.5,
+        height: MediaQuery.of(context).size.height / 2.4,
         child: Card(
           elevation: 5,
           margin: const EdgeInsets.all(5),
