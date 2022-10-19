@@ -116,12 +116,14 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         lastDate: DateTime(2100),
                         icon: const Icon(Icons.event),
                         dateLabelText: pickupdate,
-                        // selectableDayPredicate: (date) {
-                        //   if (date.weekday == 6 || date.weekday == 7) {
-                        //     return false;
-                        //   }
-                        //   return true;
-                        // },
+                         /*
+                         Restricted for day's code
+                         selectableDayPredicate: (date) {
+                           if (date.weekday == 6 || date.weekday == 7) {
+                             return false;
+                           }
+                           return true;
+                         },*/
                       ),
                     ),
                     const SizedBox(width: 10),
