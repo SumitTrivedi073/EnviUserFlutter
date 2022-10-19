@@ -19,16 +19,6 @@ class PaymentBreakdownWidget extends StatefulWidget {
 
 class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
   bool arrowClicked = false;
-  List<String> breakDownNames = [
-    distanceTravelledText,
-    ratePerKmText,
-    totalFareText,
-    lessDiscountText,
-    tollsText,
-    taxesText,
-    amountPayableText
-  ];
-
   @override
   Widget build(BuildContext context) {
     double totalTax =
