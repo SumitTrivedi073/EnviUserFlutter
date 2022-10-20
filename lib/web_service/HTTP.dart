@@ -146,4 +146,20 @@ Future<Object?> getwithoutHeader(url) async {
 
     throw error;
   }
+
+}
+Future<Object?> postwithoutdata(url, [headers]) async {
+  try {
+    //final encodedData = data != null ? jsonEncode(data) : null;
+    Map<String, String> requestHeaders = await setRequestHeaders(headers);
+
+    var response = await http.post(
+      url,
+      headers: requestHeaders,
+
+    );
+    return AccessPermissionHandler(response);
+  } catch (error) {
+    throw error;
+  }
 }

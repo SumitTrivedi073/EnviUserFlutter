@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -366,7 +367,7 @@ class _LoginpageState extends State<Loginpage> {
         setState(() {
           isLoading = false;
         });
-        showToast(e.message.toString());
+        showSnackbar(context,e.message.toString());
       },
       codeSent: (String verificationId, int? resendToken) async {
         loginverificationId = verificationId;
@@ -406,7 +407,7 @@ class _LoginpageState extends State<Loginpage> {
       setState(() {
         isLoading = false;
       });
-      showToast(e.message.toString());
+      showSnackbar(context,e.message.toString());
     }
   }
 
@@ -448,7 +449,7 @@ class _LoginpageState extends State<Loginpage> {
     };
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
-
+print(response.statusCode);
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);

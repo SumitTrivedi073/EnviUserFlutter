@@ -302,6 +302,26 @@ class _NavigationPageState extends State<NavigationDrawer> {
               );
             },
           ),
+          ListTile(
+            leading: const Icon(
+              Icons.delete,
+              size: 24,
+              color: AppColor.red,
+            ),
+            title: robotoTextWidget(
+              textval: menudeleteaccount,
+              colorval: AppColor.red,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            onTap: () {
+              closeDrawer();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => dialogueDelete(context),
+              );
+            },
+          ),
           const SizedBox(
             height: 15,
           ),
@@ -365,7 +385,86 @@ class _NavigationPageState extends State<NavigationDrawer> {
   void closeDrawer() {
     Navigator.pop(context);
   }
-
+  Widget dialogueDelete(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      content: SizedBox(
+          height: 120,
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                appName,
+                style: const TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              deleteaccountConfirmation,
+              style: const TextStyle(
+                  color: AppColor.butgreen,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: cancel,
+                        colorval: AppColor.greyblack,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        deleteacountApiCall(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: confirm,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ])),
+    );
+  }
   Widget dialogueLogout(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -456,7 +555,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       dynamic res = await HTTP.get(userLogout());
     } catch (e) {}
 
-    showToast("Logout SuccessFully");
+    showSnackbar(context,"Logout SuccessFully");
     sharedPreferences.clear();
 
     Profiledata.setusreid("");
@@ -469,5 +568,32 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);
+  }
+  Future<void> deleteacountApiCall(BuildContext context) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    await _auth.signOut();
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    try {
+      dynamic res = await HTTP.postwithoutdata(userdeRegisterMe(),null);//post(userdeRegisterMe());
+      print(res.statusCode);
+    if (res.statusCode == 200) {
+      showSnackbar(context,"Delete Account SuccessFully");
+      sharedPreferences.clear();
+
+      Profiledata.setusreid("");
+      Profiledata.settoken("");
+      Profiledata.setmailid("");
+      Profiledata.setpropic("");
+      Profiledata.setphone("");
+      Profiledata.setgender("");
+      Profiledata.setname("");
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+              (Route<dynamic> route) => false);
+    }
+    } catch (e) {}
+
+
   }
 }
