@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:envi/login/model/LoginModel.dart';
@@ -14,17 +15,21 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../web_service/Constant.dart';
-
+import 'dart:io' as Io;
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:path_provider/path_provider.dart';
 
 class NewProfilePage extends StatefulWidget {
-  const NewProfilePage({Key? key, required this.user, required this.isUpdate})
+  const NewProfilePage(
+      {Key? key, required this.user, required this.isUpdate, this.callback})
       : super(key: key);
   final LoginModel user;
   final bool isUpdate;
+  final void Function(LoginModel user)? callback;
+
   @override
   State<NewProfilePage> createState() => _NewProfilePageState();
 }
@@ -59,13 +64,8 @@ class _NewProfilePageState extends State<NewProfilePage> {
     _emailController.text = widget.user.mailid;
     _phoneNoController.text = widget.user.phone;
     _firstNameController.text = widget.user.name;
-    if (widget.user.gender.toString() == "m") {
-      selectedGender = "Male";
-    } else if (widget.user.gender.toString() == "f") {
-      selectedGender = "Female";
-    } else {
-      selectedGender = "I'd rather not say";
-    }
+    selectedGender = widget.user.gender;
+  
   }
 
   @override
@@ -272,6 +272,10 @@ class _NewProfilePageState extends State<NewProfilePage> {
               ),
               MaterialButton(
                 onPressed: () async {
+                  SharedPreferences sharedPreferences =
+                      await SharedPreferences.getInstance();
+
+                  var id = sharedPreferences.getString(loginID);
                   UserApiService userApi = UserApiService();
                   final response = await userApi.userEditProfile(
                       image: _image ?? await getImageFileFromAssets(),
@@ -279,16 +283,24 @@ class _NewProfilePageState extends State<NewProfilePage> {
                       name: _firstNameController.text,
                       gender: selectedGender!,
                       email: _emailController.text);
-
-                  if (response) {
+                  String updatedImg = '';
+                  if (response['message'] ==
+                      'user-profile updated successfully ') {
+                    LoginModel usr = LoginModel(
+                        widget.user.token,
+                        id ?? '',
+                        _firstNameController.text,
+                        response['pro_pic'],
+                        selectedGender!,
+                        widget.user.phone,
+                        widget.user.mailid);
+                    widget.callback!(usr);
                     utility.showInSnackBar(
                         value: updatedSuccessText,
                         context: context,
                         duration: const Duration(seconds: 3));
                     Future.delayed(const Duration(seconds: 2), () {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      setState(() {});
                     });
                   } else {
                     utility.showInSnackBar(
