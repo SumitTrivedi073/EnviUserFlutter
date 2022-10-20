@@ -83,7 +83,8 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
-    print("url==========>$url");
+    print(
+        "RAGHUVTTRACKING: calling google map direction API url==========>$url");
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
@@ -144,6 +145,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             ? widget.liveTripData!.driverLocation.longitude
             : 77.345492878187);
 
+    print("RAGHUVTTRACKING: New Car Location ${carCurrentLocation.latitude}");
     if (previousLocation.latitude != 0.0 &&
         previousLocation != carCurrentLocation) {
       animateCar(
@@ -342,9 +344,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     int minutes = new_time ~/ 60;
     int seconds = (new_time % 60).toInt();
     if (minutes > 0) {
-      widget.callback("$minutes Minute");
+      widget.callback("$minutes Minutes");
     } else {
-      widget.callback("$seconds Second");
+      widget.callback("$seconds Seconds");
     }
   }
 
@@ -368,6 +370,13 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   }
 
   void startTimer() {
+    print("RAGHUVTTRACKING: Starting the timer");
+
+    if (timer != null) {
+      print("RAGHUVTTRACKING: Killing existing Timer");
+      timer.cancel();
+    }
+
     timer = Timer.periodic(
         const Duration(minutes: 5),
         (Timer t) => {
@@ -377,7 +386,10 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   @override
   void dispose() {
-    if (timer != null) timer.cancel();
+    if (timer != null) {
+      print("RAGHUVTTRACKING: Timer is getting Cancelled");
+      timer.cancel();
+    }
     super.dispose();
   }
 }
