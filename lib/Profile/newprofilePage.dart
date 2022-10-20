@@ -289,7 +289,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                 Icons.edit_note_outlined,
                                 size: 30,
                               ),
-                              hintText: examplePhoneNumberText,
+                              hintText: 'Phone Number',
                               hintStyle: AppTextStyle.robotoRegular18Gray,
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.all(10.0),
@@ -343,7 +343,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                     var id = sharedPreferences.getString(loginID);
                     UserApiService userApi = UserApiService();
                     final response = await userApi.userEditProfile(
-                        image: _image ?? await getImageFileFromAssets(),
+                        image: _image ,
                         token: widget.user!.token,
                         name: _firstNameController.text,
                         gender: selectedGender!,
