@@ -45,7 +45,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                       sizeval: 16,
                       fontWeight: FontWeight.w600),
                   subtitle:  widget.livetripData!.tripInfo
-                      .priceClass.discountPercent.toDouble()!=0.0? robotoTextWidget(
+                      .priceClass.discountPercent.toString()!=0.0? robotoTextWidget(
                       textval: 'Includes ${widget.livetripData!.tripInfo.priceClass.discountPercent}% discount',
                       colorval: AppColor.textgray,
                       sizeval: 14,
@@ -136,14 +136,14 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w800),
                               const SizedBox(
                                 height: 10,
                               ),
                             ],
                           ),
                           widget.livetripData!.tripInfo
-                              .arrivalAtDestination!.discount.toDouble()!=0.0? Row(
+                              .arrivalAtDestination!.discount.toString()!=0.0? Row(
                             children: [
                               robotoTextWidget(
                                   textval: lessDiscountText,
@@ -164,7 +164,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                             ],
                           ):Container(),
                           widget.livetripData!.tripInfo
-                              .arrivalAtDestination!.tollAmount.toDouble()!=0.0? Row(
+                              .arrivalAtDestination!.tollAmount.toString()!=0.0? Row(
                             children: [
                               robotoTextWidget(
                                   textval: tollsText,
@@ -193,8 +193,8 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w600),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: totalTax.round().toString() != null
-                                      ? totalTax.round().toString()
+                                  textval: totalTax.toString() != null
+                                      ? totalTax.toString()
                                       : '0',
                                   colorval: AppColor.black,
                                   sizeval: 14,
@@ -215,7 +215,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               robotoTextWidget(
                                 textval: widget.livetripData!.tripInfo
                                     .arrivalAtDestination!.amountTobeCollected
-                                    .toString(),
+                                    .toDouble().round().toString(),
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w800,

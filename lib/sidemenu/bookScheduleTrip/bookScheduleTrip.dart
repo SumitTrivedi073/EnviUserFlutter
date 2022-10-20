@@ -4,6 +4,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/sidemenu/searchDriver/model/driverListModel.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -211,8 +212,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         borderRadius: BorderRadius.circular(10),
       ),
       content: Container(
-          height: 470,
-
+        height: 440,
           child: Column(children: [
             const Padding(
               padding: EdgeInsets.only(top: 10),
@@ -328,7 +328,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             const SizedBox(
               height: 10,
             ),
-
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2.0),
@@ -426,7 +425,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             const SizedBox(
               height: 10,
             ),
-
             Text(
               Toaddress,
               style: const TextStyle(
@@ -544,7 +542,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                     )),
             (Route<dynamic> route) => true);
       }
-      showToast((jsonDecode(response.body)['msg'].toString()));
+      showSnackbar(context,(jsonDecode(response.body)['msg'].toString()));
     }
   }
 

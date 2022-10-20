@@ -385,7 +385,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       if (response.statusCode == 200) {
        _firstLoad();
       }
-      showToast((jsonDecode(response.body)['msg'].toString()));
+      showSnackbar(context,(jsonDecode(response.body)['msg'].toString()));
     }
   }
 }

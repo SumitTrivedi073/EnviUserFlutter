@@ -555,7 +555,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       dynamic res = await HTTP.get(userLogout());
     } catch (e) {}
 
-    showToast("Logout SuccessFully");
+    showSnackbar(context,"Logout SuccessFully");
     sharedPreferences.clear();
 
     Profiledata.setusreid("");
@@ -578,7 +578,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       dynamic res = await HTTP.postwithoutdata(userdeRegisterMe(),null);//post(userdeRegisterMe());
       print(res.statusCode);
     if (res.statusCode == 200) {
-      showToast("Delete Account SuccessFully");
+      showSnackbar(context,"Delete Account SuccessFully");
       sharedPreferences.clear();
 
       Profiledata.setusreid("");
