@@ -20,6 +20,9 @@ import '../../direction_model/directionModel.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
 
+const int GOOGLE_API_INVOCATION_LIMIT = 6;
+const int GOOGLE_API_INNTERVAL_MINUTES = 5;
+
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
   final void Function(String) callback;
@@ -39,7 +42,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   String googleAPiKey = GoogleApiKey;
   late Timer timer;
-  int count = 1;
+  int GOOGLE_API_INVOCATIONS = 1;
   late String _sessionToken;
   var uuid = const Uuid();
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
@@ -82,10 +85,17 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   }
 
   getDirections() async {
+    if (GOOGLE_API_INVOCATIONS > GOOGLE_API_INVOCATION_LIMIT) {
+      print(
+          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}");
+      return;
+    }
+
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
-    print("url==========>$url");
+    print(
+        "RAGHUVTTRACKING: calling google map direction API url==========>${GOOGLE_API_INVOCATIONS}");
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
@@ -119,8 +129,18 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
                 carCurrentLocation.longitude,
                 pickupLocation.latitude,
                 pickupLocation.longitude);
-        startTimer();
+
         updatePickupTime();
+
+        GOOGLE_API_INVOCATIONS++;
+
+        timer = Timer(
+          const Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
+          () {
+            print("RAGHUVTTRACKING:Calling direction API within timer");
+            getDirections();
+          },
+        );
       } else {
         throw Exception('Failed to load predictions');
       }
@@ -344,9 +364,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     int minutes = new_time ~/ 60;
     int seconds = (new_time % 60).toInt();
     if (minutes > 0) {
-      widget.callback("$minutes Minute");
+      widget.callback("$minutes Minutes");
     } else {
-      widget.callback("$seconds Second");
+      widget.callback("$seconds Seconds");
     }
   }
 
@@ -369,17 +389,14 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     return -1;
   }
 
-  void startTimer() {
-    timer = Timer.periodic(
-        const Duration(minutes: 5),
-        (Timer t) => {
-              if (count <= 10) {getDirections(), count++}
-            });
-  }
-
   @override
   void dispose() {
-    if (timer != null) timer.cancel();
+    if (timer != null) {
+      print("RAGHUVTTRACKING: Timer is getting Cancelled");
+      timer.cancel();
+      GOOGLE_API_INVOCATIONS =
+          GOOGLE_API_INVOCATION_LIMIT * 2; //to Ensure we don't call this again
+    }
     super.dispose();
   }
 }

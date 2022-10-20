@@ -797,7 +797,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0+1"
+    version: "2.0.3+1"
   sqflite_common:
     dependency: transitive
     description:
@@ -968,4 +968,4 @@ packages:
     version: "5.4.1"
 sdks:
   dart: ">=2.18.0 <3.0.0"
-  flutter: ">=3.3.0-0"
+  flutter: ">=3.0.0"
