@@ -10,6 +10,7 @@ var MenuCustomerCare = "Customer Care";
 var MenuSettings = "Settings";
 var MenuPrivacyPolicy = "Privacy Policy";
 var MenuLogout = "Logout";
+var menudeleteaccount = "Delete My Account";
 var BookNow = "Book Now";
 var BookForLater = "Book for later?";
 var FromLocationHint = "Select Pickup Location";
@@ -99,6 +100,7 @@ var SOS = "SOS";
 var Support = "SUPPORT";
 var Invoice = "INVOICE";
 var logoutConfirmation = "Are you sure want to logout?";
+var deleteaccountConfirmation = "Are you sure want to delete account?\nThis will remove your trip data and account information's from envi server";
 
 var youHaveArrivedText = "You have arrived";
 var rateYourDriverText = "Rate your driver";

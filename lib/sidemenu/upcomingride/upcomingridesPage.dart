@@ -13,7 +13,9 @@ import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../theme/theme.dart';
+import '../../utils/utility.dart';
 import '../../web_service/APIDirectory.dart';
+import '../../web_service/ApiCollection.dart';
 import '../ridehistory/model/rideHistoryModel.dart';
 import 'model/ScheduleTripModel.dart';
 class UpcomingRidesPage extends StatefulWidget {
@@ -53,9 +55,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res.statusCode == 200) {
+      print(jsonDecode(res.body)['schedule_trip_list']);
       setState(() {
 
-        if(jsonDecode(res.body)['schedule_trip_list'] !=null) {
+        if(jsonDecode(res.body)['schedule_trip_list'] !=null && jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
+
           arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
               .map((i) => ScheduleTripModel.fromJson(i))
               .toList();
@@ -132,16 +136,15 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             ),
             Expanded(
               child:_isFirstLoadRunning
-                  ? Center(
+                  ? const Center(
                 child: CircularProgressIndicator(),
               )
                   : Container(
-                  margin: const EdgeInsets.only(right: 10.0),
                   child: _buildPosts(context)),
             ),
             if (_isLoadMoreRunning == true)
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 40),
+              const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 40),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -151,7 +154,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               Container(
                 padding: const EdgeInsets.only(top: 30, bottom: 40),
                 color: Colors.green,
-                child: Center(
+                child: const Center(
                   child: Text(
                     'You have fetched all of the content',
                     style: TextStyle(
@@ -211,7 +214,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               height: 1,
               color: AppColor.border,
             ),
-            CellRow3(),
+            CellRow3(index),
           ]),
     );
   }
@@ -225,12 +228,12 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(children:  [
-            Icon(
+            const Icon(
               Icons.sunny,
               color: AppColor.black,
               size: 20.0,
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             robotoTextWidget(
               textval: "${getdayTodayTomarrowYesterday(arrtrip[index].scheduledAt)}",
               colorval: AppColor.black,
@@ -259,7 +262,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       ),
       child: Container(
         color: AppColor.alfaorange.withOpacity(0.1),
-        height: 94,
         padding:
             const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
         child: Column(
@@ -273,12 +275,21 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                   children: [
                     Row(
                       children:  [
-                        robotoTextWidget(
-                          textval: arrtrip[index].toAddress.length > 30 ? arrtrip[index].toAddress.substring(0, 30) : arrtrip[index].toAddress,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
+                        Container(
+                          width: MediaQuery.of(context).size.width - 55,
+                          child: robotoTextWidget(
+                            textval: arrtrip[index].fromAddress,
+                            colorval: AppColor.black,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w200,
+                          ),
                         ),
+                        // robotoTextWidget(
+                        //   textval:  arrtrip[index].fromAddress,
+                        //   colorval: AppColor.black,
+                        //   sizeval: 14.0,
+                        //   fontWeight: FontWeight.normal,
+                        // ),
                       ],
                     ),
                     const SizedBox(
@@ -286,12 +297,21 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                     ),
                     Row(
                       children:  [
-                        robotoTextWidget(
-                          textval: arrtrip[index].fromAddress.length > 30 ? arrtrip[index].fromAddress.substring(0, 30) : arrtrip[index].fromAddress,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
+                        Container(
+                          width: MediaQuery.of(context).size.width - 55,
+                          child: robotoTextWidget(
+                            textval: arrtrip[index].toAddress,
+                            colorval: AppColor.black,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w200,
+                          ),
                         ),
+                        // robotoTextWidget(
+                        //   textval:  arrtrip[index].toAddress,
+                        //   colorval: AppColor.black,
+                        //   sizeval: 14.0,
+                        //   fontWeight: FontWeight.normal,
+                        // ),
                       ],
                     ),
                   ],
@@ -314,13 +334,26 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                 ]),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children:  [
+                  robotoTextWidget(
+                    textval: arrtrip[index].status,
+                    colorval: AppColor.red,
+                    sizeval: 13.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Container CellRow3() {
+  Container CellRow3(int index) {
     return Container(
       color: AppColor.white,
       height: 38,
@@ -335,10 +368,24 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
-            onPressed: () {},
+            onPressed: () {
+              confirmBooking(arrtrip[index].passengerTripMasterId);
+            },
           ),
         ],
       ),
     );
+  }
+  Future<void> confirmBooking(String passengerTripMasterId) async {
+
+    final response = await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
+
+    if (response != null) {
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+       _firstLoad();
+      }
+      showSnackbar(context,(jsonDecode(response.body)['msg'].toString()));
+    }
   }
 }

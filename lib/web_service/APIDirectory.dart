@@ -45,7 +45,9 @@ userLogin() {
 userLogout() {
   return Uri.parse('${getBaseURL()}/user/userLogout');
 }
-
+userdeRegisterMe() {
+  return Uri.parse('${getBaseURL()}/user/deRegisterMe');
+}
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }
@@ -115,4 +117,7 @@ CreateOrder() {
 
 registerUser() {
   return Uri.parse('${getBaseURL()}/login/userRegistration');
+}
+cancleSchedule(String tripObjId){
+  return Uri.parse('${getBaseURL()}/userTrip/cancelScheduledTrip?tripObjId=$tripObjId');
 }
