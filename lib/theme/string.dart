@@ -121,3 +121,6 @@ var failedToUpdateText = "Failed To Update";
 var noDriverAvailable = "No Driver Available";
 var retry = "Retry";
 var moveText = "Move marker around to set address";
+var nameText = "Name";
+var failedRegister = 'Failed to Register';
+var registerSuccessText = 'Registered Successfully';

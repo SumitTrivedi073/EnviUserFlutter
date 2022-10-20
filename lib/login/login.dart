@@ -7,9 +7,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../Profile/newprofilePage.dart';
@@ -439,13 +441,18 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   void signIn() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     String? deviceId = await _getId();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     Map data = {
       "countrycode": countrycontroller.text.toString(),
       "phone": phoneController.text.toString(),
-      "FcmToken": "",
+      "FcmToken": fcmToken,
       "deviceId": deviceId
     };
+    sharedPreferences.setString(deviceIdShared, deviceId!);
+    sharedPreferences.setString(fcmTokenShared, fcmToken!);
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
 
@@ -455,7 +462,7 @@ class _LoginpageState extends State<Loginpage> {
       print("jsonData========>$jsonData['content']");
       setState(() {
         //   _timer.cancel();
-        LoginModel users = new LoginModel.fromJson(jsonData['content']);
+        LoginModel users = LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
               context,
@@ -474,9 +481,14 @@ class _LoginpageState extends State<Loginpage> {
         }
       });
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (!mounted) return;
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const NewProfilePage(
+                    isUpdate: false,
+                  )));
     }
   }
 }
