@@ -25,7 +25,6 @@ getBaseURL() {
       print("1");
       baseUrl = webBaseUrl;
     } else {
-
       print("2");
       baseUrl = mobileBaseUrl;
     }
@@ -38,9 +37,11 @@ getBaseURL() {
   }
   return baseUrl;
 }
+
 userLogin() {
   return Uri.parse('${getBaseURL()}/login/userLogin');
 }
+
 userLogout() {
   return Uri.parse('${getBaseURL()}/user/userLogout');
 }
@@ -50,26 +51,34 @@ userdeRegisterMe() {
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }
-getfetchLandingPageSettings(){
 
+getfetchLandingPageSettings() {
   return Uri.parse('${getBaseURL()}/login/fetchLandingPageSettings');
 }
-getUserTripHistory(String userid, int pagecount, int limit){
-  print(Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
-  return Uri.parse('${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
+
+getUserTripHistory(String userid, int pagecount, int limit) {
+  print(Uri.parse(
+      '${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
+  return Uri.parse(
+      '${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
 }
-GetAllFavouriteAddressdata(String userid){
+
+GetAllFavouriteAddressdata(String userid) {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/getAll/$userid');
 }
+
 searchDriver() {
   return Uri.parse('${getBaseURL()}/userTrip/searchDrivers');
 }
+
 startTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/startUserTrip');
 }
+
 cancelTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/cancelUserTrip');
 }
+
 SosApi() {
   return Uri.parse('${getBaseURL()}/user/sos');
 }
@@ -78,27 +87,36 @@ SendInvoice() {
   return Uri.parse('${getBaseURL()}/userTrip/resendInvoice');
 }
 
-EditFavouriteAddressdata(){
+EditFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
 }
-AddFavouriteAddressdata(){
+
+AddFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/add');
 }
-getScheduleEstimation(){
+
+getScheduleEstimation() {
   return Uri.parse('${getBaseURL()}/userTrip/getScheduleEstimation');
 }
-DeleteFavouriteAddressdata(){
+
+DeleteFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/delete');
 }
 
-updatePaymentMode(){
+updatePaymentMode() {
   return Uri.parse('${getBaseURL()}/userTrip/updatePaymentMode');
 }
-AddSchedualeTrip(){
+
+AddSchedualeTrip() {
   return Uri.parse('${getBaseURL()}/userTrip/bookScheduleTrip');
 }
-CreateOrder(){
+
+CreateOrder() {
   return Uri.parse('${getBaseURL()}/order/createOrder');
+}
+
+registerUser() {
+  return Uri.parse('${getBaseURL()}/login/userRegistration');
 }
 cancleSchedule(String tripObjId){
   return Uri.parse('${getBaseURL()}/userTrip/cancelScheduledTrip?tripObjId=$tripObjId');

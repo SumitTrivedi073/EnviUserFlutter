@@ -26,6 +26,64 @@ class Utility {
     }
   }
 
+  String? validatorText({
+    bool? isEmail,
+    String? value,
+    String? emptyMsg,
+    bool isMandatary = true,
+    int minLimit = 2,
+    int maxLimit = 256,
+    String? condistionUnMetMsg,
+    bool shouldBeNumber = false,
+    bool isDecimalMadatory = false,
+    double? maxVal,
+    double? minVal,
+  }) {
+    if (isMandatary) {
+      if (value!.isEmpty) {
+        return emptyMsg ?? 'Please fill this input field';
+      } else {
+        if (!(value.length >= minLimit)) {
+          return 'Should be greater then ${minLimit - 1} characters';
+        } else if (value.length > maxLimit) {
+          return 'Should be smaller then $maxLimit characters';
+        }
+        if (shouldBeNumber) {
+          try {
+            if (double.parse(value.toString()).runtimeType == double ||
+                double.parse(value.toString()).runtimeType == int) {
+              if (isDecimalMadatory) {
+                if (value.split('.').length <= 1) {
+                  return 'Please enter value with a decimal';
+                } else if (value.split('.')[1].length < 1) {
+                  return 'Please enter value with a decimal';
+                }
+              }
+              if (minVal != null) {
+                if (double.parse(value.toString()) <= minVal) {
+                  return 'Should be greater then $minVal';
+                }
+              }
+              if (maxVal != null) {
+                if (double.parse(value.toString()) >= maxVal) {
+                  return 'Should be less then $maxVal';
+                }
+              }
+              // if(isEmail && ){
+
+              // }
+            }
+          } catch (e) {
+            return 'Please enter a float value';
+          }
+        }
+
+        return null;
+      }
+    }
+    return null;
+  }
+
   void showInSnackBar({required String value, context, Duration? duration}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -89,13 +147,14 @@ String encodeImgURLString(tmp) {
       tmp != null && tmp != '' ? Uri.encodeFull(tmp).trim() : placeHolderImage;
   return endStr;
 }
+
 Future<void> deleteAlldata() async {
   final database =
       await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
   FavoritesDataDao dao = database.taskDao;
   List<FavoritesData> data = await dao.findAllTasks();
   FavoritesData res;
-  for(res in data){
+  for (res in data) {
     print("datadelete${res}");
     await dao.deleteTask(res);
   }
