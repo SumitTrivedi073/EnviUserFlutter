@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             title: 'Envi',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.green,
             ),
             home: MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -213,6 +213,7 @@ void SetProfileData(){
             final splitList = res["address"].split(",");
             title = splitList[1];
           }
+          try{
           var data = await dao.findDataByaddressg(res["address"]);
           if (data == null) {
             final task = FavoritesData.optional(
@@ -226,6 +227,9 @@ void SetProfileData(){
             await dao.insertTask(task);
           } else {
             print("data$data");
+          }
+        }catch(e){
+            print(e.toString());
           }
         }
       }

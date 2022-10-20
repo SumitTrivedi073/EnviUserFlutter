@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../appConfig/Profiledata.dart';
 import '../appConfig/landingPageSettings.dart';
@@ -83,48 +84,48 @@ class _NavigationPageState extends State<NavigationDrawer> {
                   ]),
             ),
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/book-ride.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuBookaRide,
-              colorval: AppColor.lightwhite,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(title: 'title')),
-                  (route) => true);
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/schedule-ride.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuScheduleaRide,
-              colorval: AppColor.lightwhite,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/book-ride.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuBookaRide,
+          //     colorval: AppColor.lightwhite,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //     Navigator.of(context).pushAndRemoveUntil(
+          //         MaterialPageRoute(
+          //             builder: (context) => HomePage(title: 'title')),
+          //         (route) => true);
+          //   },
+          // ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/schedule-ride.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuScheduleaRide,
+          //     colorval: AppColor.lightwhite,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
           const SizedBox(
             height: 10,
           ),
-          const Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Divider(color: Colors.white)),
+          // const Padding(
+          //     padding: EdgeInsets.only(left: 70),
+          //     child: Divider(color: Colors.white)),
           const SizedBox(
             height: 10,
           ),
@@ -266,6 +267,23 @@ class _NavigationPageState extends State<NavigationDrawer> {
           ),
           ListTile(
             leading: const Icon(
+              Icons.privacy_tip,
+              size: 24,
+              color: Color(0xFF567b6b),
+            ),
+            title: robotoTextWidget(
+              textval: MenuPrivacyPolicy,
+              colorval: AppColor.lightText,
+              sizeval: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+            onTap: () {
+              closeDrawer();
+             launchUrlString('https://www.malbork.in/#/privacy');
+            },
+          ),
+          ListTile(
+            leading: const Icon(
               Icons.logout,
               size: 24,
               color: Color(0xFF567b6b),
@@ -356,7 +374,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           height: 100,
           child: Column(children: [
             Padding(
-              padding: EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(top: 5),
               child: Text(
                 appName,
                 style: const TextStyle(
@@ -384,50 +402,44 @@ class _NavigationPageState extends State<NavigationDrawer> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                      height: 38,
-                      width: 120,
-                      margin: EdgeInsets.only(right: 5),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: AppColor.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(12), // <-- Radius
-                          ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
                         ),
-                        child: robotoTextWidget(
-                          textval: cancel,
-                          colorval: AppColor.greyblack,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w600,
+                      ),
+                      child: robotoTextWidget(
+                        textval: cancel,
+                        colorval: AppColor.greyblack,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        confirmLogout(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
                         ),
-                      )),
-                  Container(
-                      height: 40,
-                      width: 120,
-                      margin: EdgeInsets.only(left: 5),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          confirmLogout(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: AppColor.greyblack,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(12), // <-- Radius
-                          ),
-                        ),
-                        child: robotoTextWidget(
-                          textval: confirm,
-                          colorval: AppColor.white,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )),
+                      ),
+                      child: robotoTextWidget(
+                        textval: confirm,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -444,7 +456,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
       dynamic res = await HTTP.get(userLogout());
     } catch (e) {}
 
-
     showToast("Logout SuccessFully");
     sharedPreferences.clear();
 
@@ -458,7 +469,5 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);
-
-
   }
 }

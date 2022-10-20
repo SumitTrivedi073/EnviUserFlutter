@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -79,7 +80,7 @@ class DriverListItemPageState extends State<DriverListItem> {
 
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
+     setState(() {
         isLoading = false;
 
         DriverList = (jsonDecode(res.body)['content'] as List)
@@ -95,11 +96,10 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
+      showSnackbar(context,jsonDecode(res.body)['msg']);
       setState(() {
         isLoading = false;
       });
-
-      throw "Can't get DriverList.";
     }
   }
 
@@ -110,7 +110,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Expanded(child: getDriverList(DriverList));
+        : Container(child: getDriverList(DriverList));
   }
 
   Widget driverListItems(int index) {
@@ -133,7 +133,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                 side: const BorderSide(color: Colors.white, width: 2.0),
                 borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 Row(
@@ -258,7 +258,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   height: 5,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     robotoTextWidget(
                         textval: estimateFare,
@@ -278,7 +278,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     robotoTextWidget(
                         textval:
@@ -289,7 +289,9 @@ class DriverListItemPageState extends State<DriverListItem> {
                     const SizedBox(
                       width: 25,
                     ),
-                    Text(
+                    vehiclePriceClasses[index]
+                        .priceClass
+                        .sellerDiscount!.toDouble()!=0.0? Text(
                       getTotalPrice(
                           vehiclePriceClasses[index]
                               .priceClass
@@ -308,10 +310,12 @@ class DriverListItemPageState extends State<DriverListItem> {
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Roboto',
                           decoration: TextDecoration.lineThrough),
-                    ),
+                    ):Container(),
                     const SizedBox(
                       width: 25,
                     ),
+                    vehiclePriceClasses[index].priceClass.discountPercent.toString()!=null
+                        && vehiclePriceClasses[index].priceClass.discountPercent!=0.0?
                     Column(
                       children: [
                         const robotoTextWidget(
@@ -326,7 +330,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             sizeval: 13,
                             fontWeight: FontWeight.w400),
                       ],
-                    )
+                    ):Container()
                   ],
                 ),
               ],
@@ -347,8 +351,8 @@ class DriverListItemPageState extends State<DriverListItem> {
 
   Widget getDriverList(List<Content> driverList) {
     if (driverList.isNotEmpty) {
-      return Container(
-        height: MediaQuery.of(context).size.height / 2.5,
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 2.4,
         child: Card(
           elevation: 5,
           margin: const EdgeInsets.all(5),
@@ -421,32 +425,31 @@ class DriverListItemPageState extends State<DriverListItem> {
               const SizedBox(
                 height: 5,
               ),
-              Expanded(
-                  child: CarouselSlider(
+              CarouselSlider(
                 items: List.generate(
-                    DriverList.length, (index) => driverListItems(index)),
+                DriverList.length, (index) => driverListItems(index)),
                 carouselController: carouselController,
                 options: CarouselOptions(
-                  enableInfiniteScroll: false,
-                  scrollDirection: Axis.horizontal,
-                  onPageChanged: (index, reason) {
-                    selectedIndex = index;
-                    setState(() {
-                      if (selectedIndex == 0) {
-                        isBackArrowGreen = false;
-                      } else {
-                        isBackArrowGreen = true;
-                      }
-                      if (selectedIndex == DriverList.length - 1) {
-                        isForwardArrowGreen = false;
-                      } else {
-                        isForwardArrowGreen = true;
-                      }
-                    });
-                  },
-                  autoPlay: false,
+              enableInfiniteScroll: false,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) {
+                selectedIndex = index;
+                setState(() {
+                  if (selectedIndex == 0) {
+                    isBackArrowGreen = false;
+                  } else {
+                    isBackArrowGreen = true;
+                  }
+                  if (selectedIndex == DriverList.length - 1) {
+                    isForwardArrowGreen = false;
+                  } else {
+                    isForwardArrowGreen = true;
+                  }
+                });
+              },
+              autoPlay: false,
                 ),
-              )),
+              ),
               Container(
                   height: 40,
                   margin: const EdgeInsets.all(5),
