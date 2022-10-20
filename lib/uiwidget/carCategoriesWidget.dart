@@ -21,13 +21,13 @@ class CarCategoriesWidget extends StatefulWidget {
   final SearchPlaceModel? toAddress;
   final void Function(vehiclePriceClassesModel) callback;
   final void Function(String) callback2;
-
+final String scheduledAt;
   const CarCategoriesWidget(
       {Key? key,
       this.toAddress,
       this.fromAddress,
       required this.callback,
-      required this.callback2})
+      required this.callback2,required this.scheduledAt})
       : super(key: key);
 
   @override
@@ -65,7 +65,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.latitude,
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
-        widget.toAddress!.latLng.longitude);
+        widget.toAddress!.latLng.longitude,widget.scheduledAt);
     if (response != null && response.statusCode == 200) {
       setState(() {
         isLoading = false;

@@ -60,17 +60,28 @@ class ApiCollection {
     return res;
   }
   static Future<dynamic> getScheduleEstimationdata(
-      from_latitude, from_longitude, to_latitude, to_longitude) async {
- 
+      from_latitude, from_longitude, to_latitude, to_longitude, scheduledAt) async {
+    Map data = {};
+if(scheduledAt == ""){
 
+   data = {
+    "from_latitude": from_latitude,
+    "from_longitude": from_longitude,
+    "to_latitude": to_latitude,
+    "to_longitude":to_longitude,
+  };
+}
+else{
 
-    Map data = {
-      "from_latitude": from_latitude,
-      "from_longitude": from_longitude,
-      "to_latitude": to_latitude,
-      "to_longitude":to_longitude
+   data = {
+    "from_latitude": from_latitude,
+    "from_longitude": from_longitude,
+    "to_latitude": to_latitude,
+    "to_longitude":to_longitude,
 
-    };
+    "scheduledAt":scheduledAt
+  };
+}
     print("SheduleEstimationdata==========>$data");
     dynamic res = await HTTP.post(getScheduleEstimation(), data);
     return res;

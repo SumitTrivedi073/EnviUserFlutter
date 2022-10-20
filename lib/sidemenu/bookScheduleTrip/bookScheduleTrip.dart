@@ -47,7 +47,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   void getSelectvehicle(vehiclePriceClassesModel object) {
     SelectedVehicle = object;
   }
-
+  late String scheduledAt = "";
   late String distance = "";
 
   @override
@@ -57,8 +57,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
     print(AppConfig().getadvance_booking_time_limit());
-    _controller2.text = DateFormat('HH:mm').format(mindatime);
-    _controller1.text = mindatime.toString();
+   // _controller2.text = DateFormat('HH:mm').format(mindatime);
+   // _controller1.text = mindatime.toString();
   }
 
   @override
@@ -91,7 +91,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 fromAddress: widget.fromAddress,
                 toAddress: widget.toAddress,
                 callback: getSelectvehicle,
-                callback2: retrieveDistance),
+                callback2: retrieveDistance,scheduledAt: scheduledAt,),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2.0),
@@ -146,6 +146,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         lastDate: DateTime(2100),
                         icon: const Icon(Icons.access_time),
                         timeLabelText: pickuptime,
+                        onSaved: (val) => setState(() {
+                          //  val = SelectedDateTime.toString();
+                          updatedtime();
+                        }),
                       ),
                     ),
                   ],
@@ -158,6 +162,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    if(!_controller2.text.isEmpty){
                     if (SelectedVehicle!=null &&  SelectedVehicle!.type != "") {
                       DateTime dt =
                           DateTime.parse(_controller1.text.toString());
@@ -181,10 +186,15 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                             duration: const Duration(seconds: 3));
                       }
                     } else { utility.showInSnackBar(
-                        value: 'Please select car',
+                        value: 'Please select Car',
                         context: context,
                         duration: const Duration(seconds: 3));
 
+                    }}else{
+                      utility.showInSnackBar(
+                          value: 'Please select your Date and Time',
+                          context: context,
+                          duration: const Duration(seconds: 3));
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -512,7 +522,19 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           ])),
     );
   }
+Future<void>updatedtime()async {
+  DateTime dt = DateTime.parse(_controller1.text.toString());
+  print(
+      "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
+  var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
+  var inputDate = inputFormat.parse(
+      "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}"); // <-- dd/MM 24H format
+  print(inputDate);
+  var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
+  setState(() { scheduledAt = outputFormat.format(inputDate);});
 
+
+}
   Future<void> confirmBooking() async {
     DateTime dt = DateTime.parse(_controller1.text.toString());
     print(
