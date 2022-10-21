@@ -26,9 +26,6 @@ class RatingBarWidget extends StatefulWidget {
 
 class _RatingBarWidgetPageState extends State<RatingBarWidget> {
 
-  String rating= '3';
-  bool ratingSubmitted = false;
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
