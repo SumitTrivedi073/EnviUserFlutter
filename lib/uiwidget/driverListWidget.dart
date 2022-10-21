@@ -180,8 +180,8 @@ class DriverListItemPageState extends State<DriverListItem> {
                             child: Image.network(
                               encodeImgURLString(DriverList[index].driverPhoto),
                               fit: BoxFit.fill,
-                              height: 40,
-                              width: 50,
+                              height: 30,
+                              width: 40,
                             ),
                           )
                         ],
