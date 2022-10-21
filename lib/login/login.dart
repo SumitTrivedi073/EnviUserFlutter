@@ -369,7 +369,7 @@ class _LoginpageState extends State<Loginpage> {
         setState(() {
           isLoading = false;
         });
-        showSnackbar(context,e.message.toString());
+        showSnackbar(context, e.message.toString());
       },
       codeSent: (String verificationId, int? resendToken) async {
         loginverificationId = verificationId;
@@ -409,7 +409,7 @@ class _LoginpageState extends State<Loginpage> {
       setState(() {
         isLoading = false;
       });
-      showSnackbar(context,e.message.toString());
+      showSnackbar(context, e.message.toString());
     }
   }
 
@@ -456,7 +456,7 @@ class _LoginpageState extends State<Loginpage> {
     sharedPreferences.setString(fcmTokenShared, fcmToken!);
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
-print(response.statusCode);
+    print(response.statusCode);
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
@@ -469,8 +469,8 @@ print(response.statusCode);
               context,
               MaterialPageRoute(
                   builder: (context) => NewProfilePage(
-                        user: users,
                         isUpdate: false,
+                        phone: phoneController.text.toString(),
                       )));
         } else {
           Navigator.push(
@@ -487,8 +487,9 @@ print(response.statusCode);
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const NewProfilePage(
+              builder: (context) => NewProfilePage(
                     isUpdate: false,
+                    phone: phoneController.text.toString(),
                   )));
     }
   }

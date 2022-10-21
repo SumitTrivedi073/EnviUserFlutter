@@ -25,10 +25,11 @@ import 'package:path_provider/path_provider.dart';
 
 class NewProfilePage extends StatefulWidget {
   const NewProfilePage(
-      {Key? key, this.user, required this.isUpdate, this.callback})
+      {Key? key, this.user, required this.isUpdate, this.callback, this.phone})
       : super(key: key);
   final LoginModel? user;
   final bool isUpdate;
+  final String? phone;
   final void Function(LoginModel user)? callback;
 
   @override
@@ -91,6 +92,8 @@ class _NewProfilePageState extends State<NewProfilePage> {
     // imagePicker = ImagePicker();
     if (widget.isUpdate) {
       updateUser();
+    } else {
+      _phoneNoController.text = widget.phone ?? '';
     }
     super.initState();
   }
@@ -386,18 +389,20 @@ class _NewProfilePageState extends State<NewProfilePage> {
                           widget.user!.phone,
                           widget.user!.mailid);
                       widget.callback!(usr);
-                      utility.showInSnackBar(
-                          value: updatedSuccessText,
-                          context: context,
-                          duration: const Duration(seconds: 3));
+                      // utility.showInSnackBar(
+                      //     value: updatedSuccessText,
+                      //     context: context,
+                      //     duration: const Duration(seconds: 3));
+                      showToast(updatedSuccessText);
                       Future.delayed(const Duration(seconds: 2), () {
                         Navigator.of(context).pop();
                       });
                     } else {
-                      utility.showInSnackBar(
-                          value: failedToUpdateText,
-                          context: context,
-                          duration: const Duration(seconds: 3));
+                      showToast(failedToUpdateText);
+                      // utility.showInSnackBar(
+                      //     value: failedToUpdateText,
+                      //     context: context,
+                      //     duration: const Duration(seconds: 3));
                     }
                   } else {
                     if (!mounted) return;
@@ -431,13 +436,14 @@ class _NewProfilePageState extends State<NewProfilePage> {
                             loginName, _firstNameController.text);
                         sharedPreferences.setString(loginpropic,
                             encodeImgURLString(response['content']['image']));
-                        Future.delayed(Duration(microseconds: 200))
-                            .then((value) {
-                          utility.showInSnackBar(
-                              value: 'Registered Successfully',
-                              context: context,
-                              duration: const Duration(seconds: 2));
-                        });
+                        // Future.delayed(Duration(microseconds: 200))
+                        //     .then((value) {
+                        //   utility.showInSnackBar(
+                        //       value: 'Registered Successfully',
+                        //       context: context,
+                        //       duration: const Duration(seconds: 2));
+                        // });
+                        showToast('Registered Successfully');
                         Future.delayed(const Duration(seconds: 2), () {
                           if (!mounted) return;
 
@@ -447,10 +453,11 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                   builder: (context) => MainEntryPoint()));
                         });
                       } else {
-                        utility.showInSnackBar(
-                            value: failedRegister,
-                            context: context,
-                            duration: const Duration(seconds: 2));
+                        showToast(failedRegister);
+                        // utility.showInSnackBar(
+                        //     value: failedRegister,
+                        //     context: context,
+                        //     duration: const Duration(seconds: 2));
                       }
                     }
                   }
