@@ -101,8 +101,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   color: AppColor.border,
                 ),
               ),
-              child: SizedBox(
-                child: Row(
+              child:  Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Expanded(
@@ -156,7 +155,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                     ),
                   ],
                 ),
-              ),
             ),
             Container(
                 height: 40,
@@ -483,11 +481,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                  height: 40,
-                  width: 120,
-                  margin: const EdgeInsets.all(5),
-                  child: ElevatedButton(
+              ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -503,12 +497,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                       sizeval: 14,
                       fontWeight: FontWeight.w600,
                     ),
-                  )),
-              Container(
-                  height: 40,
-                  width: 120,
-                  margin: const EdgeInsets.all(5),
-                  child: ElevatedButton(
+                  ),ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       confirmBooking();
@@ -525,7 +514,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                       sizeval: 14,
                       fontWeight: FontWeight.w600,
                     ),
-                  )),
+                  ),
             ],
           )
         ])
