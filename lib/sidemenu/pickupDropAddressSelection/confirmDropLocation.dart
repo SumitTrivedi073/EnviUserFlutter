@@ -83,7 +83,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
-        addressToAdd!.address,
+        addressToAdd!.title,
         addressToAdd.address,
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
@@ -103,7 +103,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             title: addressToAdd.title);
         await dao!.insertTask(task);
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -142,7 +142,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await dao!.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -152,7 +152,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
-        addressToAdd!.address,
+        addressToAdd!.title,
         addressToAdd.address,
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
@@ -213,7 +213,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         print(task);
         await dao!.updateTask(task);
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -227,11 +227,13 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           detail.identifier, detail.isFavourite);
     }
     var toDetail = await dao!.findDataByaddressg(endLocation.address);
-    if (toDetail == null) {
-      apiCallAddFavoritetoaddress(endLocation);
-    } else {
-      apiCallUpdateFavoritetoaddress(toDetail.id, toDetail.title,
-          widget.endLocation, toDetail.identifier, toDetail.isFavourite);
+    if (startLocation.address != endLocation.address) {
+      if (toDetail == null) {
+        apiCallAddFavoritetoaddress(endLocation);
+      } else {
+        apiCallUpdateFavoritetoaddress(toDetail.id, toDetail.title,
+            widget.endLocation, toDetail.identifier, toDetail.isFavourite);
+      }
     }
   }
 
@@ -378,7 +380,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             const SizedBox(
               height: 10,
             ),
-          Padding(
+            Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 moveText,

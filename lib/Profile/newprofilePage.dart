@@ -271,32 +271,57 @@ class _NewProfilePageState extends State<NewProfilePage> {
                         SizedBox(
                           height: 10,
                         ),
-                        TextFormField(
-                          enabled: (widget.isUpdate) ? false : true,
-                          controller: _phoneNoController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            return Utility().validatorText(
-                                value: value,
-                                shouldBeNumber: true,
-                                minLimit: 10,
-                                isMandatary: true,
-                                maxLimit: 12);
-                          },
-                          decoration: InputDecoration(
-                              filled: true,
-                              suffixIcon: const Icon(
-                                Icons.edit_note_outlined,
-                                size: 30,
+                        (widget.isUpdate)
+                            ? TextFormField(
+                                enabled: (widget.isUpdate) ? false : true,
+                                controller: _phoneNoController,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  return Utility().validatorText(
+                                      value: value,
+                                      shouldBeNumber: true,
+                                      minLimit: 10,
+                                      isMandatary: true,
+                                      maxLimit: 12);
+                                },
+                                decoration: const InputDecoration(
+                                    filled: true,
+                                    suffixIcon: Icon(
+                                      Icons.edit_note_outlined,
+                                      size: 30,
+                                    ),
+                                    hintText: 'Phone Number',
+                                    hintStyle: AppTextStyle.robotoRegular18Gray,
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.all(10.0),
+                                    isDense: true,
+                                    fillColor: AppColor.textfieldlightgrey),
+                                style: AppTextStyle.robotoRegular18,
+                              )
+                            : TextFormField(
+                                enabled: (widget.isUpdate) ? false : true,
+                                controller: _phoneNoController,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  return Utility().validatorText(
+                                      value: value,
+                                      shouldBeNumber: true,
+                                      minLimit: 10,
+                                      isMandatary: true,
+                                      maxLimit: 12);
+                                },
+                                decoration: const InputDecoration(
+                                    filled: true,
+                                    hintText: 'Phone Number',
+                                    hintStyle: AppTextStyle.robotoRegular18Gray,
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.all(10.0),
+                                    isDense: true,
+                                    fillColor: AppColor.textfieldlightgrey),
+                                style: AppTextStyle.robotoRegular18,
                               ),
-                              hintText: 'Phone Number',
-                              hintStyle: AppTextStyle.robotoRegular18Gray,
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.all(10.0),
-                              isDense: true,
-                              fillColor: AppColor.textfieldlightgrey),
-                          style: AppTextStyle.robotoRegular18,
-                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -343,7 +368,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                     var id = sharedPreferences.getString(loginID);
                     UserApiService userApi = UserApiService();
                     final response = await userApi.userEditProfile(
-                        image: _image ,
+                        image: _image,
                         token: widget.user!.token,
                         name: _firstNameController.text,
                         gender: selectedGender!,
@@ -375,6 +400,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                           duration: const Duration(seconds: 3));
                     }
                   } else {
+                    if (!mounted) return;
                     if (_profileForm.currentState!.validate()) {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
@@ -412,22 +438,20 @@ class _NewProfilePageState extends State<NewProfilePage> {
                               context: context,
                               duration: const Duration(seconds: 2));
                         });
-                        if (!mounted) return;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainEntryPoint()));
+                        Future.delayed(const Duration(seconds: 2), () {
+                          if (!mounted) return;
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainEntryPoint()));
+                        });
                       } else {
                         utility.showInSnackBar(
                             value: failedRegister,
                             context: context,
                             duration: const Duration(seconds: 2));
                       }
-                    } else {
-                      utility.showInSnackBar(
-                          value: 'Fill all Fields',
-                          context: context,
-                          duration: const Duration(seconds: 2));
                     }
                   }
                 },
