@@ -391,7 +391,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   @override
   void dispose() {
-    if (timer != null) {
+    if (timer != null && timer.isActive) {
       print("RAGHUVTTRACKING: Timer is getting Cancelled");
       timer.cancel();
       GOOGLE_API_INVOCATIONS =

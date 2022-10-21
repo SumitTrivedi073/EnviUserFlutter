@@ -188,7 +188,7 @@ class _TimerButtonState extends State<TimerButton>
   @override
   void dispose() {
     super.dispose();
-    if (timer.isActive) {
+    if (timer!=null && timer.isActive) {
       timer.cancel();
     }
   }
