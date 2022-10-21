@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -5,8 +7,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
+import '../web_service/APIDirectory.dart';
 import 'robotoTextWidget.dart';
 import '../web_service/Constant.dart';
+import 'package:envi/web_service/HTTP.dart'as HTTP;
 
 class RatingBarWidget extends StatefulWidget {
   final TripDataModel? livetripData;
@@ -21,6 +25,7 @@ class RatingBarWidget extends StatefulWidget {
 }
 
 class _RatingBarWidgetPageState extends State<RatingBarWidget> {
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -73,7 +78,7 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        print(rating);
+                        submitRating(rating);
                       },
                     ),
                   ],
@@ -82,5 +87,17 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
             ),
           )),
     );
+  }
+
+  Future<void> submitRating(double rating) async {
+
+    dynamic res =
+        await HTTP.get(submitDriverRating(widget.livetripData!.tripInfo.passengerTripMasterId,rating));
+
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
+      print(jsonDecode(res.body));
+    } else {
+      throw "Rating Api not worked.";
+    }
   }
 }

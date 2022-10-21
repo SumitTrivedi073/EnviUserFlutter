@@ -57,8 +57,6 @@ getfetchLandingPageSettings() {
 }
 
 getUserTripHistory(String userid, int pagecount, int limit) {
-  print(Uri.parse(
-      '${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit'));
   return Uri.parse(
       '${getBaseURL()}/userTrip/getUserTripHistory/$userid/$pagecount/$limit');
 }
@@ -86,6 +84,13 @@ SosApi() {
 SendInvoice() {
   return Uri.parse('${getBaseURL()}/userTrip/resendInvoice');
 }
+submitDriverRating(String passengerTripMasterId, double rating) {
+  print(Uri.parse(
+      '${getBaseURL()}/userTrip/ratingByUser?tripId=$passengerTripMasterId&rating=$rating'));
+  return Uri.parse(
+      '${getBaseURL()}/userTrip/ratingByUser?tripId=$passengerTripMasterId&rating=$rating');
+}
+
 
 EditFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');

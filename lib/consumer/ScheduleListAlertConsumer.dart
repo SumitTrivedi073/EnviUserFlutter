@@ -26,8 +26,6 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
   @override
   Widget build(BuildContext context) {
       return Consumer<firestoreScheduleTripNotifier>(builder: (context, value, child) {
-        print("scheduleTripConsumer========>${value.scheduleTrip}");
-
         if(value.scheduleTrip != null) {
            return Flexible(
                child: Wrap(children: [
