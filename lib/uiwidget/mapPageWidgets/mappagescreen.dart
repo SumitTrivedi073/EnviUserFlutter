@@ -166,18 +166,23 @@ class MyMapState extends State {
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    //print(placemarks);
-    Placemark place = placemarks[0];
-    placeName = (place.subLocality != '')
-        ? place.subLocality!
-        : place.subAdministrativeArea!;
-    isoId = place.isoCountryCode;
-    setState(() {
-      Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    });
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+      //print(placemarks);
+      Placemark place = placemarks[0];
+      placeName = (place.subLocality != '')
+          ? place.subLocality!
+          : place.subAdministrativeArea!;
+      isoId = place.isoCountryCode;
+      setState(() {
+        Address =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place
+            .postalCode}, ${place.country}';
+      });
+    }catch(e){
+      print("Exception==========>${e.toString()}");
+    }
   }
 
   @override
