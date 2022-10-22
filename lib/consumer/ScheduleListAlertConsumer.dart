@@ -26,7 +26,9 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
   @override
   Widget build(BuildContext context) {
       return Consumer<firestoreScheduleTripNotifier>(builder: (context, value, child) {
+
         if(value.scheduleTrip != null) {
+          print("scheduleTripConsumer===========${value.scheduleTrip!.status}");
            return Flexible(
                child: Wrap(children: [
                  GestureDetector(
@@ -84,6 +86,7 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
                  )
                ]));
          }else{
+          print("scheduleTripConsumer===========null");
            return Container();
          }
      });
@@ -99,10 +102,6 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
    }else if (status==ScheduleTripDriverAssignedStatus){
      return 'Driver assigned for your schedule trip';
    }
-
-
-
-
   }
 
    getColor(String status) {
