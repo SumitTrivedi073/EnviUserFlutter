@@ -11,6 +11,7 @@ import 'package:envi/theme/theme.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,10 +20,18 @@ import 'appConfig/Profiledata.dart';
 import '../../../../web_service/HTTP.dart' as HTTP;
 import 'database/database.dart';
 import 'login/login.dart';
+import 'notificationService/local_notification_service.dart';
 
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  LocalNotificationService.initialize();
   final database =
       await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
   final dao = database.taskDao;
@@ -45,7 +54,7 @@ class MyApp extends StatelessWidget {
             title: 'Envi',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.green,
             ),
             home: MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -69,6 +78,47 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   void initState() {
     super.initState();
     checkLoginStatus();
+    receiveNotification();
+
+  }
+
+
+  void receiveNotification() {
+    FirebaseMessaging.instance.getInitialMessage().then(
+          (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+          checkLoginStatus();
+        }
+      },
+    );
+
+    // 2. This method only call when App in forground it mean app must be opened
+    FirebaseMessaging.onMessage.listen(
+          (message) {
+        print("FirebaseMessaging.onMessage.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data11 ${message.data}");
+          LocalNotificationService.createanddisplaynotification(message);
+
+        }
+      },
+    );
+
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+          (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
   }
 
   checkLoginStatus() async {
@@ -213,6 +263,7 @@ void SetProfileData(){
             final splitList = res["address"].split(",");
             title = splitList[1];
           }
+          try{
           var data = await dao.findDataByaddressg(res["address"]);
           if (data == null) {
             final task = FavoritesData.optional(
@@ -226,6 +277,9 @@ void SetProfileData(){
             await dao.insertTask(task);
           } else {
             print("data$data");
+          }
+        }catch(e){
+            print(e.toString());
           }
         }
       }

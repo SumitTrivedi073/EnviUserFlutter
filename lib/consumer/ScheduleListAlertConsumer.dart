@@ -26,83 +26,91 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
   @override
   Widget build(BuildContext context) {
       return Consumer<firestoreScheduleTripNotifier>(builder: (context, value, child) {
-        return value.scheduleTrip != null
-        ?  Flexible(
-      child: Wrap(children: [
-        GestureDetector(
-          onTap: (){
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => UpcomingRidesPage()),
-                    (route) => true);
-          },
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(top: 5, left: 10, right: 10),
-            padding: EdgeInsets.all(10),
-            decoration:  BoxDecoration(
-              color: getColor(value.scheduleTrip!.status),
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
+        if(value.scheduleTrip != null) {
+           return Flexible(
+               child: Wrap(children: [
+                 GestureDetector(
+                   onTap: () {
+                     Navigator.of(context).pushAndRemoveUntil(
+                         MaterialPageRoute(
+                             builder: (context) => UpcomingRidesPage()),
+                             (route) => true);
+                   },
+                   child: Container(
+                     width: MediaQuery
+                         .of(context)
+                         .size
+                         .width,
+                     margin: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                     padding: EdgeInsets.all(10),
+                     decoration: BoxDecoration(
+                       color: getColor(value.scheduleTrip!.status),
+                       borderRadius: BorderRadius.all(Radius.circular(5)),
+                     ),
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Container(
+                           child: SvgPicture.asset(
+                             "assets/svg/schedule-ride-panel-icon.svg",
+                             width: 20,
+                             height: 20,
+                             color: Colors.white,
+                           ),
+                         ),
 
-                  child: SvgPicture.asset(
-                    "assets/svg/schedule-ride-panel-icon.svg",
-                    width: 20,
-                    height: 20,
-                    color: Colors.white,
-                  ),
-                ),
+                         Flexible(
+                             child: Wrap(children: [
+                               Container(
+                                 margin: const EdgeInsets.only(left: 5),
+                                 child: robotoTextWidget(
+                                   textval: getText(value.scheduleTrip!.status),
+                                   colorval: AppColor.white,
+                                   sizeval: 14,
+                                   fontWeight: FontWeight.w800,
+                                 ),
+                               ),
+                             ])),
+                         SvgPicture.asset(
+                           "assets/svg/schedule-ride-chevron-arrow.svg",
+                           width: 20,
+                           height: 20,
+                           color: Colors.white,
+                         ),
 
-                Flexible(
-                    child: Wrap(children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 5),
-                        child: robotoTextWidget(
-                          textval: getText(value.scheduleTrip!.status),
-                          colorval: AppColor.white,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ])),
-                SvgPicture.asset(
-                  "assets/svg/schedule-ride-chevron-arrow.svg",
-                  width: 20,
-                  height: 20,
-                  color: Colors.white,
-                ),
-
-              ],
-            ),
-          ),
-        )
-      ])):Container();
+                       ],
+                     ),
+                   ),
+                 )
+               ]));
+         }else{
+           return Container();
+         }
      });
   }
 
   getText(String status) {
    if(status==ScheduleTripRequestedStatus){
      return  'Your schedule trip is in process';
-   }else if (status==TripStatusConfirmedStatus){
+   }else if (status==ScheduleTripConfirmedStatus){
      return  'Your schedule trip is $status';
-   }else if (status==TripStatusRejectStatus){
+   }else if (status==ScheduleTripRejectStatus){
      return 'We are extremely sorry your scheduled trip is rejected';
+   }else if (status==ScheduleTripDriverAssignedStatus){
+     return 'Driver assigned for your schedule trip';
    }
 
 
 
- }
+
+  }
 
    getColor(String status) {
     if(status==ScheduleTripRequestedStatus){
       return AppColor.alfaorange;
-    }else if(status==TripStatusConfirmedStatus){
+    }else if(status==ScheduleTripConfirmedStatus||status==ScheduleTripDriverAssignedStatus){
       return AppColor.darkGreen;
-    }else if(status==TripStatusRejectStatus){
+    }else if(status==ScheduleTripRejectStatus){
       return AppColor.red;
     }
   }

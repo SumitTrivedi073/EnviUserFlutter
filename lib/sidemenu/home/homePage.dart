@@ -1,6 +1,7 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../appConfig/Profiledata.dart';
+import '../../notificationService/local_notification_service.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../uiwidget/mapPageWidgets/mappagescreen.dart';
 import '../../web_service/Constant.dart';
@@ -33,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getUserName();
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<firestoreLiveTripDataNotifier>(
@@ -88,4 +91,6 @@ class _HomePageState extends State<HomePage> {
 
     });
   }
+
+
 }

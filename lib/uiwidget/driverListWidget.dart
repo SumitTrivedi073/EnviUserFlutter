@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -95,11 +96,10 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
+      showSnackbar(context, jsonDecode(res.body)['msg']);
       setState(() {
         isLoading = false;
       });
-
-      throw "Can't get DriverList.";
     }
   }
 
@@ -110,229 +110,252 @@ class DriverListItemPageState extends State<DriverListItem> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Expanded(child: getDriverList(DriverList));
+        : Container(child: getDriverList(DriverList));
   }
 
   Widget driverListItems(int index) {
     var tmp = DriverList[index].driverName ?? '';
     var driverName = tmp.length > 10 ? '${tmp.substring(0, 9)}..' : tmp;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedIndex = index;
-        });
-      },
-      child: Card(
-        margin: const EdgeInsets.all(5),
-        color: const Color(0xFFE4F3F5),
-        shape: selectedIndex == index
-            ? RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.green, width: 2.0),
-                borderRadius: BorderRadius.circular(5.0))
-            : RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.white, width: 2.0),
-                borderRadius: BorderRadius.circular(5.0)),
-        child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        robotoTextWidget(
-                            textval: driverName,
-                            colorval: AppColor.black,
-                            sizeval: 10,
-                            fontWeight: FontWeight.normal),
-                        robotoTextWidget(
-                            textval:
-                                '${DriverList[index].durationToPickUpLocation} Minutes Away',
-                            colorval: AppColor.black,
-                            sizeval: 16,
-                            fontWeight: FontWeight.w600),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        RatingBar.builder(
-                          initialRating:
-                              DriverList[index].driverRating!.toDouble(),
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 14,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 2.0),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
+    return Flexible(
+        child: Wrap(children: [
+      Container(
+          child: GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        child: Card(
+          margin: const EdgeInsets.all(5),
+          color: const Color(0xFFE4F3F5),
+          shape: selectedIndex == index
+              ? RoundedRectangleBorder(
+                  side: const BorderSide(color: Colors.green, width: 2.0),
+                  borderRadius: BorderRadius.circular(5.0))
+              : RoundedRectangleBorder(
+                  side: const BorderSide(color: Colors.white, width: 2.0),
+                  borderRadius: BorderRadius.circular(5.0)),
+          child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Column(
+                        children: [
+                          robotoTextWidget(
+                              textval: driverName,
+                              colorval: AppColor.black,
+                              sizeval: 10,
+                              fontWeight: FontWeight.normal),
+                          robotoTextWidget(
+                              textval:
+                                  '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                              colorval: AppColor.black,
+                              sizeval: 16,
+                              fontWeight: FontWeight.w600),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RatingBar.builder(
+                            initialRating:
+                                DriverList[index].driverRating!.toDouble(),
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 14,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 2.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            },
                           ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        ),
-                        Card(
-                          child: Image.network(
-                            encodeImgURLString(DriverList[index].driverPhoto),
-                            fit: BoxFit.fill,
-                            height: 40,
-                            width: 50,
+                          Card(
+                            child: Image.network(
+                              encodeImgURLString(DriverList[index].driverPhoto),
+                              fit: BoxFit.fill,
+                              height: 30,
+                              width: 40,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/svg/car-type-sedan.svg",
+                        width: 40,
+                        height: 30,
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Column(
+                        children: [
+                          robotoTextWidget(
+                              textval:
+                                  DriverList[index].priceClass!.type.toString(),
+                              colorval: AppColor.black,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w200),
+                          const SizedBox(
+                            height: 5,
                           ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      "assets/svg/car-type-sedan.svg",
-                      width: 40,
-                      height: 30,
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      children: [
-                        robotoTextWidget(
-                            textval:
-                                DriverList[index].priceClass!.type.toString(),
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w200),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Row(
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(
+                                      'assets/images/passengers-icon.png',
+                                      height: 15,
+                                      width: 15,
+                                      fit: BoxFit.cover),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  robotoTextWidget(
+                                      textval:
+                                          "${DriverList[index].priceClass!.passengerCapacity} People",
+                                      colorval: AppColor.black,
+                                      sizeval: 14,
+                                      fontWeight: FontWeight.w200)
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Image.asset('assets/images/weight-icon.png',
+                                      height: 15, width: 15, fit: BoxFit.cover),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  robotoTextWidget(
+                                      textval: DriverList[index]
+                                          .priceClass!
+                                          .bootSpace
+                                          .toString(),
+                                      colorval: AppColor.black,
+                                      sizeval: 14,
+                                      fontWeight: FontWeight.w200)
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    color: AppColor.border,
+                    height: 2,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      robotoTextWidget(
+                          textval: estimateFare,
+                          colorval: AppColor.darkgrey,
+                          sizeval: 12,
+                          fontWeight: FontWeight.w600),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.info_outlined,
+                            size: 20.0,
+                            color: Colors.grey,
+                          ))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      robotoTextWidget(
+                          textval:
+                              "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
+                          colorval: AppColor.black,
+                          sizeval: 18,
+                          fontWeight: FontWeight.w800),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      vehiclePriceClasses[index]
+                                  .priceClass
+                                  .sellerDiscount!
+                                  .toDouble() !=
+                              0.0
+                          ? Text(
+                              getTotalPrice(
+                                  vehiclePriceClasses[index]
+                                      .priceClass
+                                      .totalFare!
+                                      .toDouble(),
+                                  vehiclePriceClasses[index]
+                                      .priceClass
+                                      .sellerDiscount!
+                                      .toDouble()),
+                              textAlign: TextAlign.justify,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Roboto',
+                                  decoration: TextDecoration.lineThrough),
+                            )
+                          : Container(),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      vehiclePriceClasses[index]
+                                      .priceClass
+                                      .discountPercent
+                                      .toString() !=
+                                  null &&
+                              vehiclePriceClasses[index]
+                                      .priceClass
+                                      .discountPercent !=
+                                  0.0
+                          ? Column(
                               children: [
-                                Image.asset('assets/images/passengers-icon.png',
-                                    height: 15, width: 15, fit: BoxFit.cover),
-                                const SizedBox(
-                                  width: 5,
-                                ),
+                                const robotoTextWidget(
+                                    textval: "Special Offer",
+                                    colorval: AppColor.purple,
+                                    sizeval: 14,
+                                    fontWeight: FontWeight.w800),
                                 robotoTextWidget(
                                     textval:
-                                        "${DriverList[index].priceClass!.passengerCapacity} People",
-                                    colorval: AppColor.black,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w200)
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Row(
-                              children: [
-                                Image.asset('assets/images/weight-icon.png',
-                                    height: 15, width: 15, fit: BoxFit.cover),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                robotoTextWidget(
-                                    textval: DriverList[index]
-                                        .priceClass!
-                                        .bootSpace
-                                        .toString(),
-                                    colorval: AppColor.black,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w200)
+                                        '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
+                                    colorval: AppColor.purple,
+                                    sizeval: 13,
+                                    fontWeight: FontWeight.w400),
                               ],
                             )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  color: AppColor.border,
-                  height: 2,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    robotoTextWidget(
-                        textval: estimateFare,
-                        colorval: AppColor.darkgrey,
-                        sizeval: 12,
-                        fontWeight: FontWeight.w600),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.info_outlined,
-                          size: 20.0,
-                          color: Colors.grey,
-                        ))
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    robotoTextWidget(
-                        textval:
-                            "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
-                        colorval: AppColor.black,
-                        sizeval: 18,
-                        fontWeight: FontWeight.w800),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    Text(
-                      getTotalPrice(
-                          vehiclePriceClasses[index]
-                              .priceClass
-                              .totalFare!
-                              .toDouble(),
-                          vehiclePriceClasses[index]
-                              .priceClass
-                              .sellerDiscount!
-                              .toDouble()),
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Roboto',
-                          decoration: TextDecoration.lineThrough),
-                    ),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    Column(
-                      children: [
-                        const robotoTextWidget(
-                            textval: "Special Offer",
-                            colorval: AppColor.purple,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w800),
-                        robotoTextWidget(
-                            textval:
-                                '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
-                            colorval: AppColor.purple,
-                            sizeval: 13,
-                            fontWeight: FontWeight.w400),
-                      ],
-                    )
-                  ],
-                ),
-              ],
-            )),
-      ),
-    );
+                          : Container()
+                    ],
+                  ),
+                ],
+              )),
+        ),
+      ))
+    ]));
   }
 
   String getTotalPrice(double totalFare, double discount) {
@@ -347,143 +370,145 @@ class DriverListItemPageState extends State<DriverListItem> {
 
   Widget getDriverList(List<Content> driverList) {
     if (driverList.isNotEmpty) {
-      return Container(
-        height: MediaQuery.of(context).size.height / 2.5,
-        child: Card(
-          elevation: 5,
-          margin: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: robotoTextWidget(
-                          textval: '${DriverList.length} Ride Option',
-                          colorval: AppColor.black,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w800),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(children: [
-                          Container(
-                            width: 1,
-                            color: AppColor.darkgrey,
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                if (selectedIndex != 0) {
-                                  carouselController.previousPage();
-                                }
-                              },
-                              icon: Icon(
-                                Icons.arrow_back_ios,
-                                color: (selectedIndex != 0)
-                                    ? Colors.green
-                                    : AppColor.grey,
-                              ))
-                        ]),
-                        Row(children: [
-                          Container(
-                            width: 1,
-                            color: AppColor.darkgrey,
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                if (selectedIndex != DriverList.length - 1) {
-                                  carouselController.nextPage();
-                                }
-                              },
-                              icon: Icon(Icons.arrow_forward_ios,
-                                  color:
-                                      (selectedIndex != DriverList.length - 1)
-                                          ? Colors.green
-                                          : AppColor.grey)),
-                          Container(
-                            width: 1,
-                            color: AppColor.grey,
-                          ),
-                        ]),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 1,
-                color: AppColor.grey,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                  child: CarouselSlider(
-                items: List.generate(
-                    DriverList.length, (index) => driverListItems(index)),
-                carouselController: carouselController,
-                options: CarouselOptions(
-                  enableInfiniteScroll: false,
-                  scrollDirection: Axis.horizontal,
-                  onPageChanged: (index, reason) {
-                    selectedIndex = index;
-                    setState(() {
-                      if (selectedIndex == 0) {
-                        isBackArrowGreen = false;
-                      } else {
-                        isBackArrowGreen = true;
-                      }
-                      if (selectedIndex == DriverList.length - 1) {
-                        isForwardArrowGreen = false;
-                      } else {
-                        isForwardArrowGreen = true;
-                      }
-                    });
-                  },
-                  autoPlay: false,
-                ),
-              )),
-              Container(
+      return Flexible(
+          child: Wrap(children: [
+        Container(
+          child: Card(
+            elevation: 5,
+            margin: const EdgeInsets.all(5),
+            child: Column(
+              children: [
+                SizedBox(
                   height: 40,
-                  margin: const EdgeInsets.all(5),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => ConfirmDriver(
-                                    driverDetail: DriverList[selectedIndex!],
-                                    priceDetail:
-                                        vehiclePriceClasses[selectedIndex!],
-                                    fromAddress: widget.fromAddress,
-                                    toAddress: widget.toAddress,
-                                  )),
-                          (Route<dynamic> route) => true);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.greyblack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: robotoTextWidget(
+                            textval: '${DriverList.length} Ride Option',
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w800),
                       ),
-                    ),
-                    child: robotoTextWidget(
-                      textval: bookNow,
-                      colorval: AppColor.white,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ))
-            ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Row(children: [
+                            Container(
+                              width: 1,
+                              color: AppColor.darkgrey,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  if (selectedIndex != 0) {
+                                    carouselController.previousPage();
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back_ios,
+                                  color: (selectedIndex != 0)
+                                      ? Colors.green
+                                      : AppColor.grey,
+                                ))
+                          ]),
+                          Row(children: [
+                            Container(
+                              width: 1,
+                              color: AppColor.darkgrey,
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  if (selectedIndex != DriverList.length - 1) {
+                                    carouselController.nextPage();
+                                  }
+                                },
+                                icon: Icon(Icons.arrow_forward_ios,
+                                    color:
+                                        (selectedIndex != DriverList.length - 1)
+                                            ? Colors.green
+                                            : AppColor.grey)),
+                            Container(
+                              width: 1,
+                              color: AppColor.grey,
+                            ),
+                          ]),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 1,
+                  color: AppColor.grey,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                CarouselSlider(
+                  items: List.generate(
+                      DriverList.length, (index) => driverListItems(index)),
+                  carouselController: carouselController,
+                  options: CarouselOptions(
+                    enableInfiniteScroll: false,
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (index, reason) {
+                      selectedIndex = index;
+                      setState(() {
+                        if (selectedIndex == 0) {
+                          isBackArrowGreen = false;
+                        } else {
+                          isBackArrowGreen = true;
+                        }
+                        if (selectedIndex == DriverList.length - 1) {
+                          isForwardArrowGreen = false;
+                        } else {
+                          isForwardArrowGreen = true;
+                        }
+                      });
+                    },
+                    autoPlay: false,
+                  ),
+                ),
+                Container(
+                    height: 40,
+                    margin: const EdgeInsets.all(5),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ConfirmDriver(
+                                      driverDetail: DriverList[selectedIndex!],
+                                      priceDetail:
+                                          vehiclePriceClasses[selectedIndex!],
+                                      fromAddress: widget.fromAddress,
+                                      toAddress: widget.toAddress,
+                                    )),
+                            (Route<dynamic> route) => true);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: robotoTextWidget(
+                        textval: bookNow,
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ))
+              ],
+            ),
           ),
-        ),
-      );
+        )
+      ]));
     } else {
       return Container(
-        height: MediaQuery.of(context).size.height/8,
+        height: MediaQuery.of(context).size.height / 8,
         margin: const EdgeInsets.all(10),
         child: Card(
             elevation: 5,
@@ -503,11 +528,12 @@ class DriverListItemPageState extends State<DriverListItem> {
                       child: ElevatedButton(
                         onPressed: () {
                           _firstLoad("1");
-                          },
+                        },
                         style: ElevatedButton.styleFrom(
                           primary: AppColor.greyblack,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12), // <-- Radius
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
                           ),
                         ),
                         child: robotoTextWidget(

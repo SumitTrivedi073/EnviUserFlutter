@@ -8,6 +8,7 @@ import '../appConfig/appConfig.dart';
 import '../enum/BookingTiming.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../theme/string.dart';
+import '../theme/theme.dart';
 import '../utils/utility.dart';
 
 class FromBookScheduleWidget extends StatefulWidget {
@@ -163,7 +164,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                                         )),
                                     (route) => true);
                           } else {
-                            showToast(serviceNotAvailable);
+                            showSnackbar(context,serviceNotAvailable);
                           }
                         },
                       )

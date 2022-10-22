@@ -118,15 +118,17 @@ class MyMapState extends State {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 10),
-                  child: FromBookScheduleWidget(
-                    address: Address,
-                    currentLocation: SearchPlaceModel(
-                        address: Address,
-                        id: isoId ?? '',
-                        title: placeName,
-                        latLng: latlong!,
-                        isFavourite: 'N'),
-                  ),
+                  child: (Address == PickUp)
+                      ? Container()
+                      : FromBookScheduleWidget(
+                          address: Address,
+                          currentLocation: SearchPlaceModel(
+                              address: Address,
+                              id: isoId ?? '',
+                              title: placeName,
+                              latLng: latlong!,
+                              isFavourite: 'N'),
+                        ),
                 ),
               )
             ],

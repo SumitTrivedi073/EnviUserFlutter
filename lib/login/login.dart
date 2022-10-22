@@ -5,11 +5,14 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../Profile/newprofilePage.dart';
@@ -67,37 +70,39 @@ class _LoginpageState extends State<Loginpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //body
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(PageBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          // Vertically center the widget inside the column
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 30, right: 30),
-              width: MediaQuery.of(context).size.width > 400
-                  ? 400
-                  : MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.white.withOpacity(.5),
-                  blurRadius: 20.0, // soften the shadow
-                )
-              ]),
-              child: isLoading
-                  ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview
-                      ? loginview()
-                      : verifyview(),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(PageBackgroundImage),
+              fit: BoxFit.cover,
             ),
-          ],
+          ),
+          child: Column(
+            // Vertically center the widget inside the column
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 30, right: 30),
+                width: MediaQuery.of(context).size.width > 400
+                    ? 400
+                    : MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(.5),
+                    blurRadius: 20.0, // soften the shadow
+                  )
+                ]),
+                child: isLoading
+                    ? const Center(child: const CircularProgressIndicator())
+                    : _showmobileview
+                        ? loginview()
+                        : verifyview(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -105,7 +110,9 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_timer != null) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
@@ -329,12 +336,11 @@ class _LoginpageState extends State<Loginpage> {
                     setState(() {
                       isLoading = true;
                     });
-                     /* fetchotp(
+                    /* fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
 */
                     signIn();
-
                   }
                 },
                 child: const robotoTextWidget(
@@ -363,7 +369,7 @@ class _LoginpageState extends State<Loginpage> {
         setState(() {
           isLoading = false;
         });
-        showToast(e.message.toString());
+        showSnackbar(context, e.message.toString());
       },
       codeSent: (String verificationId, int? resendToken) async {
         loginverificationId = verificationId;
@@ -398,14 +404,12 @@ class _LoginpageState extends State<Loginpage> {
         });
         signIn();
       }
-
-
     } on FirebaseAuthException catch (e) {
       print("catch$e");
       setState(() {
         isLoading = false;
       });
-      showToast(e.message.toString());
+      showSnackbar(context, e.message.toString());
     }
   }
 
@@ -438,39 +442,55 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   void signIn() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     String? deviceId = await _getId();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     Map data = {
       "countrycode": countrycontroller.text.toString(),
       "phone": phoneController.text.toString(),
-      "FcmToken": "",
+      "FcmToken": fcmToken,
       "deviceId": deviceId
     };
+    sharedPreferences.setString(deviceIdShared, deviceId!);
+    sharedPreferences.setString(fcmTokenShared, fcmToken!);
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
-
+    print(response.statusCode);
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
       print("jsonData========>$jsonData['content']");
       setState(() {
-     //   _timer.cancel();
-        LoginModel users = new LoginModel.fromJson(jsonData['content']);
+        //   _timer.cancel();
+        LoginModel users = LoginModel.fromJson(jsonData['content']);
         if (users.id.isEmpty) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,isUpdate: false,)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewProfilePage(
+                        isUpdate: false,
+                        phone: phoneController.text.toString(),
+                      )));
         } else {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileAfterloginPage(
-                    profiledatamodel: users,
+                        profiledatamodel: users,
                       )));
         }
       });
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (!mounted) return;
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NewProfilePage(
+                    isUpdate: false,
+                    phone: phoneController.text.toString(),
+                  )));
     }
   }
 }

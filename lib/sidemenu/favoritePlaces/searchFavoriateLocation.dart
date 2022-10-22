@@ -196,6 +196,9 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                         longitude = details.result!.geometry!.location!.lng!;
                       }
                     }
+                    setState(() {
+                      searchPlaceList = [];
+                    });
                     Navigator.push(
                         context,
                         MaterialPageRoute(

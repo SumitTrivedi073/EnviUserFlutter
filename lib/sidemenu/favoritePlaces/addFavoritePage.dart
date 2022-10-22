@@ -16,6 +16,7 @@ import '../../database/database.dart';
 import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
 import '../../theme/string.dart';
+import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../utils/utility.dart';
@@ -399,7 +400,6 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   }
 
   Future<void> ApiCall_Add_Favorite() async {
-
     dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
@@ -426,7 +426,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         await dao.insertTask(task);
         Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      showSnackbar(context,(jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -460,7 +460,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
 
         Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      showSnackbar(context,(jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -487,7 +487,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         await dao.deleteTask(task);
         Navigator.pop(context, {"isbact": true});
       }
-      showToast((jsonDecode(response.body)['message'].toString()));
+      showSnackbar(context,(jsonDecode(response.body)['message'].toString()));
     }
   }
 }

@@ -33,6 +33,7 @@ class _TimerButtonState extends State<TimerButton>
   LatLng? latlong = null;
   int counter = 60;
   String reasonForCancellation = ShorterWaitingTime;
+  bool isLoading = false;
   final List<String> _status = [
     ShorterWaitingTime,
     PlanChanged,
@@ -187,7 +188,7 @@ class _TimerButtonState extends State<TimerButton>
   @override
   void dispose() {
     super.dispose();
-    if (timer.isActive) {
+    if (timer!=null && timer.isActive) {
       timer.cancel();
     }
   }
@@ -257,7 +258,11 @@ class _TimerButtonState extends State<TimerButton>
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              cancelTripAPI(context);
+                              setState(() {
+                                isLoading = true;
+                                cancelTripAPI(context);
+                              });
+
                             },
                             style: ElevatedButton.styleFrom(
                               primary: AppColor.greyblack,
@@ -266,7 +271,15 @@ class _TimerButtonState extends State<TimerButton>
                                     BorderRadius.circular(12), // <-- Radius
                               ),
                             ),
-                            child: robotoTextWidget(
+                            child:  isLoading
+                                ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 1.5,
+                                ))
+                                : robotoTextWidget(
                               textval: confirm,
                               colorval: AppColor.white,
                               sizeval: 14,
@@ -305,12 +318,18 @@ class _TimerButtonState extends State<TimerButton>
             :0.0
       }
     };
-    print("CancelTripdata=======>$data");
+    setState(() {
+      isLoading = true;
+    });
     dynamic res = await HTTP.post(cancelTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      print("CancelTripRes=======>${res.statusCode}");
+      setState(() {
+        isLoading = false;
+      });
     } else {
-      throw "Trip Not Cancelled";
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }
