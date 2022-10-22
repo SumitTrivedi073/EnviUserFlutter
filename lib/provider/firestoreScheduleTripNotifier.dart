@@ -38,8 +38,6 @@ class firestoreScheduleTripNotifier extends ChangeNotifier {
 
           if(jsonData!=null && jsonData.toString().isNotEmpty) {
             if(scheduleDate.isAtSameMomentAs(currentDate)|| scheduleDate.isAfter(currentDate)) {
-              print("scheduleTripModel========> ${res.doc['scheduledAt']}");
-
               scheduleTrip = ScheduleTrip.fromJson(jsonData);
             }else{
               scheduleTrip = null;
