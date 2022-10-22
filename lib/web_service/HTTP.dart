@@ -7,7 +7,6 @@ import 'package:http/http.dart';
 import '../appConfig/Profiledata.dart';
 import 'Constant.dart';
 
-
 Response? AccessPermissionHandler(response) {
   if (response.statusCode == 401) {
     Fluttertoast.showToast(
@@ -32,9 +31,7 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
   const contentType = 'application/json';
   Map<String, String> headers = {'Content-Type': contentType};
 
-
   dynamic token = Profiledata().gettoken();
-  print("token$token");
   dynamic extra = additionalHeaders != null ? additionalHeaders : {};
 
   return headers = {
@@ -45,6 +42,7 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
 }
 
 Future<Object?> get(url, [headers]) async {
+  print("url==> $url");
   try {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
     var response = await http.get(url, headers: requestHeaders);
@@ -57,6 +55,7 @@ Future<Object?> get(url, [headers]) async {
 }
 
 Future<Object?> post(url, data, [headers]) async {
+  print("url==> $url");
   try {
     final encodedData = data != null ? jsonEncode(data) : null;
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
@@ -73,6 +72,8 @@ Future<Object?> post(url, data, [headers]) async {
 }
 
 Future<Object?> put(url, data, [headers]) async {
+  print("url==> $url");
+
   try {
     final encodedData = jsonEncode(data);
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
@@ -85,6 +86,7 @@ Future<Object?> put(url, data, [headers]) async {
 }
 
 Future<Object?> delete(url, [headers]) async {
+  print("url==> $url");
   try {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
     print('response in http delete before ');
@@ -100,6 +102,8 @@ Future<Object?> delete(url, [headers]) async {
 Future<Object> postToAcceptMultipartRequest(
     url, data, bufferData, fileName, fieldName,
     [headers]) async {
+  print("url==> $url");
+
   try {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
     var request = http.MultipartRequest('POST', url);
@@ -116,7 +120,7 @@ Future<Object> postToAcceptMultipartRequest(
 
 Future<Object> postDataWithMutipleFiles(url, data, files, fieldName,
     [headers]) async {
-  print('inside postDataWithMutipleFiles ');
+  print("url==> $url");
   try {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
     var request = http.MultipartRequest('POST', url);
@@ -133,22 +137,26 @@ Future<Object> postDataWithMutipleFiles(url, data, files, fieldName,
     print('Error in postDataWithMutipleFiles $error');
     throw error;
   }
-
 }
+
 Future<Object?> getwithoutHeader(url) async {
+  print("url==> $url");
+
   try {
-     const contentType = 'application/json';
+    const contentType = 'application/json';
     Map<String, String> headerstemp = {'Access-Control-Allow-Origin': "*"};
-    var response = await http.get(url,headers: headerstemp);
+    var response = await http.get(url, headers: headerstemp);
     return AccessPermissionHandler(response);
   } catch (error) {
     print('Something went wrong in HTTP Get $error');
 
     throw error;
   }
-
 }
+
 Future<Object?> postwithoutdata(url, [headers]) async {
+  print("url==> $url");
+
   try {
     //final encodedData = data != null ? jsonEncode(data) : null;
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
@@ -156,7 +164,6 @@ Future<Object?> postwithoutdata(url, [headers]) async {
     var response = await http.post(
       url,
       headers: requestHeaders,
-
     );
     return AccessPermissionHandler(response);
   } catch (error) {
