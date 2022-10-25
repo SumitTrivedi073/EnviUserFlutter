@@ -149,6 +149,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         timeLabelText: pickuptime,
                         onSaved: (val) => setState(() {
                           //  val = SelectedDateTime.toString();
+
+                          print("object");
                           updatedtime();
                         }),
                       ),

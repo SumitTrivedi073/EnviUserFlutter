@@ -16,6 +16,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../appConfig/Profiledata.dart';
 import '../main.dart';
 import '../web_service/Constant.dart';
 import 'dart:io' as Io;
@@ -436,13 +437,14 @@ class _NewProfilePageState extends State<NewProfilePage> {
                             loginName, _firstNameController.text);
                         sharedPreferences.setString(loginpropic,
                             encodeImgURLString(response['content']['image']));
-                        // Future.delayed(Duration(microseconds: 200))
-                        //     .then((value) {
-                        //   utility.showInSnackBar(
-                        //       value: 'Registered Successfully',
-                        //       context: context,
-                        //       duration: const Duration(seconds: 2));
-                        // });
+                        Profiledata.setusreid(response['content']['userid']);
+                        Profiledata.settoken(response['content']['token']);
+                        Profiledata.setmailid( _emailController.text);
+                        Profiledata.setpropic(
+                            encodeImgURLString(response['content']['image']));
+                        Profiledata.setphone(_phoneNoController.text);
+                        Profiledata.setgender(selectedGender!);
+                        Profiledata.setname(_firstNameController.text);
                         showToast('Registered Successfully');
                         Future.delayed(const Duration(seconds: 2), () {
                           if (!mounted) return;

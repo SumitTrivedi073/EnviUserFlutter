@@ -66,6 +66,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
         widget.toAddress!.latLng.longitude,widget.scheduledAt);
+    print("sssssssss${response.statusCode}");
     if (response != null && response.statusCode == 200) {
       setState(() {
         isLoading = false;
@@ -77,7 +78,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.callback2(distance.toString());
       });
     } else {
-      var errmsg = jsonDecode(response.body)['msg'];
+      var errmsg = jsonDecode(response.body)['message'];
       // setState(() {
       //   isLoading = false;
       // });

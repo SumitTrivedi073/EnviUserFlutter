@@ -170,7 +170,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     );
   }
 
-  InkWell _buildPosts(BuildContext context) {
+  Widget _buildPosts(BuildContext context) {
+    if(arrtrip.length == 0 || arrtrip == null)return Center(child: Text("No trips data available"));
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
