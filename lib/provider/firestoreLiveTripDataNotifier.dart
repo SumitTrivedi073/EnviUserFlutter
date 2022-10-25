@@ -25,7 +25,9 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
         var count = 0;
         print("object");
         for (var res in result.docChanges) {
-          dynamic data = res.doc.data();
+          if (res.type != DocumentChangeType.removed) {
+
+            dynamic data = res.doc.data();
 
           var dstat = data?["passengerTripMasterId"];
           print("trip data ${dstat}");
@@ -40,15 +42,20 @@ class firestoreLiveTripDataNotifier extends ChangeNotifier {
             var encodedJson = json.encode(jsonObj, toEncodable: myEncode);
             var jsonData = json.decode(encodedJson);
             print("tripdata========> ${event.data()}");
-            if(jsonData!=null && jsonData.toString().isNotEmpty) {
+            if (jsonData != null && jsonData
+                .toString()
+                .isNotEmpty) {
               liveTripData = TripDataModel.fromJson(jsonData);
             } else {
               liveTripData = null;
             }
-            notifyListeners();
-          });
-        }
 
+          });
+        }else{
+            liveTripData = null;
+          }
+      }
+        notifyListeners();
       });
     } catch (e) {
       debugPrint("ERROR - $e");

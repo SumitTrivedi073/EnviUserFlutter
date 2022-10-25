@@ -230,8 +230,13 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               fontWeight: FontWeight.bold,
             ),
           ]),
-          robotoTextWidget(
+          arrtrip[index].price.totalFare!='NA'? robotoTextWidget(
             textval: "₹ ${arrtrip[index].price.totalFare}",
+            colorval: AppColor.black,
+            sizeval: 18.0,
+            fontWeight: FontWeight.bold,
+          ): robotoTextWidget(
+            textval: arrtrip[index].status,
             colorval: AppColor.black,
             sizeval: 18.0,
             fontWeight: FontWeight.bold,
@@ -312,12 +317,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 const Padding(
                   padding: EdgeInsets.only(left: 25),
                 ),
-                robotoTextWidget(
+                arrtrip[index].distance!='NA'?robotoTextWidget(
                   textval: "${arrtrip[index].distance} Km",
                   colorval: AppColor.darkgrey,
                   sizeval: 13.0,
                   fontWeight: FontWeight.w800,
-                ),
+                ):Container(),
               ]),
               robotoTextWidget(
                 textval: arrtrip[index].vehicle.Vnumber,
@@ -342,7 +347,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      child: arrtrip[index].status == 'cancelled'
+      child: arrtrip[index].status == CancelledStatus
           ? Container(
              width: MediaQuery.of(context).size.width,
         child: MaterialButton(

@@ -190,9 +190,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
               closeDrawer();
             },
           ),
-          const SizedBox(
-            height: 20,
-          ),
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/fare-charges.svg",
