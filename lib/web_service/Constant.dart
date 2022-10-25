@@ -20,6 +20,7 @@ var ScheduleTripConfirmedStatus = "confirmed";
 var ScheduleTripRejectStatus = "rejected";
 var ScheduleTripDriverAssignedStatus = "driverassigned";
 var ScheduleTripCancelledByOps = "cancelled_by_ops";
+var CancelledStatus = "cancelled";
 
 var deviceIdShared = 'deviceId';
 var fcmTokenShared = 'FcmToken';

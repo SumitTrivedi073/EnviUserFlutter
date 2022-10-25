@@ -210,11 +210,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: AppColor.border,
             ),
             CellRow2(index),
-            Container(
+            arrtrip[index].status!=CancelledStatus? Container(
               height: 1,
               color: AppColor.border,
-            ),
-            CellRow3(index),
+            ):Container(),
+          arrtrip[index].status!=CancelledStatus?CellRow3(index):Container(),
           ]),
     );
   }
@@ -284,13 +284,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                             fontWeight: FontWeight.w200,
                           ),
                         ),
-                        // robotoTextWidget(
-                        //   textval:  arrtrip[index].fromAddress,
-                        //   colorval: AppColor.black,
-                        //   sizeval: 14.0,
-                        //   fontWeight: FontWeight.normal,
-                        // ),
-                      ],
+                       ],
                     ),
                     const SizedBox(
                       height: 3,
@@ -306,13 +300,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                             fontWeight: FontWeight.w200,
                           ),
                         ),
-                        // robotoTextWidget(
-                        //   textval:  arrtrip[index].toAddress,
-                        //   colorval: AppColor.black,
-                        //   sizeval: 14.0,
-                        //   fontWeight: FontWeight.normal,
-                        // ),
-                      ],
+                       ],
                     ),
                   ],
                 ),
@@ -369,14 +357,14 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               fontWeight: FontWeight.bold,
             ),
             onPressed: () {
-              confirmBooking(arrtrip[index].passengerTripMasterId);
+              cancelBooking(arrtrip[index].passengerTripMasterId);
             },
           ),
         ],
       ),
     );
   }
-  Future<void> confirmBooking(String passengerTripMasterId) async {
+  Future<void> cancelBooking(String passengerTripMasterId) async {
 
     final response = await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 
