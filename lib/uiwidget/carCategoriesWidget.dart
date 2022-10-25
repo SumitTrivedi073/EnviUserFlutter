@@ -66,7 +66,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
         widget.toAddress!.latLng.longitude,widget.scheduledAt);
-    print("sssssssss${response.statusCode}");
     if (response != null && response.statusCode == 200) {
       setState(() {
         isLoading = false;
@@ -79,17 +78,17 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
       });
     } else {
       var errmsg = jsonDecode(response.body)['message'];
-      // setState(() {
-      //   isLoading = false;
-      // });
+       setState(() {
+         isLoading = false;
+       });
       showDialog(
         context: context,
-        builder: (BuildContext context) => dialogueLogout(context,errmsg),
+        builder: (BuildContext context) => dialogueError(context,errmsg),
       );
 
     }
   }
-  Widget dialogueLogout(BuildContext context,String msg) {
+  Widget dialogueError(BuildContext context,String msg) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),

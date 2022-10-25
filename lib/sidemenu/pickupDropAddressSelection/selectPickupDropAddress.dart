@@ -49,7 +49,7 @@ class SelectPickupDropAddress extends StatefulWidget {
 
 class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   bool areBothAddressConfirmed = false;
-  List<SearchPlaceModel> searchPlaceList = [];
+  List<SearchPlaceModel>? searchPlaceList = [];
   SearchPlaceModel? startingAddress;
   SearchPlaceModel? endAddress;
   List<dynamic> _placeList = [];
@@ -307,7 +307,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
           // print(json.decode(response.body)['predictions']);
           _placeList = json.decode(response.body)['predictions'];
           for (var i = 0; i < _placeList.length; i++) {
-            searchPlaceList.add(SearchPlaceModel(
+            searchPlaceList!.add(SearchPlaceModel(
               id: _placeList[i]["place_id"],
               address: _placeList[i]["description"],
               title: _placeList[i]["description"],
@@ -346,372 +346,416 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                   ],
                 )),
             Expanded(
-                child: ListView.builder(
-              shrinkWrap: true,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () async {
-                    print("serch index$index");
-                    print("serch index${searchPlaceList[index].isFavourite}");
-                    String isFavourite = searchPlaceList[index].isFavourite;
-                    if (useGoogleApi) {
-                      final placeId = searchPlaceList[index].id;
-                      final details = await googlePlace.details.get(placeId,
-                          sessionToken: _sessionToken,
-                          fields: 'geometry,formatted_address,name');
-                      if (details != null &&
-                          details.result != null &&
-                          mounted) {
-                        if (startFocusNode.hasFocus) {
-                          setState(() {
-                            // startPosition = details.result;
-                            FromLocationText.text =
-                                details.result!.formattedAddress!;
-                            startingAddress = SearchPlaceModel(
-                                id: searchPlaceList[index].id,
-                                address: details.result!.formattedAddress!,
-                                latLng: LatLng(
-                                    details.result!.geometry!.location!.lat!,
-                                    details.result!.geometry!.location!.lng!),
-                                title: details.result!.name!,
-                                isFavourite: 'N');
+              child: (searchPlaceList != null)
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            print("serch index$index");
+                            print(
+                                "serch index${searchPlaceList![index].isFavourite}");
+                            String isFavourite =
+                                searchPlaceList![index].isFavourite;
+                            if (useGoogleApi) {
+                              final placeId = searchPlaceList![index].id;
+                              final details = await googlePlace.details.get(
+                                  placeId,
+                                  sessionToken: _sessionToken,
+                                  fields: 'geometry,formatted_address,name');
+                              if (details != null &&
+                                  details.result != null &&
+                                  mounted) {
+                                if (startFocusNode.hasFocus) {
+                                  setState(() {
+                                    // startPosition = details.result;
+                                    FromLocationText.text =
+                                        details.result!.formattedAddress!;
+                                    startingAddress = SearchPlaceModel(
+                                        id: searchPlaceList![index].id,
+                                        address:
+                                            details.result!.formattedAddress!,
+                                        latLng: LatLng(
+                                            details.result!.geometry!.location!
+                                                .lat!,
+                                            details.result!.geometry!.location!
+                                                .lng!),
+                                        title: details.result!.name!,
+                                        isFavourite: 'N');
 
-                            // _isVisible = false;
-                            searchPlaceList = [];
-                          });
-                          if (endAddress == null) {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              title: confirmLocationText,
-                                              endLocation: endAddress,
-                                              status: AddressConfirmation
-                                                  .bothUnconfirmed,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                startingAddress = result[0];
+                                    // _isVisible = false;
+                                    searchPlaceList = [];
+                                  });
+                                  if (endAddress == null) {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      endLocation: endAddress,
+                                                      status:
+                                                          AddressConfirmation
+                                                              .bothUnconfirmed,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        startingAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      FromLocationText.text =
+                                          startingAddress!.address;
+                                    });
+                                    endFocusNode.requestFocus();
+                                    getLocalSuggestions('');
+                                  } else {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      endLocation: endAddress,
+                                                      status: AddressConfirmation
+                                                          .toAddressConfirmed,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        startingAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      FromLocationText.text =
+                                          startingAddress!.address;
+                                    });
+                                  }
+                                } else {
+                                  setState(() {
+                                    // endPosition = details.result;
+                                    ToLocationText.text =
+                                        details.result!.formattedAddress!;
+                                    endAddress = SearchPlaceModel(
+                                        id: searchPlaceList![index].id,
+                                        address:
+                                            details.result!.formattedAddress!,
+                                        latLng: LatLng(
+                                            details.result!.geometry!.location!
+                                                .lat!,
+                                            details.result!.geometry!.location!
+                                                .lng!),
+                                        title: details.result!.name!,
+                                        isFavourite: 'N');
+                                    searchPlaceList = [];
+                                  });
+                                  if (startingAddress == null) {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      status:
+                                                          AddressConfirmation
+                                                              .bothUnconfirmed,
+                                                      endLocation: endAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        endAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      ToLocationText.text = endAddress!.address;
+                                    });
+                                    startFocusNode.requestFocus();
+                                    getLocalSuggestions('');
+                                  } else {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      status: AddressConfirmation
+                                                          .fromAddressConfirmed,
+                                                      endLocation: endAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        endAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      ToLocationText.text = endAddress!.address;
+                                    });
+                                  }
+                                  // endAddress = await Navigator.of(context)
+                                  //     .pushAndRemoveUntil(
+                                  //         MaterialPageRoute(
+                                  //             builder: (BuildContext context) =>
+                                  //                 ConfirmDropLocation(
+                                  //                   location: endAddress,
+                                  //                   title: confirmLocationText,
+                                  //                   isFavourite: isFavourite.toString(),
+                                  //                 )),
+                                  //         (Route<dynamic> route) => true);
+                                  // setState(() {
+                                  //   ToLocationText.text = endAddress!.address;
+                                  // });
+                                }
+                              }
+                            } else {
+                              if (mounted) {
+                                if (startFocusNode.hasFocus) {
+                                  setState(() {
+                                    FromLocationText.text =
+                                        searchPlaceList![index].address;
+                                    startingAddress = searchPlaceList![index];
+                                    searchPlaceList = [];
+                                  });
+                                  if (endAddress == null) {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      endLocation: endAddress,
+                                                      status:
+                                                          AddressConfirmation
+                                                              .bothUnconfirmed,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        startingAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      FromLocationText.text =
+                                          startingAddress!.address;
+                                      getLocalSuggestions('');
+                                    });
+                                    endFocusNode.requestFocus();
+                                  } else {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      endLocation: endAddress,
+                                                      status: AddressConfirmation
+                                                          .toAddressConfirmed,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        startingAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      FromLocationText.text =
+                                          startingAddress!.address;
+                                    });
+                                  }
+                                } else {
+                                  setState(() {
+                                    ToLocationText.text =
+                                        searchPlaceList![index].address;
+                                    endAddress = searchPlaceList![index];
+                                    searchPlaceList = [];
+                                  });
+                                  if (startingAddress == null) {
+                                    var result;
+
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      status:
+                                                          AddressConfirmation
+                                                              .bothUnconfirmed,
+                                                      endLocation: endAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        endAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      ToLocationText.text = endAddress!.address;
+                                    });
+                                    startFocusNode.requestFocus();
+                                    getLocalSuggestions('');
+                                  } else {
+                                    var result;
+                                    result = await Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ConfirmDropLocation(
+                                                      tripType: widget.tripType,
+                                                      startLocation:
+                                                          startingAddress,
+                                                      status: AddressConfirmation
+                                                          .fromAddressConfirmed,
+                                                      endLocation: endAddress,
+                                                      title:
+                                                          confirmLocationText,
+                                                      isFavourite: isFavourite
+                                                          .toString(),
+                                                    )),
+                                            (Route<dynamic> route) => true);
+                                    if (result != null) {
+                                      if (result.length == 2) {
+                                        startingAddress = result[0];
+                                        endAddress = result[1];
+                                      } else {
+                                        endAddress = result[0];
+                                      }
+                                    }
+
+                                    setState(() {
+                                      ToLocationText.text = endAddress!.address;
+                                    });
+                                  }
+                                }
                               }
                             }
-
-                            setState(() {
-                              FromLocationText.text = startingAddress!.address;
-                            });
-                            endFocusNode.requestFocus();
-                            getLocalSuggestions('');
-                          } else {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              title: confirmLocationText,
-                                              endLocation: endAddress,
-                                              status: AddressConfirmation
-                                                  .toAddressConfirmed,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                startingAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              FromLocationText.text = startingAddress!.address;
-                            });
-                          }
-                        } else {
-                          setState(() {
-                            // endPosition = details.result;
-                            ToLocationText.text =
-                                details.result!.formattedAddress!;
-                            endAddress = SearchPlaceModel(
-                                id: searchPlaceList[index].id,
-                                address: details.result!.formattedAddress!,
-                                latLng: LatLng(
-                                    details.result!.geometry!.location!.lat!,
-                                    details.result!.geometry!.location!.lng!),
-                                title: details.result!.name!,
-                                isFavourite: 'N');
-                            searchPlaceList = [];
-                          });
-                          if (startingAddress == null) {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              status: AddressConfirmation
-                                                  .bothUnconfirmed,
-                                              endLocation: endAddress,
-                                              title: confirmLocationText,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                endAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              ToLocationText.text = endAddress!.address;
-                            });
-                            startFocusNode.requestFocus();
-                            getLocalSuggestions('');
-                          } else {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              status: AddressConfirmation
-                                                  .fromAddressConfirmed,
-                                              endLocation: endAddress,
-                                              title: confirmLocationText,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                endAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              ToLocationText.text = endAddress!.address;
-                            });
-                          }
-                          // endAddress = await Navigator.of(context)
-                          //     .pushAndRemoveUntil(
-                          //         MaterialPageRoute(
-                          //             builder: (BuildContext context) =>
-                          //                 ConfirmDropLocation(
-                          //                   location: endAddress,
-                          //                   title: confirmLocationText,
-                          //                   isFavourite: isFavourite.toString(),
-                          //                 )),
-                          //         (Route<dynamic> route) => true);
-                          // setState(() {
-                          //   ToLocationText.text = endAddress!.address;
-                          // });
-                        }
-                      }
-                    } else {
-                      if (mounted) {
-                        if (startFocusNode.hasFocus) {
-                          setState(() {
-                            FromLocationText.text =
-                                searchPlaceList[index].address;
-                            startingAddress = searchPlaceList[index];
-                            searchPlaceList = [];
-                          });
-                          if (endAddress == null) {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              title: confirmLocationText,
-                                              endLocation: endAddress,
-                                              status: AddressConfirmation
-                                                  .bothUnconfirmed,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                startingAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              FromLocationText.text = startingAddress!.address;
-                              getLocalSuggestions('');
-                            });
-                            endFocusNode.requestFocus();
-                          } else {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              title: confirmLocationText,
-                                              endLocation: endAddress,
-                                              status: AddressConfirmation
-                                                  .toAddressConfirmed,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                startingAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              FromLocationText.text = startingAddress!.address;
-                            });
-                          }
-                        } else {
-                          setState(() {
-                            ToLocationText.text =
-                                searchPlaceList[index].address;
-                            endAddress = searchPlaceList[index];
-                            searchPlaceList = [];
-                          });
-                          if (startingAddress == null) {
-                            var result;
-
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              status: AddressConfirmation
-                                                  .bothUnconfirmed,
-                                              endLocation: endAddress,
-                                              title: confirmLocationText,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                endAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              ToLocationText.text = endAddress!.address;
-                            });
-                            startFocusNode.requestFocus();
-                            getLocalSuggestions('');
-                          } else {
-                            var result;
-                            result = await Navigator.of(context)
-                                .pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ConfirmDropLocation(
-                                              tripType: widget.tripType,
-                                              startLocation: startingAddress,
-                                              status: AddressConfirmation
-                                                  .fromAddressConfirmed,
-                                              endLocation: endAddress,
-                                              title: confirmLocationText,
-                                              isFavourite:
-                                                  isFavourite.toString(),
-                                            )),
-                                    (Route<dynamic> route) => true);
-                            if (result != null) {
-                              if (result.length == 2) {
-                                startingAddress = result[0];
-                                endAddress = result[1];
-                              } else {
-                                endAddress = result[0];
-                              }
-                            }
-
-                            setState(() {
-                              ToLocationText.text = endAddress!.address;
-                            });
-                          }
-                        }
-                      }
-                    }
-                  },
-                  child: Card(
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ListTile(
-                        title: robotoTextWidget(
-                          textval: searchPlaceList[index].title,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        subtitle: robotoTextWidget(
-                          textval: searchPlaceList[index].address,
-                          colorval: AppColor.black,
-                          sizeval: 12.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        leading: SvgPicture.asset(
-                          (searchPlaceList[index].title == 'Work')
-                              ? "assets/svg/place-work.svg"
-                              : (searchPlaceList[index].title == 'Home')
-                                  ? "assets/svg/place-home.svg"
-                                  : Images.toLocationImage,
-                          width: 20,
-                          height: 20,
-                          color: AppColor.darkGreen,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-              itemCount: searchPlaceList.length,
-              padding: const EdgeInsets.all(8),
-            )),
-            (searchPlaceList.isEmpty) ? const Spacer() : const SizedBox(),
+                          },
+                          child: Card(
+                            elevation: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: ListTile(
+                                title: robotoTextWidget(
+                                  textval: searchPlaceList![index].title,
+                                  colorval: AppColor.black,
+                                  sizeval: 14.0,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                                subtitle: robotoTextWidget(
+                                  textval: searchPlaceList![index].address,
+                                  colorval: AppColor.black,
+                                  sizeval: 12.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                leading: SvgPicture.asset(
+                                  (searchPlaceList![index].title == 'Work')
+                                      ? "assets/svg/place-work.svg"
+                                      : (searchPlaceList![index].title ==
+                                              'Home')
+                                          ? "assets/svg/place-home.svg"
+                                          : Images.toLocationImage,
+                                  width: 20,
+                                  height: 20,
+                                  color: AppColor.darkGreen,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: searchPlaceList!.length,
+                      padding: const EdgeInsets.all(8),
+                    )
+                  : const SizedBox(),
+            ),
           ],
         ),
       ),
