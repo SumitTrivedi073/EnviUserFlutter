@@ -457,10 +457,11 @@ class _LoginpageState extends State<Loginpage> {
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
     print(response.statusCode);
+    print("jsonData========>${convert.jsonDecode(response.body)}");
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
-      print("jsonData========>$jsonData['content']");
+
       setState(() {
         //   _timer.cancel();
         LoginModel users = LoginModel.fromJson(jsonData['content']);
