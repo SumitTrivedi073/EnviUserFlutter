@@ -472,6 +472,8 @@ class _LoginpageState extends State<Loginpage> {
                         isUpdate: false,
                         phone: phoneController.text.toString(),
                       )));
+          isLoading = false;
+          setState(() {});
         } else {
           Navigator.push(
               context,
@@ -491,6 +493,8 @@ class _LoginpageState extends State<Loginpage> {
                     isUpdate: false,
                     phone: phoneController.text.toString(),
                   )));
+      isLoading = false;
+      setState(() {});
     }
   }
 }
