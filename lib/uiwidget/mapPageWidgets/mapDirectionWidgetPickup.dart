@@ -41,7 +41,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   PolylinePoints polylinePoints = PolylinePoints();
 
   String googleAPiKey = GoogleApiKey;
-  late Timer timer;
+   Timer? timer;
   int GOOGLE_API_INVOCATIONS = 1;
   late String _sessionToken;
   var uuid = const Uuid();
@@ -391,9 +391,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   @override
   void dispose() {
-    if (timer != null && timer.isActive) {
+    if (timer != null && timer!.isActive) {
       print("RAGHUVTTRACKING: Timer is getting Cancelled");
-      timer.cancel();
+      timer!.cancel();
       GOOGLE_API_INVOCATIONS =
           GOOGLE_API_INVOCATION_LIMIT * 2; //to Ensure we don't call this again
     }
