@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:convert' as convert;
 
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../appConfig/landingPageSettings.dart';
 import '../../theme/string.dart';
@@ -14,9 +16,6 @@ import '../../uiwidget/robotoTextWidget.dart';
 import '../../utils/utility.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
-
-import 'dart:convert' as convert;
-import '../../../../web_service/HTTP.dart' as HTTP;
 import '../onRide/model/SosModel.dart';
 import 'model/rideHistoryModel.dart';
 
@@ -34,6 +33,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   int _limit = 20;
   late dynamic userId;
   List<RideHistoryModel> arrtrip = [];
+
   @override
   void initState() {
     super.initState();
@@ -342,26 +342,10 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Align(
-          alignment: Alignment.center,
-          child: MaterialButton(
-            child: robotoTextWidget(
-              textval: Invoice,
-              colorval: AppColor.butgreen,
-              sizeval: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {
-              sendInvoice(arrtrip[index].passengerTripMasterId);
-            },
-          ),
-        ),
-        Container(
-          width: 1,
-          color: AppColor.border,
-        ),
-        MaterialButton(
+      child: arrtrip[index].status == 'cancelled'
+          ? Container(
+             width: MediaQuery.of(context).size.width,
+        child: MaterialButton(
           child: robotoTextWidget(
             textval: Support,
             colorval: AppColor.butgreen,
@@ -374,7 +358,40 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 : '');
           },
         ),
-      ]),
+      )
+          : Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Align(
+                alignment: Alignment.center,
+                child: MaterialButton(
+                  child: robotoTextWidget(
+                    textval: Invoice,
+                    colorval: AppColor.butgreen,
+                    sizeval: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onPressed: () {
+                    sendInvoice(arrtrip[index].passengerTripMasterId);
+                  },
+                ),
+              ),
+              Container(
+                width: 1,
+                color: AppColor.border,
+              ),
+              MaterialButton(
+                child: robotoTextWidget(
+                  textval: Support,
+                  colorval: AppColor.butgreen,
+                  sizeval: 14.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                onPressed: () {
+                  makingPhoneCall(LandingPageConfig().getcustomerCare() != null
+                      ? LandingPageConfig().getcustomerCare()
+                      : '');
+                },
+              ),
+            ]),
     );
   }
 

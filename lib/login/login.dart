@@ -110,7 +110,7 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    if (_timer != null) {
+    if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
     super.dispose();

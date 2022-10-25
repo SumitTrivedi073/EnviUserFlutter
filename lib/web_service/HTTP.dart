@@ -32,7 +32,7 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
   Map<String, String> headers = {'Content-Type': contentType};
 
   dynamic token = Profiledata().gettoken();
-  dynamic extra = additionalHeaders != null ? additionalHeaders : {};
+   dynamic extra = additionalHeaders != null ? additionalHeaders : {};
 
   return headers = {
     'Content-Type': contentType,
