@@ -225,300 +225,300 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      content: Flexible(
-          child: Wrap(children: [
-        Column(children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
-              "You are booking",
-              style: TextStyle(
-                  color: AppColor.butgreen,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+        
+      const Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Text(
+        "You are booking",
+        style: TextStyle(
+            color: AppColor.butgreen,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w600,
+            fontSize: 14),
+      ),
+      ),
+      const SizedBox(
+      height: 10,
+      ),
+      Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(2.0),
+        side: const BorderSide(
+          color: AppColor.border,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                robotoTextWidget(
+                    textval: SelectedVehicle!.type.toString(),
+                    colorval: AppColor.black,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w200),
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
-              ),
+            const SizedBox(
+              width: 10,
             ),
-            child: Padding(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Image.asset('assets/images/passengers-icon.png',
+                        height: 15, width: 15, fit: BoxFit.cover),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    robotoTextWidget(
+                        textval:
+                            "${SelectedVehicle!.passengerCapacity} People",
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200)
+                  ],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Row(
+                  children: [
+                    Image.asset('assets/images/weight-icon.png',
+                        height: 15, width: 15, fit: BoxFit.cover),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    robotoTextWidget(
+                        textval: SelectedVehicle!.bootSpace.toString(),
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200)
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      ),
+      const SizedBox(height: 10),
+      const Text(
+      "Schedual At",
+      style: TextStyle(
+          color: AppColor.butgreen,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w600,
+          fontSize: 14),
+      ),
+      const SizedBox(
+      height: 5,
+      ),
+      Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(2.0),
+        side: const BorderSide(
+          color: AppColor.border,
+        ),
+      ),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            robotoTextWidget(
+                textval: schedualTime.toString(),
+                colorval: AppColor.black,
+                sizeval: 12,
+                fontWeight: FontWeight.w200),
+          ],
+        ),
+      ),
+      ),
+      const SizedBox(
+      height: 10,
+      ),
+      Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(2.0),
+        side: const BorderSide(
+          color: AppColor.border,
+        ),
+      ),
+      child: SizedBox(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 10),
               padding: const EdgeInsets.only(top: 5, bottom: 5),
               child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      robotoTextWidget(
-                          textval: SelectedVehicle!.type.toString(),
-                          colorval: AppColor.black,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w200),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset('assets/images/passengers-icon.png',
-                              height: 15, width: 15, fit: BoxFit.cover),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          robotoTextWidget(
-                              textval:
-                                  "${SelectedVehicle!.passengerCapacity} People",
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w200)
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset('assets/images/weight-icon.png',
-                              height: 15, width: 15, fit: BoxFit.cover),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          robotoTextWidget(
-                              textval: SelectedVehicle!.bootSpace.toString(),
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w200)
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            "Schedual At",
-            style: TextStyle(
-                color: AppColor.butgreen,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w600,
-                fontSize: 14),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
-              ),
-            ),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(10),
-              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   robotoTextWidget(
-                      textval: schedualTime.toString(),
+                      textval:
+                          "₹${SelectedVehicle!.total_fare.toStringAsFixed(0)}",
                       colorval: AppColor.black,
                       sizeval: 12,
                       fontWeight: FontWeight.w200),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
-              ),
-            ),
-            child: SizedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        robotoTextWidget(
-                            textval:
-                                "₹${SelectedVehicle!.total_fare.toStringAsFixed(0)}",
-                            colorval: AppColor.black,
-                            sizeval: 12,
-                            fontWeight: FontWeight.w200),
-                        robotoTextWidget(
-                            textval: ApproxFare,
-                            colorval: AppColor.black,
-                            sizeval: 12,
-                            fontWeight: FontWeight.w400),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    height: 55,
-                    width: 1,
-                    color: AppColor.border,
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          robotoTextWidget(
-                              textval:
-                                  '${SelectedVehicle!.distance.toStringAsFixed(0)} KM',
-                              colorval: AppColor.black,
-                              sizeval: 12,
-                              fontWeight: FontWeight.w200),
-                          const robotoTextWidget(
-                              textval: "Pickup Distance",
-                              colorval: AppColor.black,
-                              sizeval: 12,
-                              fontWeight: FontWeight.w400),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            Fromaddress,
-            style: const TextStyle(
-                color: AppColor.butgreen,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w600,
-                fontSize: 14),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
-              ),
-            ),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
                   robotoTextWidget(
-                      textval: widget.fromAddress!.address.toString(),
+                      textval: ApproxFare,
                       colorval: AppColor.black,
                       sizeval: 12,
-                      fontWeight: FontWeight.w200),
+                      fontWeight: FontWeight.w400),
                 ],
               ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            Toaddress,
-            style: const TextStyle(
-                color: AppColor.butgreen,
-                fontFamily: 'Roboto',
+            const SizedBox(width: 10),
+            Container(
+              height: 55,
+              width: 1,
+              color: AppColor.border,
+            ),
+            const SizedBox(width: 10),
+            Container(
+                margin: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    robotoTextWidget(
+                        textval:
+                            '${SelectedVehicle!.distance.toStringAsFixed(0)} KM',
+                        colorval: AppColor.black,
+                        sizeval: 12,
+                        fontWeight: FontWeight.w200),
+                    const robotoTextWidget(
+                        textval: "Pickup Distance",
+                        colorval: AppColor.black,
+                        sizeval: 12,
+                        fontWeight: FontWeight.w400),
+                  ],
+                )),
+          ],
+        ),
+      ),
+      ),
+      const SizedBox(height: 10),
+      Text(
+      Fromaddress,
+      style: const TextStyle(
+          color: AppColor.butgreen,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w600,
+          fontSize: 14),
+      ),
+      const SizedBox(
+      height: 5,
+      ),
+      Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(2.0),
+        side: const BorderSide(
+          color: AppColor.border,
+        ),
+      ),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            robotoTextWidget(
+                textval: widget.fromAddress!.address.toString(),
+                colorval: AppColor.black,
+                sizeval: 12,
+                fontWeight: FontWeight.w200),
+          ],
+        ),
+      ),
+      ),
+      const SizedBox(
+      height: 10,
+      ),
+      Text(
+      Toaddress,
+      style: const TextStyle(
+          color: AppColor.butgreen,
+          fontFamily: 'Roboto',
+          fontWeight: FontWeight.w600,
+          fontSize: 14),
+      ),
+      const SizedBox(
+      height: 5,
+      ),
+      Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(2.0),
+        side: const BorderSide(
+          color: AppColor.border,
+        ),
+      ),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            robotoTextWidget(
+                textval: widget.toAddress!.address.toString(),
+                colorval: AppColor.black,
+                sizeval: 12,
+                fontWeight: FontWeight.w200),
+          ],
+        ),
+      ),
+      ),
+      const SizedBox(
+      height: 10,
+      ),
+      Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColor.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+              ),
+              child: robotoTextWidget(
+                textval: cancel,
+                colorval: AppColor.greyblack,
+                sizeval: 14,
                 fontWeight: FontWeight.w600,
-                fontSize: 14),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-              side: const BorderSide(
-                color: AppColor.border,
+              ),
+            ),ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                confirmBooking();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColor.greyblack,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+              ),
+              child: robotoTextWidget(
+                textval: confirm,
+                colorval: AppColor.white,
+                sizeval: 14,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  robotoTextWidget(
-                      textval: widget.toAddress!.address.toString(),
-                      colorval: AppColor.black,
-                      sizeval: 12,
-                      fontWeight: FontWeight.w200),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
-                      ),
-                    ),
-                    child: robotoTextWidget(
-                      textval: cancel,
-                      colorval: AppColor.greyblack,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      confirmBooking();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.greyblack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
-                      ),
-                    ),
-                    child: robotoTextWidget(
-                      textval: confirm,
-                      colorval: AppColor.white,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-            ],
-          )
-        ])
-      ])),
+      ],
+      )
+      ]),
     );
   }
 

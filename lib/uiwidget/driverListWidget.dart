@@ -116,8 +116,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   Widget driverListItems(int index) {
     var tmp = DriverList[index].driverName ?? '';
     var driverName = tmp.length > 10 ? '${tmp.substring(0, 9)}..' : tmp;
-    return Flexible(
-        child: Wrap(children: [
+    return Wrap(children: [
       Container(
           child: GestureDetector(
         onTap: () {
@@ -355,7 +354,7 @@ class DriverListItemPageState extends State<DriverListItem> {
               )),
         ),
       ))
-    ]));
+    ]);
   }
 
   String getTotalPrice(double totalFare, double discount) {
@@ -370,8 +369,7 @@ class DriverListItemPageState extends State<DriverListItem> {
 
   Widget getDriverList(List<Content> driverList) {
     if (driverList.isNotEmpty) {
-      return Flexible(
-          child: Wrap(children: [
+      return Wrap(children: [
         Container(
           child: Card(
             elevation: 5,
@@ -505,7 +503,7 @@ class DriverListItemPageState extends State<DriverListItem> {
             ),
           ),
         )
-      ]));
+      ]);
     } else {
       return Container(
         height: MediaQuery.of(context).size.height / 8,
