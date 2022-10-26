@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:envi/sidemenu/bookScheduleTrip/bookScheduleTrip.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/confirmDropLocation.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/images.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/web_service/APIDirectory.dart';
@@ -18,16 +16,12 @@ import 'package:google_place/google_place.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../appConfig/Profiledata.dart';
 import '../../database/database.dart';
-import '../../database/favoritesData.dart';
 import '../../database/favoritesDataDao.dart';
 import '../../enum/BookingTiming.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
-import '../../utils/utility.dart';
-import '../../web_service/ApiCollection.dart';
 import '../../web_service/Constant.dart';
 
 class SelectPickupDropAddress extends StatefulWidget {
@@ -78,140 +72,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     dao = database.taskDao;
   }
 
-  Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
-    dynamic userid = Profiledata().getusreid();
-    final response = await ApiCollection.FavoriateDataAdd(
-        userid,
-        FromLocationText.text.toString(),
-        addressToAdd!.address,
-        addressToAdd.latLng.latitude,
-        addressToAdd.latLng.longitude,
-        "N");
-
-    if (response != null) {
-      if (response.statusCode == 200) {
-        String addressId = jsonDecode(response.body)['content']['addressId'];
-        print(jsonDecode(response.body)['content']);
-
-        final task = FavoritesData.optional(
-            identifier: addressId,
-            address: addressToAdd.address,
-            isFavourite: 'N',
-            latitude: addressToAdd.latLng.latitude.toString(),
-            longitude: addressToAdd.latLng.longitude.toString(),
-            title: addressToAdd.title);
-        await dao.insertTask(task);
-      }
-      //showToast((jsonDecode(response.body)['message'].toString()));
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
     }
   }
 
-  Future<void> apiCallUpdateFavorite(
-      int? Id,
-      String titel,
-      SearchPlaceModel? addressToUpdate,
-      String identifire,
-      String favoriate) async {
-    dynamic userid = Profiledata().getusreid();
-    final response = await ApiCollection.FavoriateDataUpdate(
-        userid,
-        titel,
-        addressToUpdate!.address,
-        addressToUpdate.latLng.latitude,
-        addressToUpdate.latLng.longitude,
-        favoriate,
-        identifire);
-    print("update" + response.body);
-
-    if (response != null) {
-      if (response.statusCode == 200) {
-        String addressId = jsonDecode(response.body)['content']['addressId'];
-        print(jsonDecode(response.body)['content']);
-
-        final task = FavoritesData.optional(
-            id: Id,
-            identifier: identifire,
-            address: addressToUpdate.address,
-            isFavourite: favoriate,
-            latitude: addressToUpdate.latLng.latitude.toString(),
-            longitude: addressToUpdate.latLng.longitude.toString(),
-            title: titel);
-        print(task);
-        await dao.updateTask(task);
-        //Navigator.pop(context, {"isbact": true});
-      }
-      // showToast((jsonDecode(response.body)['message'].toString()));
-    }
-  }
-
-  Future<void> apiCallAddFavoritetoaddress(
-      SearchPlaceModel? addressToAdd) async {
-    dynamic userid = Profiledata().getusreid();
-    final response = await ApiCollection.FavoriateDataAdd(
-        userid,
-        ToLocationText.text.toString(),
-        addressToAdd!.address,
-        addressToAdd.latLng.latitude,
-        addressToAdd.latLng.longitude,
-        "N");
-    print(response.body);
-
-    if (response != null) {
-      if (response.statusCode == 200) {
-        String addressId = jsonDecode(response.body)['content']['addressId'];
-        print(jsonDecode(response.body)['content']);
-
-        final task = FavoritesData.optional(
-            identifier: addressId,
-            address: addressToAdd.address,
-            isFavourite: 'Y',
-            latitude: addressToAdd.latLng.latitude.toString(),
-            longitude: addressToAdd.latLng.longitude.toString(),
-            title: addressToAdd.title);
-        print(task);
-        await dao.insertTask(task);
-        //Navigator.pop(context, {"isbact": true});
-      }
-      //showToast((jsonDecode(response.body)['message'].toString()));
-    }
-  }
-
-  Future<void> apiCallUpdateFavoritetoaddress(
-      int? Id,
-      String titel,
-      SearchPlaceModel? addressToUpdate,
-      String identifire,
-      String favoriate) async {
-    dynamic userid = Profiledata().getusreid();
-    final response = await ApiCollection.FavoriateDataUpdate(
-        userid,
-        titel,
-        addressToUpdate!.address,
-        addressToUpdate.latLng.latitude,
-        addressToUpdate.latLng.longitude,
-        favoriate,
-        identifire);
-    print("update" + response.body);
-
-    if (response != null) {
-      if (response.statusCode == 200) {
-        String addressId = jsonDecode(response.body)['content']['addressId'];
-        print(jsonDecode(response.body)['content']);
-
-        final task = FavoritesData.optional(
-            id: Id,
-            identifier: identifire,
-            address: addressToUpdate.address,
-            isFavourite: favoriate,
-            latitude: addressToUpdate.latLng.latitude.toString(),
-            longitude: addressToUpdate.latLng.longitude.toString(),
-            title: titel);
-        print(task);
-        await dao.updateTask(task);
-      }
-      // showToast((jsonDecode(response.body)['message'].toString()));
-    }
-  }
+ 
 
   Future<void> getLocalSuggestions(String val) async {
     searchPlaceList = await AutocompleteService().getdata(val);
@@ -389,25 +257,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   });
                                   if (endAddress == null) {
                                     var result;
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      endLocation: endAddress,
-                                                      status:
-                                                          AddressConfirmation
-                                                              .bothUnconfirmed,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  title: confirmLocationText,
+                                                  endLocation: endAddress,
+                                                  status: AddressConfirmation
+                                                      .bothUnconfirmed,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
+
                                     if (result != null) {
                                       if (result.length == 2) {
                                         startingAddress = result[0];
@@ -425,24 +289,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     getLocalSuggestions('');
                                   } else {
                                     var result;
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      endLocation: endAddress,
-                                                      status: AddressConfirmation
-                                                          .toAddressConfirmed,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  title: confirmLocationText,
+                                                  endLocation: endAddress,
+                                                  status: AddressConfirmation
+                                                      .toAddressConfirmed,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
+
                                     if (result != null) {
                                       if (result.length == 2) {
                                         startingAddress = result[0];
@@ -477,25 +338,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   });
                                   if (startingAddress == null) {
                                     var result;
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      status:
-                                                          AddressConfirmation
-                                                              .bothUnconfirmed,
-                                                      endLocation: endAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  status: AddressConfirmation
+                                                      .bothUnconfirmed,
+                                                  endLocation: endAddress,
+                                                  title: confirmLocationText,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
+
                                     if (result != null) {
                                       if (result.length == 2) {
                                         startingAddress = result[0];
@@ -512,24 +369,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     getLocalSuggestions('');
                                   } else {
                                     var result;
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      status: AddressConfirmation
-                                                          .fromAddressConfirmed,
-                                                      endLocation: endAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  status: AddressConfirmation
+                                                      .fromAddressConfirmed,
+                                                  endLocation: endAddress,
+                                                  title: confirmLocationText,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
+
                                     if (result != null) {
                                       if (result.length == 2) {
                                         startingAddress = result[0];
@@ -569,25 +423,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   });
                                   if (endAddress == null) {
                                     var result;
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      endLocation: endAddress,
-                                                      status:
-                                                          AddressConfirmation
-                                                              .bothUnconfirmed,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  title: confirmLocationText,
+                                                  endLocation: endAddress,
+                                                  status: AddressConfirmation
+                                                      .bothUnconfirmed,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
+
                                     if (result != null) {
                                       if (result.length == 2) {
                                         startingAddress = result[0];
@@ -647,25 +497,20 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   if (startingAddress == null) {
                                     var result;
 
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      status:
-                                                          AddressConfirmation
-                                                              .bothUnconfirmed,
-                                                      endLocation: endAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  status: AddressConfirmation
+                                                      .bothUnconfirmed,
+                                                  endLocation: endAddress,
+                                                  title: confirmLocationText,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
 
                                     if (result != null) {
                                       if (result.length == 2) {
@@ -683,24 +528,21 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     getLocalSuggestions('');
                                   } else {
                                     var result;
-                                    result = await Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    ConfirmDropLocation(
-                                                      tripType: widget.tripType,
-                                                      startLocation:
-                                                          startingAddress,
-                                                      status: AddressConfirmation
-                                                          .fromAddressConfirmed,
-                                                      endLocation: endAddress,
-                                                      title:
-                                                          confirmLocationText,
-                                                      isFavourite: isFavourite
-                                                          .toString(),
-                                                    )),
-                                            (Route<dynamic> route) => true);
+                                    result = await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                ConfirmDropLocation(
+                                                  tripType: widget.tripType,
+                                                  startLocation:
+                                                      startingAddress,
+                                                  status: AddressConfirmation
+                                                      .fromAddressConfirmed,
+                                                  endLocation: endAddress,
+                                                  title: confirmLocationText,
+                                                  isFavourite:
+                                                      isFavourite.toString(),
+                                                )));
+
                                     if (result != null) {
                                       if (result.length == 2) {
                                         startingAddress = result[0];

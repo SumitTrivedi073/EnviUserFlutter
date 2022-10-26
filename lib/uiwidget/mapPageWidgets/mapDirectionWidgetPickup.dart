@@ -17,6 +17,7 @@ import 'package:uuid/uuid.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../../direction_model/directionModel.dart';
+import '../../direction_model/leg.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
 
@@ -41,7 +42,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   PolylinePoints polylinePoints = PolylinePoints();
 
   String googleAPiKey = GoogleApiKey;
-   Timer? timer;
+  Timer? timer;
   int GOOGLE_API_INVOCATIONS = 1;
   late String _sessionToken;
   var uuid = const Uuid();
@@ -74,6 +75,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
   late double distancecorrectionFactor, googleDistance, duration;
+  late Leg currentTravelLeg;
 
   @override
   void initState() {
@@ -90,7 +92,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}");
       return;
     }
-
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
@@ -103,25 +104,40 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             DirectionModel.fromJson(json.decode(response.body));
         List<PointLatLng> pointLatLng = [];
 
-        for (var i = 0; i < directionModel.routes.length; i++) {
-          for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
-            for (var k = 0;
-                k < directionModel.routes[i].legs[j].steps.length;
-                k++) {
-              duration =
-                  directionModel.routes[i].legs[j].duration.value.toDouble();
-              googleDistance =
-                  directionModel.routes[i].legs[j].distance.value.toDouble();
+        // for (var i = 0; i < directionModel.routes.length; i++) {
+        //   for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
+        //     for (var k = 0;
+        //         k < directionModel.routes[i].legs[j].steps.length;
+        //         k++) {
+        //       duration =
+        //           directionModel.routes[i].legs[j].duration.value.toDouble();
+        //       googleDistance =
+        //           directionModel.routes[i].legs[j].distance.value.toDouble();
 
-              pointLatLng = polylinePoints.decodePolyline(
-                  directionModel.routes[i].legs[j].steps[k].polyline.points);
-              for (var point in pointLatLng) {
-                polylineCoordinates
-                    .add(LatLng(point.latitude, point.longitude));
-              }
-            }
+        //       pointLatLng = polylinePoints.decodePolyline(
+        //           directionModel.routes[i].legs[j].steps[k].polyline.points);
+        //       for (var point in pointLatLng) {
+        //         polylineCoordinates
+        //             .add(LatLng(point.latitude, point.longitude));
+        //       }
+        //     }
+        //   }
+        // }
+
+//RAGHU VT  , We can have  multiple routes available. use the first one currently
+
+        currentTravelLeg = directionModel.routes[0].legs[0];
+        for (var k = 0; k < currentTravelLeg.steps.length; k++) {
+          duration = currentTravelLeg.duration.value.toDouble();
+          googleDistance = currentTravelLeg.distance.value.toDouble();
+
+          pointLatLng = polylinePoints
+              .decodePolyline(currentTravelLeg.steps[k].polyline.points);
+          for (var point in pointLatLng) {
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
           }
         }
+
         addPolyLine(polylineCoordinates);
         distancecorrectionFactor = googleDistance /
             calculateDistance(
@@ -130,7 +146,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
                 pickupLocation.latitude,
                 pickupLocation.longitude);
 
-        updatePickupTime();
+        waitingTimeDisplayCB(duration);
 
         GOOGLE_API_INVOCATIONS++;
 
@@ -359,10 +375,24 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             carCurrentLocation.longitude,
             pickupLocation.latitude,
             pickupLocation.longitude);
-    double new_time = (duration / googleDistance) * new_distance;
 
-    int minutes = new_time ~/ 60;
-    int seconds = (new_time % 60).toInt();
+    double new_time = (duration / googleDistance) * new_distance;
+    // waitingTimeDisplayCB(new_time);
+
+    double alternateTime = alternateDurationFromGoogleLegs(
+      carCurrentLocation.latitude,
+      carCurrentLocation.longitude,
+    );
+
+    print(
+        "GADIST: COnclusion: original $new_time , New Implemetation: $alternateTime ");
+
+    waitingTimeDisplayCB(alternateTime);
+  }
+
+  void waitingTimeDisplayCB(time) {
+    int minutes = time ~/ 60;
+    int seconds = (time % 60).toInt();
     if (minutes > 0) {
       widget.callback("$minutes Minutes");
     } else {
@@ -398,5 +428,51 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
           GOOGLE_API_INVOCATION_LIMIT * 2; //to Ensure we don't call this again
     }
     super.dispose();
+  }
+
+//Find CLosest Location on Leg
+  double alternateDurationFromGoogleLegs(latitude, longitude) {
+    var min = 99999999.0;
+    var index = 0;
+    for (int i = 0; i < currentTravelLeg.steps.length; i++) {
+      var step = currentTravelLeg.steps[i];
+      var lat = step.startLocation.lat;
+      var lng = step.startLocation.lng;
+      var dist = calculateDistance(latitude, longitude, lat, lng);
+      if (dist < min) {
+        print(
+            'GADIST: Iterating Closest point check $i , dist:$dist, currentMin: $min');
+        min = dist;
+        index = i;
+      }
+      // else {
+      //   //We have reched closest point on leg. Calculate the remaining leg distance. from that point
+      //   print(
+      //       'GADIST: Iterating Closest point Crossed $i , dist:$dist, currentMin: $min');
+      //   index = i - 1;
+      //   break;
+      // }
+    }
+
+    print('GADIST: ****Selected Index $index ,  currentMin: $min');
+    double diffDistance = distancecorrectionFactor *
+        calculateDistance(
+            latitude,
+            longitude,
+            currentTravelLeg.steps[index].startLocation.lat,
+            currentTravelLeg.steps[index].startLocation.lng);
+
+    double dur = (duration / googleDistance) * diffDistance;
+
+    print(
+        'GADIST: Diff Duration $dur $latitude $longitude ${currentTravelLeg.steps[index].startLocation.lat},${currentTravelLeg.steps[index].startLocation.lng}, diff distance: $diffDistance,orig ga distance: $googleDistance orig dur:$duration');
+
+    for (int i = index; i < currentTravelLeg.steps.length; i++) {
+      var step = currentTravelLeg.steps[i];
+      dur += step.duration.value.toDouble();
+      print('GADIST: Duration after $i iteration=> $dur');
+    }
+
+    return dur;
   }
 }

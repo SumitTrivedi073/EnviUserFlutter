@@ -493,7 +493,6 @@ class _LoginpageState extends State<Loginpage> {
       });
     } else {
       if (!mounted) return;
-      // ignore: use_build_context_synchronously
       Navigator.push(
           context,
           MaterialPageRoute(
