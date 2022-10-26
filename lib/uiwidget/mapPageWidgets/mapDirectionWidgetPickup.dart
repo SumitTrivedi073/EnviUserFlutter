@@ -430,8 +430,8 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     super.dispose();
   }
 
-  double alternateDurationFromGoogleLegs(latitude, longitude) {
 //Find CLosest Location on Leg
+  double alternateDurationFromGoogleLegs(latitude, longitude) {
     var min = 99999999.0;
     var index = 0;
     for (int i = 0; i < currentTravelLeg.steps.length; i++) {
@@ -443,15 +443,18 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         print(
             'GADIST: Iterating Closest point check $i , dist:$dist, currentMin: $min');
         min = dist;
-      } else {
-        //We have reched closest point on leg. Calculate the remaining leg distance. from that point
-        print(
-            'GADIST: Iterating Closest point Crossed $i , dist:$dist, currentMin: $min');
-        index = i - 1;
-        break;
+        index = i;
       }
+      // else {
+      //   //We have reched closest point on leg. Calculate the remaining leg distance. from that point
+      //   print(
+      //       'GADIST: Iterating Closest point Crossed $i , dist:$dist, currentMin: $min');
+      //   index = i - 1;
+      //   break;
+      // }
     }
 
+    print('GADIST: ****Selected Index $index ,  currentMin: $min');
     double diffDistance = distancecorrectionFactor *
         calculateDistance(
             latitude,
@@ -461,7 +464,8 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     double dur = (duration / googleDistance) * diffDistance;
 
-    print('GADIST: Diff Duration $dur');
+    print(
+        'GADIST: Diff Duration $dur $latitude $longitude ${currentTravelLeg.steps[index].startLocation.lat},${currentTravelLeg.steps[index].startLocation.lng}, diff distance: $diffDistance,orig ga distance: $googleDistance orig dur:$duration');
 
     for (int i = index; i < currentTravelLeg.steps.length; i++) {
       var step = currentTravelLeg.steps[i];
