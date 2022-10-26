@@ -161,8 +161,8 @@ void SetProfileData(){
         ),
         child: Center(
           child: Image.asset(
-            "assets/images/logo.png",
-            width: 276,
+            "assets/images/envi-logo-small.png",
+            width: 250,
             fit: BoxFit.fill,
           ),
         ),
