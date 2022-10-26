@@ -57,6 +57,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
+
+        //print(jsonDecode(res.body)['content']);
         if (jsonDecode(res.body)['content']['result'] != null) {
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
               .map((i) => RideHistoryModel.fromJson(i))
@@ -69,6 +71,11 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       });
     }
     setState(() {
+
+      if (arrtrip.length != _limit) {
+        _hasNextPage = false;
+      }
+
       _isFirstLoadRunning = false;
     });
   }
@@ -250,7 +257,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   Container CellRow2(int index) {
     return Container(
       color: AppColor.white,
-      height: 94,
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
       child: Column(
         children: [
@@ -270,14 +276,15 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       const SizedBox(
                         width: 5,
                       ),
-                      robotoTextWidget(
-                        textval: arrtrip[index].toAddress.length > 30
-                            ? arrtrip[index].toAddress.substring(0, 30)
-                            : arrtrip[index].toAddress,
+                      Container(
+                        width: MediaQuery.of(context).size.width - 190,
+                      child: robotoTextWidget(
+                        textval: arrtrip[index].toAddress,
                         colorval: AppColor.black,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
-                      ),
+                      ),),
+
                     ],
                   ),
                   const SizedBox(
@@ -288,24 +295,38 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       const Padding(
                         padding: EdgeInsets.only(left: 25),
                       ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 190,
+                        child:
                       robotoTextWidget(
-                        textval: arrtrip[index].fromAddress.length > 30
-                            ? arrtrip[index].fromAddress.substring(0, 30)
-                            : arrtrip[index].fromAddress,
+                        textval: arrtrip[index].fromAddress,
                         colorval: AppColor.greyblack,
                         sizeval: 14.0,
                         fontWeight: FontWeight.normal,
-                      ),
+                      ),)
                     ],
                   ),
                 ],
               ),
-              Image.network(
-                encodeImgURLString(arrtrip[index].driverPhoto),
-                fit: BoxFit.fill,
-                height: 40,
-                width: 40,
-              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.network(
+                    encodeImgURLString(arrtrip[index].driverPhoto),
+                    fit: BoxFit.fill,
+                    height: 40,
+                    width: 40,
+                  ),
+
+                  robotoTextWidget(
+                    textval: arrtrip[index].vehicle.Vnumber,
+                    colorval: AppColor.darkgrey,
+                    sizeval: 13.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+
             ],
           ),
           const SizedBox(
@@ -326,7 +347,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 ):Container(),
               ]),
               robotoTextWidget(
-                textval: arrtrip[index].vehicle.Vnumber,
+                textval: arrtrip[index].name,
                 colorval: AppColor.darkgrey,
                 sizeval: 13.0,
                 fontWeight: FontWeight.bold,

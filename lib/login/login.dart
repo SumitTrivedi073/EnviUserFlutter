@@ -16,11 +16,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../Profile/newprofilePage.dart';
-import '../Profile/profilePage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
+import '../web_service/ApiConfig.dart';
 import '../web_service/Constant.dart';
 import 'model/LoginModel.dart';
 
@@ -336,11 +336,16 @@ class _LoginpageState extends State<Loginpage> {
                     setState(() {
                       isLoading = true;
                     });
-                    /* fetchotp(
+
+
+                    if(isrunOnSemulation){
+                      signIn();
+                    }else{
+                      fetchotp(
                           phoneNumber:
-                              "+${countrycontroller.text}${phoneController.text}");
-*/
-                    signIn();
+                          "+${countrycontroller.text}${phoneController.text}");
+                    }
+
                   }
                 },
                 child: const robotoTextWidget(
@@ -452,6 +457,8 @@ class _LoginpageState extends State<Loginpage> {
       "FcmToken": fcmToken,
       "deviceId": deviceId
     };
+
+    print(data);
     sharedPreferences.setString(deviceIdShared, deviceId!);
     sharedPreferences.setString(fcmTokenShared, fcmToken!);
     var jsonData = null;
