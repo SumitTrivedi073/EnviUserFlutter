@@ -213,11 +213,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: AppColor.border,
             ),
             CellRow2(index),
-            arrtrip[index].status!=RideHistoryCancelledStatus? Container(
+            arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? Container(
               height: 1,
               color: AppColor.border,
             ):Container(),
-          arrtrip[index].status!=RideHistoryCancelledStatus?CellRow3(index):Container(),
+          arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? CellRow3(index):Container(),
           ]),
     );
   }
