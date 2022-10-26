@@ -13,6 +13,7 @@ import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'appConfig/Profiledata.dart';
@@ -73,6 +74,7 @@ class MainEntryPoint extends StatefulWidget {
 class _MainEntryPointState extends State<MainEntryPoint> {
   late SharedPreferences sharedPreferences;
   late final FavoritesDataDao dao;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
@@ -84,6 +86,13 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
 
   void receiveNotification() {
+
+    var initializationSettingsAndroid =
+    AndroidInitializationSettings('@drawable/ic_notification');
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance.getInitialMessage().then(
           (message) {
         print("FirebaseMessaging.instance.getInitialMessage");
@@ -122,6 +131,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   checkLoginStatus() async {
+    print("FcmToken=========>${await FirebaseMessaging.instance.getToken()}");
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(loginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
