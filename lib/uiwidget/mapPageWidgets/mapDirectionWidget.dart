@@ -77,6 +77,7 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
+        //print(json.decode(response.body));
         DirectionModel directionModel = DirectionModel.fromJson(json.decode(response.body) );
         List<PointLatLng> pointLatLng = [];
 

@@ -172,6 +172,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         var inputDate = inputFormat.parse(
                             "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
                         if ((mindatime.difference(inputDate).inMinutes) <= 0) {
+                          print("datevalidate${mindatime.difference(inputDate).inMinutes}");
                           showDialog(
                             context: context,
                             builder: (BuildContext context) =>
@@ -181,9 +182,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                                         .format(inputDate)),
                           );
                         } else {
+                          print("datevalidate");
                           utility.showInSnackBar(
                               value:
-                                  'Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.")',
+                                  'Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.',
                               context: context,
                               duration: const Duration(seconds: 3));
                         }
@@ -392,7 +394,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                             sizeval: 12,
                             fontWeight: FontWeight.w200),
                         const robotoTextWidget(
-                            textval: "Pickup Distance",
+                            textval: "Distance",
                             colorval: AppColor.black,
                             sizeval: 12,
                             fontWeight: FontWeight.w400),
@@ -520,6 +522,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   }
 
   Future<void> updatedtime() async {
+    print(_controller1.text.toString() +_controller2.text.toString());
     DateTime dt = DateTime.parse(_controller1.text.toString());
     print(
         "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
