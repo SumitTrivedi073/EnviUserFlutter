@@ -16,7 +16,9 @@
    <application
         android:label="envi"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+       android:allowBackup="false"
+       android:roundIcon="@mipmap/ic_launcher_round">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -51,6 +53,11 @@
        <meta-data
            android:name="com.google.firebase.messaging.default_notification_channel_id"
            android:value="Envi"/>
+
+
+       <meta-data
+           android:name="com.google.firebase.messaging.default_notification_icon"
+           android:resource="@drawable/ic_notification" />
 
     </application>
 </manifest>

@@ -348,7 +348,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      child: arrtrip[index].status == CancelledStatus
+      child: arrtrip[index].status == RideHistoryCancelledStatus && arrtrip[index].status == RideHistoryRejectedStatus
           ? Container(
              width: MediaQuery.of(context).size.width,
         child: MaterialButton(
