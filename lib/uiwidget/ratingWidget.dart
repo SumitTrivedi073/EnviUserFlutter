@@ -4,9 +4,11 @@ import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../sidemenu/onRide/model/SosModel.dart';
 import '../theme/color.dart';
 import '../theme/images.dart';
 import '../theme/string.dart';
+import '../theme/theme.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 import 'robotoTextWidget.dart';
@@ -104,6 +106,10 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
 
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       print(jsonDecode(res.body));
+      var jsonData = json.decode(res.body);
+      SosModel sosModel = SosModel.fromJson(jsonData);
+      showSnackbar(context,sosModel.message);
+
     } else {
       throw "Rating Api not worked.";
     }
