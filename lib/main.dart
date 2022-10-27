@@ -104,11 +104,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   void receiveNotification() {
-
     var initializationSettingsAndroid =
-    AndroidInitializationSettings('@drawable/ic_notification');
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid);
+        AndroidInitializationSettings('@drawable/ic_notification');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance.getInitialMessage().then(
@@ -267,6 +266,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
+      if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) =>
@@ -291,17 +291,17 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                   sharedPreferences.getInt(autoExpiryDurationText)!);
               sharedPreferences.setString(
                   dailyOnceTimeText, DateTime.now().toString());
-            }
-
-            if (hrsBetween(
-                    DateTime.parse(
-                        sharedPreferences.getString(dailyOnceTimeText)!),
-                    DateTime.now()) >
-                24) {
-              displayInfoPopup(
-                  sharedPreferences.getInt(autoExpiryDurationText)!);
-              sharedPreferences.setString(
-                  dailyOnceTimeText, DateTime.now().toString());
+            } else {
+              if (hrsBetween(
+                      DateTime.parse(
+                          sharedPreferences.getString(dailyOnceTimeText)!),
+                      DateTime.now()) >
+                  24) {
+                displayInfoPopup(
+                    sharedPreferences.getInt(autoExpiryDurationText)!);
+                sharedPreferences.setString(
+                    dailyOnceTimeText, DateTime.now().toString());
+              }
             }
             break;
           case 'ONLY_ONCE':
@@ -330,23 +330,19 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         context: context,
         builder: ((context) {
           Future.delayed(
-            Duration(milliseconds: miliSecond),
+            Duration(milliseconds: miliSecond + 2000),
             () {
               Navigator.of(context).pop();
             },
           );
 
           return Dialog(
-            child: Container(
-              height: MediaQuery.of(context).size.height / 2,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                          sharedPreferences.getString(infoPopupImageUrlText)!,scale: double.maxFinite))
-                  ),
+              child: Image.network(
+            encodeImgURLString(
+              sharedPreferences.getString(infoPopupImageUrlText)!,
             ),
-          );
+            fit: BoxFit.fill,
+          ));
         }));
   }
 
