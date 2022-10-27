@@ -559,9 +559,12 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-        (Route<dynamic> route) => false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+              (Route<dynamic> route) => false);
+    });
+
   }
 
   Future<void> deleteacountApiCall(BuildContext context) async {

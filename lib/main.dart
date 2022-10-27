@@ -34,35 +34,12 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 Future<Widget> initializeApp(ApplicationConfig appConfig) async {
-WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
- //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-final database = await $FloorFlutterDatabase
-    .databaseBuilder('envi_user.db')
-    .build();
-return MyApp(appConfig);
-Future<void> main() async {
-
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-    LocalNotificationService.initialize();
-    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-
-    FlutterError.onError =
-        FirebaseCrashlytics.instance.recordFlutterFatalError;
-
-    final database =
-    await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
-    final dao = database.taskDao;
-
-
-    runApp(MyApp());
-  }, (error, stack) =>
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  final database = await $FloorFlutterDatabase
+      .databaseBuilder('envi_user.db')
+      .build();
+  return MyApp(appConfig);
 }
-
 class MyApp extends StatelessWidget {
 
   final ApplicationConfig appConfig;
