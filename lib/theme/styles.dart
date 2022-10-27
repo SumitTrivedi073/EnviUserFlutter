@@ -2,12 +2,17 @@ import 'package:envi/theme/color.dart';
 import 'package:flutter/material.dart';
 
 class AppTextStyle {
-
   static const TextStyle robotoRegular18 = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     fontFamily: 'Roboto',
     color: AppColor.black,
+  );
+  static const TextStyle robotoRegular18Green = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Roboto',
+    color: AppColor.lightgreen,
   );
   static const TextStyle robotoRegular14 = TextStyle(
     fontSize: 14,
@@ -15,7 +20,7 @@ class AppTextStyle {
     fontFamily: 'Roboto',
     color: AppColor.black,
   );
-    static const TextStyle robotoRegular18Gray = TextStyle(
+  static const TextStyle robotoRegular18Gray = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     fontFamily: 'Roboto',
