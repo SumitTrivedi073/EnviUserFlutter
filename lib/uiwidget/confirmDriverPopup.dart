@@ -335,14 +335,18 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
     dynamic res = await HTTP.post(startTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
 
-      setState(() {
-        isLoading = false;
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => WaitingForDriverScreen()),
-              (Route<dynamic> route) => false);
+     /* if(mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }*/
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (BuildContext context) => WaitingForDriverScreen()),
+                (Route<dynamic> route) => false);
       });
+
     } else {
       setState(() {
         isLoading = false;

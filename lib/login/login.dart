@@ -123,7 +123,7 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           children: <Widget>[
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/envi-logo-small.png",
               width: 276,
               fit: BoxFit.fill,
             ),
@@ -249,7 +249,7 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           children: <Widget>[
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/envi-logo-small.png",
               width: 276,
               fit: BoxFit.fill,
             ),
@@ -490,7 +490,9 @@ class _LoginpageState extends State<Loginpage> {
       jsonData = convert.jsonDecode(response.body);
 
       setState(() {
-        //   _timer.cancel();
+        if(_timer!=null && _timer.isActive) {
+          _timer.cancel();
+        }
         LoginModel users = LoginModel.fromJson(jsonData['content']);
 
         Navigator.push(

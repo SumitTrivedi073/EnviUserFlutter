@@ -69,11 +69,14 @@ class _OnRideWidgetState extends State<OnRideWidget> {
               ]));
               // }
             }else{
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      const HomePage(title: 'title')),
-                      (Route<dynamic> route) => false);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        const HomePage(title: 'title')),
+                        (Route<dynamic> route) => false);
+              });
+
             }
             return  Container(
               child: CircularProgressIndicator(),
@@ -118,7 +121,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w200,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
@@ -150,7 +153,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                             '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ]),
@@ -176,7 +179,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w200,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
