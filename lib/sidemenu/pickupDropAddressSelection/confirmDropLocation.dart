@@ -365,7 +365,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                             textval: Address,
                             colorval: AppColor.black,
                             sizeval: 14,
-                            fontWeight: FontWeight.w200,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ])),
@@ -391,12 +391,9 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(
-                moveText,
-                style: AppTextStyle.robotoRegular18Green,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
+              child: robotoTextWidget(textval: moveText,
+                  colorval: Colors.deepOrange,
+                  sizeval: 16, fontWeight: FontWeight.w800)
             ),
           ],
         ),

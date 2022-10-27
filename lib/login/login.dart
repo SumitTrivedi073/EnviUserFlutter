@@ -359,10 +359,13 @@ class _LoginpageState extends State<Loginpage> {
                       isLoading = true;
                     });
 
-                    fetchotp(
+                    if (isrunOnSemulation) {
+                      signIn();
+                    } else {
+                      fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
-
+                    }
                   }
                 },
                 child: robotoTextWidget(

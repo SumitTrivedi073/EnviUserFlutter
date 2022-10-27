@@ -397,19 +397,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                       ToLocationText.text = endAddress!.address;
                                     });
                                   }
-                                  // endAddress = await Navigator.of(context)
-                                  //     .pushAndRemoveUntil(
-                                  //         MaterialPageRoute(
-                                  //             builder: (BuildContext context) =>
-                                  //                 ConfirmDropLocation(
-                                  //                   location: endAddress,
-                                  //                   title: confirmLocationText,
-                                  //                   isFavourite: isFavourite.toString(),
-                                  //                 )),
-                                  //         (Route<dynamic> route) => true);
-                                  // setState(() {
-                                  //   ToLocationText.text = endAddress!.address;
-                                  // });
                                 }
                               }
                             } else {
@@ -575,7 +562,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   textval: searchPlaceList![index].address,
                                   colorval: AppColor.black,
                                   sizeval: 12.0,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 leading: SvgPicture.asset(
                                   (searchPlaceList![index].title == 'Work')
@@ -690,6 +677,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField fromTextWidget() {
     return TextField(
+      style: TextStyle(fontWeight: FontWeight.w600),
       autofocus: false,
       focusNode: startFocusNode,
       onSubmitted: (value) {
@@ -740,6 +728,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Widget toTextWidget() {
     return TextField(
+      style: TextStyle(fontWeight: FontWeight.w600),
       autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,

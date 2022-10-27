@@ -240,7 +240,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
@@ -298,7 +298,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
@@ -311,9 +311,11 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-    setState(() {
-      duration = durationToPickupLocation;
-    });
+    if(mounted) {
+      setState(() {
+        duration = durationToPickupLocation;
+      });
+    }
   }
 
 }
