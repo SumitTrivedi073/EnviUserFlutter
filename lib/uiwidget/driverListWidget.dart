@@ -96,7 +96,6 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
-      showSnackbar(context, jsonDecode(res.body)['msg']);
       setState(() {
         isLoading = false;
       });

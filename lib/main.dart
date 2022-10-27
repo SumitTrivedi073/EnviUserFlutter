@@ -315,8 +315,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     } else {}
   }
 
-  Future<Widget> displayInfoPopup(int miliSecond) async {
-    return await showDialog(
+  Future displayInfoPopup(int miliSecond)  {
+    return  showDialog(
         context: context,
         builder: ((context) {
           Future.delayed(
@@ -333,15 +333,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                   image: DecorationImage(
                       fit: BoxFit.fill,
                       image: NetworkImage(
-                          sharedPreferences.getString(infoPopupImageUrlText)!))
-
-                  //  Image.network(
-                  //                 encodeImgURLString(Profiledata.propic),
-                  //                 fit: BoxFit.fill,
-                  //                 height: 40,
-                  //                 width: 50,
-                  //               ),
-
+                          sharedPreferences.getString(infoPopupImageUrlText)!,scale: double.maxFinite))
                   ),
             ),
           );
