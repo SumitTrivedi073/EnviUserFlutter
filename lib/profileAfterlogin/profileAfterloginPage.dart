@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../login/model/LoginModel.dart';
 import '../main.dart';
 import '../theme/color.dart';
+import '../theme/images.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
 import '../web_service/Constant.dart';
@@ -116,15 +117,15 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: "Wellcome back, ${user!.name}!",
+                textval: "Welcome back, ${user!.name}!",
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
-            robotoTextWidget(
-                textval: reviewprofile,
-                colorval: AppColor.black,
-                sizeval: 16.0,
-                fontWeight: FontWeight.normal),
+            // robotoTextWidget(
+            //     textval: reviewprofile,
+            //     colorval: AppColor.black,
+            //     sizeval: 16.0,
+            //     fontWeight: FontWeight.normal),
             const SizedBox(
               height: 20,
             ),
@@ -173,10 +174,17 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                                 height: 100,
                                 width: 100,
                                 fit: BoxFit.fill,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    Images.personPlaceHolderImage,
+                                    height: 50,
+                                    width: 50,
+                                  );
+                                },
                                 placeholder:
                                     'assets/images/envi-logo-small.png',
                                 image: encodeImgURLString(user!.propic))),
-                                
                         const SizedBox(
                           height: 5,
                         ),

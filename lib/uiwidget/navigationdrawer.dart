@@ -174,38 +174,38 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/safety.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuSafety,
-              colorval: AppColor.red,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/fare-charges.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuFareCharges,
-              colorval: AppColor.lightText,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/safety.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuSafety,
+          //     colorval: AppColor.red,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/fare-charges.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuFareCharges,
+          //     colorval: AppColor.lightText,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/favorite-places.svg",
@@ -244,22 +244,22 @@ class _NavigationPageState extends State<NavigationDrawer> {
                   : '');
             },
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/settings.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuSettings,
-              colorval: AppColor.lightText,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/settings.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuSettings,
+          //     colorval: AppColor.lightText,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
           ListTile(
             leading: const Icon(
               Icons.privacy_tip,
@@ -558,6 +558,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setphone("");
     Profiledata.setgender("");
     Profiledata.setname("");
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);

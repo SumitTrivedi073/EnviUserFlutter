@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../theme/color.dart';
+import '../theme/images.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
@@ -47,6 +48,13 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                     child: Image.network(
                       encodeImgURLString(
                           widget.livetripData!.driverInfo.driverImgUrl),
+                           errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
                       fit: BoxFit.fill,
                       height: 50,
                       width: 50,

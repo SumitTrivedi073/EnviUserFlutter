@@ -393,7 +393,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 moveText,
-                style: AppTextStyle.robotoBold20Black,
+                style: AppTextStyle.robotoRegular18Green,
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),

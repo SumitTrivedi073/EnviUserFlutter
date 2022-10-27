@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../appConfig/landingPageSettings.dart';
+import '../../theme/images.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -314,6 +315,13 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 children: [
                   Image.network(
                     encodeImgURLString(arrtrip[index].driverPhoto),
+                     errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
                     fit: BoxFit.fill,
                     height: 40,
                     width: 40,
