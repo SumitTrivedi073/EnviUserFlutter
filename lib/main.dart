@@ -13,6 +13,7 @@ import 'package:envi/theme/theme.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -36,6 +37,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   LocalNotificationService.initialize();
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   final database =
       await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
   final dao = database.taskDao;
