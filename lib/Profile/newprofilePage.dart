@@ -428,8 +428,9 @@ class _NewProfilePageState extends State<NewProfilePage> {
                           fcmToken:
                               sharedPreferences.getString(fcmTokenShared)!,
                           phoneNo: _phoneNoController.text);
+                      print(response.statusCode);
                       if (response != null &&
-                          response['message'] == 'registerd successfully') {
+                          response.statusCode == 200) {
                         sharedPreferences.setString(
                             loginEmail, _emailController.text);
                         sharedPreferences.setString(
