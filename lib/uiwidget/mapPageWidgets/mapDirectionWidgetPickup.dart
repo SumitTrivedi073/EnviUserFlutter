@@ -445,13 +445,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         min = dist;
         index = i;
       }
-      // else {
-      //   //We have reched closest point on leg. Calculate the remaining leg distance. from that point
-      //   print(
-      //       'GADIST: Iterating Closest point Crossed $i , dist:$dist, currentMin: $min');
-      //   index = i - 1;
-      //   break;
-      // }
     }
 
     print('GADIST: ****Selected Index $index ,  currentMin: $min');
