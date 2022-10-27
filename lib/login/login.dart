@@ -123,7 +123,7 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           children: <Widget>[
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/envi-logo-small.png",
               width: 276,
               fit: BoxFit.fill,
             ),
@@ -242,7 +242,7 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           children: <Widget>[
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/envi-logo-small.png",
               width: 276,
               fit: BoxFit.fill,
             ),
@@ -352,13 +352,10 @@ class _LoginpageState extends State<Loginpage> {
                       isLoading = true;
                     });
 
-                    if (isrunOnSemulation) {
-                      signIn();
-                    } else {
-                      fetchotp(
+                    fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
-                    }
+
                   }
                 },
                 child: robotoTextWidget(
@@ -483,7 +480,9 @@ class _LoginpageState extends State<Loginpage> {
       jsonData = convert.jsonDecode(response.body);
 
       setState(() {
+        if(_timer!=null && _timer.isActive) {
           _timer.cancel();
+        }
         LoginModel users = LoginModel.fromJson(jsonData['content']);
 
         Navigator.push(

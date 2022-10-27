@@ -76,7 +76,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                   textval: widget.fromAddress!.address,
                                   colorval: AppColor.black,
                                   sizeval: 16,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),
@@ -92,7 +92,8 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                       height: 2,
                     ),
                   ),
-                  Container(
+                  widget.distance!=null && widget.distance.isNotEmpty
+                      ?Container(
                     height: 40,
                     width: 70,
                     alignment: Alignment.center,
@@ -110,7 +111,8 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                       sizeval: 14,
                       fontWeight: FontWeight.normal,
                     ),
-                  ),
+                  )
+                      :Container(),
                 ]),
                 GestureDetector(
                     onTap: () {
@@ -146,7 +148,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                   textval: widget.toAddress!.address,
                                   colorval: AppColor.black,
                                   sizeval: 16,
-                                  fontWeight: FontWeight.w200,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),

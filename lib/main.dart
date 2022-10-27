@@ -148,7 +148,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   checkLoginStatus() async {
-    print("FcmToken=========>${await FirebaseMessaging.instance.getToken()}");
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(loginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
