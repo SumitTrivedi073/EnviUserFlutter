@@ -33,16 +33,25 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  LocalNotificationService.initialize();
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  final database =
-      await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
-  final dao = database.taskDao;
 
-  runApp(const MyApp());
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+    LocalNotificationService.initialize();
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+    FlutterError.onError =
+        FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    final database =
+    await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+    final dao = database.taskDao;
+
+
+    runApp(MyApp());
+  }, (error, stack) =>
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
 class MyApp extends StatelessWidget {
@@ -317,8 +326,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     } else {}
   }
 
-  Future<Widget> displayInfoPopup(int miliSecond) async {
-    return await showDialog(
+  Future displayInfoPopup(int miliSecond)  {
+    return  showDialog(
         context: context,
         builder: ((context) {
           Future.delayed(
