@@ -131,7 +131,8 @@ class _LoginpageState extends State<Loginpage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: verifymsg,
+                textval:
+                    'Enter the OTP that has been sent to +${countrycontroller.text}${phoneController.text}',
                 colorval: AppColor.black,
                 sizeval: 16.0,
                 fontWeight: FontWeight.normal),
@@ -181,6 +182,9 @@ class _LoginpageState extends State<Loginpage> {
                         fontWeight: FontWeight.bold)),
               ),
             ),
+            const SizedBox(
+              height: 15,
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Align(
@@ -208,6 +212,9 @@ class _LoginpageState extends State<Loginpage> {
                             sizeval: 16.0,
                             fontWeight: FontWeight.bold)),
               ),
+            ),
+            const SizedBox(
+              height: 15,
             ),
             Container(
               width: MediaQuery.of(context).size.width,
