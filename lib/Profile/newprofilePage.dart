@@ -145,6 +145,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                 letsSetUpyourProfileText,
                 style: AppTextStyle.robotoRegular16,
               ),
+              SizedBox(height: 25),
               Form(
                 key: _profileForm,
                 child: Card(
@@ -172,15 +173,21 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                           height: 100.0,
                                           fit: BoxFit.fitHeight,
                                         )
-                                      : Container(
-                                          child: FadeInImage.assetNetwork(
-                                              height: 100,
-                                              width: 100,
-                                              fit: BoxFit.fill,
-                                              placeholder:
-                                                  'assets/images/envi-logo-small.png',
-                                              image: encodeImgURLString(
-                                                  widget.user!.propic)))
+                                      : FadeInImage.assetNetwork(
+                                          imageErrorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(
+                                              'assets/images/envi-logo-small.png',
+                                              scale: 2,
+                                            );
+                                          },
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.fill,
+                                          placeholder:
+                                              'assets/images/envi-logo-small.png',
+                                          image: encodeImgURLString(
+                                              widget.user!.propic))
                                   : (_image != null)
                                       ? Image.file(
                                           _image!,
@@ -439,7 +446,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                             encodeImgURLString(response['content']['image']));
                         Profiledata.setusreid(response['content']['userid']);
                         Profiledata.settoken(response['content']['token']);
-                        Profiledata.setmailid( _emailController.text);
+                        Profiledata.setmailid(_emailController.text);
                         Profiledata.setpropic(
                             encodeImgURLString(response['content']['image']));
                         Profiledata.setphone(_phoneNoController.text);

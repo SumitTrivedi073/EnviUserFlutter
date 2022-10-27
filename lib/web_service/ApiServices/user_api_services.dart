@@ -9,7 +9,7 @@ import 'package:envi/web_service/HTTP.dart' as HTTP;
 class UserApiService {
   late LoginModel user;
 
-  Uri uri = Uri.parse('https://qausernew.azurewebsites.net/user/updateProfile');
+  // Uri uri = Uri.parse('https://qausernew.azurewebsites.net/user/updateProfile');
 
   Future<dynamic> userEditProfile({
     File? image,
@@ -24,7 +24,7 @@ class UserApiService {
     body['gender'] = gender;
     body['mailid'] = email;
     var headers = {'x-access-token': token};
-    var request = http.MultipartRequest('POST', uri);
+    var request = http.MultipartRequest('POST', updateUser());
     request.fields.addAll(body);
     if (image != null) {
       request.files.add(http.MultipartFile.fromBytes(
@@ -69,6 +69,7 @@ class UserApiService {
 
     var request = http.MultipartRequest('POST', registerUser());
     request.fields.addAll(body);
+    
     request.files.add(http.MultipartFile.fromBytes(
       'pro_pic',
       File(image.path).readAsBytesSync(),
