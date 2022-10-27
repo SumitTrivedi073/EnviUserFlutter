@@ -153,7 +153,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
         return true;
       }
     } catch (e) {
-      print(response.reasonPhrase);
+      debugPrint(response.reasonPhrase);
       return false;
     }
   }
@@ -195,7 +195,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
         return true;
       }
     } catch (e) {
-      print(e);
+      debugPrint(response.reasonPhrase);
       return false;
     }
   }

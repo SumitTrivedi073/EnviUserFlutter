@@ -132,7 +132,7 @@ class _LoginpageState extends State<Loginpage> {
             ),
             robotoTextWidget(
                 textval:
-                    'Enter the OTP that has been sent to +${countrycontroller.text}${phoneController.text}',
+                    'OTP SENT TO +${countrycontroller.text}${phoneController.text}',
                 colorval: AppColor.black,
                 sizeval: 16.0,
                 fontWeight: FontWeight.normal),
@@ -141,7 +141,7 @@ class _LoginpageState extends State<Loginpage> {
               keyboardType: TextInputType.phone,
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
-                hintText: "Please enter OTP",
+                hintText: "Enter OTP",
                 hintStyle: TextStyle(color: Colors.black45),
               ),
               validator: (value) {
@@ -178,7 +178,7 @@ class _LoginpageState extends State<Loginpage> {
                     child: robotoTextWidget(
                         textval: verify,
                         colorval: AppColor.butgreen,
-                        sizeval: 16.0,
+                        sizeval: 18.0,
                         fontWeight: FontWeight.bold)),
               ),
             ),
@@ -232,7 +232,7 @@ class _LoginpageState extends State<Loginpage> {
                 child: robotoTextWidget(
                     textval: numberedit,
                     colorval: AppColor.butgreen,
-                    sizeval: 16.0,
+                    sizeval: 18.0,
                     fontWeight: FontWeight.bold),
               ),
             ),
