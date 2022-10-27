@@ -5,19 +5,22 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../Profile/newprofilePage.dart';
-import '../Profile/profilePage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
+import '../web_service/ApiConfig.dart';
 import '../web_service/Constant.dart';
 import 'model/LoginModel.dart';
 
@@ -67,37 +70,39 @@ class _LoginpageState extends State<Loginpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //body
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(PageBackgroundImage),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          // Vertically center the widget inside the column
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 30, right: 30),
-              width: MediaQuery.of(context).size.width > 400
-                  ? 400
-                  : MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.white.withOpacity(.5),
-                  blurRadius: 20.0, // soften the shadow
-                )
-              ]),
-              child: isLoading
-                  ? const Center(child: const CircularProgressIndicator())
-                  : _showmobileview
-                      ? loginview()
-                      : verifyview(),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(PageBackgroundImage),
+              fit: BoxFit.cover,
             ),
-          ],
+          ),
+          child: Column(
+            // Vertically center the widget inside the column
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 30, right: 30),
+                width: MediaQuery.of(context).size.width > 400
+                    ? 400
+                    : MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(.5),
+                    blurRadius: 20.0, // soften the shadow
+                  )
+                ]),
+                child: isLoading
+                    ? const Center(child: const CircularProgressIndicator())
+                    : _showmobileview
+                        ? loginview()
+                        : verifyview(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -105,7 +110,7 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    if(_timer!=null) {
+    if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
     super.dispose();
@@ -118,7 +123,7 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           children: <Widget>[
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/envi-logo-small.png",
               width: 276,
               fit: BoxFit.fill,
             ),
@@ -126,7 +131,8 @@ class _LoginpageState extends State<Loginpage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: verifymsg,
+                textval:
+                    'OTP SENT TO +${countrycontroller.text}${phoneController.text}',
                 colorval: AppColor.black,
                 sizeval: 16.0,
                 fontWeight: FontWeight.normal),
@@ -135,7 +141,7 @@ class _LoginpageState extends State<Loginpage> {
               keyboardType: TextInputType.phone,
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
-                hintText: "Please enter OTP",
+                hintText: "Enter OTP",
                 hintStyle: TextStyle(color: Colors.black45),
               ),
               validator: (value) {
@@ -172,9 +178,12 @@ class _LoginpageState extends State<Loginpage> {
                     child: robotoTextWidget(
                         textval: verify,
                         colorval: AppColor.butgreen,
-                        sizeval: 16.0,
+                        sizeval: 18.0,
                         fontWeight: FontWeight.bold)),
               ),
+            ),
+            const SizedBox(
+              height: 15,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -204,6 +213,9 @@ class _LoginpageState extends State<Loginpage> {
                             fontWeight: FontWeight.bold)),
               ),
             ),
+            const SizedBox(
+              height: 15,
+            ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 20.0,
@@ -220,7 +232,7 @@ class _LoginpageState extends State<Loginpage> {
                 child: robotoTextWidget(
                     textval: numberedit,
                     colorval: AppColor.butgreen,
-                    sizeval: 16.0,
+                    sizeval: 18.0,
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -237,80 +249,95 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           children: <Widget>[
             Image.asset(
-              "assets/images/logo.png",
+              "assets/images/envi-logo-small.png",
               width: 276,
               fit: BoxFit.fill,
             ),
-            const SizedBox(
-              height: 15,
-            ),
+
             robotoTextWidget(
                 textval: welcome,
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
-            robotoTextWidget(
-                textval: mobilevalidation,
-                colorval: AppColor.black,
-                sizeval: 16.0,
-                fontWeight: FontWeight.normal),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: plushcontroller,
-                    readOnly: true,
-                    style: const TextStyle(color: AppColor.black),
+            // robotoTextWidget(
+            //     textval: mobilevalidation,
+            //     colorval: AppColor.black,
+            //     sizeval: 16.0,
+            //     fontWeight: FontWeight.normal),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Expanded(
+                  //   child: TextFormField(
+                  //     textAlign: TextAlign.center,
+                  //     controller: plushcontroller,
+                  //     readOnly: true,
+                  //     style: const TextStyle(color: AppColor.black),
+                  //   ),
+                  // ),
+                  const SizedBox(
+                    width: 5,
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: TextFormField(
-                    controller: countrycontroller,
-                    keyboardType: TextInputType.phone,
-                    style: const TextStyle(color: AppColor.black),
-                    decoration: const InputDecoration(
-                      hintText: "country code",
-                      hintStyle: TextStyle(color: Colors.black45),
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      controller: countrycontroller,
+                      keyboardType: TextInputType.phone,
+                      style: const TextStyle(color: AppColor.black),
+                      decoration: const InputDecoration(
+                        prefixText: '+',
+                        // hintText: "country code",
+                        hintStyle: TextStyle(
+                          color: Colors.black45,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter valid country code!';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter valid country code!';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  flex: 5, // wrap your Column in Expanded
-                  child: TextFormField(
-                    controller: phoneController,
-                    maxLength: 12,
-                    keyboardType: TextInputType.phone,
-                    style: const TextStyle(color: AppColor.black),
-                    decoration: const InputDecoration(
-                      hintText: "Please enter phone number",
-                      hintStyle: TextStyle(color: Colors.black45),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    flex: 6, // wrap your Column in Expanded
+                    child: TextFormField(
+                      controller: phoneController,
+                      // maxLength: 12,
+                      keyboardType: TextInputType.phone,
+                      style: const TextStyle(color: AppColor.black),
+                      decoration: const InputDecoration(
+                        hintText: " Please Enter phone number",
+                        hintStyle:
+                            TextStyle(color: Colors.black45, fontSize: 14),
+                      ),
+                      validator: (value) {
+                        if (value!.length < 13) {
+                          if (value.isEmpty ||
+                              !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
+                                  .hasMatch(value)) {
+                            return 'Please enter valid phone number!';
+                          }
+                        } else {
+                          return "Number can't exceed twelve digits ";
+                        }
+
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty ||
-                          !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
-                              .hasMatch(value)) {
-                        return 'Please enter valid phone number!';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Container(
               width: MediaQuery.of(context).size.width,
@@ -331,18 +358,20 @@ class _LoginpageState extends State<Loginpage> {
                     setState(() {
                       isLoading = true;
                     });
-                     /* fetchotp(
+
+                    if (isrunOnSemulation) {
+                      signIn();
+                    } else {
+                      fetchotp(
                           phoneNumber:
                               "+${countrycontroller.text}${phoneController.text}");
-*/
-                    signIn();
-
+                    }
                   }
                 },
-                child: const robotoTextWidget(
-                    textval: "Submit",
+                child: robotoTextWidget(
+                    textval: submitAllCapsText,
                     colorval: AppColor.butgreen,
-                    sizeval: 16.0,
+                    sizeval: 20.0,
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -365,7 +394,7 @@ class _LoginpageState extends State<Loginpage> {
         setState(() {
           isLoading = false;
         });
-        showToast(e.message.toString());
+        showSnackbar(context, e.message.toString());
       },
       codeSent: (String verificationId, int? resendToken) async {
         loginverificationId = verificationId;
@@ -400,14 +429,12 @@ class _LoginpageState extends State<Loginpage> {
         });
         signIn();
       }
-
-
     } on FirebaseAuthException catch (e) {
       print("catch$e");
       setState(() {
         isLoading = false;
       });
-      showToast(e.message.toString());
+      showSnackbar(context, e.message.toString());
     }
   }
 
@@ -440,39 +467,58 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   void signIn() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     String? deviceId = await _getId();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     Map data = {
       "countrycode": countrycontroller.text.toString(),
       "phone": phoneController.text.toString(),
-      "FcmToken": "",
+      "FcmToken": fcmToken,
       "deviceId": deviceId
     };
+
+    print(data);
+    sharedPreferences.setString(deviceIdShared, deviceId!);
+    sharedPreferences.setString(fcmTokenShared, fcmToken!);
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
-
+    print(response.statusCode);
+    print("jsonData========>${convert.jsonDecode(response.body)}");
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
-      print("jsonData========>$jsonData['content']");
+
       setState(() {
-     //   _timer.cancel();
-        LoginModel users = new LoginModel.fromJson(jsonData['content']);
-        if (users.id.isEmpty) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) =>  NewProfilePage(user: users,isUpdate: false,)));
-        } else {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProfileAfterloginPage(
-                    profiledatamodel: users,
-                      )));
+        if(_timer!=null && _timer.isActive) {
+          _timer.cancel();
         }
+        LoginModel users = LoginModel.fromJson(jsonData['content']);
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfileAfterloginPage(
+                      profiledatamodel: users,
+                    )));
       });
     } else {
-      setState(() {
+      if (response.statusCode == 400) {
+        if (!mounted) return;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NewProfilePage(
+                      isUpdate: false,
+                      phone: phoneController.text.toString(),
+                      countryCode: countrycontroller.text,
+                    )));
         isLoading = false;
-      });
+        setState(() {});
+      } else {
+        if (!mounted) return;
+        showSnackbar(context, 'Unable To Login');
+      }
     }
   }
 }

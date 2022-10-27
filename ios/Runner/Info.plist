@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<key>NSPhotoLibraryUsageDescription</key>
-
-<string>Need to upload image</string>
-
-<key>NSCameraUsageDescription</key>
-
-<string>Need to upload image</string>
-
-<key>NSMicrophoneUsageDescription</key>
-
-<string>Need to upload image</string>
 <dict>
+	<key>FirebaseMessagingAutoInitEnabled</key>
+	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -75,10 +66,15 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
 	<key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>tel</string>
-    </array>
+	<array>
+		<string>tel</string>
+	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to upload image</string>
 </dict>
 </plist>

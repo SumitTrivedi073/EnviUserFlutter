@@ -21,13 +21,13 @@ class CarCategoriesWidget extends StatefulWidget {
   final SearchPlaceModel? toAddress;
   final void Function(vehiclePriceClassesModel) callback;
   final void Function(String) callback2;
-
+final String scheduledAt;
   const CarCategoriesWidget(
       {Key? key,
       this.toAddress,
       this.fromAddress,
       required this.callback,
-      required this.callback2})
+      required this.callback2,required this.scheduledAt})
       : super(key: key);
 
   @override
@@ -65,7 +65,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.latitude,
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
-        widget.toAddress!.latLng.longitude);
+        widget.toAddress!.latLng.longitude,widget.scheduledAt);
     if (response != null && response.statusCode == 200) {
       setState(() {
         isLoading = false;
@@ -77,17 +77,82 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.callback2(distance.toString());
       });
     } else {
-      var errmsg = jsonDecode(response.body)['msg'];
-      showToast(errmsg);
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const HomePage(title: "title")),
-          (Route<dynamic> route) => false);
+      var errmsg = jsonDecode(response.body)['message'];
+       setState(() {
+         isLoading = false;
+       });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => dialogueError(context,errmsg),
+      );
+
     }
+  }
+  Widget dialogueError(BuildContext context,String msg) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      content: SizedBox(
+          height: 100,
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                appName,
+                style: const TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              msg,
+              style: const TextStyle(
+                  color: AppColor.black,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w200,
+                  fontSize: 14),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                const HomePage(title: "title")),
+                                (Route<dynamic> route) => false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.greyblack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ),
+                      child: const robotoTextWidget(
+                        textval: "Ok",
+                        colorval: AppColor.white,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ])),
+    );
   }
 
   @override
@@ -261,13 +326,14 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval: "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(2)}",
+                        textval: "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
                     const SizedBox(
                       width: 25,
                     ),
+                    if(vehiclePriceClasses[index].discountPercent != "0")
                     Text(
                       getTotalPrice(
                           vehiclePriceClasses[index].total_fare.toDouble(),
@@ -287,6 +353,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     const SizedBox(
                       width: 25,
                     ),
+
+                    if(vehiclePriceClasses[index].discountPercent != "0")
                     Column(
                       children: [
                         const robotoTextWidget(
@@ -317,6 +385,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
 
     double sum = num1 + num2;
     print('sum:$sum');
-    return "₹${sum.toStringAsFixed(2)}";
+    return "₹${sum.toStringAsFixed(0)}";
   }
 }

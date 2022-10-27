@@ -118,15 +118,17 @@ class MyMapState extends State {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 10),
-                  child: FromBookScheduleWidget(
-                    address: Address,
-                    currentLocation: SearchPlaceModel(
-                        address: Address,
-                        id: isoId ?? '',
-                        title: placeName,
-                        latLng: latlong!,
-                        isFavourite: 'N'),
-                  ),
+                  child: (Address == PickUp)
+                      ? Container()
+                      : FromBookScheduleWidget(
+                          address: Address,
+                          currentLocation: SearchPlaceModel(
+                              address: Address,
+                              id: isoId ?? '',
+                              title: placeName,
+                              latLng: latlong!,
+                              isFavourite: 'N'),
+                        ),
                 ),
               )
             ],
@@ -164,18 +166,23 @@ class MyMapState extends State {
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    //print(placemarks);
-    Placemark place = placemarks[0];
-    placeName = (place.subLocality != '')
-        ? place.subLocality!
-        : place.subAdministrativeArea!;
-    isoId = place.isoCountryCode;
-    setState(() {
-      Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    });
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+      //print(placemarks);
+      Placemark place = placemarks[0];
+      placeName = (place.subLocality != '')
+          ? place.subLocality!
+          : place.subAdministrativeArea!;
+      isoId = place.isoCountryCode;
+      setState(() {
+        Address =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place
+            .postalCode}, ${place.country}';
+      });
+    }catch(e){
+      print("Exception==========>${e.toString()}");
+    }
   }
 
   @override

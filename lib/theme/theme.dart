@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../utils/utility.dart';
 import 'color.dart';
+import 'images.dart';
 
 ThemeData appTheme() {
   return ThemeData(
@@ -24,8 +25,9 @@ getsmallNetworkImage(context, path) {
     print(path);
     return CircleAvatar(
         radius: 18,
-        foregroundImage: NetworkImage(encodeImgURLString(
-            path))); //Image.network(path,height: 40, fit: BoxFit.cover);
+        foregroundImage: NetworkImage(
+          encodeImgURLString(path),
+        )); //Image.network(path,height: 40, fit: BoxFit.cover);
   } else {
     return Container(
       color: AppColor.white,
@@ -38,10 +40,23 @@ getsmallNetworkImage(context, path) {
     );
   }
 }
+
 getheaderNetworkImage(context, path) {
   if (path != null && path != null) {
     print(path);
-    return Image.network(path, height: 40, width: 50, fit: BoxFit.cover);//Image.network(path,height: 40, fit: BoxFit.cover);
+    return Image.network(
+      path,
+      height: 40,
+      width: 50,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          Images.personPlaceHolderImage,
+          height: 50,
+          width: 50,
+        );
+      },
+    ); //Image.network(path,height: 40, fit: BoxFit.cover);
   } else {
     return Container(
       color: AppColor.white,
@@ -54,10 +69,17 @@ getheaderNetworkImage(context, path) {
     );
   }
 }
+
 getNetworkImage(context, path) {
   if (path != null && path != null) {
     return Image.network(encodeImgURLString(path),
-        height: 100, width: 100, fit: BoxFit.fitWidth);
+        errorBuilder: (context, error, stackTrace) {
+      return Image.asset(
+        Images.personPlaceHolderImage,
+        height: 50,
+        width: 50,
+      );
+    }, height: 100, width: 100, fit: BoxFit.fitWidth);
   } else {
     return Container(
       color: AppColor.white,

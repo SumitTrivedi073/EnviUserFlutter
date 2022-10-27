@@ -4,6 +4,7 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../theme/string.dart';
 import '../../../uiwidget/robotoTextWidget.dart';
@@ -13,7 +14,9 @@ import 'dart:convert' as convert;
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../theme/theme.dart';
+import '../../utils/utility.dart';
 import '../../web_service/APIDirectory.dart';
+import '../../web_service/ApiCollection.dart';
 import '../ridehistory/model/rideHistoryModel.dart';
 import 'model/ScheduleTripModel.dart';
 class UpcomingRidesPage extends StatefulWidget {
@@ -52,10 +55,12 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     userId = Profiledata().getusreid() ;
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    if (res.statusCode == 200) {
+    if (res != null && res.statusCode != null && res.statusCode == 200)  {
+      print(jsonDecode(res.body)['schedule_trip_list']);
       setState(() {
 
-        if(jsonDecode(res.body)['schedule_trip_list'] !=null) {
+        if(jsonDecode(res.body)['schedule_trip_list'] !=null && jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
+
           arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
               .map((i) => ScheduleTripModel.fromJson(i))
               .toList();
@@ -132,16 +137,15 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             ),
             Expanded(
               child:_isFirstLoadRunning
-                  ? Center(
+                  ? const Center(
                 child: CircularProgressIndicator(),
               )
                   : Container(
-                  margin: const EdgeInsets.only(right: 10.0),
                   child: _buildPosts(context)),
             ),
             if (_isLoadMoreRunning == true)
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 40),
+              const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 40),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -151,7 +155,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               Container(
                 padding: const EdgeInsets.only(top: 30, bottom: 40),
                 color: Colors.green,
-                child: Center(
+                child: const Center(
                   child: Text(
                     'You have fetched all of the content',
                     style: TextStyle(
@@ -165,7 +169,8 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     );
   }
 
-  InkWell _buildPosts(BuildContext context) {
+  Widget _buildPosts(BuildContext context) {
+    if(arrtrip.length == 0 || arrtrip == null)return Center(child: Text("No trips data available"));
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
@@ -184,6 +189,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: Colors.transparent,
             );
           },
+
         ));
   }
 
@@ -207,11 +213,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: AppColor.border,
             ),
             CellRow2(index),
-            Container(
+            arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? Container(
               height: 1,
               color: AppColor.border,
-            ),
-            CellRow3(),
+            ):Container(),
+          arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? CellRow3(index):Container(),
           ]),
     );
   }
@@ -225,12 +231,12 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(children:  [
-            Icon(
+            const Icon(
               Icons.sunny,
               color: AppColor.black,
               size: 20.0,
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             robotoTextWidget(
               textval: "${getdayTodayTomarrowYesterday(arrtrip[index].scheduledAt)}",
               colorval: AppColor.black,
@@ -259,7 +265,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       ),
       child: Container(
         color: AppColor.alfaorange.withOpacity(0.1),
-        height: 94,
         padding:
             const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
         child: Column(
@@ -273,26 +278,48 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                   children: [
                     Row(
                       children:  [
-                        robotoTextWidget(
-                          textval: arrtrip[index].toAddress.length > 30 ? arrtrip[index].toAddress.substring(0, 30) : arrtrip[index].toAddress,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
+                        SvgPicture.asset(
+                        "assets/svg/from-location-img.svg",
+                        width: 20,
+                        height: 20,
+                      ),
+                        const SizedBox(
+                          width: 5,
                         ),
-                      ],
+                        Container(
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: robotoTextWidget(
+                            textval: arrtrip[index].fromAddress,
+                            colorval: AppColor.black,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w200,
+                          ),
+                        ),
+                       ],
                     ),
                     const SizedBox(
                       height: 3,
                     ),
                     Row(
                       children:  [
-                        robotoTextWidget(
-                          textval: arrtrip[index].fromAddress.length > 30 ? arrtrip[index].fromAddress.substring(0, 30) : arrtrip[index].fromAddress,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
+                        SvgPicture.asset(
+                          "assets/svg/to-location-img.svg",
+                          width: 20,
+                          height: 20,
                         ),
-                      ],
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: robotoTextWidget(
+                            textval: arrtrip[index].toAddress,
+                            colorval: AppColor.black,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w200,
+                          ),
+                        ),
+                       ],
                     ),
                   ],
                 ),
@@ -314,13 +341,26 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                 ]),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(children:  [
+                  robotoTextWidget(
+                    textval: arrtrip[index].status,
+                    colorval: AppColor.red,
+                    sizeval: 13.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Container CellRow3() {
+  Container CellRow3(int index) {
     return Container(
       color: AppColor.white,
       height: 38,
@@ -328,17 +368,32 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
           MaterialButton(
             child: robotoTextWidget(
-              textval: CancelBooking,
+              textval: arrtrip[index].status == "cancelled"?"Already Cancelled":CancelBooking,
               colorval: Color(0xFFED0000),
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
-            onPressed: () {},
+            onPressed: () {
+              cancelBooking(arrtrip[index].passengerTripMasterId);
+            },
           ),
         ],
       ),
     );
+  }
+  Future<void> cancelBooking(String passengerTripMasterId) async {
+
+    final response = await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
+
+    if (response != null) {
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+       _firstLoad();
+      }
+      showSnackbar(context,(jsonDecode(response.body)['msg'].toString()));
+    }
   }
 }

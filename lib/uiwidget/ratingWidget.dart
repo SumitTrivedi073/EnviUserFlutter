@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../sidemenu/onRide/model/SosModel.dart';
 import '../theme/color.dart';
+import '../theme/images.dart';
 import '../theme/string.dart';
+import '../theme/theme.dart';
 import '../utils/utility.dart';
+import '../web_service/APIDirectory.dart';
 import 'robotoTextWidget.dart';
 import '../web_service/Constant.dart';
+import 'package:envi/web_service/HTTP.dart'as HTTP;
 
 class RatingBarWidget extends StatefulWidget {
   final TripDataModel? livetripData;
@@ -21,6 +28,7 @@ class RatingBarWidget extends StatefulWidget {
 }
 
 class _RatingBarWidgetPageState extends State<RatingBarWidget> {
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -42,6 +50,13 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                     child: Image.network(
                       encodeImgURLString(
                           widget.livetripData!.driverInfo.driverImgUrl),
+                           errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
                       fit: BoxFit.fill,
                       height: 50,
                       width: 50,
@@ -73,7 +88,7 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        print(rating);
+                        submitRating(rating);
                       },
                     ),
                   ],
@@ -82,5 +97,21 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
             ),
           )),
     );
+  }
+
+  Future<void> submitRating(double rating) async {
+
+    dynamic res =
+        await HTTP.get(submitDriverRating(widget.livetripData!.tripInfo.passengerTripMasterId,rating));
+
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
+      print(jsonDecode(res.body));
+      var jsonData = json.decode(res.body);
+      SosModel sosModel = SosModel.fromJson(jsonData);
+      showSnackbar(context,sosModel.message);
+
+    } else {
+      throw "Rating Api not worked.";
+    }
   }
 }
