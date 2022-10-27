@@ -311,11 +311,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-    if(mounted) {
       setState(() {
         duration = durationToPickupLocation;
       });
-    }
   }
 
 }
