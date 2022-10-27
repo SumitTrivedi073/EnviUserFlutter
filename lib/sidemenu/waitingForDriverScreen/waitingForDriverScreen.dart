@@ -272,7 +272,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ]),
