@@ -333,7 +333,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           Future.delayed(
             Duration(milliseconds: miliSecond),
             () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop();
             },
           );
 

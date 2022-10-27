@@ -483,7 +483,7 @@ class _LoginpageState extends State<Loginpage> {
       jsonData = convert.jsonDecode(response.body);
 
       setState(() {
-        //   _timer.cancel();
+          _timer.cancel();
         LoginModel users = LoginModel.fromJson(jsonData['content']);
 
         Navigator.push(
