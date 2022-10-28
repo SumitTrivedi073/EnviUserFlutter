@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:envi/sidemenu/searchDriver/model/driverListModel.dart' as DriverListModel;
 import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart';
 import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
@@ -43,7 +45,9 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  Container(
+    return   isLoading
+        ? CircularProgressIndicator()
+        :Container(
         height: 350,
         margin: const EdgeInsets.only(left: 20,right: 20),
         child: Card(
@@ -240,11 +244,13 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                const HomePage(title: "title")),
-                                (Route<dynamic> route) => false);
+                        if(mounted) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  const HomePage(title: 'title')),
+                                  (Route<dynamic> route) => false);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.white,
@@ -274,21 +280,10 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                         ),
                       ),
                     onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                        confirmBooking();
-                      });
+                      confirmBooking();
 
                     },
-                    child: isLoading
-                        ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 1.5,
-                        ))
-                        :   robotoTextWidget(
+                    child:   robotoTextWidget(
                       textval: confirm,
                       colorval: AppColor.white,
                       sizeval: 14,
@@ -332,16 +327,16 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
     });
     dynamic res = await HTTP.post(startTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        isLoading = false;
+      if(mounted) {
+         Navigator.of(context).pop(false);
+         Navigator.of(context).pushAndRemoveUntil(
+             MaterialPageRoute(
+                 builder: (BuildContext context) => WaitingForDriverScreen()),
+                 (Route<dynamic> route) => false);
+      }
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => WaitingForDriverScreen()),
-              (Route<dynamic> route) => false);
-      });
     } else {
-      throw "Driver Not Booked";
+      isLoading = false;
     }
   }
 }

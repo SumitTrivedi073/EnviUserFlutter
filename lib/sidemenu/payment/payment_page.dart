@@ -33,11 +33,10 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  String selectedPayOption = '';
-  String passangerTripMasterId = '';
-  bool _isLoading = false;
+  String? selectedPayOption = '';
+  String? passangerTripMasterId = '';
   late TripDataModel tripDataModel;
-  LatLng? latlong = null;
+  LatLng? latlong;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +48,8 @@ class _PaymentPageState extends State<PaymentPage> {
             if (value.liveTripData != null) {
               tripDataModel = value.liveTripData!;
               passangerTripMasterId =
-                  value.liveTripData!.tripInfo.passengerTripMasterId;
-              selectedPayOption = value.liveTripData!.tripInfo.paymentMode;
+                  value.liveTripData!.tripInfo!.passengerTripMasterId;
+              selectedPayOption = value.liveTripData!.tripInfo!.paymentMode;
             }else{
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
@@ -111,13 +110,13 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future<void> updatePayment(
-      String selectedPayOption, String passangerTripMasterId) async {
+      String? selectedPayOption, String? passangerTripMasterId) async {
     Map body;
     body = {
       "passengerTripMasterId": passangerTripMasterId,
       "paymentMode": selectedPayOption
     };
-    var jsonData = null;
+    var jsonData;
     dynamic res = await HTTP.post(updatePaymentMode(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);
@@ -132,9 +131,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
     Map body;
     body = {
-      "passengerTripMasterId": tripDataModel.tripInfo.passengerTripMasterId,
+      "passengerTripMasterId": tripDataModel.tripInfo!.passengerTripMasterId,
     };
-    var jsonData = null;
+    var jsonData;
     dynamic res = await HTTP.post(CreateOrder(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);

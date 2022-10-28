@@ -17,23 +17,23 @@ class TripDataModel {
     required this.tripInfo,
   });
 
-  DriverInfo driverInfo;
-  DriverLocation driverLocation;
-  PassengerInfo passengerInfo;
-  TripInfo tripInfo;
+  DriverInfo? driverInfo;
+  DriverLocation? driverLocation;
+  PassengerInfo? passengerInfo;
+  TripInfo? tripInfo;
 
   factory TripDataModel.fromJson(Map<String, dynamic> json) => TripDataModel(
-        driverInfo: DriverInfo.fromJson(json["driverInfo"]),
-        driverLocation: DriverLocation.fromJson(json["driverLocation"]),
-        passengerInfo: PassengerInfo.fromJson(json["passengerInfo"]),
-        tripInfo: TripInfo.fromJson(json["tripInfo"]),
+        driverInfo: json["driverInfo"]!=null ? DriverInfo.fromJson(json["driverInfo"]):null,
+        driverLocation: json["driverLocation"]!=null ? DriverLocation.fromJson(json["driverLocation"]):null,
+        passengerInfo: json["passengerInfo"]!=null ? PassengerInfo.fromJson(json["passengerInfo"]):null,
+        tripInfo: json["tripInfo"]!=null ? TripInfo.fromJson(json["tripInfo"]):null,
       );
 
   Map<String, dynamic> toJson() => {
-        "driverInfo": driverInfo.toJson(),
-        "driverLocation": driverLocation.toJson(),
-        "passengerInfo": passengerInfo.toJson(),
-        "tripInfo": tripInfo.toJson(),
+        "driverInfo": driverInfo!.toJson(),
+        "driverLocation": driverLocation!.toJson(),
+        "passengerInfo": passengerInfo!.toJson(),
+        "tripInfo": tripInfo!.toJson(),
       };
 }
 
@@ -131,40 +131,40 @@ class TripInfo {
     required this.arrivalAtDestination,
   });
 
-  PriceClass priceClass;
-  String specialRemarks;
-  String paymentMode;
-  String passengerTripMasterId;
-  String tripStatus;
-  bool scheduledTrip;
-  String otp;
-  DropLocation dropLocation;
-  PickupLocation pickupLocation;
+  PriceClass? priceClass;
+  String? specialRemarks;
+  String? paymentMode;
+  String? passengerTripMasterId;
+  String? tripStatus;
+  bool? scheduledTrip;
+  String? otp;
+  DropLocation? dropLocation;
+  PickupLocation? pickupLocation;
   ArrivalAtDestination? arrivalAtDestination;
 
   factory TripInfo.fromJson(Map<String, dynamic> json) => TripInfo(
-        priceClass: PriceClass.fromJson(json["priceClass"]),
+        priceClass: json["priceClass"]!=null ? PriceClass.fromJson(json["priceClass"]):null,
         specialRemarks: json["specialRemarks"],
         paymentMode: json["paymentMode"],
         passengerTripMasterId: json["passengerTripMasterId"],
         tripStatus: json["tripStatus"],
         scheduledTrip: json["scheduledTrip"],
         otp: json["otp"],
-        dropLocation: DropLocation.fromJson(json["dropLocation"]),
-        pickupLocation: PickupLocation.fromJson(json["pickupLocation"]),
+        dropLocation: json["dropLocation"] !=null ? DropLocation.fromJson(json["dropLocation"]):null,
+        pickupLocation: json["pickupLocation"]!=null ? PickupLocation.fromJson(json["pickupLocation"]):null,
         arrivalAtDestination: json["arrivalAtDestination"] != null ? ArrivalAtDestination.fromJson(json["arrivalAtDestination"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
-        "priceClass": priceClass.toJson(),
+        "priceClass": priceClass!.toJson(),
         "specialRemarks": specialRemarks,
         "paymentMode": paymentMode,
         "passengerTripMasterId": passengerTripMasterId,
         "tripStatus": tripStatus,
         "scheduledTrip": scheduledTrip,
         "otp": otp,
-        "dropLocation": dropLocation.toJson(),
-        "pickupLocation": pickupLocation.toJson(),
+        "dropLocation": dropLocation!.toJson(),
+        "pickupLocation": pickupLocation!.toJson(),
         "arrivalAtDestination": arrivalAtDestination!.toJson(),
       };
 }
@@ -251,20 +251,20 @@ class ArrivalAtDestination {
 
   factory ArrivalAtDestination.fromJson(Map<String, dynamic> json) =>
       ArrivalAtDestination(
-        advancePaid: json["advancePaid"].toDouble().round(),
-        amountTobeCollected: json["amountTobeCollected"].toDouble().round(),
-        cgst: json["cgst"].toDouble().round(),
-        discount: json["discount"].toDouble().round(),
-        discountedPrice: json["discountedPrice"].toDouble().round(),
-        distanceTravelled: json["distanceTravelled"].toDouble().round(),
-        kmFare: json["kmFare"].toDouble().round(),
-        minuteFare: json["minuteFare"].toDouble().round(),
+        advancePaid: json["advancePaid"].toDouble(),
+        amountTobeCollected: json["amountTobeCollected"].toDouble(),
+        cgst: json["cgst"].toDouble(),
+        discount: json["discount"].toDouble(),
+        discountedPrice: json["discountedPrice"].toDouble(),
+        distanceTravelled: json["distanceTravelled"].toDouble(),
+        kmFare: json["kmFare"].toDouble(),
+        minuteFare: json["minuteFare"].toDouble(),
         paymentStatus: json["paymentStatus"],
-        perKMPrice: json["perKMPrice"].toDouble().round(),
-        priceInclusiveOfTax: json["priceInclusiveOfTax"].toDouble().round(),
-        sgst: json["sgst"].toDouble().round(),
-        tollAmount: json["tollAmount"].toDouble().round(),
-        totalFare: json["totalFare"].toDouble().round(),
+        perKMPrice: json["perKMPrice"].toDouble(),
+        priceInclusiveOfTax: json["priceInclusiveOfTax"].toDouble(),
+        sgst: json["sgst"].toDouble(),
+        tollAmount: json["tollAmount"].toDouble(),
+        totalFare: json["totalFare"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -328,23 +328,23 @@ class PriceClass {
 
   factory PriceClass.fromJson(Map<String, dynamic> json) => PriceClass(
         passengerCapacity: json["passengerCapacity"],
-        discountPercent: json["discountPercent"].toDouble().round(),
-        minFare: json["minFare"].toDouble().round(),
-        distance: json["distance"].toDouble().round(),
-        tollCharges: json["toll_charges"].toDouble().round(),
-        sellerDiscount: json["seller_discount"].toDouble().round(),
-        totalFare: json["total_fare"].toDouble().round(),
-        advancePaid: json["advancePaid"].toDouble().round(),
-        baseFare: json["base_fare"].toDouble().round(),
+        discountPercent: json["discountPercent"].toDouble(),
+        minFare: json["minFare"].toDouble(),
+        distance: json["distance"].toDouble(),
+        tollCharges: json["toll_charges"].toDouble(),
+        sellerDiscount: json["seller_discount"].toDouble(),
+        totalFare: json["total_fare"].toDouble(),
+        advancePaid: json["advancePaid"].toDouble(),
+        baseFare: json["base_fare"].toDouble(),
         skuId: json["sku_id"],
-        perKmFare: json["perKMFare"].toDouble().round(),
+        perKmFare: json["perKMFare"].toDouble(),
         type: json["type"],
-        stateTax: json["state_tax"].toDouble().round(),
-        maxKmRange: json["maxKmRange"].toDouble().round(),
+        stateTax: json["state_tax"].toDouble(),
+        maxKmRange: json["maxKmRange"].toDouble(),
         bootSpace: json["bootSpace"],
         gstp: json["gstp"].toDouble(),
         subcategory: json["subcategory"],
-        amountToBeCollected: json["amount_to_be_collected"].toDouble().round(),
+        amountToBeCollected: json["amount_to_be_collected"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {

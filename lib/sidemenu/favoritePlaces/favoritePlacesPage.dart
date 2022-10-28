@@ -52,6 +52,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
   Future<void> getdata() async {
     List<FavoritesData> temparr = await dao.getFavoriate();
+    homeDetail = await dao.findTaskByTitle("Home");
+    workDetail = await dao.findTaskByTitle("Work");
     setState(() {
       arraddress = temparr;
     });

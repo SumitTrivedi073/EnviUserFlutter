@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
-import 'package:envi/sidemenu/searchDriver/model/driverListModel.dart';
+import 'package:envi/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -47,6 +47,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     SelectedVehicle = object;
   }
 
+  late String scheduledAt = "";
   late String distance = "";
 
   @override
@@ -56,8 +57,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
     print(AppConfig().getadvance_booking_time_limit());
-    _controller2.text = DateFormat('HH:mm').format(mindatime);
-    _controller1.text = mindatime.toString();
+    // _controller2.text = DateFormat('HH:mm').format(mindatime);
+    // _controller1.text = mindatime.toString();
   }
 
   @override
@@ -87,10 +88,12 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               tripType: BookingTiming.later,
             ),
             CarCategoriesWidget(
-                fromAddress: widget.fromAddress,
-                toAddress: widget.toAddress,
-                callback: getSelectvehicle,
-                callback2: retrieveDistance),
+              fromAddress: widget.fromAddress,
+              toAddress: widget.toAddress,
+              callback: getSelectvehicle,
+              callback2: retrieveDistance,
+              scheduledAt: scheduledAt,
+            ),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2.0),
@@ -98,55 +101,58 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   color: AppColor.border,
                 ),
               ),
-              child: SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'd MMM, yyyy',
-                        controller: _controller1,
-                        //initialValue: SelectedgoLiveDate,
-                        firstDate: DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            DateTime.now().hour),
-                        lastDate: DateTime(2100),
-                        icon: const Icon(Icons.event),
-                        dateLabelText: pickupdate,
-                        selectableDayPredicate: (date) {
-                          if (date.weekday == 6 || date.weekday == 7) {
-                            return false;
-                          }
-                          return true;
-                        },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: DateTimePicker(
+                      type: DateTimePickerType.date,
+                      dateMask: 'd MMM, yyyy',
+                      controller: _controller1,
+                      //initialValue: SelectedgoLiveDate,
+                      firstDate: DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          DateTime.now().hour),
+                      lastDate: DateTime(2100),
+                      icon: const Icon(Icons.event),
+                      dateLabelText: pickupdate,
+                      /*
+                         Restricted for day's code
+                         selectableDayPredicate: (date) {
+                           if (date.weekday == 6 || date.weekday == 7) {
+                             return false;
+                           }
+                           return true;
+                         },*/
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Container(
+                    height: 55,
+                    width: 1,
+                    color: AppColor.border,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DateTimePicker(
+                      type: DateTimePickerType.time,
+                      dateMask: 'HH:mm',
+                      controller: _controller2,
+                      firstDate: DateTime(
+                        DateTime.now().hour,
+                        DateTime.now().minute,
                       ),
+                      lastDate: DateTime(2100),
+                      icon: const Icon(Icons.access_time),
+                      timeLabelText: pickuptime,
+                      onSaved: (val) => setState(() {
+                        updatedtime();
+                      }),
                     ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 55,
-                      width: 1,
-                      color: AppColor.border,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: DateTimePicker(
-                        type: DateTimePickerType.time,
-                        dateMask: 'HH:mm',
-                        controller: _controller2,
-                        firstDate: DateTime(
-                          DateTime.now().hour,
-                          DateTime.now().minute,
-                        ),
-                        lastDate: DateTime(2100),
-                        icon: const Icon(Icons.access_time),
-                        timeLabelText: pickuptime,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -155,33 +161,45 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (SelectedVehicle!=null &&  SelectedVehicle!.type != "") {
-                      DateTime dt =
-                          DateTime.parse(_controller1.text.toString());
-                      print(
-                          "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
-                      var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
-                      var inputDate = inputFormat.parse(
-                          "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
-                      if ((mindatime.difference(inputDate).inMinutes) <= 0) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => _buildPopupDialog(
-                              context,
-                              DateFormat('d MMM, yyyy HH:mm')
-                                  .format(inputDate)),
-                        );
+                    if (!_controller2.text.isEmpty) {
+                      if (SelectedVehicle != null &&
+                          SelectedVehicle!.type != "") {
+                        DateTime dt =
+                            DateTime.parse(_controller1.text.toString());
+                        print(
+                            "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
+                        var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
+                        var inputDate = inputFormat.parse(
+                            "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
+                        if ((mindatime.difference(inputDate).inMinutes) <= 0) {
+                          print("datevalidate${mindatime.difference(inputDate).inMinutes}");
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                _buildPopupDialog(
+                                    context,
+                                    DateFormat('d MMM, yyyy HH:mm')
+                                        .format(inputDate)),
+                          );
+                        } else {
+                          print("datevalidate");
+                          utility.showInSnackBar(
+                              value:
+                                  'Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.',
+                              context: context,
+                              duration: const Duration(seconds: 3));
+                        }
                       } else {
                         utility.showInSnackBar(
-                            value: 'Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.")',
+                            value: 'Please select Car',
                             context: context,
                             duration: const Duration(seconds: 3));
                       }
-                    } else { utility.showInSnackBar(
-                        value: 'Please select car',
-                        context: context,
-                        duration: const Duration(seconds: 3));
-
+                    } else {
+                      utility.showInSnackBar(
+                          value: 'Please select your Date and Time',
+                          context: context,
+                          duration: const Duration(seconds: 3));
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -205,331 +223,317 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
 
   Widget _buildPopupDialog(BuildContext context, String schedualTime) {
     return AlertDialog(
-      content: Container(
-          height: 555,
-          child: Column(children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: Text(
-                "You are booking",
-                style: TextStyle(
-                    color: AppColor.butgreen,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            "You are booking",
+            style: TextStyle(
+                color: AppColor.butgreen,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w600,
+                fontSize: 14),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2.0),
+            side: const BorderSide(
+              color: AppColor.border,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: Column(
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 5),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     robotoTextWidget(
                         textval: SelectedVehicle!.type.toString(),
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w200),
+                  ],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset('assets/images/passengers-icon.png',
+                            height: 15, width: 15, fit: BoxFit.cover),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        robotoTextWidget(
+                            textval:
+                                "${SelectedVehicle!.passengerCapacity} People",
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w200)
+                      ],
+                    ),
                     const SizedBox(
-                      height: 10,
+                      width: 10,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            Image.asset('assets/images/passengers-icon.png',
-                                height: 15, width: 15, fit: BoxFit.cover),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            robotoTextWidget(
-                                textval:
-                                    "${SelectedVehicle!.passengerCapacity} People",
-                                colorval: AppColor.black,
-                                sizeval: 14,
-                                fontWeight: FontWeight.w200)
-                          ],
-                        ),
+                        Image.asset('assets/images/weight-icon.png',
+                            height: 15, width: 15, fit: BoxFit.cover),
                         const SizedBox(
-                          width: 10,
+                          width: 5,
                         ),
-                        Row(
-                          children: [
-                            Image.asset('assets/images/weight-icon.png',
-                                height: 15, width: 15, fit: BoxFit.cover),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            robotoTextWidget(
-                                textval: SelectedVehicle!.bootSpace.toString(),
-                                colorval: AppColor.black,
-                                sizeval: 14,
-                                fontWeight: FontWeight.w200)
-                          ],
-                        ),
+                        robotoTextWidget(
+                            textval: SelectedVehicle!.bootSpace.toString(),
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w200)
                       ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Schedual At",
-              style: TextStyle(
-                  color: AppColor.butgreen,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const robotoTextWidget(
-                        textval: "Time",
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
                     ),
-                    robotoTextWidget(
-                        textval: schedualTime.toString(),
-                        colorval: AppColor.black,
-                        sizeval: 12,
-                        fontWeight: FontWeight.w200),
                   ],
-                ),
-              ),
+                )
+              ],
             ),
-            const SizedBox(
-              height: 10,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          "Schedual At",
+          style: TextStyle(
+              color: AppColor.butgreen,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600,
+              fontSize: 14),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2.0),
+            side: const BorderSide(
+              color: AppColor.border,
             ),
-            const SizedBox(
-              height: 10,
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                robotoTextWidget(
+                    textval: schedualTime.toString(),
+                    colorval: AppColor.black,
+                    sizeval: 12,
+                    fontWeight: FontWeight.w200),
+              ],
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 10),
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          robotoTextWidget(
-                              textval:
-                                  "₹${SelectedVehicle!.total_fare.toString()}",
-                              colorval: AppColor.black,
-                              sizeval: 16,
-                              fontWeight: FontWeight.w800),
-                          robotoTextWidget(
-                              textval: ApproxFare,
-                              colorval: AppColor.black,
-                              sizeval: 12,
-                              fontWeight: FontWeight.w400),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 55,
-                      width: 1,
-                      color: AppColor.border,
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            robotoTextWidget(
-                                textval: '${SelectedVehicle!.distance} KM',
-                                colorval: AppColor.black,
-                                sizeval: 16,
-                                fontWeight: FontWeight.w800),
-                            const robotoTextWidget(
-                                textval: "Pickup Distance",
-                                colorval: AppColor.black,
-                                sizeval: 12,
-                                fontWeight: FontWeight.w400),
-                          ],
-                        )),
-                  ],
-                ),
-              ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2.0),
+            side: const BorderSide(
+              color: AppColor.border,
             ),
-            const SizedBox(height: 10),
-            Text(
-              Fromaddress,
-              style: const TextStyle(
-                  color: AppColor.butgreen,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    robotoTextWidget(
-                        textval: placeName,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    robotoTextWidget(
-                        textval: widget.fromAddress!.address.toString(),
-                        colorval: AppColor.black,
-                        sizeval: 12,
-                        fontWeight: FontWeight.w200),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              Toaddress,
-              style: const TextStyle(
-                  color: AppColor.butgreen,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    robotoTextWidget(
-                        textval: placeName,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w200),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    robotoTextWidget(
-                        textval: widget.toAddress!.address.toString(),
-                        colorval: AppColor.black,
-                        sizeval: 12,
-                        fontWeight: FontWeight.w200),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          child: SizedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                    height: 40,
-                    width: 120,
-                    margin: const EdgeInsets.all(5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: cancel,
-                        colorval: AppColor.greyblack,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
+                  margin: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      robotoTextWidget(
+                          textval:
+                              "₹${SelectedVehicle!.total_fare.toStringAsFixed(0)}",
+                          colorval: AppColor.black,
+                          sizeval: 12,
+                          fontWeight: FontWeight.w200),
+                      robotoTextWidget(
+                          textval: ApproxFare,
+                          colorval: AppColor.black,
+                          sizeval: 12,
+                          fontWeight: FontWeight.w400),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
                 Container(
-                    height: 40,
-                    width: 120,
-                    margin: const EdgeInsets.all(5),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        confirmBooking();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: AppColor.greyblack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                      child: robotoTextWidget(
-                        textval: confirm,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  height: 55,
+                  width: 1,
+                  color: AppColor.border,
+                ),
+                const SizedBox(width: 10),
+                Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        robotoTextWidget(
+                            textval:
+                                '${SelectedVehicle!.distance.toStringAsFixed(0)} KM',
+                            colorval: AppColor.black,
+                            sizeval: 12,
+                            fontWeight: FontWeight.w200),
+                        const robotoTextWidget(
+                            textval: "Distance",
+                            colorval: AppColor.black,
+                            sizeval: 12,
+                            fontWeight: FontWeight.w400),
+                      ],
                     )),
               ],
-            )
-          ])),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          Fromaddress,
+          style: const TextStyle(
+              color: AppColor.butgreen,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600,
+              fontSize: 14),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2.0),
+            side: const BorderSide(
+              color: AppColor.border,
+            ),
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                robotoTextWidget(
+                    textval: widget.fromAddress!.address.toString(),
+                    colorval: AppColor.black,
+                    sizeval: 12,
+                    fontWeight: FontWeight.w200),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          Toaddress,
+          style: const TextStyle(
+              color: AppColor.butgreen,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600,
+              fontSize: 14),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2.0),
+            side: const BorderSide(
+              color: AppColor.border,
+            ),
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                robotoTextWidget(
+                    textval: widget.toAddress!.address.toString(),
+                    colorval: AppColor.black,
+                    sizeval: 12,
+                    fontWeight: FontWeight.w200),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColor.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+              ),
+              child: robotoTextWidget(
+                textval: cancel,
+                colorval: AppColor.greyblack,
+                sizeval: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                confirmBooking();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: AppColor.greyblack,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+              ),
+              child: robotoTextWidget(
+                textval: confirm,
+                colorval: AppColor.white,
+                sizeval: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        )
+      ]),
     );
+  }
+
+  Future<void> updatedtime() async {
+    print(_controller1.text.toString() +_controller2.text.toString());
+    DateTime dt = DateTime.parse(_controller1.text.toString());
+    print(
+        "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
+    var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
+    var inputDate = inputFormat.parse(
+        "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}"); // <-- dd/MM 24H format
+    print(inputDate);
+    var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
+    setState(() {
+      scheduledAt = outputFormat.format(inputDate);
+    });
   }
 
   Future<void> confirmBooking() async {
@@ -561,7 +565,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                     )),
             (Route<dynamic> route) => true);
       }
-      showToast((jsonDecode(response.body)['msg'].toString()));
+      showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
     }
   }
 

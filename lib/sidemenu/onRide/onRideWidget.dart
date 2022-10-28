@@ -33,7 +33,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
           builder: (context, value, child) {
             if (value.liveTripData != null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (value.liveTripData!.tripInfo.tripStatus ==
+                if (value.liveTripData!.tripInfo!.tripStatus ==
                     TripStatusCompleted) {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
@@ -63,17 +63,20 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                   FromToData(value.liveTripData!),
                   EstimateFareWidget(
                       amountTobeCollected: value
-                          .liveTripData!.tripInfo.priceClass.amountToBeCollected
+                          .liveTripData!.tripInfo!.priceClass!.amountToBeCollected
                           .toStringAsFixed(2))
                 ]),
               ]));
               // }
             }else{
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      const HomePage(title: 'title')),
-                      (Route<dynamic> route) => false);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        const HomePage(title: 'title')),
+                        (Route<dynamic> route) => false);
+              });
+
             }
             return  Container(
               child: CircularProgressIndicator(),
@@ -114,11 +117,11 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
                               textval: liveTripData
-                                  .tripInfo.pickupLocation.pickupAddress
+                                  .tripInfo!.pickupLocation!.pickupAddress
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w200,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
@@ -147,10 +150,10 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                       ),
                       child: robotoTextWidget(
                         textval:
-                            '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
+                            '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ]),
@@ -172,11 +175,11 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
                               textval: liveTripData
-                                  .tripInfo.dropLocation.dropAddress
+                                  .tripInfo!.dropLocation!.dropAddress
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w200,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),

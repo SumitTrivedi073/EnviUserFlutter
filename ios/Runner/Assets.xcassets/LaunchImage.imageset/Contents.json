@@ -1,23 +1,23 @@
 {
   "images" : [
     {
+      "filename" : "iPhone 8 Plus (414x736).png",
       "idiom" : "universal",
-      "filename" : "LaunchImage.png",
       "scale" : "1x"
     },
     {
+      "filename" : "iPhone X, XS, 11 Pro (375x812)@2x.png",
       "idiom" : "universal",
-      "filename" : "LaunchImage@2x.png",
       "scale" : "2x"
     },
     {
+      "filename" : "iPhone XR, XS Max, 11 (414x896)@3x.png",
       "idiom" : "universal",
-      "filename" : "LaunchImage@3x.png",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }

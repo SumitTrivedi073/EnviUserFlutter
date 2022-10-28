@@ -1,6 +1,7 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../appConfig/Profiledata.dart';
+import '../../notificationService/local_notification_service.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../uiwidget/mapPageWidgets/mappagescreen.dart';
 import '../../web_service/Constant.dart';
@@ -33,35 +35,36 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getUserName();
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<firestoreLiveTripDataNotifier>(
         builder: (context, value, child) {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && value.liveTripData!=null) {
-         if ( value.liveTripData!.tripInfo.tripStatus == TripStatusRequest ||
-              value.liveTripData!.tripInfo.tripStatus == TripStatusAlloted||
-             value.liveTripData!.tripInfo.tripStatus == TripStatusArrived) {
+        if (mounted && value.liveTripData != null) {
+          if (value.liveTripData!.tripInfo!.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripInfo!.tripStatus == TripStatusAlloted ||
+              value.liveTripData!.tripInfo!.tripStatus == TripStatusArrived) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                         WaitingForDriverScreen()),
+                        WaitingForDriverScreen()),
                 (Route<dynamic> route) => false);
-          }else if(value.liveTripData!.tripInfo.tripStatus == TripStatusOnboarding){
-           Navigator.of(context).pushAndRemoveUntil(
-               MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                   const OnRideWidget()),
-                   (Route<dynamic> route) => false);
-         }else if (value.liveTripData!.tripInfo.tripStatus==TripStatusCompleted){
-           Navigator.of(context).pushAndRemoveUntil(
-               MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                   const PaymentPage()),
-                   (Route<dynamic> route) => false);
-         }
-      }
+          } else if (value.liveTripData!.tripInfo!.tripStatus ==
+              TripStatusOnboarding) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const OnRideWidget()),
+                (Route<dynamic> route) => false);
+          } else if (value.liveTripData!.tripInfo!.tripStatus ==
+              TripStatusCompleted) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const PaymentPage()),
+                (Route<dynamic> route) => false);
+          }
+        }
       });
       return Scaffold(
         drawer: NavigationDrawer(),
@@ -88,4 +91,6 @@ class _HomePageState extends State<HomePage> {
 
     });
   }
+
+
 }

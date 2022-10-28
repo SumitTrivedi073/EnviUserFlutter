@@ -28,6 +28,7 @@ import '../../theme/string.dart';
 import '../../utils/utility.dart';
 import '../../web_service/ApiCollection.dart';
 import '../bookScheduleTrip/bookScheduleTrip.dart';
+import '../home/homePage.dart';
 
 class ConfirmDropLocation extends StatefulWidget {
   final String title;
@@ -78,12 +79,19 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     }
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   Future<void> apiCallAddFavorite(SearchPlaceModel? addressToAdd) async {
     dynamic userid = Profiledata().getusreid();
 
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
-        addressToAdd!.address,
+        addressToAdd!.title,
         addressToAdd.address,
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
@@ -103,7 +111,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             title: addressToAdd.title);
         await dao!.insertTask(task);
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -142,7 +150,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         await dao!.updateTask(task);
         //Navigator.pop(context, {"isbact": true});
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -152,7 +160,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
-        addressToAdd!.address,
+        addressToAdd!.title,
         addressToAdd.address,
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
@@ -213,7 +221,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         print(task);
         await dao!.updateTask(task);
       }
-     // showToast((jsonDecode(response.body)['message'].toString()));
+      // showToast((jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -227,11 +235,13 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           detail.identifier, detail.isFavourite);
     }
     var toDetail = await dao!.findDataByaddressg(endLocation.address);
-    if (toDetail == null) {
-      apiCallAddFavoritetoaddress(endLocation);
-    } else {
-      apiCallUpdateFavoritetoaddress(toDetail.id, toDetail.title,
-          widget.endLocation, toDetail.identifier, toDetail.isFavourite);
+    if (startLocation.address != endLocation.address) {
+      if (toDetail == null) {
+        apiCallAddFavoritetoaddress(endLocation);
+      } else {
+        apiCallUpdateFavoritetoaddress(toDetail.id, toDetail.title,
+            widget.endLocation, toDetail.identifier, toDetail.isFavourite);
+      }
     }
   }
 
@@ -312,13 +322,14 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
               padding: const EdgeInsets.all(16),
               child: FloatingActionButton(
                 // isExtended: true,
-                child: const Icon(Icons.my_location_outlined),
                 backgroundColor: Colors.green,
                 onPressed: () {
                   setState(() {
                     getCurrentLocation();
                   });
                 },
+                // isExtended: true,
+                child: const Icon(Icons.my_location_outlined),
               ),
             ),
           ),
@@ -354,7 +365,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                             textval: Address,
                             colorval: AppColor.black,
                             sizeval: 14,
-                            fontWeight: FontWeight.w200,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ])),
@@ -378,14 +389,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             const SizedBox(
               height: 10,
             ),
-          Padding(
+            Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(
-                moveText,
-                style: AppTextStyle.robotoBold20Black,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
+              child: robotoTextWidget(textval: moveText,
+                  colorval: Colors.deepOrange,
+                  sizeval: 16, fontWeight: FontWeight.w800)
             ),
           ],
         ),
@@ -399,8 +407,12 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                 margin: const EdgeInsets.all(5),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    // Navigator.pop(context);
+
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const HomePage(title: "title")));
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AppColor.greyblack,
