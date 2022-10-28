@@ -39,7 +39,9 @@ Future<Widget> initializeApp(ApplicationConfig appConfig) async {
   final database = await $FloorFlutterDatabase
       .databaseBuilder('envi_user.db')
       .build();
+  checkPermission();
   return MyApp(appConfig);
+
 }
 Future checkPermission() async {
 
