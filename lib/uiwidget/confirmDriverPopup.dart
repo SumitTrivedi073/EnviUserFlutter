@@ -45,7 +45,9 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  Container(
+    return   isLoading
+        ? CircularProgressIndicator()
+        :Container(
         height: 350,
         margin: const EdgeInsets.only(left: 20,right: 20),
         child: Card(
@@ -281,15 +283,7 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                       confirmBooking();
 
                     },
-                    child: isLoading
-                        ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 1.5,
-                        ))
-                        :   robotoTextWidget(
+                    child:   robotoTextWidget(
                       textval: confirm,
                       colorval: AppColor.white,
                       sizeval: 14,
