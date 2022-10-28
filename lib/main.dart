@@ -51,9 +51,24 @@ Future<void> main() async {
 
 
     runApp(MyApp());
+    checkPermission();
   }, (error, stack) =>
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
+Future checkPermission() async {
+
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     print('User granted permission');
@@ -63,6 +78,7 @@ Future<void> main() async {
     print('User declined or has not accepted permission');
   }
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

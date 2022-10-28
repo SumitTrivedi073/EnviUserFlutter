@@ -42,7 +42,7 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController plushcontroller = new TextEditingController();
   TextEditingController countrycontroller = new TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  late Timer _timer;
+   Timer? _timer;
   int _start = 60;
 
   @override
@@ -112,8 +112,8 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
     }
     super.dispose();
   }
@@ -227,7 +227,9 @@ class _LoginpageState extends State<Loginpage> {
                 height: 25,
                 onPressed: () {
                   setState(() {
-                    _timer.cancel();
+                    if(_timer!=null && _timer!.isActive) {
+                      _timer!.cancel();
+                    }
                     _showmobileview = true;
                   });
                 },
@@ -473,6 +475,7 @@ class _LoginpageState extends State<Loginpage> {
 
     String? deviceId = await _getId();
     final fcmToken = await FirebaseMessaging.instance.getToken();
+    print("FCMTOKEN===========>${fcmToken}");
     Map data = {
       "countrycode": countrycontroller.text.toString(),
       "phone": phoneController.text.toString(),
@@ -491,11 +494,12 @@ class _LoginpageState extends State<Loginpage> {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
 
-      setState(() {
-        if(_timer!=null && _timer.isActive) {
-          _timer.cancel();
-        }
         LoginModel users = LoginModel.fromJson(jsonData['content']);
+
+      setState(() {
+        if(_timer!=null && _timer!.isActive) {
+          _timer!.cancel();
+        }
 
         Navigator.push(
             context,
