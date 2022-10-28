@@ -4,6 +4,7 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../theme/string.dart';
 import '../../../uiwidget/robotoTextWidget.dart';
@@ -54,7 +55,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     userId = Profiledata().getusreid() ;
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    if (res.statusCode == 200) {
+    if (res != null && res.statusCode != null && res.statusCode == 200)  {
       print(jsonDecode(res.body)['schedule_trip_list']);
       setState(() {
 
@@ -168,7 +169,8 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     );
   }
 
-  InkWell _buildPosts(BuildContext context) {
+  Widget _buildPosts(BuildContext context) {
+    if(arrtrip.length == 0 || arrtrip == null)return Center(child: Text("No trips data available"));
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
@@ -187,6 +189,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: Colors.transparent,
             );
           },
+
         ));
   }
 
@@ -210,11 +213,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: AppColor.border,
             ),
             CellRow2(index),
-            Container(
+            arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? Container(
               height: 1,
               color: AppColor.border,
-            ),
-            CellRow3(index),
+            ):Container(),
+          arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? CellRow3(index):Container(),
           ]),
     );
   }
@@ -275,8 +278,16 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                   children: [
                     Row(
                       children:  [
+                        SvgPicture.asset(
+                        "assets/svg/from-location-img.svg",
+                        width: 20,
+                        height: 20,
+                      ),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Container(
-                          width: MediaQuery.of(context).size.width - 55,
+                          width: MediaQuery.of(context).size.width - 80,
                           child: robotoTextWidget(
                             textval: arrtrip[index].fromAddress,
                             colorval: AppColor.black,
@@ -284,21 +295,23 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                             fontWeight: FontWeight.w200,
                           ),
                         ),
-                        // robotoTextWidget(
-                        //   textval:  arrtrip[index].fromAddress,
-                        //   colorval: AppColor.black,
-                        //   sizeval: 14.0,
-                        //   fontWeight: FontWeight.normal,
-                        // ),
-                      ],
+                       ],
                     ),
                     const SizedBox(
                       height: 3,
                     ),
                     Row(
                       children:  [
+                        SvgPicture.asset(
+                          "assets/svg/to-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Container(
-                          width: MediaQuery.of(context).size.width - 55,
+                          width: MediaQuery.of(context).size.width - 80,
                           child: robotoTextWidget(
                             textval: arrtrip[index].toAddress,
                             colorval: AppColor.black,
@@ -306,13 +319,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                             fontWeight: FontWeight.w200,
                           ),
                         ),
-                        // robotoTextWidget(
-                        //   textval:  arrtrip[index].toAddress,
-                        //   colorval: AppColor.black,
-                        //   sizeval: 14.0,
-                        //   fontWeight: FontWeight.normal,
-                        // ),
-                      ],
+                       ],
                     ),
                   ],
                 ),
@@ -361,22 +368,23 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
           MaterialButton(
             child: robotoTextWidget(
-              textval: CancelBooking,
+              textval: arrtrip[index].status == "cancelled"?"Already Cancelled":CancelBooking,
               colorval: Color(0xFFED0000),
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
             onPressed: () {
-              confirmBooking(arrtrip[index].passengerTripMasterId);
+              cancelBooking(arrtrip[index].passengerTripMasterId);
             },
           ),
         ],
       ),
     );
   }
-  Future<void> confirmBooking(String passengerTripMasterId) async {
+  Future<void> cancelBooking(String passengerTripMasterId) async {
 
     final response = await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 

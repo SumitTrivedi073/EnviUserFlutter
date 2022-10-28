@@ -174,41 +174,38 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/safety.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuSafety,
-              colorval: AppColor.red,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/fare-charges.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuFareCharges,
-              colorval: AppColor.lightText,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/safety.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuSafety,
+          //     colorval: AppColor.red,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/fare-charges.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuFareCharges,
+          //     colorval: AppColor.lightText,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/favorite-places.svg",
@@ -247,22 +244,22 @@ class _NavigationPageState extends State<NavigationDrawer> {
                   : '');
             },
           ),
-          ListTile(
-            leading: SvgPicture.asset(
-              "assets/svg/settings.svg",
-              width: 22,
-              height: 24,
-            ),
-            title: robotoTextWidget(
-              textval: MenuSettings,
-              colorval: AppColor.lightText,
-              sizeval: 20.0,
-              fontWeight: FontWeight.normal,
-            ),
-            onTap: () {
-              closeDrawer();
-            },
-          ),
+          // ListTile(
+          //   leading: SvgPicture.asset(
+          //     "assets/svg/settings.svg",
+          //     width: 22,
+          //     height: 24,
+          //   ),
+          //   title: robotoTextWidget(
+          //     textval: MenuSettings,
+          //     colorval: AppColor.lightText,
+          //     sizeval: 20.0,
+          //     fontWeight: FontWeight.normal,
+          //   ),
+          //   onTap: () {
+          //     closeDrawer();
+          //   },
+          // ),
           ListTile(
             leading: const Icon(
               Icons.privacy_tip,
@@ -388,89 +385,88 @@ class _NavigationPageState extends State<NavigationDrawer> {
     return AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
-        content: Flexible(
-            child: Wrap(children: [
-              Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Text(
-                    appName,
-                    style: const TextStyle(
-                        color: AppColor.butgreen,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18),
+        content: Wrap(children: [
+          Column(mainAxisSize: MainAxisSize.min, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                appName,
+                style: const TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Wrap(
+                children: [
+                  Text(
+                    deleteaccountConfirmation,
+                    style: TextStyle(
+                        color: AppColor.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                  ),
+                  child: robotoTextWidget(
+                    textval: cancel,
+                    colorval: AppColor.greyblack,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-               Container(
-                 alignment: Alignment.center,
-                 child: Flexible(
-                   child: Wrap(children: [
-                     Text(deleteaccountConfirmation,
-                     style: TextStyle(color:AppColor.black,
-                     fontSize: 14,
-                     fontWeight: FontWeight.w600),)
-                   ],),
-                 ),
-               ),
-                const SizedBox(
-                  height: 10,
-                ),
-               Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                       ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColor.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12), // <-- Radius
-                            ),
-                          ),
-                          child: robotoTextWidget(
-                            textval: cancel,
-                            colorval: AppColor.greyblack,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ElevatedButton(
-                          onPressed: () {
-                            deleteacountApiCall(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColor.greyblack,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12), // <-- Radius
-                            ),
-                          ),
-                          child: robotoTextWidget(
-                            textval: confirm,
-                            colorval: AppColor.white,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-
-                    ],
+                ElevatedButton(
+                  onPressed: () {
+                    deleteacountApiCall(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.greyblack,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
                   ),
-              ]),
-            ])));
-
+                  child: robotoTextWidget(
+                    textval: confirm,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ]),
+        ]));
   }
 
   Widget dialogueLogout(BuildContext context) {
     return AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
-        content: Flexible(
-            child: Wrap(children: [
-          Column(children: [
+        content: Container(
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Text(
@@ -499,44 +495,48 @@ class _NavigationPageState extends State<NavigationDrawer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColor.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
                     ),
-                  ),
-                  child: robotoTextWidget(
-                    textval: cancel,
-                    colorval: AppColor.greyblack,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
+                    child: robotoTextWidget(
+                      textval: cancel,
+                      colorval: AppColor.greyblack,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    confirmLogout(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColor.greyblack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      confirmLogout(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.greyblack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
                     ),
-                  ),
-                  child: robotoTextWidget(
-                    textval: confirm,
-                    colorval: AppColor.white,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
+                    child: robotoTextWidget(
+                      textval: confirm,
+                      colorval: AppColor.white,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
             )
           ]),
-        ])));
+        ));
   }
 
   Future<void> confirmLogout(BuildContext context) async {
@@ -558,6 +558,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setphone("");
     Profiledata.setgender("");
     Profiledata.setname("");
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);

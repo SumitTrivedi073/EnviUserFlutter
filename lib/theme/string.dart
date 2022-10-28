@@ -34,7 +34,7 @@ var mobilevalidation = "Please enter phone number";
 var verifymsg =
     "We have sent you a One- Time Password\n (OTP)Please enter it here:";
 var resend = "Resend OTP";
-var numberedit = "Edit Mobile";
+var numberedit = "EDIT MOBILE";
 var verify = "Verify";
 var reviewprofile = "Please review your profile";
 var loginwithdeffrentnumber = "Log in with a different number";
@@ -100,7 +100,8 @@ var SOS = "SOS";
 var Support = "SUPPORT";
 var Invoice = "INVOICE";
 var logoutConfirmation = "Are you sure want to logout?";
-var deleteaccountConfirmation = "Are you sure want to delete account?\nThis will remove your trip data and account information's from envi server";
+var deleteaccountConfirmation =
+    "Are you sure want to delete account?\nThis will remove your trip data and account information's from envi server";
 
 var youHaveArrivedText = "You have arrived";
 var rateYourDriverText = "Rate your driver";
@@ -126,3 +127,11 @@ var moveText = "Move marker around to set address";
 var nameText = "Name";
 var failedRegister = 'Failed to Register';
 var registerSuccessText = 'Registered Successfully';
+var autoExpiryDurationText = 'autoExpiryDuration';
+var infoPopupFrequencyText = 'infoPopupFrequency';
+var infoPopupIdText = 'infoPopupId';
+var infoPopupImageUrlText = 'infoPopupImgagedUrl';
+var infoPopupTypeText = 'infoPopupType';
+var showInfoPopupText = 'showInfoPopup';
+var dailyOnceTimeText = 'DailyOnceTime';
+var submitAllCapsText = 'SUBMIT';

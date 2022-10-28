@@ -240,7 +240,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w200,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
@@ -272,7 +272,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ]),
@@ -298,7 +298,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
-                              fontWeight: FontWeight.w200,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ])),
@@ -311,9 +311,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-    setState(() {
-      duration = durationToPickupLocation;
-    });
+      setState(() {
+        duration = durationToPickupLocation;
+      });
   }
 
 }

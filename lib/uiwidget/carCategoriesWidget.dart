@@ -77,18 +77,18 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.callback2(distance.toString());
       });
     } else {
-      var errmsg = jsonDecode(response.body)['msg'];
-      // setState(() {
-      //   isLoading = false;
-      // });
+      var errmsg = jsonDecode(response.body)['message'];
+       setState(() {
+         isLoading = false;
+       });
       showDialog(
         context: context,
-        builder: (BuildContext context) => dialogueLogout(context,errmsg),
+        builder: (BuildContext context) => dialogueError(context,errmsg),
       );
 
     }
   }
-  Widget dialogueLogout(BuildContext context,String msg) {
+  Widget dialogueError(BuildContext context,String msg) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),

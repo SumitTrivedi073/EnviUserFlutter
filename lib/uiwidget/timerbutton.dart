@@ -29,7 +29,7 @@ class TimerButton extends StatefulWidget {
 class _TimerButtonState extends State<TimerButton>
     with TickerProviderStateMixin {
   int state = 0;
-  late Timer timer;
+  Timer? timer;
   LatLng? latlong = null;
   int counter = 60;
   String reasonForCancellation = ShorterWaitingTime;
@@ -188,8 +188,8 @@ class _TimerButtonState extends State<TimerButton>
   @override
   void dispose() {
     super.dispose();
-    if (timer!=null && timer.isActive) {
-      timer.cancel();
+    if (timer!=null && timer!.isActive) {
+      timer!.cancel();
     }
   }
 
