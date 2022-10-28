@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../appConfig/Profiledata.dart';
 import '../../appConfig/landingPageSettings.dart';
+import '../../theme/images.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -257,20 +258,20 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(
-                        Icons.star,
-                        color: AppColor.butgreen,
+                      Icon(
+                        Icons.location_on,
                       ),
                       const SizedBox(
                         width: 5,
                       ),
-                      robotoTextWidget(
-                        textval: arrtrip[index].toAddress.length > 30
-                            ? arrtrip[index].toAddress.substring(0, 30)
-                            : arrtrip[index].toAddress,
-                        colorval: AppColor.black,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.normal,
+                      Container(
+                        width: MediaQuery.of(context).size.width - 110,
+                        child: robotoTextWidget(
+                          textval: arrtrip[index].fromAddress,
+                          colorval: AppColor.black,
+                          sizeval: 16,
+                          fontWeight: FontWeight.w200,
+                        ),
                       ),
                     ],
                   ),
@@ -279,27 +280,53 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   ),
                   Row(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 25),
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.red,
                       ),
-                      robotoTextWidget(
-                        textval: arrtrip[index].fromAddress.length > 30
-                            ? arrtrip[index].fromAddress.substring(0, 30)
-                            : arrtrip[index].fromAddress,
-                        colorval: AppColor.greyblack,
-                        sizeval: 14.0,
-                        fontWeight: FontWeight.normal,
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 110,
+                        child: robotoTextWidget(
+                          textval: arrtrip[index].toAddress,
+                          colorval: AppColor.black,
+                          sizeval: 16,
+                          fontWeight: FontWeight.w200,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-              Image.network(
-                encodeImgURLString(arrtrip[index].driverPhoto),
-                fit: BoxFit.fill,
-                height: 40,
-                width: 40,
-              ),
+
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      encodeImgURLString(arrtrip[index].driverPhoto),
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
+                      fit: BoxFit.fill,
+                      height: 40,
+                      width: 40,
+                    ),
+
+                    robotoTextWidget(
+                      textval: arrtrip[index].name,
+                      colorval: AppColor.darkgrey,
+                      sizeval: 13.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ]),
+
             ],
           ),
           const SizedBox(

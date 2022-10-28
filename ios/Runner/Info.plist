@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
@@ -35,15 +34,26 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Need to upload image</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your explanation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your explanation</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to upload image</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -65,21 +75,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-	<key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>tel</string>
-    </array>
-    <key>NSPhotoLibraryUsageDescription</key>
-
-    <string>Need to upload image</string>
-
-    <key>NSCameraUsageDescription</key>
-
-    <string>Need to upload image</string>
-
-    <key>NSMicrophoneUsageDescription</key>
-
-    <string>Need to upload image</string>
 </dict>
 </plist>

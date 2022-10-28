@@ -56,6 +56,8 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   Future checkPermission() async {
+
+    
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission != PermissionStatus.granted) {
       LocationPermission permission = await Geolocator.requestPermission();
