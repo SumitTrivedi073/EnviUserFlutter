@@ -42,7 +42,7 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController plushcontroller = new TextEditingController();
   TextEditingController countrycontroller = new TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
-   Timer? _timer;
+  Timer? _timer = null;
   int _start = 60;
 
   @override
@@ -56,8 +56,6 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   Future checkPermission() async {
-
-    
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission != PermissionStatus.granted) {
       LocationPermission permission = await Geolocator.requestPermission();
@@ -475,7 +473,6 @@ class _LoginpageState extends State<Loginpage> {
 
     String? deviceId = await _getId();
     final fcmToken = await FirebaseMessaging.instance.getToken();
-    print("FCMTOKEN===========>${fcmToken}");
     Map data = {
       "countrycode": countrycontroller.text.toString(),
       "phone": phoneController.text.toString(),
