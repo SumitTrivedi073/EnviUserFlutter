@@ -1,4 +1,7 @@
+import 'package:envi/Profile/newprofilePage.dart';
+import 'package:envi/Profile/profilePage.dart';
 import 'package:envi/login/login.dart';
+import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/sidemenu/ridehistory/ridehistoryPage.dart';
 import 'package:envi/sidemenu/upcomingride/upcomingridesPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
@@ -62,32 +65,44 @@ class _NavigationPageState extends State<NavigationDrawer> {
             decoration: const BoxDecoration(
               color: AppColor.drawertop,
             ),
-            child: Container(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      Container(
-                        height: 70.0,
-                        width: 70.0,
-                        margin: const EdgeInsets.only(top: 20.0),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50.0),
-                          child: getsmallNetworkImage(
-                              context, encodeImgURLString(Profiledata.propic)),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      userDetails(),
+            child: GestureDetector(
+              onTap: () {
+                closeDrawer();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ProfilePage()), //RAGHU VT : Please change this to Approporate Page
+                    (route) => true);
+              },
+              child: Container(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 70.0,
+                              width: 70.0,
+                              margin: const EdgeInsets.only(top: 20.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: getsmallNetworkImage(context,
+                                    encodeImgURLString(Profiledata.propic)),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            userDetails(),
+                          ]),
                     ]),
-                  ]),
+              ),
             ),
           ),
           // ListTile(
