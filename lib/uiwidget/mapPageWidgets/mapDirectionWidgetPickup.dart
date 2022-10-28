@@ -50,19 +50,19 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   List<LatLng> polylineCoordinates = [];
 
   late LatLng pickupLocation = LatLng(
-      (widget.liveTripData!.tripInfo.pickupLocation.latitude != null)
-          ? widget.liveTripData!.tripInfo.pickupLocation.latitude
+      (widget.liveTripData!.tripInfo!.pickupLocation!.latitude != null)
+          ? widget.liveTripData!.tripInfo!.pickupLocation!.latitude
           : 13.197965663195877,
-      (widget.liveTripData!.tripInfo.pickupLocation.longitude != null)
-          ? widget.liveTripData!.tripInfo.pickupLocation.longitude
+      (widget.liveTripData!.tripInfo!.pickupLocation!.longitude != null)
+          ? widget.liveTripData!.tripInfo!.pickupLocation!.longitude
           : 77.70646809992469);
 
   late LatLng carCurrentLocation = LatLng(
-      (widget.liveTripData!.driverLocation.latitude != null)
-          ? widget.liveTripData!.driverLocation.latitude
+      (widget.liveTripData!.driverLocation!.latitude != null)
+          ? widget.liveTripData!.driverLocation!.latitude
           : 14.063446041067092,
-      (widget.liveTripData!.driverLocation.longitude != null)
-          ? widget.liveTripData!.driverLocation.longitude
+      (widget.liveTripData!.driverLocation!.longitude != null)
+          ? widget.liveTripData!.driverLocation!.longitude
           : 77.345492878187);
 
   late LatLng previousLocation = const LatLng(0.0, 0.0);
@@ -175,11 +175,11 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   @override
   Widget build(BuildContext context) {
     carCurrentLocation = LatLng(
-        (widget.liveTripData!.driverLocation.latitude != null)
-            ? widget.liveTripData!.driverLocation.latitude
+        (widget.liveTripData!.driverLocation!.latitude != null)
+            ? widget.liveTripData!.driverLocation!.latitude
             : 14.063446041067092,
-        (widget.liveTripData!.driverLocation.longitude != null)
-            ? widget.liveTripData!.driverLocation.longitude
+        (widget.liveTripData!.driverLocation!.longitude != null)
+            ? widget.liveTripData!.driverLocation!.longitude
             : 77.345492878187);
 
     if (previousLocation.latitude != 0.0 &&
