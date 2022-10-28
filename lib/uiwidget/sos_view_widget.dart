@@ -76,12 +76,12 @@ class _SOSViewPageState extends State<SOSView> {
     Map data;
     data = {
       "id": Profiledata().getusreid(),
-      "passengerTripmasterId": widget.liveTripData!.tripInfo.passengerTripMasterId,
+      "passengerTripmasterId": widget.liveTripData!.tripInfo!.passengerTripMasterId,
       "name": Profiledata().getname(),
       "phone": Profiledata().getphone(),
-      "vehicleNumber":  widget.liveTripData!.driverInfo.vehicleNumber,
-      "driverName": widget.liveTripData!.driverInfo.name,
-      "driverNumber": widget.liveTripData!.driverInfo.phone,
+      "vehicleNumber":  widget.liveTripData!.driverInfo!.vehicleNumber,
+      "driverName": widget.liveTripData!.driverInfo!.name,
+      "driverNumber": widget.liveTripData!.driverInfo!.phone,
 
     };
 

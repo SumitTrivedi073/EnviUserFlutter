@@ -33,8 +33,8 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  String selectedPayOption = '';
-  String passangerTripMasterId = '';
+  String? selectedPayOption = '';
+  String? passangerTripMasterId = '';
   late TripDataModel tripDataModel;
   LatLng? latlong;
 
@@ -48,8 +48,8 @@ class _PaymentPageState extends State<PaymentPage> {
             if (value.liveTripData != null) {
               tripDataModel = value.liveTripData!;
               passangerTripMasterId =
-                  value.liveTripData!.tripInfo.passengerTripMasterId;
-              selectedPayOption = value.liveTripData!.tripInfo.paymentMode;
+                  value.liveTripData!.tripInfo!.passengerTripMasterId;
+              selectedPayOption = value.liveTripData!.tripInfo!.paymentMode;
             }else{
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
@@ -110,7 +110,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future<void> updatePayment(
-      String selectedPayOption, String passangerTripMasterId) async {
+      String? selectedPayOption, String? passangerTripMasterId) async {
     Map body;
     body = {
       "passengerTripMasterId": passangerTripMasterId,
@@ -131,7 +131,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
     Map body;
     body = {
-      "passengerTripMasterId": tripDataModel.tripInfo.passengerTripMasterId,
+      "passengerTripMasterId": tripDataModel.tripInfo!.passengerTripMasterId,
     };
     var jsonData;
     dynamic res = await HTTP.post(CreateOrder(), body);
