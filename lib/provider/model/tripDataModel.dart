@@ -17,23 +17,23 @@ class TripDataModel {
     required this.tripInfo,
   });
 
-  DriverInfo driverInfo;
-  DriverLocation driverLocation;
-  PassengerInfo passengerInfo;
-  TripInfo tripInfo;
+  DriverInfo? driverInfo;
+  DriverLocation? driverLocation;
+  PassengerInfo? passengerInfo;
+  TripInfo? tripInfo;
 
   factory TripDataModel.fromJson(Map<String, dynamic> json) => TripDataModel(
-        driverInfo: DriverInfo.fromJson(json["driverInfo"]),
-        driverLocation: DriverLocation.fromJson(json["driverLocation"]),
-        passengerInfo: PassengerInfo.fromJson(json["passengerInfo"]),
-        tripInfo: TripInfo.fromJson(json["tripInfo"]),
+        driverInfo: json["driverInfo"]!=null ? DriverInfo.fromJson(json["driverInfo"]):null,
+        driverLocation: json["driverLocation"]!=null ? DriverLocation.fromJson(json["driverLocation"]):null,
+        passengerInfo: json["passengerInfo"]!=null ? PassengerInfo.fromJson(json["passengerInfo"]):null,
+        tripInfo: json["tripInfo"]!=null ? TripInfo.fromJson(json["tripInfo"]):null,
       );
 
   Map<String, dynamic> toJson() => {
-        "driverInfo": driverInfo.toJson(),
-        "driverLocation": driverLocation.toJson(),
-        "passengerInfo": passengerInfo.toJson(),
-        "tripInfo": tripInfo.toJson(),
+        "driverInfo": driverInfo!.toJson(),
+        "driverLocation": driverLocation!.toJson(),
+        "passengerInfo": passengerInfo!.toJson(),
+        "tripInfo": tripInfo!.toJson(),
       };
 }
 
@@ -131,40 +131,40 @@ class TripInfo {
     required this.arrivalAtDestination,
   });
 
-  PriceClass priceClass;
-  String specialRemarks;
-  String paymentMode;
-  String passengerTripMasterId;
-  String tripStatus;
-  bool scheduledTrip;
-  String otp;
-  DropLocation dropLocation;
-  PickupLocation pickupLocation;
+  PriceClass? priceClass;
+  String? specialRemarks;
+  String? paymentMode;
+  String? passengerTripMasterId;
+  String? tripStatus;
+  bool? scheduledTrip;
+  String? otp;
+  DropLocation? dropLocation;
+  PickupLocation? pickupLocation;
   ArrivalAtDestination? arrivalAtDestination;
 
   factory TripInfo.fromJson(Map<String, dynamic> json) => TripInfo(
-        priceClass: PriceClass.fromJson(json["priceClass"]),
+        priceClass: json["priceClass"]!=null ? PriceClass.fromJson(json["priceClass"]):null,
         specialRemarks: json["specialRemarks"],
         paymentMode: json["paymentMode"],
         passengerTripMasterId: json["passengerTripMasterId"],
         tripStatus: json["tripStatus"],
         scheduledTrip: json["scheduledTrip"],
         otp: json["otp"],
-        dropLocation: DropLocation.fromJson(json["dropLocation"]),
-        pickupLocation: PickupLocation.fromJson(json["pickupLocation"]),
+        dropLocation: json["dropLocation"] !=null ? DropLocation.fromJson(json["dropLocation"]):null,
+        pickupLocation: json["pickupLocation"]!=null ? PickupLocation.fromJson(json["pickupLocation"]):null,
         arrivalAtDestination: json["arrivalAtDestination"] != null ? ArrivalAtDestination.fromJson(json["arrivalAtDestination"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
-        "priceClass": priceClass.toJson(),
+        "priceClass": priceClass!.toJson(),
         "specialRemarks": specialRemarks,
         "paymentMode": paymentMode,
         "passengerTripMasterId": passengerTripMasterId,
         "tripStatus": tripStatus,
         "scheduledTrip": scheduledTrip,
         "otp": otp,
-        "dropLocation": dropLocation.toJson(),
-        "pickupLocation": pickupLocation.toJson(),
+        "dropLocation": dropLocation!.toJson(),
+        "pickupLocation": pickupLocation!.toJson(),
         "arrivalAtDestination": arrivalAtDestination!.toJson(),
       };
 }
