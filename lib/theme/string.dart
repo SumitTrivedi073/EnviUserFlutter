@@ -32,7 +32,7 @@ var dropLocation = "Drop Location";
 var welcome = "Welcome!";
 var mobilevalidation = "Please enter phone number";
 var verifymsg =
-    "We have sent you a One- Time Password\n (OTP)Please enter it here:";
+    "We have sent you a One- Time Password\n (OTP). Please enter it here:";
 var resend = "Resend OTP";
 var numberedit = "EDIT MOBILE";
 var verify = "Verify";
@@ -121,7 +121,7 @@ var Fromaddress = "From address";
 var placeName = "Place Name";
 var updatedSuccessText = "Updated Successfully";
 var failedToUpdateText = "Failed To Update";
-var noDriverAvailable = "No Driver Available";
+var noDriverAvailable = "Sorry, no driver available around";
 var retry = "Retry";
 var moveText = "Move marker around to set address";
 var nameText = "Name";
