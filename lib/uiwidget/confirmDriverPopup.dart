@@ -242,11 +242,13 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                const HomePage(title: "title")),
-                                (Route<dynamic> route) => false);
+                        if(mounted) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  const HomePage(title: 'title')),
+                                  (Route<dynamic> route) => false);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.white,
@@ -276,10 +278,7 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
                         ),
                       ),
                     onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                        confirmBooking();
-                      });
+                      confirmBooking();
 
                     },
                     child: isLoading
@@ -334,23 +333,16 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
     });
     dynamic res = await HTTP.post(startTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-
-     /* if(mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }*/
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitingForDriverScreen()),
-                (Route<dynamic> route) => false);
-      });
+      if(mounted) {
+         Navigator.of(context).pop(false);
+         Navigator.of(context).pushAndRemoveUntil(
+             MaterialPageRoute(
+                 builder: (BuildContext context) => WaitingForDriverScreen()),
+                 (Route<dynamic> route) => false);
+      }
 
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      isLoading = false;
     }
   }
 }

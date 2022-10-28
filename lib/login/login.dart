@@ -42,7 +42,7 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController plushcontroller = new TextEditingController();
   TextEditingController countrycontroller = new TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
-   Timer? _timer;
+  Timer? _timer = null;
   int _start = 60;
 
   @override
@@ -225,7 +225,9 @@ class _LoginpageState extends State<Loginpage> {
                 height: 25,
                 onPressed: () {
                   setState(() {
-                    _timer!.cancel();
+                    if(_timer!=null && _timer!.isActive) {
+                      _timer!.cancel();
+                    }
                     _showmobileview = true;
                   });
                 },
@@ -489,12 +491,13 @@ class _LoginpageState extends State<Loginpage> {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
 
-      LoginModel users = LoginModel.fromJson(jsonData['content']);
+        LoginModel users = LoginModel.fromJson(jsonData['content']);
 
       setState(() {
         if(_timer!=null && _timer!.isActive) {
           _timer!.cancel();
         }
+
         Navigator.push(
             context,
             MaterialPageRoute(

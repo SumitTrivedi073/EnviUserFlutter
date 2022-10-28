@@ -36,15 +36,26 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Need to upload image</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your explanation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your explanation</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to upload image</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -5,7 +5,7 @@ import 'ApiConfig.dart' as APICONFIG;
 const scheme = 'http';
 const host = 'localhost';
 const port = '5001';
-const mobileHost = '192.168.29.211';
+const mobileHost = '192.168.29.69';
 
 const webBaseUrl = '$scheme://$host:$port';
 const mobileBaseUrl = '$scheme://$mobileHost:$port';
@@ -84,7 +84,7 @@ SosApi() {
 SendInvoice() {
   return Uri.parse('${getBaseURL()}/userTrip/resendInvoice');
 }
-submitDriverRating(String passengerTripMasterId, double rating) {
+submitDriverRating(String? passengerTripMasterId, double rating) {
   print(Uri.parse(
       '${getBaseURL()}/userTrip/ratingByUser?tripId=$passengerTripMasterId&rating=$rating'));
   return Uri.parse(
