@@ -289,7 +289,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width - 190,
+                        width: MediaQuery.of(context).size.width - 185,
                         child: robotoTextWidget(
                           textval: arrtrip[index].toAddress,
                           colorval: AppColor.black,
@@ -312,7 +312,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width - 190,
+                        width: MediaQuery.of(context).size.width - 185,
                         child: robotoTextWidget(
                           textval: arrtrip[index].fromAddress,
                           colorval: AppColor.greyblack,
@@ -326,7 +326,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               ),
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end
+                  ,
                   children: [
                     Image.network(
                       encodeImgURLString(arrtrip[index].driverPhoto),
@@ -370,7 +371,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                     : Container(),
               ]),
               robotoTextWidget(
-                textval: arrtrip[index].name,
+                textval: arrtrip[index].vehicle.Vnumber,
                 colorval: AppColor.darkgrey,
                 sizeval: 13.0,
                 fontWeight: FontWeight.bold,

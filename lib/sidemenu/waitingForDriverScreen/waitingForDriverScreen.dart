@@ -180,7 +180,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                   ]),
 
                 ]))
-              : Container();
+              : Container(
+            child: CircularProgressIndicator(),
+          );
         }),
       ),
     );
