@@ -34,7 +34,7 @@ var mobilevalidation = "Please enter phone number";
 var verifymsg =
     "We have sent you a One- Time Password\n (OTP)Please enter it here:";
 var resend = "Resend OTP";
-var numberedit = "Edit Mobile";
+var numberedit = "EDIT MOBILE";
 var verify = "Verify";
 var reviewprofile = "Please review your profile";
 var loginwithdeffrentnumber = "Log in with a different number";
@@ -134,3 +134,4 @@ var infoPopupImageUrlText = 'infoPopupImgagedUrl';
 var infoPopupTypeText = 'infoPopupType';
 var showInfoPopupText = 'showInfoPopup';
 var dailyOnceTimeText = 'DailyOnceTime';
+var submitAllCapsText = 'SUBMIT';

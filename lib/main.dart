@@ -13,6 +13,7 @@ import 'package:envi/theme/theme.dart';
 import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -32,15 +33,25 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  LocalNotificationService.initialize();
-  final database =
-      await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
-  final dao = database.taskDao;
 
-  runApp(const MyApp());
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+    LocalNotificationService.initialize();
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+    FlutterError.onError =
+        FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    final database =
+    await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+    final dao = database.taskDao;
+
+
+    runApp(MyApp());
+  }, (error, stack) =>
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
 class MyApp extends StatelessWidget {
@@ -93,11 +104,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   void receiveNotification() {
-
     var initializationSettingsAndroid =
-    AndroidInitializationSettings('@drawable/ic_notification');
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid);
+        AndroidInitializationSettings('@drawable/ic_notification');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance.getInitialMessage().then(
@@ -137,7 +147,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   checkLoginStatus() async {
-    print("FcmToken=========>${await FirebaseMessaging.instance.getToken()}");
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString(loginID) == null) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -257,6 +266,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
+      if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) =>
@@ -281,17 +291,17 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                   sharedPreferences.getInt(autoExpiryDurationText)!);
               sharedPreferences.setString(
                   dailyOnceTimeText, DateTime.now().toString());
-            }
-
-            if (hrsBetween(
-                    DateTime.parse(
-                        sharedPreferences.getString(dailyOnceTimeText)!),
-                    DateTime.now()) >
-                24) {
-              displayInfoPopup(
-                  sharedPreferences.getInt(autoExpiryDurationText)!);
-              sharedPreferences.setString(
-                  dailyOnceTimeText, DateTime.now().toString());
+            } else {
+              if (hrsBetween(
+                      DateTime.parse(
+                          sharedPreferences.getString(dailyOnceTimeText)!),
+                      DateTime.now()) >
+                  24) {
+                displayInfoPopup(
+                    sharedPreferences.getInt(autoExpiryDurationText)!);
+                sharedPreferences.setString(
+                    dailyOnceTimeText, DateTime.now().toString());
+              }
             }
             break;
           case 'ONLY_ONCE':
@@ -315,36 +325,24 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     } else {}
   }
 
-  Future<Widget> displayInfoPopup(int miliSecond) async {
-    return await showDialog(
+  Future displayInfoPopup(int miliSecond)  {
+    return  showDialog(
         context: context,
         builder: ((context) {
           Future.delayed(
-            Duration(milliseconds: miliSecond),
+            Duration(milliseconds: miliSecond + 2000),
             () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop();
             },
           );
 
           return Dialog(
-            child: Container(
-              height: MediaQuery.of(context).size.height / 2,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                          sharedPreferences.getString(infoPopupImageUrlText)!))
-
-                  //  Image.network(
-                  //                 encodeImgURLString(Profiledata.propic),
-                  //                 fit: BoxFit.fill,
-                  //                 height: 40,
-                  //                 width: 50,
-                  //               ),
-
-                  ),
+              child: Image.network(
+            encodeImgURLString(
+              sharedPreferences.getString(infoPopupImageUrlText)!,
             ),
-          );
+            fit: BoxFit.fill,
+          ));
         }));
   }
 

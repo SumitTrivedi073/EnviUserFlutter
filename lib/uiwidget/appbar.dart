@@ -2,6 +2,7 @@ import 'package:envi/appConfig/Profiledata.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
+import '../theme/images.dart';
 import '../utils/utility.dart';
 import '../theme/theme.dart';
 import '../web_service/Constant.dart';
@@ -68,6 +69,13 @@ class _AppBarPageState extends State<AppBarWidget> {
                     Card(
                       child: Image.network(
                         encodeImgURLString(Profiledata.propic),
+                         errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
                         fit: BoxFit.fill,
                         height: 40,
                         width: 50,

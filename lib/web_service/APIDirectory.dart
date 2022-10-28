@@ -123,6 +123,11 @@ CreateOrder() {
 registerUser() {
   return Uri.parse('${getBaseURL()}/login/userRegistration');
 }
+
+updateUser() {
+  return Uri.parse('${getBaseURL()}/user/updateProfile');
+
+}
 cancleSchedule(String tripObjId){
   return Uri.parse('${getBaseURL()}/userTrip/cancelScheduledTrip?tripObjId=$tripObjId');
 }

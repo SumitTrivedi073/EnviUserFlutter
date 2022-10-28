@@ -14,6 +14,7 @@ import '../../../../web_service/HTTP.dart' as HTTP;
 import '../appConfig/Profiledata.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/searchDriver/model/driverListModel.dart';
+import '../theme/images.dart';
 import '../theme/string.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
@@ -96,7 +97,6 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
-      showSnackbar(context, jsonDecode(res.body)['msg']);
       setState(() {
         isLoading = false;
       });
@@ -178,6 +178,13 @@ class DriverListItemPageState extends State<DriverListItem> {
                           Card(
                             child: Image.network(
                               encodeImgURLString(DriverList[index].driverPhoto),
+                               errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
                               fit: BoxFit.fill,
                               height: 30,
                               width: 40,
@@ -384,7 +391,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                       Container(
                         padding: const EdgeInsets.all(10),
                         child: robotoTextWidget(
-                            textval: '${DriverList.length} Ride Option',
+                            textval: '${DriverList.length} Ride Options',
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w800),

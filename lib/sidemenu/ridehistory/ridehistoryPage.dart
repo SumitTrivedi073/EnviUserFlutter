@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../appConfig/landingPageSettings.dart';
+import '../../theme/images.dart';
 import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/robotoTextWidget.dart';
@@ -323,22 +324,31 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 ],
               ),
               Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.network(
-                      encodeImgURLString(arrtrip[index].driverPhoto),
-                      fit: BoxFit.fill,
-                      height: 40,
-                      width: 40,
-                    ),
-                    robotoTextWidget(
-                      textval: arrtrip[index].vehicle.Vnumber,
-                      colorval: AppColor.darkgrey,
-                      sizeval: 13.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.network(
+                    encodeImgURLString(arrtrip[index].driverPhoto),
+                     errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          Images.personPlaceHolderImage,
+                          height: 50,
+                          width: 50,
+                        );
+                      },
+                    fit: BoxFit.fill,
+                    height: 40,
+                    width: 40,
+                  ),
+
+                  robotoTextWidget(
+                    textval: arrtrip[index].vehicle.Vnumber,
+                    colorval: AppColor.darkgrey,
+                    sizeval: 13.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ]),
+
             ],
           ),
           const SizedBox(

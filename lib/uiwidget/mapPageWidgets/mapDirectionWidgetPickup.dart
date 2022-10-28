@@ -239,8 +239,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     );
     polylines[id] = polyline;
 
-    setState(() {});
-
+   if(mounted) {
+     setState(() {});
+   }
     if (previousLocation != carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
