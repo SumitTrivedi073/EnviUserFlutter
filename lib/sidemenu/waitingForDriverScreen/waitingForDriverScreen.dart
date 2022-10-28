@@ -45,7 +45,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (value.liveTripData != null) {
               isLoaded = true;
-              if (value.liveTripData!.tripInfo.tripStatus ==
+                if (value.liveTripData!.tripInfo!.tripStatus ==
                   TripStatusOnboarding) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
@@ -175,7 +175,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                     getCardBanner(value.liveTripData!),
                     Align(
                       alignment: Alignment.topRight,
-                      child: OTPView(otp: value.liveTripData!.tripInfo.otp),
+                      child: OTPView(otp: value.liveTripData!.tripInfo!.otp),
                     ),
                   ]),
 
@@ -193,10 +193,10 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   Widget getCardBanner(TripDataModel liveTripData) {
-    if (liveTripData.tripInfo.tripStatus == TripStatusArrived) {
+    if (liveTripData.tripInfo!.tripStatus == TripStatusArrived) {
       return CardBanner(
           title: Driverarrived, image: 'assets/images/driver_arrived_img.png');
-    } else if (liveTripData.tripInfo.tripStatus == TripStatusAlloted) {
+    } else if (liveTripData.tripInfo!.tripStatus == TripStatusAlloted) {
       return CardBanner(
           title: DriverOnTheWay, image: 'assets/images/driver_on_way.png');
     } else {
@@ -236,7 +236,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
                               textval: liveTripData
-                                  .tripInfo.pickupLocation.pickupAddress
+                                  .tripInfo!.pickupLocation!.pickupAddress
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
@@ -269,7 +269,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                       ),
                       child: robotoTextWidget(
                         textval:
-                            '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
+                            '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w600,
@@ -294,7 +294,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
                               textval: liveTripData
-                                  .tripInfo.dropLocation.dropAddress
+                                  .tripInfo!.dropLocation!.dropAddress
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,

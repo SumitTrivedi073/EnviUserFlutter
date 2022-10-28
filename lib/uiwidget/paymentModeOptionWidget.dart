@@ -22,7 +22,7 @@ class PaymentModeOptionWidget extends StatefulWidget {
 
 class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
   List<String> arroption = [];
-  late String selectedOption = widget.tripDataModel.tripInfo.paymentMode;
+  late String? selectedOption = widget.tripDataModel.tripInfo!.paymentMode;
   String PaymentOption = AppConfig.paymentOptions;
   
 
@@ -77,7 +77,7 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
               onTap: () {
                 setState(() {
                   selectedOption = arroption[index];
-                  widget.callback(selectedOption);
+                  widget.callback(selectedOption!);
                 });
                 print("Tapped a Container");
               },
