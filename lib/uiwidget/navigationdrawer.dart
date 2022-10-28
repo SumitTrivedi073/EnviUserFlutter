@@ -29,6 +29,13 @@ class _NavigationPageState extends State<NavigationDrawer> {
   String? email;
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();

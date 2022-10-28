@@ -50,6 +50,7 @@ class NewProfilePage extends StatefulWidget {
 class _NewProfilePageState extends State<NewProfilePage> {
   var registerNewUserResponse;
   var updateUserResponse;
+  bool isLoading = false;
   File? _image;
   Future getImage() async {
     final img = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -72,6 +73,13 @@ class _NewProfilePageState extends State<NewProfilePage> {
     setState(() {
       selectedGender = val;
     });
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   bool isEmail(String em) {
@@ -270,21 +278,35 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                           height: 100.0,
                                           fit: BoxFit.fitHeight,
                                         )
-                                      : FadeInImage.assetNetwork(
-                                          imageErrorBuilder:
+                                      : Image.network(
+                                          encodeImgURLString(
+                                              widget.user!.propic),
+                                          errorBuilder:
                                               (context, error, stackTrace) {
                                             return Image.asset(
                                               Images.personPlaceHolderImage,
                                               height: 100,
                                             );
                                           },
+                                          fit: BoxFit.fill,
                                           height: 100,
                                           width: 100,
-                                          fit: BoxFit.fill,
-                                          placeholder:
-                                              'assets/images/envi-logo-small.png',
-                                          image: encodeImgURLString(
-                                              widget.user!.propic))
+                                        )
+                                  // FadeInImage.assetNetwork(
+                                  //     imageErrorBuilder:
+                                  //         (context, error, stackTrace) {
+                                  //       return Image.asset(
+                                  //         Images.personPlaceHolderImage,
+                                  //         height: 100,
+                                  //       );
+                                  //     },
+                                  //     height: 100,
+                                  //     width: 100,
+                                  //     fit: BoxFit.fill,
+                                  //     placeholder:
+                                  //         'assets/images/envi-logo-small.png',
+                                  //     image: encodeImgURLString(
+                                  //         widget.user!.propic))
                                   : (_image != null)
                                       ? Image.file(
                                           _image!,
@@ -463,115 +485,127 @@ class _NewProfilePageState extends State<NewProfilePage> {
               const SizedBox(
                 height: 15,
               ),
-              MaterialButton(
-                onPressed: () async {
-                  if (widget.isUpdate) {
-                    SharedPreferences sharedPreferences =
-                        await SharedPreferences.getInstance();
+              (!isLoading)
+                  ? MaterialButton(
+                      onPressed: () async {
+                        if (widget.isUpdate) {
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
 
-                    var id = sharedPreferences.getString(loginID);
+                          var id = sharedPreferences.getString(loginID);
 
-                    final response = await userEditProfile(
-                        image: _image,
-                        token: widget.user!.token,
-                        name: _firstNameController.text,
-                        gender: selectedGender!,
-                        email: _emailController.text);
+                          final response = await userEditProfile(
+                              image: _image,
+                              token: widget.user!.token,
+                              name: _firstNameController.text,
+                              gender: selectedGender!,
+                              email: _emailController.text);
 
-                    if (response) {
-                      LoginModel usr = LoginModel(
-                          widget.user!.token,
-                          id ?? widget.user!.id,
-                          _firstNameController.text,
-                          updateUserResponse['pro_pic'] ?? widget.user!.propic,
-                          selectedGender!,
-                          widget.user!.phone,
-                          widget.user!.mailid);
-                      widget.callback!(usr);
-                      // utility.showInSnackBar(
-                      //     value: updatedSuccessText,
-                      //     context: context,
-                      //     duration: const Duration(seconds: 3));
-                      showToast(updatedSuccessText);
-                      Future.delayed(const Duration(seconds: 2), () {
-                        Navigator.of(context).pop();
-                      });
-                    } else {
-                      showToast(failedToUpdateText);
-                      // utility.showInSnackBar(
-                      //     value: failedToUpdateText,
-                      //     context: context,
-                      //     duration: const Duration(seconds: 3));
-                    }
-                  } else {
-                    if (!mounted) return;
-                    if (_profileForm.currentState!.validate()) {
-                      SharedPreferences sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      final response = await registerNewUser(
-                          image: _image,
-                          name: _firstNameController.text,
-                          gender: selectedGender!,
-                          email: _emailController.text,
-                          deviceId:
-                              sharedPreferences.getString(deviceIdShared)!,
-                          fcmToken:
-                              sharedPreferences.getString(fcmTokenShared)!,
-                          phoneNo: _phoneNoController.text);
-
-                      if (response) {
-                        sharedPreferences.setString(
-                            loginEmail, _emailController.text);
-                        sharedPreferences.setString(loginToken,
-                            registerNewUserResponse['content']['token']);
-                        sharedPreferences.setString(loginID,
-                            registerNewUserResponse['content']['userid']);
-                        sharedPreferences.setString(
-                            logingender, selectedGender!);
-                        sharedPreferences.setString(
-                            loginPhone, _phoneNoController.text);
-                        sharedPreferences.setString(
-                            loginName, _firstNameController.text);
-                        sharedPreferences.setString(
-                            loginpropic,
-                            encodeImgURLString(
-                                registerNewUserResponse['content']['image']));
-                        Profiledata.setusreid(
-                            registerNewUserResponse['content']['userid']);
-                        Profiledata.settoken(
-                            registerNewUserResponse['content']['token']);
-                        Profiledata.setmailid(_emailController.text);
-                        Profiledata.setpropic(encodeImgURLString(
-                            registerNewUserResponse['content']['image']));
-                        Profiledata.setphone(_phoneNoController.text);
-                        Profiledata.setgender(selectedGender!);
-                        Profiledata.setname(_firstNameController.text);
-                        showToast('Registered Successfully');
-                        Future.delayed(const Duration(seconds: 2), () {
+                          if (response) {
+                            LoginModel usr = LoginModel(
+                                widget.user!.token,
+                                id ?? widget.user!.id,
+                                _firstNameController.text,
+                                updateUserResponse['pro_pic'] ??
+                                    widget.user!.propic,
+                                selectedGender!,
+                                widget.user!.phone,
+                                widget.user!.mailid);
+                            widget.callback!(usr);
+                            // utility.showInSnackBar(
+                            //     value: updatedSuccessText,
+                            //     context: context,
+                            //     duration: const Duration(seconds: 3));
+                            showToast(updatedSuccessText);
+                            Future.delayed(const Duration(seconds: 2), () {
+                              Navigator.of(context).pop();
+                            });
+                          } else {
+                            showToast(failedToUpdateText);
+                            // utility.showInSnackBar(
+                            //     value: failedToUpdateText,
+                            //     context: context,
+                            //     duration: const Duration(seconds: 3));
+                          }
+                        } else {
                           if (!mounted) return;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainEntryPoint()));
-                        });
-                      } else {
-                        showToast(failedRegister);
-                        // utility.showInSnackBar(
-                        //     value: failedRegister,
-                        //     context: context,
-                        //     duration: const Duration(seconds: 2));
-                      }
-                    }
-                  }
-                },
-                height: 48,
-                minWidth: double.infinity,
-                color: AppColor.greyblack,
-                child: Text(
-                  (widget.isUpdate) ? 'Update Account' : createAccountText,
-                  style: AppTextStyle.robotoBold20White,
-                ),
-              )
+                          if (_profileForm.currentState!.validate()) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            final response = await registerNewUser(
+                                image: _image,
+                                name: _firstNameController.text,
+                                gender: selectedGender!,
+                                email: _emailController.text,
+                                deviceId: sharedPreferences
+                                    .getString(deviceIdShared)!,
+                                fcmToken: sharedPreferences
+                                    .getString(fcmTokenShared)!,
+                                phoneNo: _phoneNoController.text);
+                            setState(() {
+                              isLoading = false;
+                            });
+                            if (response) {
+                              sharedPreferences.setString(
+                                  loginEmail, _emailController.text);
+                              sharedPreferences.setString(loginToken,
+                                  registerNewUserResponse['content']['token']);
+                              sharedPreferences.setString(loginID,
+                                  registerNewUserResponse['content']['userid']);
+                              sharedPreferences.setString(
+                                  logingender, selectedGender!);
+                              sharedPreferences.setString(
+                                  loginPhone, _phoneNoController.text);
+                              sharedPreferences.setString(
+                                  loginName, _firstNameController.text);
+                              sharedPreferences.setString(
+                                  loginpropic,
+                                  encodeImgURLString(
+                                      registerNewUserResponse['content']
+                                          ['image']));
+                              Profiledata.setusreid(
+                                  registerNewUserResponse['content']['userid']);
+                              Profiledata.settoken(
+                                  registerNewUserResponse['content']['token']);
+                              Profiledata.setmailid(_emailController.text);
+                              Profiledata.setpropic(encodeImgURLString(
+                                  registerNewUserResponse['content']['image']));
+                              Profiledata.setphone(_phoneNoController.text);
+                              Profiledata.setgender(selectedGender!);
+                              Profiledata.setname(_firstNameController.text);
+                              showToast('Registered Successfully');
+                              Future.delayed(const Duration(seconds: 2), () {
+                                if (!mounted) return;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MainEntryPoint()));
+                              });
+                            } else {
+                              showToast(failedRegister);
+                              // utility.showInSnackBar(
+                              //     value: failedRegister,
+                              //     context: context,
+                              //     duration: const Duration(seconds: 2));
+                            }
+                          }
+                        }
+                      },
+                      height: 48,
+                      minWidth: double.infinity,
+                      color: AppColor.greyblack,
+                      child: Text(
+                        (widget.isUpdate)
+                            ? 'Update Account'
+                            : createAccountText,
+                        style: AppTextStyle.robotoBold20White,
+                      ),
+                    )
+                  : const Center(child: CircularProgressIndicator())
             ],
           ),
         ),

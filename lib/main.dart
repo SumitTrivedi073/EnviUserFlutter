@@ -43,9 +43,8 @@ Future<Widget> initializeApp(ApplicationConfig appConfig) async {
   return MyApp(appConfig);
 
 }
+
 Future checkPermission() async {
-
-
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationSettings settings = await messaging.requestPermission(
@@ -357,12 +356,12 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     } else {}
   }
 
-  Future displayInfoPopup(int miliSecond)  {
-    return  showDialog(
+  Future displayInfoPopup(int miliSecond) {
+    return showDialog(
         context: context,
         builder: ((context) {
           Future.delayed(
-            Duration(milliseconds: miliSecond + 2000),
+            Duration(milliseconds: miliSecond + 5000),
             () {
               Navigator.of(context).pop();
             },

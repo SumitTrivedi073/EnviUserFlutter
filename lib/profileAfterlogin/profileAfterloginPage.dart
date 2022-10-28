@@ -169,22 +169,49 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           ],
                         ),
                         ClipRRect(
-                            borderRadius: BorderRadius.circular(55.0),
-                            child: FadeInImage.assetNetwork(
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.fill,
-                                imageErrorBuilder:
-                                    (context, error, stackTrace) {
-                                  return Image.asset(
-                                    Images.personPlaceHolderImage,
-                                    height: 50,
-                                    width: 50,
-                                  );
-                                },
-                                placeholder:
-                                    'assets/images/envi-logo-small.png',
-                                image: encodeImgURLString(user!.propic))),
+                          borderRadius: BorderRadius.circular(55.0),
+                          child: Image.network(
+                            encodeImgURLString(user!.propic),
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                Images.personPlaceHolderImage,
+                                height: 50,
+                                width: 50,
+                              );
+                            },
+                            fit: BoxFit.fill,
+                            height: 100,
+                            width: 100,
+                          ),
+                          //  FadeInImage.assetNetwork(
+                          //     height: 100,
+                          //     width: 100,
+                          //     fit: BoxFit.fill,
+                          //     imageErrorBuilder:
+                          //         (context, error, stackTrace) {
+                          //       return Image.asset(
+                          //         Images.personPlaceHolderImage,
+                          //         height: 50,
+                          //         width: 50,
+                          //       );
+                          //     },
+                          //     placeholder:
+                          //         'assets/images/envi-logo-small.png',
+                          //     image: encodeImgURLString(user!.propic))
+                        ),
                         const SizedBox(
                           height: 5,
                         ),
@@ -263,6 +290,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           Profiledata.setphone(user!.phone);
                           Profiledata.setgender(user!.gender);
                           Profiledata.setname(user!.name);
+                          if (!mounted) return;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
