@@ -1,17 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "iPhone 8 Plus (414x736).png",
+      "filename" : "logo.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "iPhone X, XS, 11 Pro (375x812)@2x.png",
+      "filename" : "logo-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "iPhone XR, XS Max, 11 (414x896)@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
