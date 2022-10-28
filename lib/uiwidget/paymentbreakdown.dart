@@ -22,8 +22,8 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
   @override
   Widget build(BuildContext context) {
     double totalTax =
-        widget.livetripData!.tripInfo.arrivalAtDestination!.cgst.toDouble() +
-            widget.livetripData!.tripInfo.arrivalAtDestination!.sgst.toDouble();
+        widget.livetripData!.tripInfo!.arrivalAtDestination!.cgst.toDouble() +
+            widget.livetripData!.tripInfo!.arrivalAtDestination!.sgst.toDouble();
     // TODO: implement build
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10),
@@ -44,14 +44,14 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                       colorval: AppColor.black,
                       sizeval: 16,
                       fontWeight: FontWeight.w600),
-                  subtitle:  widget.livetripData!.tripInfo
-                      .priceClass.discountPercent.toDouble()!=0.0? robotoTextWidget(
-                      textval: 'Includes ${widget.livetripData!.tripInfo.priceClass.discountPercent.round()}% discount',
+                  subtitle:  widget.livetripData!.tripInfo!
+                      .priceClass!.discountPercent.toDouble()!=0.0? robotoTextWidget(
+                      textval: 'Includes ${widget.livetripData!.tripInfo!.priceClass!.discountPercent.round()}% discount',
                       colorval: AppColor.textgray,
                       sizeval: 14,
                       fontWeight: FontWeight.w400):Container(),
                   trailing: robotoTextWidget(
-                      textval: widget.livetripData!.tripInfo
+                      textval: widget.livetripData!.tripInfo!
                           .arrivalAtDestination!.amountTobeCollected
                           .toString(),
                       colorval: AppColor.darkGreen,
@@ -91,7 +91,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w600),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo
+                                  textval: widget.livetripData!.tripInfo!
                                       .arrivalAtDestination!.distanceTravelled
                                       .toString(),
                                   colorval: AppColor.black,
@@ -111,7 +111,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w600),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo
+                                  textval: widget.livetripData!.tripInfo!
                                       .arrivalAtDestination!.perKMPrice
                                       .toString(),
                                   colorval: AppColor.black,
@@ -132,7 +132,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo
-                                      .arrivalAtDestination!.kmFare
+                                      !.arrivalAtDestination!.kmFare
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
@@ -143,7 +143,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                             ],
                           ),
                           widget.livetripData!.tripInfo
-                              .arrivalAtDestination!.discount.toDouble()!=0.0? Row(
+                          !.arrivalAtDestination!.discount.toDouble()!=0.0? Row(
                             children: [
                               robotoTextWidget(
                                   textval: lessDiscountText,
@@ -153,7 +153,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo
-                                      .arrivalAtDestination!.discount
+                                  !.arrivalAtDestination!.discount
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
@@ -164,7 +164,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                             ],
                           ):Container(),
                           widget.livetripData!.tripInfo
-                              .arrivalAtDestination!.tollAmount.toDouble()!=0.0? Row(
+                          !.arrivalAtDestination!.tollAmount.toDouble()!=0.0? Row(
                             children: [
                               robotoTextWidget(
                                   textval: tollsText,
@@ -174,7 +174,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo
-                                      .arrivalAtDestination!.tollAmount
+                                  !.arrivalAtDestination!.tollAmount
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
@@ -214,7 +214,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               const Spacer(),
                               robotoTextWidget(
                                 textval: widget.livetripData!.tripInfo
-                                    .arrivalAtDestination!.amountTobeCollected
+                                !.arrivalAtDestination!.amountTobeCollected
                                     .toDouble().round().toString(),
                                 colorval: AppColor.black,
                                 sizeval: 14,

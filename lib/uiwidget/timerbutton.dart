@@ -297,17 +297,17 @@ class _TimerButtonState extends State<TimerButton>
     Map data;
     data = {
       "passengerTripMasterId":
-      widget.liveTripData!.tripInfo.passengerTripMasterId != null
-          ? widget.liveTripData!.tripInfo.passengerTripMasterId
+      widget.liveTripData!.tripInfo!.passengerTripMasterId != null
+          ? widget.liveTripData!.tripInfo!.passengerTripMasterId
           :"",
-      "driverTripMasterId": widget.liveTripData!.driverInfo.driverId != null
-          ? widget.liveTripData!.driverInfo.driverId
+      "driverTripMasterId": widget.liveTripData!.driverInfo!.driverId != null
+          ? widget.liveTripData!.driverInfo!.driverId
           :"",
       "reason": reasonForCancellation != null
           ? reasonForCancellation
           :ShorterWaitingTime,
-      "driverId": widget.liveTripData!.driverInfo.driverId != null
-          ? widget.liveTripData!.driverInfo.driverId
+      "driverId": widget.liveTripData!.driverInfo!.driverId != null
+          ? widget.liveTripData!.driverInfo!.driverId
           :"",
       "location": {
         "latitude": latlong != null

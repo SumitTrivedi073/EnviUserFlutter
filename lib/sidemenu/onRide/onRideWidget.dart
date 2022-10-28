@@ -33,7 +33,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
           builder: (context, value, child) {
             if (value.liveTripData != null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (value.liveTripData!.tripInfo.tripStatus ==
+                if (value.liveTripData!.tripInfo!.tripStatus ==
                     TripStatusCompleted) {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
@@ -63,7 +63,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                   FromToData(value.liveTripData!),
                   EstimateFareWidget(
                       amountTobeCollected: value
-                          .liveTripData!.tripInfo.priceClass.amountToBeCollected
+                          .liveTripData!.tripInfo!.priceClass!.amountToBeCollected
                           .toStringAsFixed(2))
                 ]),
               ]));
@@ -117,7 +117,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
                               textval: liveTripData
-                                  .tripInfo.pickupLocation.pickupAddress
+                                  .tripInfo!.pickupLocation!.pickupAddress
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,
@@ -150,7 +150,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                       ),
                       child: robotoTextWidget(
                         textval:
-                            '${liveTripData.tripInfo.priceClass.distance.toStringAsFixed(2)} Km',
+                            '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w600,
@@ -175,7 +175,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
                               textval: liveTripData
-                                  .tripInfo.dropLocation.dropAddress
+                                  .tripInfo!.dropLocation!.dropAddress
                                   .toString(),
                               colorval: AppColor.black,
                               sizeval: 16,

@@ -57,7 +57,7 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 child: Image.network(
                                   encodeImgURLString(value
-                                      .liveTripData!.driverInfo.driverImgUrl),
+                                      .liveTripData!.driverInfo!.driverImgUrl),
                                        errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           Images.personPlaceHolderImage,
@@ -77,10 +77,10 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   robotoTextWidget(
-                                    textval: value.liveTripData!.driverInfo.name
+                                    textval: value.liveTripData!.driverInfo!.name
                                                 .toString() !=
                                             null
-                                        ? value.liveTripData!.driverInfo.name
+                                        ? value.liveTripData!.driverInfo!.name
                                             .toString()
                                         : '',
                                     colorval: AppColor.grey,
@@ -127,10 +127,10 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                   ),
                                   onPressed: () {
                                     makingPhoneCall(value
-                                                .liveTripData!.driverInfo.phone
+                                                .liveTripData!.driverInfo!.phone
                                                 .toString() !=
                                             null
-                                        ? value.liveTripData!.driverInfo.phone
+                                        ? value.liveTripData!.driverInfo!.phone
                                             .toString()
                                         : '');
                                   },
@@ -154,17 +154,17 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                               children: [
                                 robotoTextWidget(
                                   textval:
-                                      '${value.liveTripData!.tripInfo.priceClass.type.toString()} - ${value.liveTripData!.tripInfo.priceClass.passengerCapacity.toString()} People',
+                                      '${value.liveTripData!.tripInfo!.priceClass!.type.toString()} - ${value.liveTripData!.tripInfo!.priceClass!.passengerCapacity.toString()} People',
                                   colorval: AppColor.grey,
                                   sizeval: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 robotoTextWidget(
-                                  textval: value.liveTripData!.driverInfo
+                                  textval: value.liveTripData!.driverInfo!
                                               .vehicleNumber
                                               .toString() !=
                                           null
-                                      ? value.liveTripData!.driverInfo
+                                      ? value.liveTripData!.driverInfo!
                                           .vehicleNumber
                                           .toString()
                                       : '',
