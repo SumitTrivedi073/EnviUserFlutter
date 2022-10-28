@@ -225,7 +225,9 @@ class _LoginpageState extends State<Loginpage> {
                 height: 25,
                 onPressed: () {
                   setState(() {
-                    _timer!.cancel();
+                    if(_timer!=null && _timer!.isActive) {
+                      _timer!.cancel();
+                    }
                     _showmobileview = true;
                   });
                 },
@@ -489,11 +491,12 @@ class _LoginpageState extends State<Loginpage> {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
 
+        LoginModel users = LoginModel.fromJson(jsonData['content']);
+
       setState(() {
-        if (_timer != null && _timer!.isActive) {
+        if(_timer!=null && _timer!.isActive) {
           _timer!.cancel();
         }
-        LoginModel users = LoginModel.fromJson(jsonData['content']);
 
         Navigator.push(
             context,

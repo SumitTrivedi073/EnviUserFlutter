@@ -284,9 +284,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(
-                        Icons.star,
-                        color: AppColor.butgreen,
+                      Icon(
+                        Icons.location_on,
                       ),
                       const SizedBox(
                         width: 5,
@@ -307,8 +306,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   ),
                   Row(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 25),
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(
+                        width: 5,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width - 190,
@@ -323,31 +326,32 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   ),
                 ],
               ),
+
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.network(
-                    encodeImgURLString(arrtrip[index].driverPhoto),
-                     errorBuilder: (context, error, stackTrace) {
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      encodeImgURLString(arrtrip[index].driverPhoto),
+                      errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           Images.personPlaceHolderImage,
                           height: 50,
                           width: 50,
                         );
                       },
-                    fit: BoxFit.fill,
-                    height: 40,
-                    width: 40,
-                  ),
+                      fit: BoxFit.fill,
+                      height: 40,
+                      width: 40,
+                    ),
 
-                  robotoTextWidget(
-                    textval: arrtrip[index].vehicle.Vnumber,
-                    colorval: AppColor.darkgrey,
-                    sizeval: 13.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ]),
+                    robotoTextWidget(
+                      textval: arrtrip[index].name,
+                      colorval: AppColor.darkgrey,
+                      sizeval: 13.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ]),
 
             ],
           ),
