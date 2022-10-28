@@ -6,6 +6,7 @@ import 'package:envi/uiwidget/sfcompactTextWidget.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -570,28 +571,28 @@ class _NavigationPageState extends State<NavigationDrawer> {
     await _auth.signOut();
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    try {
-      dynamic res = await HTTP.postwithoutdata(
-          userdeRegisterMe(), null); //post(userdeRegisterMe());
-      print(res.statusCode);
-      if (res.statusCode == 200) {
-        showSnackbar(context, "Delete Account SuccessFully");
-        sharedPreferences.clear();
 
-        Profiledata.setusreid("");
-        Profiledata.settoken("");
-        Profiledata.setmailid("");
-        Profiledata.setpropic("");
-        Profiledata.setphone("");
-        Profiledata.setgender("");
-        Profiledata.setname("");
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => const Loginpage()),
-            (Route<dynamic> route) => false);
-      }
-    } catch (e) {
-      print("Error==========>$e");
+    dynamic res = await HTTP.postwithoutdata(
+        userdeRegisterMe(), null); //post(userdeRegisterMe());
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+      showToast("Deleted Account SuccessFully");
+      sharedPreferences.clear();
+
+      Profiledata.setusreid("");
+      Profiledata.settoken("");
+      Profiledata.setmailid("");
+      Profiledata.setpropic("");
+      Profiledata.setphone("");
+
+      Profiledata.setgender("");
+      Profiledata.setname("");
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const Loginpage()));
+      setState(() {});
+    } else {
+      showToast("Failed to Delete");
     }
   }
 }

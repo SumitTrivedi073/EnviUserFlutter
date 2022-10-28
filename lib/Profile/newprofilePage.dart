@@ -151,6 +151,9 @@ class _NewProfilePageState extends State<NewProfilePage> {
       if (response.statusCode == 200) {
         updateUserResponse = jsonDecode(await response.stream.bytesToString());
         return true;
+      } else {
+        debugPrint(response.toString());
+        return false;
       }
     } catch (e) {
       debugPrint(response.reasonPhrase);
@@ -193,6 +196,9 @@ class _NewProfilePageState extends State<NewProfilePage> {
         registerNewUserResponse =
             jsonDecode(await response.stream.bytesToString());
         return true;
+      } else {
+        debugPrint(response.toString());
+        return false;
       }
     } catch (e) {
       debugPrint(response.reasonPhrase);

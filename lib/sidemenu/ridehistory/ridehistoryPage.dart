@@ -20,6 +20,12 @@ import '../../web_service/Constant.dart';
 import '../onRide/model/SosModel.dart';
 import 'model/rideHistoryModel.dart';
 
+class CarbonProfile {
+  late double totalLifeTimeKMs;
+  late double totalLifeTimeTrips;
+  late String carbonSaved;
+}
+
 class RideHistoryPage extends StatefulWidget {
   @override
   State<RideHistoryPage> createState() => _RideHistoryPageState();
@@ -34,6 +40,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   int _limit = 20;
   late dynamic userId;
   List<RideHistoryModel> arrtrip = [];
+
+  dynamic carbonProfile;
 
   @override
   void initState() {
@@ -58,9 +66,11 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-
         //print(jsonDecode(res.body)['content']);
         if (jsonDecode(res.body)['content']['result'] != null) {
+          carbonProfile = jsonDecode(res.body)['content']['carbonProfile'];
+          print(
+              'RAGHU CARBON PROFILE ${carbonProfile} '); //totalLifeTimeKMs, totalLifeTimeTrips, carbonSaved
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
               .map((i) => RideHistoryModel.fromJson(i))
               .toList();
@@ -72,7 +82,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       });
     }
     setState(() {
-
       if (arrtrip.length != _limit) {
         _hasNextPage = false;
       }
@@ -179,7 +188,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   }
 
   Widget _buildPosts(BuildContext context) {
-    if(arrtrip.length == 0 || arrtrip == null)return Center(child: Text("No trips data available"));
+    if (arrtrip.length == 0 || arrtrip == null)
+      return Center(child: Text("No trips data available"));
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
@@ -239,17 +249,19 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               fontWeight: FontWeight.bold,
             ),
           ]),
-          arrtrip[index].price.totalFare!='NA'? robotoTextWidget(
-            textval: "₹ ${arrtrip[index].price.totalFare}",
-            colorval: AppColor.black,
-            sizeval: 18.0,
-            fontWeight: FontWeight.bold,
-          ): robotoTextWidget(
-            textval: arrtrip[index].status,
-            colorval: AppColor.black,
-            sizeval: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
+          arrtrip[index].price.totalFare != 'NA'
+              ? robotoTextWidget(
+                  textval: "₹ ${arrtrip[index].price.totalFare}",
+                  colorval: AppColor.black,
+                  sizeval: 18.0,
+                  fontWeight: FontWeight.bold,
+                )
+              : robotoTextWidget(
+                  textval: arrtrip[index].status,
+                  colorval: AppColor.black,
+                  sizeval: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
         ],
       ),
     );
@@ -277,12 +289,12 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width - 110,
+                        width: MediaQuery.of(context).size.width - 185,
                         child: robotoTextWidget(
-                          textval: arrtrip[index].fromAddress,
+                          textval: arrtrip[index].toAddress,
                           colorval: AppColor.black,
-                          sizeval: 16,
-                          fontWeight: FontWeight.w200,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ],
@@ -300,22 +312,22 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width - 110,
+                        width: MediaQuery.of(context).size.width - 185,
                         child: robotoTextWidget(
-                          textval: arrtrip[index].toAddress,
-                          colorval: AppColor.black,
-                          sizeval: 16,
-                          fontWeight: FontWeight.w200,
+                          textval: arrtrip[index].fromAddress,
+                          colorval: AppColor.greyblack,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.normal,
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ],
               ),
-
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end
+                  ,
                   children: [
                     Image.network(
                       encodeImgURLString(arrtrip[index].driverPhoto),
@@ -330,7 +342,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       height: 40,
                       width: 40,
                     ),
-
                     robotoTextWidget(
                       textval: arrtrip[index].name,
                       colorval: AppColor.darkgrey,
@@ -338,7 +349,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ]),
-
             ],
           ),
           const SizedBox(
@@ -351,15 +361,17 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 const Padding(
                   padding: EdgeInsets.only(left: 25),
                 ),
-                arrtrip[index].distance!='NA'?robotoTextWidget(
-                  textval: "${arrtrip[index].distance} Km",
-                  colorval: AppColor.darkgrey,
-                  sizeval: 13.0,
-                  fontWeight: FontWeight.w800,
-                ):Container(),
+                arrtrip[index].distance != 'NA'
+                    ? robotoTextWidget(
+                        textval: "${arrtrip[index].distance} Km",
+                        colorval: AppColor.darkgrey,
+                        sizeval: 13.0,
+                        fontWeight: FontWeight.w800,
+                      )
+                    : Container(),
               ]),
               robotoTextWidget(
-                textval: arrtrip[index].name,
+                textval: arrtrip[index].vehicle.Vnumber,
                 colorval: AppColor.darkgrey,
                 sizeval: 13.0,
                 fontWeight: FontWeight.bold,
@@ -381,23 +393,24 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      child: arrtrip[index].status == RideHistoryCancelledStatus && arrtrip[index].status == RideHistoryRejectedStatus
+      child: arrtrip[index].status == RideHistoryCancelledStatus &&
+              arrtrip[index].status == RideHistoryRejectedStatus
           ? Container(
-             width: MediaQuery.of(context).size.width,
-        child: MaterialButton(
-          child: robotoTextWidget(
-            textval: Support,
-            colorval: AppColor.butgreen,
-            sizeval: 14.0,
-            fontWeight: FontWeight.bold,
-          ),
-          onPressed: () {
-            makingPhoneCall(LandingPageConfig().getcustomerCare() != null
-                ? LandingPageConfig().getcustomerCare()
-                : '');
-          },
-        ),
-      )
+              width: MediaQuery.of(context).size.width,
+              child: MaterialButton(
+                child: robotoTextWidget(
+                  textval: Support,
+                  colorval: AppColor.butgreen,
+                  sizeval: 14.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                onPressed: () {
+                  makingPhoneCall(LandingPageConfig().getcustomerCare() != null
+                      ? LandingPageConfig().getcustomerCare()
+                      : '');
+                },
+              ),
+            )
           : Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               Align(
                 alignment: Alignment.center,
@@ -469,14 +482,16 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               Expanded(
                   flex: 2,
                   child: Column(
-                    children: const [
+                    children: [
                       robotoTextWidget(
-                        textval: "22",
+                        textval: (carbonProfile != null)
+                            ? " ${carbonProfile['totalLifeTimeTrips']}"
+                            : '--', //Change here
                         colorval: AppColor.white,
                         sizeval: 22.0,
                         fontWeight: FontWeight.bold,
                       ),
-                      robotoTextWidget(
+                      const robotoTextWidget(
                         textval: "Rides Taken",
                         colorval: AppColor.lightwhite,
                         sizeval: 13.0,
@@ -487,14 +502,16 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               Expanded(
                   flex: 2,
                   child: Column(
-                    children: const [
+                    children: [
                       robotoTextWidget(
-                        textval: "175 Kg",
+                        textval: (carbonProfile != null)
+                            ? "${carbonProfile['carbonSaved']}"
+                            : '--', //Change Here
                         colorval: AppColor.white,
                         sizeval: 22.0,
                         fontWeight: FontWeight.bold,
                       ),
-                      robotoTextWidget(
+                      const robotoTextWidget(
                         textval: "CO2 Emission Prevented",
                         colorval: AppColor.lightwhite,
                         sizeval: 10.0,
