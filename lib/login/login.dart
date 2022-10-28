@@ -42,7 +42,7 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController plushcontroller = new TextEditingController();
   TextEditingController countrycontroller = new TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  late Timer _timer;
+   Timer? _timer;
   int _start = 60;
 
   @override
@@ -110,8 +110,8 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   void dispose() {
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
     }
     super.dispose();
   }
@@ -225,7 +225,7 @@ class _LoginpageState extends State<Loginpage> {
                 height: 25,
                 onPressed: () {
                   setState(() {
-                    _timer.cancel();
+                    _timer!.cancel();
                     _showmobileview = true;
                   });
                 },
@@ -478,7 +478,7 @@ class _LoginpageState extends State<Loginpage> {
       "deviceId": deviceId
     };
 
-    print(data);
+    print("LoginInput==============>${data.toString()}");
     sharedPreferences.setString(deviceIdShared, deviceId!);
     sharedPreferences.setString(fcmTokenShared, fcmToken!);
     var jsonData = null;
@@ -489,12 +489,12 @@ class _LoginpageState extends State<Loginpage> {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
 
-      setState(() {
-        if(_timer!=null && _timer.isActive) {
-          _timer.cancel();
-        }
-        LoginModel users = LoginModel.fromJson(jsonData['content']);
+      LoginModel users = LoginModel.fromJson(jsonData['content']);
 
+      setState(() {
+        if(_timer!=null && _timer!.isActive) {
+          _timer!.cancel();
+        }
         Navigator.push(
             context,
             MaterialPageRoute(

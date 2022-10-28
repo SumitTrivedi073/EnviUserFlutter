@@ -1,5 +1,5 @@
 import 'package:envi/web_service/ApiConstants.dart' as ApiConstants;
-var ENVIRONMENT = 'PROD';
-var releaseType = ApiConstants.production;
-var isrunOnSemulation = false;
+var ENVIRONMENT = 'QA';
+var releaseType = ApiConstants.qa;
+var isrunOnSemulation = true;
 

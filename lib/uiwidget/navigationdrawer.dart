@@ -559,11 +559,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
               (Route<dynamic> route) => false);
-    });
 
   }
 
