@@ -310,10 +310,10 @@ class _TimerButtonState extends State<TimerButton>
           ? widget.liveTripData!.driverInfo.driverId
           :"",
       "location": {
-        "latitude": latlong!.latitude != null
+        "latitude": latlong != null
             ? latlong!.latitude
             :0.0,
-        "longitude": latlong!.longitude != null
+        "longitude": latlong != null
             ? latlong!.longitude
             :0.0
       }

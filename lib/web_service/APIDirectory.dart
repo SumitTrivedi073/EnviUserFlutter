@@ -12,9 +12,9 @@ const mobileBaseUrl = '$scheme://$mobileHost:$port';
 
 const deployedLambdaUrl = "";
 
-const qaUrl = 'https://qausernew.azurewebsites.net/';
+const qaUrl = 'https://qausernew.azurewebsites.net';
 
-const productionUrl = 'https://qausernew.azurewebsites.net/';
+const productionUrl = 'https://qausernew.azurewebsites.net';
 const directionBaseURL = 'https://maps.googleapis.com/maps/api/directions/json';
 
 getBaseURL() {
