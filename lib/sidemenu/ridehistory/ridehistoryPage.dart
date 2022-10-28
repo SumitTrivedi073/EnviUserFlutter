@@ -20,14 +20,12 @@ import '../../web_service/Constant.dart';
 import '../onRide/model/SosModel.dart';
 import 'model/rideHistoryModel.dart';
 
-
 class CarbonProfile {
   late double totalLifeTimeKMs;
   late double totalLifeTimeTrips;
   late String carbonSaved;
-  
-
 }
+
 class RideHistoryPage extends StatefulWidget {
   @override
   State<RideHistoryPage> createState() => _RideHistoryPageState();
@@ -326,7 +324,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   ),
                 ],
               ),
-
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +341,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       height: 40,
                       width: 40,
                     ),
-
                     robotoTextWidget(
                       textval: arrtrip[index].name,
                       colorval: AppColor.darkgrey,
@@ -352,7 +348,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ]),
-
             ],
           ),
           const SizedBox(
@@ -486,14 +481,16 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               Expanded(
                   flex: 2,
                   child: Column(
-                    children:  [
+                    children: [
                       robotoTextWidget(
-                        textval: " ${carbonProfile['totalLifeTimeTrips']}", //Change here
+                        textval: (carbonProfile != null)
+                            ? " ${carbonProfile['totalLifeTimeTrips']}"
+                            : '--', //Change here
                         colorval: AppColor.white,
                         sizeval: 22.0,
                         fontWeight: FontWeight.bold,
                       ),
-                     const  robotoTextWidget(
+                      const robotoTextWidget(
                         textval: "Rides Taken",
                         colorval: AppColor.lightwhite,
                         sizeval: 13.0,
@@ -504,9 +501,11 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               Expanded(
                   flex: 2,
                   child: Column(
-                    children:  [
+                    children: [
                       robotoTextWidget(
-                        textval: "${carbonProfile['carbonSaved']}Kg", //Change Here
+                        textval: (carbonProfile != null)
+                            ? "${carbonProfile['carbonSaved']}"
+                            : '--', //Change Here
                         colorval: AppColor.white,
                         sizeval: 22.0,
                         fontWeight: FontWeight.bold,
