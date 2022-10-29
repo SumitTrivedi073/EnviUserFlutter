@@ -88,10 +88,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   }
 
   getDirections() async {
-    if (GOOGLE_API_INVOCATIONS >
-        AppConfig().getGoogleDirectionWFDriverIntervalMaxTrialCount()) {
+    if (GOOGLE_API_INVOCATIONS > GOOGLE_API_INVOCATION_LIMIT) {
       print(
-          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}, Limit : ${AppConfig().getGoogleDirectionWFDriverIntervalMaxTrialCount()}  Configued interval ${AppConfig().getGoogleDirectionWFDriverIntervalInMin()}");
+          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}, Limit : ${GOOGLE_API_INVOCATION_LIMIT}  Configued interval ${GOOGLE_API_INNTERVAL_MINUTES}");
       return;
     }
     String request =
