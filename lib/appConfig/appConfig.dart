@@ -1,5 +1,4 @@
 class AppConfig {
-
   AppConfig._privateConstructor();
 
   static final AppConfig _instance = AppConfig._privateConstructor();
@@ -10,7 +9,7 @@ class AppConfig {
   static int minAndroidVersion = 0;
   static int miniOSVersion = 0;
   static String androidAppUrl = "";
-  static String iosAppUrl= "";
+  static String iosAppUrl = "";
   static int advance_booking_time_limit = 0;
   static int driver_assignment_time_limit = 0;
   static bool isScheduleFeatureEnabled = false;
@@ -23,60 +22,110 @@ class AppConfig {
   static int googleDirectionDriverIntervalInMin = 0;
   static int googleDirectionDriverIntervalMaxTrialCount = 0;
 
-  static void setminAndroidVersion(int val){minAndroidVersion = val;}
-  int getminAndroidVersion(){
+  static int googleDirectionWFDriverIntervalInMin = 10;
+  static int googleDirectionWFDriverIntervalMaxTrialCount = 3;
+
+  static void setminAndroidVersion(int val) {
+    minAndroidVersion = val;
+  }
+
+  int getminAndroidVersion() {
     return minAndroidVersion;
   }
 
+  static setminiOSVersion(int val) {
+    miniOSVersion = val;
+  }
 
-  static setminiOSVersion(int val){miniOSVersion = val;}
-  int getminiOSVersion(){
+  int getminiOSVersion() {
     return miniOSVersion;
   }
-  static setandroidAppUrl(String val){androidAppUrl = val;}
-  String getandroidAppUrl(){
+
+  static setandroidAppUrl(String val) {
+    androidAppUrl = val;
+  }
+
+  String getandroidAppUrl() {
     return androidAppUrl;
   }
-  static setiosAppUrl(String val){iosAppUrl = val;}
-  String getiosAppUrl(){
+
+  static setiosAppUrl(String val) {
+    iosAppUrl = val;
+  }
+
+  String getiosAppUrl() {
     return iosAppUrl;
   }
-  static setadvance_booking_time_limit(int val){advance_booking_time_limit = val;}
-  int getadvance_booking_time_limit(){
+
+  static setadvance_booking_time_limit(int val) {
+    advance_booking_time_limit = val;
+  }
+
+  int getadvance_booking_time_limit() {
     return advance_booking_time_limit;
   }
-  static setdriver_assignment_time_limit(int val){driver_assignment_time_limit = val;}
-  int getdriver_assignment_time_limit(){
+
+  static setdriver_assignment_time_limit(int val) {
+    driver_assignment_time_limit = val;
+  }
+
+  int getdriver_assignment_time_limit() {
     return driver_assignment_time_limit;
   }
-  static setisScheduleFeatureEnabled(bool val){isScheduleFeatureEnabled = val;}
-  bool getisScheduleFeatureEnabled(){
+
+  static setisScheduleFeatureEnabled(bool val) {
+    isScheduleFeatureEnabled = val;
+  }
+
+  bool getisScheduleFeatureEnabled() {
     return isScheduleFeatureEnabled;
   }
 
-  static setscheduleFreeDriverDistance(int val){scheduleFreeDriverDistance = val;}
-  int getscheduleFreeDriverDistance(){
+  static setscheduleFreeDriverDistance(int val) {
+    scheduleFreeDriverDistance = val;
+  }
+
+  int getscheduleFreeDriverDistance() {
     return scheduleFreeDriverDistance;
   }
-  static setpaymentOptions(String val){paymentOptions = val;}
-  String getpaymentOptions(){
+
+  static setpaymentOptions(String val) {
+    paymentOptions = val;
+  }
+
+  String getpaymentOptions() {
     return paymentOptions;
   }
-  static setdefaultPaymentMode(String val){defaultPaymentMode = val;}
-  String getdefaultPaymentMode(){
+
+  static setdefaultPaymentMode(String val) {
+    defaultPaymentMode = val;
+  }
+
+  String getdefaultPaymentMode() {
     return defaultPaymentMode;
   }
-  static setscheduleAllottedDriverDistance(int val){scheduleAllottedDriverDistance = val;}
-  int getscheduleAllottedDriverDistance(){
+
+  static setscheduleAllottedDriverDistance(int val) {
+    scheduleAllottedDriverDistance = val;
+  }
+
+  int getscheduleAllottedDriverDistance() {
     return scheduleAllottedDriverDistance;
   }
 
-  static setisCancellationFeeApplicable(bool val){isCancellationFeeApplicable = val;}
-  bool getisCancellationFeeApplicable(){
+  static setisCancellationFeeApplicable(bool val) {
+    isCancellationFeeApplicable = val;
+  }
+
+  bool getisCancellationFeeApplicable() {
     return isCancellationFeeApplicable;
   }
-  static setcancellationFee(int val){cancellationFee = val;}
-  int getcancellationFee(){
+
+  static setcancellationFee(int val) {
+    cancellationFee = val;
+  }
+
+  int getcancellationFee() {
     return cancellationFee;
   }
   static setgoogleDirectionDriverIntervalInMin(int val){googleDirectionDriverIntervalInMin = val;}
