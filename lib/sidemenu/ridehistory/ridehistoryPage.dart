@@ -334,7 +334,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                            ClipRRect(
                                borderRadius: BorderRadius.circular(50.0),
                                child: Image.network(
-                                 encodeImgURLString(Profiledata().getpropic()),
+                                 encodeImgURLString(arrtrip[index].driverPhoto),
                                  errorBuilder: (context, error, stackTrace) {
                                    return Image.asset(
                                      Images.personPlaceHolderImage,
