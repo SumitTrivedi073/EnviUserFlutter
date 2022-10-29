@@ -83,7 +83,8 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       });
     }
     setState(() {
-      if (arrtrip.length != _limit) {
+
+      if (arrtrip.length != _limit && arrtrip.isNotEmpty) {
         _hasNextPage = false;
       }
 
