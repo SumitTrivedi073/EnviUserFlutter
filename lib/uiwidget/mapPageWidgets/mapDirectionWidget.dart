@@ -63,52 +63,8 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed), //Icon for Marker
     ));
 
-    getDirections(); //fetch direction polylines from Google API
 
     super.initState();
-  }
-
-  getDirections() async {
-    List<LatLng> polylineCoordinates = [];
-
-    String request =
-        '$directionBaseURL?origin=${pickupLocation.latitude},${pickupLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
-    var url = Uri.parse(request);
-    dynamic response = await HTTP.get(url);
-    if (response != null && response != null) {
-      if (response.statusCode == 200) {
-        //print(json.decode(response.body));
-        DirectionModel directionModel = DirectionModel.fromJson(json.decode(response.body) );
-        List<PointLatLng> pointLatLng = [];
-
-        for (var i = 0; i < directionModel.routes.length; i++) {
-
-          for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
-            for (var k = 0; k < directionModel.routes[i].legs[j].steps.length; k++) {
-              pointLatLng =   polylinePoints.decodePolyline(directionModel.routes[i].legs[j].steps[k].polyline.points);
-              for (var point in pointLatLng) {
-                polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-              }
-            }
-          }
-        }
-        addPolyLine(polylineCoordinates);
-      } else {
-        throw Exception('Failed to load predictions');
-      }
-    }
-  }
-
-  addPolyLine(List<LatLng> polylineCoordinates) {
-    PolylineId id = const PolylineId("poly");
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.green,
-      points: polylineCoordinates,
-      width: 5,
-    );
-    polylines[id] = polyline;
-    setState(() {});
   }
 
   @override
