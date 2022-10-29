@@ -21,13 +21,14 @@ class CarCategoriesWidget extends StatefulWidget {
   final SearchPlaceModel? toAddress;
   final void Function(vehiclePriceClassesModel) callback;
   final void Function(String) callback2;
-final String scheduledAt;
+  final String scheduledAt;
   const CarCategoriesWidget(
       {Key? key,
       this.toAddress,
       this.fromAddress,
       required this.callback,
-      required this.callback2,required this.scheduledAt})
+      required this.callback2,
+      required this.scheduledAt})
       : super(key: key);
 
   @override
@@ -65,7 +66,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.latitude,
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
-        widget.toAddress!.latLng.longitude,widget.scheduledAt);
+        widget.toAddress!.latLng.longitude,
+        widget.scheduledAt);
     if (response != null && response.statusCode == 200) {
       setState(() {
         isLoading = false;
@@ -74,21 +76,21 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             .map((i) => vehiclePriceClassesModel.fromJson(i))
             .toList();
         distance = jsonDecode(response.body)['content']['estimatedDistance'];
-        widget.callback2(distance.toString());
+        widget.callback2(distance.toStringAsFixed(2));
       });
     } else {
-      var errmsg = jsonDecode(response.body)['message'];
-       setState(() {
-         isLoading = false;
-       });
+      var errmsg = jsonDecode(response.body)['msg'];
+      setState(() {
+        isLoading = false;
+      });
       showDialog(
         context: context,
-        builder: (BuildContext context) => dialogueError(context,errmsg),
+        builder: (BuildContext context) => dialogueError(context, errmsg),
       );
-
     }
   }
-  Widget dialogueError(BuildContext context,String msg) {
+
+  Widget dialogueError(BuildContext context, String msg) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -124,15 +126,14 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                const HomePage(title: "title")),
-                                (Route<dynamic> route) => false);
+                                    const HomePage(title: "title")),
+                            (Route<dynamic> route) => false);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
@@ -326,50 +327,50 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     robotoTextWidget(
-                        textval: "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
+                        textval:
+                            "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
                         colorval: AppColor.black,
                         sizeval: 18,
                         fontWeight: FontWeight.w800),
                     const SizedBox(
                       width: 25,
                     ),
-                    if(vehiclePriceClasses[index].discountPercent != "0")
-                    Text(
-                      getTotalPrice(
-                          vehiclePriceClasses[index].total_fare.toDouble(),
-                          vehiclePriceClasses[index]
-                              .seller_discount
-                              .toDouble()),
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Roboto',
-                          decoration: TextDecoration.lineThrough),
-                    ),
+                    if (vehiclePriceClasses[index].discountPercent != "0")
+                      Text(
+                        getTotalPrice(
+                            vehiclePriceClasses[index].total_fare.toDouble(),
+                            vehiclePriceClasses[index]
+                                .seller_discount
+                                .toDouble()),
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            color: AppColor.black,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Roboto',
+                            decoration: TextDecoration.lineThrough),
+                      ),
                     const SizedBox(
                       width: 25,
                     ),
-
-                    if(vehiclePriceClasses[index].discountPercent != "0")
-                    Column(
-                      children: [
-                        const robotoTextWidget(
-                            textval: "Special Offer",
-                            colorval: AppColor.purple,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w800),
-                        robotoTextWidget(
-                            textval:
-                                '${vehiclePriceClasses[index].discountPercent.toString()} % Off',
-                            colorval: AppColor.purple,
-                            sizeval: 13,
-                            fontWeight: FontWeight.w400),
-                      ],
-                    )
+                    if (vehiclePriceClasses[index].discountPercent != "0")
+                      Column(
+                        children: [
+                          const robotoTextWidget(
+                              textval: "Special Offer",
+                              colorval: AppColor.purple,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w800),
+                          robotoTextWidget(
+                              textval:
+                                  '${vehiclePriceClasses[index].discountPercent.toString()} % Off',
+                              colorval: AppColor.purple,
+                              sizeval: 13,
+                              fontWeight: FontWeight.w400),
+                        ],
+                      )
                   ],
                 ),
               ],

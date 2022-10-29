@@ -137,8 +137,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   void receiveNotification() {
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/ic_notification');
+    const DarwinInitializationSettings initializationSettingsDarwin =
+    DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+
+    );
     var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsDarwin);
+
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance.getInitialMessage().then(
@@ -297,6 +305,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
+      AppConfig.setgoogleDirectionDriverIntervalInMin(
+          jsonData['applicationConfig']['searchConfig']['googleDirectionWFDriverIntervalInMin']);
+      AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
+          jsonData['applicationConfig']['searchConfig']['googleDirectionWFDriverIntervalMaxTrialCount']);
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

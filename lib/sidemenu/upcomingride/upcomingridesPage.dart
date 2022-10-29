@@ -170,7 +170,10 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   Widget _buildPosts(BuildContext context) {
-    if(arrtrip.length == 0 || arrtrip == null)return Center(child: Text("No trips data available"));
+    if(arrtrip.isEmpty) {
+      return const Center(child: robotoTextWidget(textval: "No trips data available",colorval: AppColor.black,
+          sizeval: 14,fontWeight: FontWeight.w600,));
+    }
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
@@ -286,7 +289,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                         const SizedBox(
                           width: 5,
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width - 80,
                           child: robotoTextWidget(
                             textval: arrtrip[index].fromAddress,
@@ -310,7 +313,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                         const SizedBox(
                           width: 5,
                         ),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width - 80,
                           child: robotoTextWidget(
                             textval: arrtrip[index].toAddress,
@@ -372,7 +375,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
           MaterialButton(
             child: robotoTextWidget(
               textval: arrtrip[index].status == "cancelled"?"Already Cancelled":CancelBooking,
-              colorval: Color(0xFFED0000),
+              colorval: const Color(0xFFED0000),
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),

@@ -66,21 +66,22 @@ class _AppBarPageState extends State<AppBarWidget> {
                         ],
                       ),
                     ),
-                    Card(
-                      child: Image.network(
-                        encodeImgURLString(Profiledata.propic),
-                         errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          Images.personPlaceHolderImage,
-                          height: 50,
-                          width: 50,
-                        );
-                      },
-                        fit: BoxFit.fill,
-                        height: 40,
-                        width: 50,
-                      ),
-                    )
+                    ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: Image.network(
+                            encodeImgURLString(Profiledata().getpropic()),
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                Images.personPlaceHolderImage,
+                                height: 40,
+                                width: 40,
+                              );
+                            },
+                            fit: BoxFit.fill,
+                            height: 40,
+                            width: 40,
+                          )),
+
                   ],
                 ),
               ),

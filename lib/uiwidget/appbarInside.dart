@@ -63,21 +63,23 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                     sizeval: 18.0,
                     fontWeight: FontWeight.w800,
                   ),
-                  Card(
-                    child: Image.network(
-                      encodeImgURLString(Profiledata.propic),
-                      fit: BoxFit.fill,
-                      height: 40,
-                      width: 50,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          Images.personPlaceHolderImage,
-                          height: 50,
-                          width: 50,
-                        );
-                      },
-                    ),
-                  )
+                 Padding(padding: EdgeInsets.only(right: 10),
+                 child:  ClipRRect(
+                     borderRadius: BorderRadius.circular(50.0),
+                     child: Image.network(
+                       encodeImgURLString(Profiledata().getpropic()),
+                       errorBuilder: (context, error, stackTrace) {
+                         return Image.asset(
+                           Images.personPlaceHolderImage,
+                           height: 40,
+                           width: 40,
+                         );
+                       },
+                       fit: BoxFit.fill,
+                       height: 40,
+                       width: 40,
+                     )),),
+
                 ],
               )),
         ],
