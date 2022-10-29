@@ -10,6 +10,7 @@ import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -132,12 +133,13 @@ class _LoginpageState extends State<Loginpage> {
             ),
             robotoTextWidget(
                 textval:
-                    'OTP SENT TO +${countrycontroller.text}${phoneController.text}',
+                    'OTP SENT TO +${countrycontroller.text} ${phoneController.text}',
                 colorval: AppColor.black,
-                sizeval: 16.0,
-                fontWeight: FontWeight.normal),
+                sizeval: 14.0,
+                fontWeight: FontWeight.w600),
             TextFormField(
               controller: otpController,
+              inputFormatters: [LengthLimitingTextInputFormatter(6)],
               keyboardType: TextInputType.phone,
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
@@ -179,7 +181,7 @@ class _LoginpageState extends State<Loginpage> {
                         textval: verify,
                         colorval: AppColor.butgreen,
                         sizeval: 18.0,
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.w800)),
               ),
             ),
             const SizedBox(
@@ -316,7 +318,8 @@ class _LoginpageState extends State<Loginpage> {
                     child: TextFormField(
                       controller: phoneController,
                       // maxLength: 12,
-                      keyboardType: TextInputType.phone,
+                      inputFormatters: [LengthLimitingTextInputFormatter(12)],
+                      keyboardType: TextInputType.number,
                       style: const TextStyle(color: AppColor.black),
                       decoration: const InputDecoration(
                         hintText: " Please Enter phone number",
@@ -324,15 +327,12 @@ class _LoginpageState extends State<Loginpage> {
                             TextStyle(color: Colors.black45, fontSize: 14),
                       ),
                       validator: (value) {
-                        if (value!.length < 13) {
-                          if (value.isEmpty ||
+                          if (value!.isEmpty ||
                               !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
                                   .hasMatch(value)) {
                             return 'Please enter valid phone number!';
                           }
-                        } else {
-                          return "Number can't exceed twelve digits ";
-                        }
+
 
                         return null;
                       },

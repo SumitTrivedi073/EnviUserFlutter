@@ -90,15 +90,13 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
 
       if (res.statusCode == 200) {
+        _isLoadMoreRunning = false;
         final List<ScheduleTripModel> fetchedPosts =
         (jsonDecode(res.body)['content']['schedule_trip_list'] as List)
             .map((i) => ScheduleTripModel.fromJson(i))
             .toList();
         if (fetchedPosts.length > 0) {
           setState(() {
-            if (fetchedPosts.length != _limit) {
-              _hasNextPage = false;
-            }
             arrtrip.addAll(fetchedPosts);
           });
         } else {
@@ -113,9 +111,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
           _isLoadMoreRunning = false;
         });
       }
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
     }
   }
 
