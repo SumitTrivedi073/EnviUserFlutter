@@ -16,6 +16,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../appConfig/Profiledata.dart';
 import '../appConfig/landingPageSettings.dart';
+import '../login/model/LoginModel.dart';
 import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
 import '../theme/string.dart';
@@ -67,12 +68,22 @@ class _NavigationPageState extends State<NavigationDrawer> {
             ),
             child: GestureDetector(
               onTap: () {
+                LoginModel user = LoginModel(
+                    Profiledata().gettoken(),
+                    Profiledata().getusreid(),
+                    Profiledata().getname(),
+                    Profiledata().getpropic(),
+                    Profiledata().getgender(),
+                    Profiledata().getphone(),
+                    Profiledata().getmailid());
                 closeDrawer();
-                Navigator.of(context).pushAndRemoveUntil(
+                Navigator.push(
+                    context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            ProfilePage()), //RAGHU VT : Please change this to Approporate Page
-                    (route) => true);
+                        builder: (context) => NewProfilePage(
+                          user: user!,
+                          isUpdate: true,
+                        )));
               },
               child: Container(
                 child: Column(

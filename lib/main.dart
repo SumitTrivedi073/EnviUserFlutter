@@ -128,8 +128,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   void receiveNotification() {
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/ic_notification');
+    const DarwinInitializationSettings initializationSettingsDarwin =
+    DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+
+    );
     var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsDarwin);
+
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.instance.getInitialMessage().then(
