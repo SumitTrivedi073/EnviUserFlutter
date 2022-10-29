@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../appConfig/Profiledata.dart';
 import '../main.dart';
+import '../sidemenu/home/homePage.dart';
 import '../theme/images.dart';
 import '../web_service/APIDirectory.dart';
 import '../web_service/Constant.dart';
@@ -32,7 +33,6 @@ class NewProfilePage extends StatefulWidget {
       {Key? key,
       this.user,
       required this.isUpdate,
-      this.callback,
       this.phone,
       this.countryCode})
       : super(key: key);
@@ -41,7 +41,6 @@ class NewProfilePage extends StatefulWidget {
   final String? phone;
   final String? countryCode;
 
-  final void Function(LoginModel user)? callback;
 
   @override
   State<NewProfilePage> createState() => _NewProfilePageState();
@@ -511,15 +510,36 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                 selectedGender!,
                                 widget.user!.phone,
                                 widget.user!.mailid);
-                            widget.callback!(usr);
+                            sharedPreferences.setString(
+                                loginEmail, _emailController.text);
+
+                            sharedPreferences.setString(
+                                logingender, selectedGender!);
+                            sharedPreferences.setString(
+                                loginPhone, _phoneNoController.text);
+                            sharedPreferences.setString(
+                                loginName, _firstNameController.text);
+                            sharedPreferences.setString(
+                                loginpropic,
+                              updateUserResponse['pro_pic'] ??
+                                  widget.user!.propic);
+
+                            Profiledata.setmailid(_emailController.text);
+                            Profiledata.setpropic(updateUserResponse['pro_pic'] ??
+                                widget.user!.propic);
+                            Profiledata.setphone(_phoneNoController.text);
+                            Profiledata.setgender(selectedGender!);
+                            Profiledata.setname(_firstNameController.text);
                             // utility.showInSnackBar(
                             //     value: updatedSuccessText,
                             //     context: context,
                             //     duration: const Duration(seconds: 3));
                             showToast(updatedSuccessText);
-                            Future.delayed(const Duration(seconds: 2), () {
-                              Navigator.of(context).pop();
-                            });
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  const HomePage(title: "title")));
+
                           } else {
                             showToast(failedToUpdateText);
                             // utility.showInSnackBar(

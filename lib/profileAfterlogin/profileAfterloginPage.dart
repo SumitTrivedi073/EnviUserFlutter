@@ -157,7 +157,6 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                                         builder: (context) => NewProfilePage(
                                               user: user!,
                                               isUpdate: true,
-                                              callback: assignUserAfterUpdate,
                                             )));
                               },
                               child: const Icon(
@@ -340,9 +339,5 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
     );
   }
 
-  assignUserAfterUpdate(LoginModel updatedUser) {
-    setState(() {
-      user = updatedUser;
-    });
-  }
+
 }
