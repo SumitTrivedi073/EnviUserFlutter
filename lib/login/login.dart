@@ -139,6 +139,7 @@ class _LoginpageState extends State<Loginpage> {
                 fontWeight: FontWeight.w600),
             TextFormField(
               controller: otpController,
+              inputFormatters: [LengthLimitingTextInputFormatter(6)],
               keyboardType: TextInputType.phone,
               style: const TextStyle(color: AppColor.black),
               decoration: const InputDecoration(
