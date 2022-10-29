@@ -488,6 +488,10 @@ class _NewProfilePageState extends State<NewProfilePage> {
                   ? MaterialButton(
                       onPressed: () async {
                         if (widget.isUpdate) {
+
+                          setState(() {
+                            isLoading = true;
+                          });
                           SharedPreferences sharedPreferences =
                               await SharedPreferences.getInstance();
 
@@ -501,6 +505,9 @@ class _NewProfilePageState extends State<NewProfilePage> {
                               email: _emailController.text);
 
                           if (response) {
+                            setState(() {
+                              isLoading = false;
+                            });
                             LoginModel usr = LoginModel(
                                 widget.user!.token,
                                 id ?? widget.user!.id,
@@ -543,6 +550,10 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                   const HomePage(title: "title")));
 
                           } else {
+
+                            setState(() {
+                              isLoading = false;
+                            });
                             showToast(failedToUpdateText);
                             // utility.showInSnackBar(
                             //     value: failedToUpdateText,
