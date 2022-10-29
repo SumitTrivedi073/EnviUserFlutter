@@ -67,7 +67,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
-        //print(jsonDecode(res.body)['content']);
+        _isFirstLoadRunning = false;
         if (jsonDecode(res.body)['content']['result'] != null) {
           carbonProfile = jsonDecode(res.body)['content']['carbonProfile'];
           print(
@@ -82,14 +82,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         _isFirstLoadRunning = false;
       });
     }
-    setState(() {
-
-      if (arrtrip.length != _limit && arrtrip.isNotEmpty) {
-        _hasNextPage = false;
-      }
-
-      _isFirstLoadRunning = false;
-    });
   }
 
   void _loadMore() async {
@@ -128,9 +120,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           _isLoadMoreRunning = false;
         });
       }
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
     }
   }
 
