@@ -227,7 +227,7 @@ class _LoginpageState extends State<Loginpage> {
                 height: 25,
                 onPressed: () {
                   setState(() {
-                    if(_timer!=null && _timer!.isActive) {
+                    if (_timer != null && _timer!.isActive) {
                       _timer!.cancel();
                     }
                     _showmobileview = true;
@@ -327,12 +327,11 @@ class _LoginpageState extends State<Loginpage> {
                             TextStyle(color: Colors.black45, fontSize: 14),
                       ),
                       validator: (value) {
-                          if (value!.isEmpty ||
-                              !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
-                                  .hasMatch(value)) {
-                            return 'Please enter valid phone number!';
-                          }
-
+                        if (value!.isEmpty ||
+                            !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
+                                .hasMatch(value)) {
+                          return 'Please enter valid phone number!';
+                        }
 
                         return null;
                       },
@@ -361,7 +360,7 @@ class _LoginpageState extends State<Loginpage> {
                       isLoading = true;
                     });
 
-                    if (isrunOnSemulation) {
+                    if (isEmulation) {
                       signIn();
                     } else {
                       fetchotp(
@@ -491,10 +490,10 @@ class _LoginpageState extends State<Loginpage> {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
 
-        LoginModel users = LoginModel.fromJson(jsonData['content']);
+      LoginModel users = LoginModel.fromJson(jsonData['content']);
 
       setState(() {
-        if(_timer!=null && _timer!.isActive) {
+        if (_timer != null && _timer!.isActive) {
           _timer!.cancel();
         }
 
