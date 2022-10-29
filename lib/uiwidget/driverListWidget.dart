@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:envi/sidemenu/searchDriver/confirmDriver.dart';
 import 'package:envi/theme/color.dart';
-import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -43,6 +42,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   bool isLoading = false;
   bool isForwardArrowGreen = true;
   bool isBackArrowGreen = true;
+  String Errormsg = '';
 
   @override
   void setState(fn) {
@@ -54,7 +54,7 @@ class DriverListItemPageState extends State<DriverListItem> {
   @override
   void initState() {
     super.initState();
-    if(DriverList.isEmpty) {
+    if (DriverList.isEmpty) {
       _firstLoad("0");
     }
   }
@@ -80,7 +80,7 @@ class DriverListItemPageState extends State<DriverListItem> {
     setState(() {
       isLoading = true;
     });
-
+         print("data$data");
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
@@ -99,6 +99,9 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
+        print("ErrorMsg========>${jsonDecode(res.body)['msg']}");
+        Errormsg = jsonDecode(res.body)['msg'];
+
       setState(() {
         isLoading = false;
       });
@@ -180,13 +183,13 @@ class DriverListItemPageState extends State<DriverListItem> {
                           Card(
                             child: Image.network(
                               encodeImgURLString(DriverList[index].driverPhoto),
-                               errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          Images.personPlaceHolderImage,
-                          height: 50,
-                          width: 50,
-                        );
-                      },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  Images.personPlaceHolderImage,
+                                  height: 50,
+                                  width: 50,
+                                );
+                              },
                               fit: BoxFit.fill,
                               height: 30,
                               width: 40,
@@ -515,7 +518,7 @@ class DriverListItemPageState extends State<DriverListItem> {
       ]);
     } else {
       return Container(
-        height: MediaQuery.of(context).size.height / 8,
+        height: MediaQuery.of(context).size.height / 7,
         margin: const EdgeInsets.all(10),
         child: Card(
             elevation: 5,
@@ -523,11 +526,12 @@ class DriverListItemPageState extends State<DriverListItem> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  robotoTextWidget(
-                      textval: noDriverAvailable,
+                  Padding(padding: EdgeInsets.all(10),
+                  child: robotoTextWidget(
+                      textval: Errormsg,
                       colorval: AppColor.darkGreen,
-                      sizeval: 16,
-                      fontWeight: FontWeight.w800),
+                      sizeval: 14,
+                      fontWeight: FontWeight.w800),),
                   Container(
                       height: 40,
                       width: 120,
