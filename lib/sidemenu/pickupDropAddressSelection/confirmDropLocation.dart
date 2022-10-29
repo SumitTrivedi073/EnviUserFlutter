@@ -617,10 +617,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
     //print(placemarks);
     Placemark place = placemarks![0];
-    toAddressName = (place.subLocality != '')
-        ? place.subLocality
-        : place.subAdministrativeArea;
+
     setState(() {
+      toAddressName = (place.subLocality != '')
+          ? place.subLocality
+          : place.subAdministrativeArea;
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
