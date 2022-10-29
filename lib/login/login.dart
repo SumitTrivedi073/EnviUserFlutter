@@ -133,10 +133,10 @@ class _LoginpageState extends State<Loginpage> {
             ),
             robotoTextWidget(
                 textval:
-                    'OTP SENT TO +${countrycontroller.text}${phoneController.text}',
+                    'OTP SENT TO +${countrycontroller.text} ${phoneController.text}',
                 colorval: AppColor.black,
-                sizeval: 16.0,
-                fontWeight: FontWeight.normal),
+                sizeval: 14.0,
+                fontWeight: FontWeight.w600),
             TextFormField(
               controller: otpController,
               keyboardType: TextInputType.phone,
@@ -180,7 +180,7 @@ class _LoginpageState extends State<Loginpage> {
                         textval: verify,
                         colorval: AppColor.butgreen,
                         sizeval: 18.0,
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.w800)),
               ),
             ),
             const SizedBox(
