@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
@@ -20,9 +21,6 @@ import '../../direction_model/directionModel.dart';
 import '../../direction_model/leg.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
-
-const int GOOGLE_API_INVOCATION_LIMIT = 6;
-const int GOOGLE_API_INNTERVAL_MINUTES = 5;
 
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
@@ -87,16 +85,16 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   }
 
   getDirections() async {
-    if (GOOGLE_API_INVOCATIONS > GOOGLE_API_INVOCATION_LIMIT) {
+    if (GOOGLE_API_INVOCATIONS >
+        AppConfig().getGoogleDirectionWFDriverIntervalMaxTrialCount()) {
       print(
-          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}");
+          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}, Limit : ${AppConfig().getGoogleDirectionWFDriverIntervalMaxTrialCount()}  Configued interval ${AppConfig().getGoogleDirectionWFDriverIntervalInMin()}");
       return;
     }
     String request =
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
-    print(
-        "RAGHUVTTRACKING: calling google map direction API url==========>${GOOGLE_API_INVOCATIONS}");
+
     dynamic response = await HTTP.get(url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
@@ -104,25 +102,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             DirectionModel.fromJson(json.decode(response.body));
         List<PointLatLng> pointLatLng = [];
 
-        // for (var i = 0; i < directionModel.routes.length; i++) {
-        //   for (var j = 0; j < directionModel.routes[i].legs.length; j++) {
-        //     for (var k = 0;
-        //         k < directionModel.routes[i].legs[j].steps.length;
-        //         k++) {
-        //       duration =
-        //           directionModel.routes[i].legs[j].duration.value.toDouble();
-        //       googleDistance =
-        //           directionModel.routes[i].legs[j].distance.value.toDouble();
-
-        //       pointLatLng = polylinePoints.decodePolyline(
-        //           directionModel.routes[i].legs[j].steps[k].polyline.points);
-        //       for (var point in pointLatLng) {
-        //         polylineCoordinates
-        //             .add(LatLng(point.latitude, point.longitude));
-        //       }
-        //     }
-        //   }
-        // }
+      
 
 //RAGHU VT  , We can have  multiple routes available. use the first one currently
 
@@ -151,7 +131,8 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         GOOGLE_API_INVOCATIONS++;
 
         timer = Timer(
-          const Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
+          Duration(
+              minutes: AppConfig().getGoogleDirectionWFDriverIntervalInMin()),
           () {
             print("RAGHUVTTRACKING:Calling direction API within timer");
             getDirections();
@@ -239,9 +220,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     );
     polylines[id] = polyline;
 
-   if(mounted) {
-     setState(() {});
-   }
+    if (mounted) {
+      setState(() {});
+    }
     if (previousLocation != carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
@@ -425,8 +406,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     if (timer != null && timer!.isActive) {
       print("RAGHUVTTRACKING: Timer is getting Cancelled");
       timer!.cancel();
-      GOOGLE_API_INVOCATIONS =
-          GOOGLE_API_INVOCATION_LIMIT * 2; //to Ensure we don't call this again
+      GOOGLE_API_INVOCATIONS = 9999; //to Ensure we don't call this again
     }
     super.dispose();
   }
@@ -446,13 +426,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         min = dist;
         index = i;
       }
-      // else {
-      //   //We have reched closest point on leg. Calculate the remaining leg distance. from that point
-      //   print(
-      //       'GADIST: Iterating Closest point Crossed $i , dist:$dist, currentMin: $min');
-      //   index = i - 1;
-      //   break;
-      // }
     }
 
     print('GADIST: ****Selected Index $index ,  currentMin: $min');
