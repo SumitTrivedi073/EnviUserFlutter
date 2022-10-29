@@ -512,7 +512,8 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                 widget.user!.mailid);
                             sharedPreferences.setString(
                                 loginEmail, _emailController.text);
-
+                            sharedPreferences.setString(loginToken, widget.user!.token);
+                            sharedPreferences.setString(loginID, widget.user!.id);
                             sharedPreferences.setString(
                                 logingender, selectedGender!);
                             sharedPreferences.setString(
@@ -523,7 +524,8 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                 loginpropic,
                               updateUserResponse['pro_pic'] ??
                                   widget.user!.propic);
-
+                            Profiledata.setusreid(widget.user!.id);
+                            Profiledata.settoken(widget.user!.token);
                             Profiledata.setmailid(_emailController.text);
                             Profiledata.setpropic(updateUserResponse['pro_pic'] ??
                                 widget.user!.propic);
