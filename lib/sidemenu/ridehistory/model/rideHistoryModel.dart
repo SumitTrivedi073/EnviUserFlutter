@@ -1,7 +1,7 @@
 class RideHistoryModel {
   late String fromAddress;
   late String passengerTripMasterId,name,driverPhoto,toAddress,status,start_time;
-String distance="0.0";
+  String distance="0.0";
  late PriceDetails price;
  late vehicleDetails vehicle;
   RideHistoryModel(this.fromAddress, this.passengerTripMasterId, this.name, this.driverPhoto, this.toAddress, this.distance, this.status,this.start_time,
@@ -14,7 +14,7 @@ String distance="0.0";
     name = json['name'];
     driverPhoto = json["driverPhoto"];
     toAddress = json["toAddress"];
-    distance = json["distance"].toString();
+    distance = json["distance"]!=null && json["distance"]!= 'NA' ?json["distance"].toStringAsFixed(2):'0.0';
     status= json["status"];
     start_time = json["start_time"];
     price = (json["price"] != null)

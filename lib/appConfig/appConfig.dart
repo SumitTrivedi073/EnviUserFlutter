@@ -20,6 +20,8 @@ class AppConfig {
   static String defaultPaymentMode = "";
   static bool isCancellationFeeApplicable = false;
   static int cancellationFee = 0;
+  static int googleDirectionDriverIntervalInMin = 0;
+  static int googleDirectionDriverIntervalMaxTrialCount = 0;
 
   static void setminAndroidVersion(int val){minAndroidVersion = val;}
   int getminAndroidVersion(){
@@ -76,5 +78,14 @@ class AppConfig {
   static setcancellationFee(int val){cancellationFee = val;}
   int getcancellationFee(){
     return cancellationFee;
+  }
+  static setgoogleDirectionDriverIntervalInMin(int val){googleDirectionDriverIntervalInMin = val;}
+  int getgoogleDirectionDriverIntervalInMin(){
+    return googleDirectionDriverIntervalInMin;
+  }
+
+  static setgoogleDirectionDriverIntervalMaxTrialCount(int val){googleDirectionDriverIntervalMaxTrialCount = val;}
+  int getgoogleDirectionDriverIntervalMaxTrialCount(){
+    return googleDirectionDriverIntervalMaxTrialCount;
   }
 }

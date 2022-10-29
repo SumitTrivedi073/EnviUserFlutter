@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
@@ -21,8 +22,8 @@ import '../../direction_model/leg.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
 
-const int GOOGLE_API_INVOCATION_LIMIT = 6;
-const int GOOGLE_API_INNTERVAL_MINUTES = 5;
+ int GOOGLE_API_INVOCATION_LIMIT = AppConfig().getgoogleDirectionDriverIntervalMaxTrialCount();
+ int GOOGLE_API_INNTERVAL_MINUTES = AppConfig().getgoogleDirectionDriverIntervalInMin();
 
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
@@ -151,7 +152,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         GOOGLE_API_INVOCATIONS++;
 
         timer = Timer(
-          const Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
+           Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
           () {
             print("RAGHUVTTRACKING:Calling direction API within timer");
             getDirections();

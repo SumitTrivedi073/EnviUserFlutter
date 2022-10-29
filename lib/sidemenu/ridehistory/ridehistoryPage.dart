@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:convert' as convert;
+import 'dart:ffi';
 
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
@@ -188,8 +189,10 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
   }
 
   Widget _buildPosts(BuildContext context) {
-    if (arrtrip.length == 0 || arrtrip == null)
-      return Center(child: Text("No trips data available"));
+    if (arrtrip.isEmpty) {
+      return const Center(child: robotoTextWidget(textval: "No trips data available",colorval: AppColor.black,
+        sizeval: 14,fontWeight: FontWeight.w600,));
+    }
     return InkWell(
         onTap: () {
           //onSelectTripDetailPage(context);
@@ -288,13 +291,13 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       const SizedBox(
                         width: 5,
                       ),
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 185,
                         child: robotoTextWidget(
                           textval: arrtrip[index].toAddress,
                           colorval: AppColor.black,
                           sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -311,71 +314,84 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       const SizedBox(
                         width: 5,
                       ),
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 185,
                         child: robotoTextWidget(
                           textval: arrtrip[index].fromAddress,
                           colorval: AppColor.greyblack,
                           sizeval: 14.0,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w600,
                         ),
                       )
                     ],
                   ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           ClipRRect(
+                               borderRadius: BorderRadius.circular(50.0),
+                               child: Image.network(
+                                 encodeImgURLString(Profiledata().getpropic()),
+                                 errorBuilder: (context, error, stackTrace) {
+                                   return Image.asset(
+                                     Images.personPlaceHolderImage,
+                                     height: 40,
+                                     width: 40,
+                                   );
+                                 },
+                                 fit: BoxFit.fill,
+                                 height: 40,
+                                 width: 40,
+                               )),
+                           SizedBox(width:5),
+                           robotoTextWidget(
+                             textval: arrtrip[index].name,
+                             colorval: AppColor.darkgrey,
+                             sizeval: 14.0,
+                             fontWeight: FontWeight.w600,
+                           ),
+                         ],
+                       ),
+
                 ],
               ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end
-                  ,
-                  children: [
-                    Image.network(
-                      encodeImgURLString(arrtrip[index].driverPhoto),
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          Images.personPlaceHolderImage,
-                          height: 50,
-                          width: 50,
-                        );
-                      },
-                      fit: BoxFit.fill,
-                      height: 40,
-                      width: 40,
-                    ),
-                    robotoTextWidget(
-                      textval: arrtrip[index].name,
-                      colorval: AppColor.darkgrey,
-                      sizeval: 13.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ]),
+
             ],
           ),
           const SizedBox(
-            height: 7,
+            height: 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(children: [
                 const Padding(
-                  padding: EdgeInsets.only(left: 25),
+                  padding: EdgeInsets.only(left: 15),
                 ),
                 arrtrip[index].distance != 'NA'
                     ? robotoTextWidget(
-                        textval: "${arrtrip[index].distance} Km",
+                        textval: "Distance: ${arrtrip[index].distance} Km",
                         colorval: AppColor.darkgrey,
                         sizeval: 13.0,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       )
-                    : Container(),
+                    : robotoTextWidget(
+                  textval: 'Vehicle No: ${arrtrip[index].vehicle.Vnumber}',
+                  colorval: AppColor.darkgrey,
+                  sizeval: 13.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ]),
-              robotoTextWidget(
-                textval: arrtrip[index].vehicle.Vnumber,
+              arrtrip[index].distance != 'NA'
+                  ?   robotoTextWidget(
+                textval: 'Vehicle Number: ${arrtrip[index].vehicle.Vnumber}',
                 colorval: AppColor.darkgrey,
                 sizeval: 13.0,
-                fontWeight: FontWeight.bold,
-              ),
+                fontWeight: FontWeight.w600,
+              ):Container(),
             ],
           ),
         ],
@@ -393,57 +409,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10)),
           border: Border.all(color: AppColor.border, width: 1.0)),
-      child: arrtrip[index].status == RideHistoryCancelledStatus &&
-              arrtrip[index].status == RideHistoryRejectedStatus
-          ? Container(
-              width: MediaQuery.of(context).size.width,
-              child: MaterialButton(
-                child: robotoTextWidget(
-                  textval: Support,
-                  colorval: AppColor.butgreen,
-                  sizeval: 14.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                onPressed: () {
-                  makingPhoneCall(LandingPageConfig().getcustomerCare() != null
-                      ? LandingPageConfig().getcustomerCare()
-                      : '');
-                },
-              ),
-            )
-          : Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Align(
-                alignment: Alignment.center,
-                child: MaterialButton(
-                  child: robotoTextWidget(
-                    textval: Invoice,
-                    colorval: AppColor.butgreen,
-                    sizeval: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  onPressed: () {
-                    sendInvoice(arrtrip[index].passengerTripMasterId);
-                  },
-                ),
-              ),
-              Container(
-                width: 1,
-                color: AppColor.border,
-              ),
-              MaterialButton(
-                child: robotoTextWidget(
-                  textval: Support,
-                  colorval: AppColor.butgreen,
-                  sizeval: 14.0,
-                  fontWeight: FontWeight.bold,
-                ),
-                onPressed: () {
-                  makingPhoneCall(LandingPageConfig().getcustomerCare() != null
-                      ? LandingPageConfig().getcustomerCare()
-                      : '');
-                },
-              ),
-            ]),
+      child: getFoooterView(index),
     );
   }
 
@@ -553,6 +519,80 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       });
     } else {
       throw "Driver Not Booked";
+    }
+  }
+
+ Widget getFoooterView(int index) {
+    if(arrtrip[index].status == RideHistoryCancelledStatus){
+    return  SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: MaterialButton(
+          child: robotoTextWidget(
+            textval: Support,
+            colorval: AppColor.butgreen,
+            sizeval: 14.0,
+            fontWeight: FontWeight.bold,
+          ),
+          onPressed: () {
+            makingPhoneCall(LandingPageConfig().getcustomerCare() != null
+                ? LandingPageConfig().getcustomerCare()
+                : '');
+          },
+        ),
+      );
+    }
+    else if(arrtrip[index].status == RideHistoryRejectedStatus){
+      return  SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: MaterialButton(
+          child: robotoTextWidget(
+            textval: Support,
+            colorval: AppColor.butgreen,
+            sizeval: 14.0,
+            fontWeight: FontWeight.bold,
+          ),
+          onPressed: () {
+            makingPhoneCall(LandingPageConfig().getcustomerCare() != null
+                ? LandingPageConfig().getcustomerCare()
+                : '');
+          },
+        ),
+      );
+    }
+    else{
+      return  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        Align(
+          alignment: Alignment.center,
+          child: MaterialButton(
+            child: robotoTextWidget(
+              textval: Invoice,
+              colorval: AppColor.butgreen,
+              sizeval: 14.0,
+              fontWeight: FontWeight.bold,
+            ),
+            onPressed: () {
+              sendInvoice(arrtrip[index].passengerTripMasterId);
+            },
+          ),
+        ),
+        Container(
+          width: 1,
+          color: AppColor.border,
+        ),
+        MaterialButton(
+          child: robotoTextWidget(
+            textval: Support,
+            colorval: AppColor.butgreen,
+            sizeval: 14.0,
+            fontWeight: FontWeight.bold,
+          ),
+          onPressed: () {
+            makingPhoneCall(LandingPageConfig().getcustomerCare() != null
+                ? LandingPageConfig().getcustomerCare()
+                : '');
+          },
+        ),
+      ]);
     }
   }
 }

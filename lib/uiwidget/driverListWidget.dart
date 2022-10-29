@@ -54,7 +54,9 @@ class DriverListItemPageState extends State<DriverListItem> {
   @override
   void initState() {
     super.initState();
-    _firstLoad("0");
+    if(DriverList.isEmpty) {
+      _firstLoad("0");
+    }
   }
 
   void _firstLoad(String retry) async {
