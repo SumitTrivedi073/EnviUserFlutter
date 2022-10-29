@@ -1,16 +1,13 @@
-import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../provider/firestoreLiveTripDataNotifier.dart';
 import '../theme/color.dart';
 import '../theme/images.dart';
 import '../utils/utility.dart';
-import '../web_service/Constant.dart';
 
 class DriverDetailWidget extends StatefulWidget {
   String duration;
@@ -58,13 +55,13 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                 child: Image.network(
                                   encodeImgURLString(value
                                       .liveTripData!.driverInfo!.driverImgUrl),
-                                       errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          Images.personPlaceHolderImage,
-                          height: 50,
-                          width: 50,
-                        );
-                      },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      Images.personPlaceHolderImage,
+                                      height: 50,
+                                      width: 50,
+                                    );
+                                  },
                                   fit: BoxFit.fill,
                                   height: 50,
                                   width: 50,
@@ -77,7 +74,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   robotoTextWidget(
-                                    textval: value.liveTripData!.driverInfo!.name
+                                    textval: value
+                                                .liveTripData!.driverInfo!.name
                                                 .toString() !=
                                             null
                                         ? value.liveTripData!.driverInfo!.name

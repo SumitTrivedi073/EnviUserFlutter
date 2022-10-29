@@ -19,6 +19,8 @@ class AppConfig {
   static String defaultPaymentMode = "";
   static bool isCancellationFeeApplicable = false;
   static int cancellationFee = 0;
+  static int googleDirectionDriverIntervalInMin = 0;
+  static int googleDirectionDriverIntervalMaxTrialCount = 0;
 
   static int googleDirectionWFDriverIntervalInMin = 10;
   static int googleDirectionWFDriverIntervalMaxTrialCount = 3;
@@ -126,20 +128,13 @@ class AppConfig {
   int getcancellationFee() {
     return cancellationFee;
   }
-
-  static setGoogleDirectionWFDriverIntervalMaxTrialCount(int val) {
-    googleDirectionWFDriverIntervalMaxTrialCount = val;
+  static setgoogleDirectionDriverIntervalInMin(int val){googleDirectionDriverIntervalInMin = val;}
+  int getgoogleDirectionDriverIntervalInMin(){
+    return googleDirectionDriverIntervalInMin;
   }
 
-  int getGoogleDirectionWFDriverIntervalMaxTrialCount() {
-    return googleDirectionWFDriverIntervalMaxTrialCount;
-  }
-
-  static setGoogleDirectionWFDriverIntervalInMin(int val) {
-    googleDirectionWFDriverIntervalInMin = val;
-  }
-
-  int getGoogleDirectionWFDriverIntervalInMin() {
-    return googleDirectionWFDriverIntervalInMin;
+  static setgoogleDirectionDriverIntervalMaxTrialCount(int val){googleDirectionDriverIntervalMaxTrialCount = val;}
+  int getgoogleDirectionDriverIntervalMaxTrialCount(){
+    return googleDirectionDriverIntervalMaxTrialCount;
   }
 }

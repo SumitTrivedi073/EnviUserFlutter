@@ -288,12 +288,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
-
-                AppConfig.setGoogleDirectionWFDriverIntervalInMin(
+      AppConfig.setgoogleDirectionDriverIntervalInMin(
           jsonData['applicationConfig']['searchConfig']['googleDirectionWFDriverIntervalInMin']);
-                AppConfig.setGoogleDirectionWFDriverIntervalMaxTrialCount(
+      AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
           jsonData['applicationConfig']['searchConfig']['googleDirectionWFDriverIntervalMaxTrialCount']);
-
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

@@ -76,7 +76,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             .map((i) => vehiclePriceClassesModel.fromJson(i))
             .toList();
         distance = jsonDecode(response.body)['content']['estimatedDistance'];
-        widget.callback2(distance.toString());
+        widget.callback2(distance.toStringAsFixed(2));
       });
     } else {
       var errmsg = jsonDecode(response.body)['msg'];

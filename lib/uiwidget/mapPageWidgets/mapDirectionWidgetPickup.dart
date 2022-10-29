@@ -22,6 +22,9 @@ import '../../direction_model/leg.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
 
+ int GOOGLE_API_INVOCATION_LIMIT = AppConfig().getgoogleDirectionDriverIntervalMaxTrialCount();
+ int GOOGLE_API_INNTERVAL_MINUTES = AppConfig().getgoogleDirectionDriverIntervalInMin();
+
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
   final void Function(String) callback;
@@ -85,10 +88,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   }
 
   getDirections() async {
-    if (GOOGLE_API_INVOCATIONS >
-        AppConfig().getGoogleDirectionWFDriverIntervalMaxTrialCount()) {
+    if (GOOGLE_API_INVOCATIONS > GOOGLE_API_INVOCATION_LIMIT) {
       print(
-          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}, Limit : ${AppConfig().getGoogleDirectionWFDriverIntervalMaxTrialCount()}  Configued interval ${AppConfig().getGoogleDirectionWFDriverIntervalInMin()}");
+          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}, Limit : ${GOOGLE_API_INVOCATION_LIMIT}  Configued interval ${GOOGLE_API_INNTERVAL_MINUTES}");
       return;
     }
     String request =
@@ -102,7 +104,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             DirectionModel.fromJson(json.decode(response.body));
         List<PointLatLng> pointLatLng = [];
 
-      
+
 
 //RAGHU VT  , We can have  multiple routes available. use the first one currently
 
@@ -131,8 +133,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         GOOGLE_API_INVOCATIONS++;
 
         timer = Timer(
-          Duration(
-              minutes: AppConfig().getGoogleDirectionWFDriverIntervalInMin()),
+           Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
           () {
             print("RAGHUVTTRACKING:Calling direction API within timer");
             getDirections();

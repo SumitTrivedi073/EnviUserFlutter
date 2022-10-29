@@ -105,42 +105,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
               ),
             ),
           ),
-          // ListTile(
-          //   leading: SvgPicture.asset(
-          //     "assets/svg/book-ride.svg",
-          //     width: 22,
-          //     height: 24,
-          //   ),
-          //   title: robotoTextWidget(
-          //     textval: MenuBookaRide,
-          //     colorval: AppColor.lightwhite,
-          //     sizeval: 20.0,
-          //     fontWeight: FontWeight.normal,
-          //   ),
-          //   onTap: () {
-          //     closeDrawer();
-          //     Navigator.of(context).pushAndRemoveUntil(
-          //         MaterialPageRoute(
-          //             builder: (context) => HomePage(title: 'title')),
-          //         (route) => true);
-          //   },
-          // ),
-          // ListTile(
-          //   leading: SvgPicture.asset(
-          //     "assets/svg/schedule-ride.svg",
-          //     width: 22,
-          //     height: 24,
-          //   ),
-          //   title: robotoTextWidget(
-          //     textval: MenuScheduleaRide,
-          //     colorval: AppColor.lightwhite,
-          //     sizeval: 20.0,
-          //     fontWeight: FontWeight.normal,
-          //   ),
-          //   onTap: () {
-          //     closeDrawer();
-          //   },
-          // ),
           const SizedBox(
             height: 10,
           ),
@@ -197,38 +161,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-          // ListTile(
-          //   leading: SvgPicture.asset(
-          //     "assets/svg/safety.svg",
-          //     width: 22,
-          //     height: 24,
-          //   ),
-          //   title: robotoTextWidget(
-          //     textval: MenuSafety,
-          //     colorval: AppColor.red,
-          //     sizeval: 20.0,
-          //     fontWeight: FontWeight.normal,
-          //   ),
-          //   onTap: () {
-          //     closeDrawer();
-          //   },
-          // ),
-          // ListTile(
-          //   leading: SvgPicture.asset(
-          //     "assets/svg/fare-charges.svg",
-          //     width: 22,
-          //     height: 24,
-          //   ),
-          //   title: robotoTextWidget(
-          //     textval: MenuFareCharges,
-          //     colorval: AppColor.lightText,
-          //     sizeval: 20.0,
-          //     fontWeight: FontWeight.normal,
-          //   ),
-          //   onTap: () {
-          //     closeDrawer();
-          //   },
-          // ),
+       
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/favorite-places.svg",
@@ -267,22 +200,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
                   : '');
             },
           ),
-          // ListTile(
-          //   leading: SvgPicture.asset(
-          //     "assets/svg/settings.svg",
-          //     width: 22,
-          //     height: 24,
-          //   ),
-          //   title: robotoTextWidget(
-          //     textval: MenuSettings,
-          //     colorval: AppColor.lightText,
-          //     sizeval: 20.0,
-          //     fontWeight: FontWeight.normal,
-          //   ),
-          //   onTap: () {
-          //     closeDrawer();
-          //   },
-          // ),
           ListTile(
             leading: const Icon(
               Icons.privacy_tip,
@@ -339,13 +256,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 builder: (BuildContext context) => dialogueDelete(context),
               );
             },
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          footerView(),
-          const SizedBox(
-            height: 15,
           ),
         ],
       ),
