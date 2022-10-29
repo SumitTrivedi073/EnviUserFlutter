@@ -5,7 +5,7 @@ import 'ApiConfig.dart' as APICONFIG;
 const scheme = 'http';
 const host = 'localhost';
 const port = '5001';
-const mobileHost = '192.168.29.69';
+const mobileHost = '192.168.29.211';
 
 const webBaseUrl = '$scheme://$host:$port';
 const mobileBaseUrl = '$scheme://$mobileHost:$port';
@@ -45,9 +45,11 @@ userLogin() {
 userLogout() {
   return Uri.parse('${getBaseURL()}/user/userLogout');
 }
+
 userdeRegisterMe() {
   return Uri.parse('${getBaseURL()}/user/deRegisterMe');
 }
+
 searchPlace() {
   return Uri.parse('${getBaseURL()}/user/getGooglePlace');
 }
@@ -84,13 +86,13 @@ SosApi() {
 SendInvoice() {
   return Uri.parse('${getBaseURL()}/userTrip/resendInvoice');
 }
+
 submitDriverRating(String? passengerTripMasterId, double rating) {
   print(Uri.parse(
       '${getBaseURL()}/userTrip/ratingByUser?tripId=$passengerTripMasterId&rating=$rating'));
   return Uri.parse(
       '${getBaseURL()}/userTrip/ratingByUser?tripId=$passengerTripMasterId&rating=$rating');
 }
-
 
 EditFavouriteAddressdata() {
   return Uri.parse('${getBaseURL()}/user/favouriteAddress/update');
@@ -126,8 +128,9 @@ registerUser() {
 
 updateUser() {
   return Uri.parse('${getBaseURL()}/user/updateProfile');
-
 }
-cancleSchedule(String tripObjId){
-  return Uri.parse('${getBaseURL()}/userTrip/cancelScheduledTrip?tripObjId=$tripObjId');
+
+cancleSchedule(String tripObjId) {
+  return Uri.parse(
+      '${getBaseURL()}/userTrip/cancelScheduledTrip?tripObjId=$tripObjId');
 }
