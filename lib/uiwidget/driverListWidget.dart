@@ -180,21 +180,21 @@ class DriverListItemPageState extends State<DriverListItem> {
                               print(rating);
                             },
                           ),
-                          Card(
-                            child: Image.network(
-                              encodeImgURLString(DriverList[index].driverPhoto),
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  Images.personPlaceHolderImage,
-                                  height: 50,
-                                  width: 50,
-                                );
-                              },
-                              fit: BoxFit.fill,
-                              height: 30,
-                              width: 40,
-                            ),
-                          )
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: Image.network(
+                                encodeImgURLString(DriverList[index].driverPhoto),
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    Images.personPlaceHolderImage,
+                                    height: 50,
+                                    width: 50,
+                                  );
+                                },
+                                fit: BoxFit.fill,
+                                height: 50,
+                                width: 50,
+                              ))
                         ],
                       ),
                     ],
