@@ -5,20 +5,20 @@ import 'package:flutter_svg/svg.dart';
 
 import '../theme/color.dart';
 import '../theme/images.dart';
-import '../theme/theme.dart';
 import '../utils/utility.dart';
-import '../web_service/Constant.dart';
 
 class AppBarInsideWidget extends StatefulWidget {
-  const AppBarInsideWidget(
+  final String pagetitle;
+  final bool isBackButtonNeeded;
+  final dynamic onPressBack;
+
+   const AppBarInsideWidget(
       {Key? key,
-      required this.title,
+      required this.pagetitle,
       this.isBackButtonNeeded = true,
       this.onPressBack})
       : super(key: key);
-  final String title;
-  final bool isBackButtonNeeded;
-  final dynamic onPressBack;
+
   @override
   State<StatefulWidget> createState() => _AppBarInsidePageState();
 }
@@ -30,6 +30,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("Title=======>${widget.pagetitle}");
   }
 
   @override
@@ -56,36 +57,39 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                               () {
                                 Navigator.pop(context);
                               })
-                      : SizedBox(),
-                 Padding(padding: EdgeInsets.all(5),
-                 child:  ClipRRect(
-                     borderRadius: BorderRadius.circular(40.0),
-                     child: Image.network(
-                       encodeImgURLString(Profiledata.propic),
-                       errorBuilder: (context, error, stackTrace) {
-                         return Image.asset(
-                           Images.personPlaceHolderImage,
-                           height: 40,
-                           width: 40,
-                         );
-                       },
-                       fit: BoxFit.fill,
-                       height: 40,
-                       width: 40,
-                     )),),
-
+                      : const SizedBox(),
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40.0),
+                        child: Image.network(
+                          encodeImgURLString(Profiledata.propic),
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              Images.personPlaceHolderImage,
+                              height: 40,
+                              width: 40,
+                            );
+                          },
+                          fit: BoxFit.fill,
+                          height: 40,
+                          width: 40,
+                        )),
+                  ),
                 ],
               )),
-        Align(alignment: Alignment.center,
-        child:   Container(
-          margin: EdgeInsets.only(top: 20),
-          child: robotoTextWidget(
-            textval: widget.title,
-            colorval: AppColor.lightwhite,
-            sizeval: 18.0,
-            fontWeight: FontWeight.w800,
-          ),
-        ),)
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: robotoTextWidget(
+                textval: widget.pagetitle,
+                colorval: AppColor.lightwhite,
+                sizeval: 18.0,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -122,7 +122,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                       ),
                       Column(children: [
                         const AppBarInsideWidget(
-                          title: "Envi",
+                          pagetitle: "Envi",
                           isBackButtonNeeded: false,
                         ),
                         const SizedBox(height: 5),

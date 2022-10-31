@@ -197,7 +197,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: widget.title,
+              pagetitle: widget.title,
               isBackButtonNeeded: true,
             ),
             Container(

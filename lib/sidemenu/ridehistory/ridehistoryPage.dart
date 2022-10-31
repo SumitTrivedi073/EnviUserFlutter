@@ -145,7 +145,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: TitelRideHistory,
+              pagetitle: TitelRideHistory,
               isBackButtonNeeded: true,
             ),
             totalTripHeader(),

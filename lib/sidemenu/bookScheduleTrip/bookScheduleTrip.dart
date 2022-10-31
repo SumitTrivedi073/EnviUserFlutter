@@ -56,9 +56,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     super.initState();
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
-    print(AppConfig().getadvance_booking_time_limit());
-    // _controller2.text = DateFormat('HH:mm').format(mindatime);
-    // _controller1.text = mindatime.toString();
+
+    print("mindatime===========>$mindatime");
   }
   
   @override
@@ -79,7 +78,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         toAddress: widget.toAddress,
       ),
       AppBarInsideWidget(
-        title: FutureBookingTitel,
+        pagetitle: FutureBookingTitle,
         isBackButtonNeeded: true,
       ),
       Positioned(
@@ -173,13 +172,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                           SelectedVehicle!.type != "") {
                         DateTime dt =
                             DateTime.parse(_controller1.text.toString());
-                        print(
-                            "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
                         var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
                         var inputDate = inputFormat.parse(
                             "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
                         if ((mindatime.difference(inputDate).inMinutes) <= 0) {
-                          print("datevalidate${mindatime.difference(inputDate).inMinutes}");
                           showDialog(
                             context: context,
                             builder: (BuildContext context) =>
@@ -189,10 +185,19 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                                         .format(inputDate)),
                           );
                         } else {
-                          print("datevalidate");
+                           String message='';
+                          var hours = AppConfig().getadvance_booking_time_limit()/60;
+                          var minutes = AppConfig().getadvance_booking_time_limit()%60;
+                          if (hours>1 && minutes>1) {
+                            message = "Please select a time slot, no earlier than $hours hours $minutes min from now.";
+                          }else if (hours>1 && minutes<1) {
+                            message = "Please select a time slot, no earlier than $hours hours from now.";
+                          }else {
+                            message =
+                            "Please select a time slot, no earlier than $minutes min from now.";
+                          }
                           utility.showInSnackBar(
-                              value:
-                                  'Please select a time slot, no earlier than ${DateFormat('d MMM, yyyy HH:mm').format(dt)} from now.',
+                              value:message,
                               context: context,
                               duration: const Duration(seconds: 3));
                         }
@@ -529,14 +534,10 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   }
 
   Future<void> updatedtime() async {
-    print(_controller1.text.toString() +_controller2.text.toString());
     DateTime dt = DateTime.parse(_controller1.text.toString());
-    print(
-        "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
     var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
     var inputDate = inputFormat.parse(
         "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}"); // <-- dd/MM 24H format
-    print(inputDate);
     var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
     setState(() {
       scheduledAt = outputFormat.format(inputDate);
@@ -545,15 +546,11 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
 
   Future<void> confirmBooking() async {
     DateTime dt = DateTime.parse(_controller1.text.toString());
-    print(
-        "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
     var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
     var inputDate = inputFormat.parse(
         "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}"); // <-- dd/MM 24H format
-    print(inputDate);
     var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
     var outputDate = outputFormat.format(inputDate);
-    print(outputDate);
     final response = await ApiCollection.AddnewSchedualeTrip(
         widget.fromAddress,
         widget.toAddress,
@@ -563,7 +560,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         SelectedVehicle!.sku_id);
 
     if (response != null) {
-      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
