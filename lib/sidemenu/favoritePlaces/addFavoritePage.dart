@@ -199,7 +199,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   SearchFavoriateLocation(
-                                                      title: pickUpLocation,
+                                                      title: selectlocation,
                                                       onCriteriaChanged:
                                                           FromLocationSearch)),
                                           (route) => true);

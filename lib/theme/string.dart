@@ -135,3 +135,4 @@ var infoPopupTypeText = 'infoPopupType';
 var showInfoPopupText = 'showInfoPopup';
 var dailyOnceTimeText = 'DailyOnceTime';
 var submitAllCapsText = 'SUBMIT';
+var selectlocation = "select location";
