@@ -19,6 +19,7 @@ import '../../web_service/APIDirectory.dart';
 import '../../web_service/ApiCollection.dart';
 import '../ridehistory/model/rideHistoryModel.dart';
 import 'model/ScheduleTripModel.dart';
+
 class UpcomingRidesPage extends StatefulWidget {
   @override
   State<UpcomingRidesPage> createState() => _UpcomingRidesPageState();
@@ -34,39 +35,37 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   late dynamic userId;
   List<ScheduleTripModel> arrtrip = [];
   @override
-  void initState()  {
+  void initState() {
     super.initState();
-
 
     _firstLoad();
     _controller = new ScrollController()..addListener(_loadMore);
   }
+
   @override
   void dispose() {
     _controller.removeListener(_loadMore);
     super.dispose();
   }
+
   void _firstLoad() async {
     setState(() {
       _isFirstLoadRunning = true;
     });
 
-
-    userId = Profiledata().getusreid() ;
+    userId = Profiledata().getusreid();
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    if (res != null && res.statusCode != null && res.statusCode == 200)  {
+    if (res != null && res.statusCode != null && res.statusCode == 200) {
       print(jsonDecode(res.body)['schedule_trip_list']);
       setState(() {
-
-        if(jsonDecode(res.body)['schedule_trip_list'] !=null && jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
-
+        if (jsonDecode(res.body)['schedule_trip_list'] != null &&
+            jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
           arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
               .map((i) => ScheduleTripModel.fromJson(i))
               .toList();
         }
       });
-
     } else {
       setState(() {
         _isFirstLoadRunning = false;
@@ -87,14 +86,14 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       });
       pagecount += 1;
       dynamic res =
-      await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
 
       if (res.statusCode == 200) {
         _isLoadMoreRunning = false;
         final List<ScheduleTripModel> fetchedPosts =
-        (jsonDecode(res.body)['content']['schedule_trip_list'] as List)
-            .map((i) => ScheduleTripModel.fromJson(i))
-            .toList();
+            (jsonDecode(res.body)['content']['schedule_trip_list'] as List)
+                .map((i) => ScheduleTripModel.fromJson(i))
+                .toList();
         if (fetchedPosts.length > 0) {
           setState(() {
             arrtrip.addAll(fetchedPosts);
@@ -127,16 +126,15 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: TitelUpcomingRides,
+              title: TitleUpcomingRides,
               isBackButtonNeeded: true,
             ),
             Expanded(
-              child:_isFirstLoadRunning
+              child: _isFirstLoadRunning
                   ? const Center(
-                child: CircularProgressIndicator(),
-              )
-                  : Container(
-                  child: _buildPosts(context)),
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(child: _buildPosts(context)),
             ),
             if (_isLoadMoreRunning == true)
               const Padding(
@@ -165,9 +163,14 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   Widget _buildPosts(BuildContext context) {
-    if(arrtrip.isEmpty) {
-      return const Center(child: robotoTextWidget(textval: "No trips data available",colorval: AppColor.black,
-          sizeval: 14,fontWeight: FontWeight.w600,));
+    if (arrtrip.isEmpty) {
+      return const Center(
+          child: robotoTextWidget(
+        textval: "No trips data available",
+        colorval: AppColor.black,
+        sizeval: 14,
+        fontWeight: FontWeight.w600,
+      ));
     }
     return InkWell(
         onTap: () {
@@ -187,7 +190,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: Colors.transparent,
             );
           },
-
         ));
   }
 
@@ -211,11 +213,17 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
               color: AppColor.border,
             ),
             CellRow2(index),
-            arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? Container(
-              height: 1,
-              color: AppColor.border,
-            ):Container(),
-          arrtrip[index].status!=RideHistoryCancelledStatus && arrtrip[index].status != RideHistoryRejectedStatus ? CellRow3(index):Container(),
+            arrtrip[index].status != RideHistoryCancelledStatus &&
+                    arrtrip[index].status != RideHistoryRejectedStatus
+                ? Container(
+                    height: 1,
+                    color: AppColor.border,
+                  )
+                : Container(),
+            arrtrip[index].status != RideHistoryCancelledStatus &&
+                    arrtrip[index].status != RideHistoryRejectedStatus
+                ? CellRow3(index)
+                : Container(),
           ]),
     );
   }
@@ -228,22 +236,25 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(children:  [
+          Row(children: [
             const Icon(
               Icons.sunny,
               color: AppColor.black,
               size: 20.0,
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             robotoTextWidget(
-              textval: "${getdayTodayTomarrowYesterday(arrtrip[index].scheduledAt)}",
+              textval:
+                  "${getdayTodayTomarrowYesterday(arrtrip[index].scheduledAt)}",
               colorval: AppColor.black,
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
             ),
           ]),
-           robotoTextWidget(
-            textval: "₹ ~${arrtrip[index].estimatedPrice.toString()}",
+          robotoTextWidget(
+            textval: "~₹${arrtrip[index].estimatedPrice.toString()}",
             colorval: AppColor.black,
             sizeval: 14.0,
             fontWeight: FontWeight.bold,
@@ -275,12 +286,12 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children:  [
+                      children: [
                         SvgPicture.asset(
-                        "assets/svg/from-location-img.svg",
-                        width: 20,
-                        height: 20,
-                      ),
+                          "assets/svg/from-location-img.svg",
+                          width: 20,
+                          height: 20,
+                        ),
                         const SizedBox(
                           width: 5,
                         ),
@@ -293,13 +304,13 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                             fontWeight: FontWeight.w200,
                           ),
                         ),
-                       ],
+                      ],
                     ),
                     const SizedBox(
                       height: 3,
                     ),
                     Row(
-                      children:  [
+                      children: [
                         SvgPicture.asset(
                           "assets/svg/to-location-img.svg",
                           width: 20,
@@ -317,7 +328,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                             fontWeight: FontWeight.w200,
                           ),
                         ),
-                       ],
+                      ],
                     ),
                   ],
                 ),
@@ -329,7 +340,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(children:  [
+                Row(children: [
                   robotoTextWidget(
                     textval: "${arrtrip[index].estimatedDistance} Kms",
                     colorval: AppColor.greyblack,
@@ -342,7 +353,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(children:  [
+                Row(children: [
                   robotoTextWidget(
                     textval: arrtrip[index].status,
                     colorval: AppColor.red,
@@ -366,10 +377,11 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           MaterialButton(
             child: robotoTextWidget(
-              textval: arrtrip[index].status == "cancelled"?"Already Cancelled":CancelBooking,
+              textval: arrtrip[index].status == "cancelled"
+                  ? "Already Cancelled"
+                  : CancelBooking,
               colorval: const Color(0xFFED0000),
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
@@ -382,16 +394,17 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       ),
     );
   }
-  Future<void> cancelBooking(String passengerTripMasterId) async {
 
-    final response = await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
+  Future<void> cancelBooking(String passengerTripMasterId) async {
+    final response =
+        await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 
     if (response != null) {
       print(jsonDecode(response.body));
       if (response.statusCode == 200) {
-       _firstLoad();
+        _firstLoad();
       }
-      showSnackbar(context,(jsonDecode(response.body)['msg'].toString()));
+      showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
     }
   }
 }

@@ -63,8 +63,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   GoogleMapController? _controller;
   String Address = PickUp;
   LatLng initialLatLng = const LatLng(0, 0);
-  // bool isFromVerified = false;
-  // bool isToVerified = false;
+  bool moveMarkerAnimate = true;
+
   late String isFavourite;
 
   void checkAddressStatus() {
@@ -273,6 +273,19 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     // getCurrentLocation();
     isFavourite = widget.isFavourite;
     getLocation(initialLatLng);
+
+    var counter = 10;
+    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      setState(() {
+        moveMarkerAnimate = !moveMarkerAnimate;
+      });
+
+      counter--;
+      if (counter == 0) {
+        moveMarkerAnimate = true;
+        timer.cancel();
+      }
+    });
   }
 
   @override
@@ -389,12 +402,28 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: robotoTextWidget(textval: moveText,
-                  colorval: Colors.deepOrange,
-                  sizeval: 16, fontWeight: FontWeight.w800)
-            ),
+
+            if (moveMarkerAnimate)
+              Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(moveText,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        background: Paint()
+                          ..color = Color.fromARGB(255, 95, 105, 172)
+                          ..strokeWidth = 20
+                          ..strokeJoin = StrokeJoin.round
+                          ..strokeCap = StrokeCap.round
+                          ..style = PaintingStyle.stroke,
+                        color: Colors.white,
+                      )))
+
+            // robotoTextWidget(
+            //     textval: moveText,
+            //     backgroundColor: Color.fromARGB(255, 241, 232, 151),
+            //     colorval: Colors.black26,
+            //     sizeval: 20,
+            //     fontWeight: FontWeight.w800)),
           ],
         ),
         Align(

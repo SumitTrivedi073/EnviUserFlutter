@@ -24,6 +24,12 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
   bool _hasNextPage = true;
   bool _isLoadMoreRunning = false;
   int _limit = 20;
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   List<FavoritesData> arraddress = [];
   late final FavoritesDataDao dao;

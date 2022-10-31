@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:envi/UiWidget/cardbanner.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/string.dart';
@@ -32,12 +34,29 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   late String duration = "0 Minute";
   bool isLoaded = false;
-  int _contentAmount = 0;
-  ExpansionStatus _expansionStatus = ExpansionStatus.contracted;
+  Timer? fullScreenDisableTimer = null;
+  bool showFullScreen = true;
+
+  @override
+  void initState() {
+    super.initState();
+    disableFullScreen();
+  }
+
+  disableFullScreen() {
+    if (fullScreenDisableTimer != null && fullScreenDisableTimer!.isActive) {
+      fullScreenDisableTimer!.cancel();
+    }
+
+    fullScreenDisableTimer = Timer(const Duration(seconds: 10), () {
+      setState(() {
+        showFullScreen = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Center(
         child: Consumer<firestoreLiveTripDataNotifier>(
@@ -45,7 +64,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (value.liveTripData != null) {
               isLoaded = true;
-                if (value.liveTripData!.tripInfo!.tripStatus ==
+              if (value.liveTripData!.tripInfo!.tripStatus ==
                   TripStatusOnboarding) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
@@ -65,124 +84,59 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
           });
           return value.liveTripData != null
               ? Scaffold(
-                  body: Stack(alignment: Alignment.center, children: <Widget>[
-                  MapDirectionWidgetPickup(
-                    key: widget._key,
-                    liveTripData: value.liveTripData!,
-                    callback: retrieveDuration,
-                  ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        //Do not remove this height otherwise map is not scrolling
-                          height: MediaQuery.of(context).size.height/2,
-                          margin: EdgeInsets.only(left: 10, right: 10),
-                        child: ExpandableBottomSheet(
-                          //use the key to get access to expand(), contract() and expansionStatus
-                          key: key,
-
-                          //optional
-                          //callbacks (use it for example for an animation in your header)
-                          onIsContractedCallback: () => print('contracted'),
-                          onIsExtendedCallback: () => print('extended'),
-
-                          //optional; default: Duration(milliseconds: 250)
-                          //The durations of the animations.
-                          /* animationDurationExtend: const Duration(milliseconds: 500),
-                        animationDurationContract:
-                        const Duration(milliseconds: 250),
-                        animationCurveExpand: Curves.bounceOut,
-                        animationCurveContract: Curves.ease,*/
-
-                          //required
-                          //This is the widget which will be overlapped by the bottom sheet.
-                          background: Container(
-                            height: 1,
-                            color: Colors.transparent,
-                          ),
-
-                          //For showing some content below green banner provide this height
-                       //   persistentContentHeight: 50,
-                          //optional
-                          //This widget is sticking above the content and will never be contracted.
-                          persistentHeader: GestureDetector(
-                            onTap: () {
-                              if (_expansionStatus == ExpansionStatus.contracted) {
+                  body: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      MapDirectionWidgetPickup(
+                        key: widget._key,
+                        liveTripData: value.liveTripData!,
+                        callback: retrieveDuration,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            if (showFullScreen) FromToData(value.liveTripData!),
+                            GestureDetector(
+                              onTap: () {
                                 setState(() {
-                                  key.currentState!.expand();
-                                  _expansionStatus =
-                                      key.currentState!.expansionStatus;
+                                  showFullScreen = true;
+                                  disableFullScreen();
                                 });
-                              } else {
-                                setState(() {
-                                  key.currentState!.contract();
-                                  _expansionStatus =
-                                      key.currentState!.expansionStatus;
-                                });
-                              }
-                            },
-                            child: Container(
-                              color: Colors.green,
-                              constraints: const BoxConstraints.expand(height: 40),
-                              child: Center(
-                                child: Container(
-                                  height: 8.0,
-                                  width: 50.0,
-                                  color:
-                                  Color.fromARGB((0.25 * 255).round(), 0, 0, 0),
-                                ),
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  DriverDetailWidget(
+                                    duration: duration,
+                                  ),
+                                  TimerButton(
+                                    liveTripData: value.liveTripData!,
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-
-                          //required
-                          //This is the content of the bottom sheet which will be extendable by dragging.
-                          expandableContent:SingleChildScrollView(
-                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              FromToData(value.liveTripData!),])
-                          ),
-
-
-                          // optional
-                          // This will enable tap to toggle option on header.
-                          enableToggle: true,
-
-                          //optional
-                          //This is a widget aligned to the bottom of the screen and stays there.
-                          //You can use this for example for navigation.
-                          persistentFooter: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              DriverDetailWidget(
-                                duration: duration,
-                              ),
-                              TimerButton(
-                                liveTripData: value.liveTripData!,
-                              ),],
-                          ),
+                          ],
                         ),
                       ),
-                    ),
-
-                  Column(children: [
-                    const AppBarInsideWidget(
-                      title: "Envi",
-                      isBackButtonNeeded: false,
-                    ),
-                    const SizedBox(height: 5),
-                    getCardBanner(value.liveTripData!),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: OTPView(otp: value.liveTripData!.tripInfo!.otp),
-                    ),
-                  ]),
-
-                ]))
-              : Container(
-            child: CircularProgressIndicator(),
-          );
+                      Column(children: [
+                        const AppBarInsideWidget(
+                          title: "Envi",
+                          isBackButtonNeeded: false,
+                        ),
+                        const SizedBox(height: 5),
+                        if (showFullScreen) getCardBanner(value.liveTripData!),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child:
+                              OTPView(otp: value.liveTripData!.tripInfo!.otp),
+                        ),
+                      ]),
+                    ],
+                  ),
+                )
+              : const CircularProgressIndicator();
         }),
       ),
     );
@@ -313,9 +267,8 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-      setState(() {
-        duration = durationToPickupLocation;
-      });
+    setState(() {
+      duration = durationToPickupLocation;
+    });
   }
-
 }

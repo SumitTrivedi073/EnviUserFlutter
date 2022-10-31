@@ -80,7 +80,6 @@ class DriverListItemPageState extends State<DriverListItem> {
     setState(() {
       isLoading = true;
     });
-         print("data$data");
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
@@ -99,7 +98,6 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
-        print("ErrorMsg========>${jsonDecode(res.body)['msg']}");
         Errormsg = jsonDecode(res.body)['msg'];
 
       setState(() {
@@ -169,7 +167,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             direction: Axis.horizontal,
                             allowHalfRating: true,
                             itemCount: 5,
-                            itemSize: 14,
+                           itemSize: 14,
                             itemPadding:
                                 const EdgeInsets.symmetric(horizontal: 2.0),
                             itemBuilder: (context, _) => const Icon(
@@ -180,21 +178,21 @@ class DriverListItemPageState extends State<DriverListItem> {
                               print(rating);
                             },
                           ),
-                          Card(
-                            child: Image.network(
-                              encodeImgURLString(DriverList[index].driverPhoto),
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  Images.personPlaceHolderImage,
-                                  height: 50,
-                                  width: 50,
-                                );
-                              },
-                              fit: BoxFit.fill,
-                              height: 30,
-                              width: 40,
-                            ),
-                          )
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: Image.network(
+                                encodeImgURLString(DriverList[index].driverPhoto),
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    Images.personPlaceHolderImage,
+                                    height: 50,
+                                    width: 50,
+                                  );
+                                },
+                                fit: BoxFit.fill,
+                                height: 50,
+                                width: 50,
+                              ))
                         ],
                       ),
                     ],

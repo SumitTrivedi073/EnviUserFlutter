@@ -75,7 +75,16 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
               .map((i) => RideHistoryModel.fromJson(i))
               .toList();
+          if (arrtrip.length > 0) {
+
+              if (arrtrip.length != _limit) {
+                _hasNextPage = false;
+              }
+
+
+          }
         }
+
       });
     } else {
       setState(() {
