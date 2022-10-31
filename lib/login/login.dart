@@ -3,7 +3,6 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-
 import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/theme/theme.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
@@ -123,170 +122,173 @@ class _LoginpageState extends State<Loginpage> {
       child: Center(
         child: Column(
           children: <Widget>[
-          Card(
-          semanticContainer: true,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-    ),
-    elevation: 5,
-    child: Container(
-    color: AppColor.white,
-    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    child: Align(
-    alignment: Alignment.center,
-    child:Column(children: [
-
-      const SizedBox(
-        height: 20,
-      ),
-      Image.asset(
-        "assets/images/envi-logo-small.png",
-        width: 276,
-        fit: BoxFit.fill,
-      ),
-      const SizedBox(
-        height: 15,
-      ),
-      robotoTextWidget(
-          textval:
-          'OTP SENT TO +${countrycontroller.text} ${phoneController.text}',
-          colorval: AppColor.black,
-          sizeval: 14.0,
-          fontWeight: FontWeight.w600),
-      if(_start > 0)
-
-        robotoTextWidget(
-            textval: "00:$_start",
-            colorval: AppColor.black,
-            sizeval: 17.0,
-            fontWeight: FontWeight.bold),
-      const SizedBox(
-        height: 10,
-      ),
-      TextFormField(
-        controller: otpController,
-        inputFormatters: [LengthLimitingTextInputFormatter(6)],
-        keyboardType: TextInputType.phone,
-        style: const TextStyle(color: AppColor.black),
-        decoration: const InputDecoration(
-          hintText: "Enter OTP",
-          hintStyle: TextStyle(color: Colors.black45),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Please enter valid OTP!';
-          }
-          return null;
-        },
-      ),
-      const SizedBox(
-        height: 20,
-      ),
-    ])))),
-
+            Card(
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 5,
+                child: Container(
+                    color: AppColor.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Column(children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Image.asset(
+                            "assets/images/envi-logo-small.png",
+                            width: 276,
+                            fit: BoxFit.fill,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          robotoTextWidget(
+                              textval:
+                                  'OTP SENT TO +${countrycontroller.text} ${phoneController.text}',
+                              colorval: AppColor.black,
+                              sizeval: 14.0,
+                              fontWeight: FontWeight.w600),
+                          if (_start > 0)
+                            robotoTextWidget(
+                                textval: "00:$_start",
+                                colorval: AppColor.black,
+                                sizeval: 17.0,
+                                fontWeight: FontWeight.bold),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: otpController,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(6)
+                            ],
+                            keyboardType: TextInputType.phone,
+                            style: const TextStyle(color: AppColor.black),
+                            decoration: const InputDecoration(
+                              hintText: "Enter OTP",
+                              hintStyle: TextStyle(color: Colors.black45),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter valid OTP!';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ])))),
             const SizedBox(
               height: 15,
             ),
-        Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          elevation: 5,
-          child:Container(
-            color: AppColor.greyblack,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.teal,
-                    ),
-                    onPressed: () {
-                      final isValid =
-                          _formKeyofrverify.currentState!.validate();
-                      if (!isValid) {
-                        return;
-                      }
+            Card(
+              semanticContainer: true,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              elevation: 5,
+              child: Container(
+                color: AppColor.greyblack,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.teal,
+                      ),
+                      onPressed: () {
+                        if (otpController.text.length == 6) {
+                          final isValid =
+                              _formKeyofrverify.currentState!.validate();
+                          if (!isValid) {
+                            return;
+                          }
 
-                      _formKeyofrverify.currentState!.save();
+                          _formKeyofrverify.currentState!.save();
+                          setState(() {
+                            isLoading = true;
+                          });
+                          verifyotp();
+                        }else{
+                          showSnackbar(context, 'Please enter valid OTP!');
+                        }
+                      },
+                      child: robotoTextWidget(
+                          textval: verify,
+                          colorval: AppColor.white,
+                          sizeval: 17.0,
+                          fontWeight: FontWeight.w800)),
+                ),
+              ),
+            ),
+            if (_start < 0)
+              Card(
+                  semanticContainer: true,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  elevation: 5,
+                  child: Container(
+                    color: AppColor.greyblack,
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                          style: TextButton.styleFrom(
+                            primary: Colors.teal,
+                          ),
+                          onPressed: () {
+                            if (_start < 0) {
+                              fetchotp(
+                                  phoneNumber:
+                                      "+${countrycontroller.text}${phoneController.text}");
+                            }
+                          },
+                          child: robotoTextWidget(
+                              textval: resend,
+                              colorval: AppColor.white,
+                              sizeval: 16.0,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  )),
+            const SizedBox(
+              height: 15,
+            ),
+            Card(
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                elevation: 5,
+                child: Container(
+                  color: AppColor.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: MaterialButton(
+                    minWidth: double.infinity,
+                    height: 25,
+                    onPressed: () {
                       setState(() {
-                        isLoading = true;
+                        if (_timer != null && _timer!.isActive) {
+                          _timer!.cancel();
+                        }
+                        _showmobileview = true;
                       });
-                      verifyotp();
                     },
                     child: robotoTextWidget(
-                        textval: verify,
-                        colorval: AppColor.white,
+                        textval: loginwithdeffrentnumber,
+                        colorval: AppColor.black,
                         sizeval: 17.0,
-                        fontWeight: FontWeight.w800)),
-              ),
-            ),),
-
-        if(_start < 0)
-        Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          elevation: 5,
-          child: Container(
-            color: AppColor.greyblack,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.teal,
-                    ),
-                    onPressed: () {
-                      if (_start < 0) {
-                        fetchotp(
-                            phoneNumber:
-                                "+${countrycontroller.text}${phoneController.text}");
-                      }
-                    },
-                    child: robotoTextWidget(
-                            textval: resend,
-                            colorval: AppColor.white,
-                            sizeval: 16.0,
-                            fontWeight: FontWeight.bold)),
-              ),
-            )),
-            const SizedBox(
-              height: 15,
-            ),
-        Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          elevation: 5,
-          child:Container(
-            color: AppColor.white,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: MaterialButton(
-                minWidth: double.infinity,
-                height: 25,
-                onPressed: () {
-                  setState(() {
-                    if (_timer != null && _timer!.isActive) {
-                      _timer!.cancel();
-                    }
-                    _showmobileview = true;
-                  });
-                },
-                child: robotoTextWidget(
-                    textval: loginwithdeffrentnumber,
-                    colorval: AppColor.black,
-                    sizeval: 17.0,
-                    fontWeight: FontWeight.bold),
-              ),
-            )),
+                        fontWeight: FontWeight.bold),
+                  ),
+                )),
           ],
         ),
       ),
@@ -299,159 +301,142 @@ class _LoginpageState extends State<Loginpage> {
       child: Center(
         child: Column(
           children: <Widget>[
-
             Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10.0),
-    ),
-    elevation: 5,
-    child: Container(
-    color: AppColor.white,
-    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    child: Align(
-    alignment: Alignment.center,
-              child:Column(children: [
-                const SizedBox(
-                  height: 20,
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                Image.asset(
-                  "assets/images/envi-logo-small.png",
-                  width: 276,
-                  fit: BoxFit.none,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                robotoTextWidget(
-                    textval: welcome,
-                    colorval: AppColor.black,
-                    sizeval: 20.0,
-                    fontWeight: FontWeight.bold),
-
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Expanded(
-                    //   child: TextFormField(
-                    //     textAlign: TextAlign.center,
-                    //     controller: plushcontroller,
-                    //     readOnly: true,
-                    //     style: const TextStyle(color: AppColor.black),
-                    //   ),
-                    // ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        controller: countrycontroller,
-                        keyboardType: TextInputType.phone,
-                        style: const TextStyle(color: AppColor.black),
-                        decoration: const InputDecoration(
-                          prefixText: '+',
-                          // hintText: "country code",
-                          hintStyle: TextStyle(
-                            color: Colors.black45,
-                            fontSize:18
+                elevation: 5,
+                child: Container(
+                  color: AppColor.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter valid country code!';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      flex: 6, // wrap your Column in Expanded
-                      child: TextFormField(
-                        controller: phoneController,
-                        // maxLength: 12,
-                        inputFormatters: [LengthLimitingTextInputFormatter(12)],
-                        keyboardType: TextInputType.number,
-                        style: const TextStyle(color: AppColor.black),
-                        decoration: const InputDecoration(
-                          hintText: "phone number",
-                          hintStyle:
-                          TextStyle(color: Colors.black45, fontSize: 18),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty ||
-                              !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
-                                  .hasMatch(value)) {
-                            return 'Please enter valid phone number!';
-                          }
-
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],)
-      ),)
-            ),
-
+                          Image.asset(
+                            "assets/images/envi-logo-small.png",
+                            fit: BoxFit.fill,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          robotoTextWidget(
+                              textval: welcome,
+                              colorval: AppColor.black,
+                              sizeval: 20.0,
+                              fontWeight: FontWeight.bold),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  controller: countrycontroller,
+                                  keyboardType: TextInputType.phone,
+                                  style: const TextStyle(color: AppColor.black),
+                                  decoration: const InputDecoration(
+                                    prefixText: '+',
+                                    hintStyle: TextStyle(
+                                        color: Colors.black45, fontSize: 18),
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter valid country code!';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                flex: 4, // wrap your Column in Expanded
+                                child: TextFormField(
+                                  controller: phoneController,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(12)
+                                  ],
+                                  keyboardType: TextInputType.number,
+                                  style: const TextStyle(color: AppColor.black),
+                                  decoration: const InputDecoration(
+                                    hintText: "phone number",
+                                    hintStyle: TextStyle(
+                                        color: Colors.black45, fontSize: 18),
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty ||
+                                        !RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}")
+                                            .hasMatch(value)) {
+                                      return 'Please enter valid phone number!';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      )),
+                )),
             const SizedBox(
               height: 15,
             ),
-        Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          elevation: 5,
-          child: Container(
-            color: AppColor.greyblack,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: MaterialButton(
-                minWidth: double.infinity,
-                height: 45,
-                onPressed: () {
-                  final isValid = _formKey.currentState!.validate();
-                  if (!isValid) {
-                    return;
-                  }
-                  _formKey.currentState!.save();
-
-                  if (_showmobileview) {
-                    setState(() {
-                      isLoading = true;
-                    });
-
-                    if (isEmulation) {
-                      signIn();
-                    } else {
-                      fetchotp(
-                          phoneNumber:
-                              "+${countrycontroller.text}${phoneController.text}");
-                    }
-                  }
-                },
-                child: robotoTextWidget(
-                    textval: submitAllCapsText,
-                    colorval: AppColor.white,
-                    sizeval: 17.0,
-                    fontWeight: FontWeight.bold),
+            Card(
+              semanticContainer: true,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
               ),
-            ),),
+              elevation: 5,
+              child: Container(
+                color: AppColor.greyblack,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  height: 45,
+                  onPressed: () {
+                    final isValid = _formKey.currentState!.validate();
+                    if (!isValid) {
+                      return;
+                    }
+                    _formKey.currentState!.save();
 
+                    if (_showmobileview) {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      if (isEmulation) {
+                        signIn();
+                      } else {
+                        fetchotp(
+                            phoneNumber:
+                                "+${countrycontroller.text}${phoneController.text}");
+                      }
+                    }
+                  },
+                  child: robotoTextWidget(
+                      textval: submitAllCapsText,
+                      colorval: AppColor.white,
+                      sizeval: 17.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -511,18 +496,12 @@ class _LoginpageState extends State<Loginpage> {
         if (_timer != null && _timer!.isActive) {
           _timer!.cancel();
 
-          _start=0;
+          _start = 0;
         }
         signIn();
       }
     } on FirebaseAuthException catch (e) {
       print("catch$e");
-      if (_timer != null && _timer!.isActive) {
-        _timer!.cancel();
-        _start =0;
-      }
-
-
       setState(() {
         isLoading = false;
       });
@@ -539,7 +518,7 @@ class _LoginpageState extends State<Loginpage> {
                 timer.cancel();
               } else {
                 setState(() {
-                 // print(_start);
+                  // print(_start);
                   _start = _start - 1;
                 });
               }
@@ -576,7 +555,6 @@ class _LoginpageState extends State<Loginpage> {
     var jsonData = null;
     dynamic response = await HTTP.post(userLogin(), data);
     print(response.statusCode);
-   // print("jsonData========>${convert.jsonDecode(response.body)}");
     if (response != null && response.statusCode == 200) {
       isLoading = false;
       jsonData = convert.jsonDecode(response.body);
@@ -584,8 +562,6 @@ class _LoginpageState extends State<Loginpage> {
       LoginModel users = LoginModel.fromJson(jsonData['content']);
 
       setState(() {
-
-
         Navigator.push(
             context,
             MaterialPageRoute(
