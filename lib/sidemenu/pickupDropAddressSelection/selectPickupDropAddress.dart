@@ -49,12 +49,11 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   List<dynamic> _placeList = [];
   bool showTripDetail = false;
   bool isFrom = false;
-  String SearchFromLocation = "", SearchToLocation = "";
   TextEditingController FromLocationText = TextEditingController();
   TextEditingController ToLocationText = TextEditingController();
   late String _sessionToken;
   var uuid = const Uuid();
-  bool _isVisible = false;
+
   DetailsResult? startPosition;
   DetailsResult? endPosition;
   late FocusNode startFocusNode;
@@ -79,11 +78,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     }
   }
 
- 
-
   Future<void> getLocalSuggestions(String val) async {
     searchPlaceList = await AutocompleteService().getdata(val);
-    print("localSearch" + searchPlaceList.toString());
     setState(() {});
   }
 
@@ -102,7 +98,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     FromLocationText.text = widget.currentLocation!.address;
     _sessionToken = uuid.v4();
@@ -140,8 +135,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 .map((i) => SearchPlaceModel.fromJson(i))
                 .toList();
             useGoogleApi = false;
-
-            _isVisible = true;
           } else {
             googleAPI(value);
           }
@@ -164,6 +157,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     String type = '(regions)';
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+    print('Im gettin called');
     String request =
         '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken&components=country:in';
     var url = Uri.parse(request);
@@ -677,7 +671,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField fromTextWidget() {
     return TextField(
-      style: TextStyle(fontWeight: FontWeight.w600),
+      style: const TextStyle(fontWeight: FontWeight.w600),
       autofocus: false,
       focusNode: startFocusNode,
       onSubmitted: (value) {
@@ -719,6 +713,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       searchPlaceList = [];
                       startingAddress = null;
                       getLocalSuggestions('');
+                      startFocusNode.requestFocus();
                     });
                   },
                 )
@@ -772,6 +767,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       searchPlaceList = [];
                       endAddress = null;
                       getLocalSuggestions('');
+                      endFocusNode.requestFocus();
                     });
                   },
                 )

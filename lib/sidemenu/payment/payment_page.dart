@@ -38,6 +38,14 @@ class _PaymentPageState extends State<PaymentPage> {
   late TripDataModel tripDataModel;
   LatLng? latlong;
 
+
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

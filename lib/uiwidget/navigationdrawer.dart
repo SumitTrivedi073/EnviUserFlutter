@@ -80,40 +80,35 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NewProfilePage(
-                          user: user!,
-                          isUpdate: true,
-                        )));
+                        builder: (context) => ProfileAfterloginPage(
+                              profiledatamodel: user,
+                            )));
               },
-              child: Container(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 70.0,
-                              width: 70.0,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: getsmallNetworkImage(context,
-                                    encodeImgURLString(Profiledata.propic)),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            userDetails(),
-                          ]),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      Container(
+                        height: 70.0,
+                        width: 70.0,
+                        margin: const EdgeInsets.only(top: 20.0),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: getsmallNetworkImage(
+                              context, encodeImgURLString(Profiledata.propic)),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      userDetails(),
                     ]),
-              ),
+                  ]),
             ),
           ),
           const SizedBox(
@@ -172,7 +167,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-       
+
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/favorite-places.svg",

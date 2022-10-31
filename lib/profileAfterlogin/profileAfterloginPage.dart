@@ -49,6 +49,13 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
     user = widget.profiledatamodel;
     super.initState();
   }
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -41,7 +41,6 @@ class NewProfilePage extends StatefulWidget {
   final String? phone;
   final String? countryCode;
 
-
   @override
   State<NewProfilePage> createState() => _NewProfilePageState();
 }
@@ -245,11 +244,13 @@ class _NewProfilePageState extends State<NewProfilePage> {
               const SizedBox(
                 height: 5,
               ),
-              Text(
-                letsSetUpyourProfileText,
-                style: AppTextStyle.robotoRegular16,
-              ),
-              SizedBox(height: 25),
+              (!widget.isUpdate)
+                  ? Text(
+                      letsSetUpyourProfileText,
+                      style: AppTextStyle.robotoRegular16,
+                    )
+                  : const SizedBox(),
+              const SizedBox(height: 25),
               Form(
                 key: _profileForm,
                 child: Card(
@@ -488,7 +489,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
                   ? MaterialButton(
                       onPressed: () async {
                         if (widget.isUpdate) {
-
                           setState(() {
                             isLoading = true;
                           });
@@ -519,8 +519,10 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                 widget.user!.mailid);
                             sharedPreferences.setString(
                                 loginEmail, _emailController.text);
-                            sharedPreferences.setString(loginToken, widget.user!.token);
-                            sharedPreferences.setString(loginID, widget.user!.id);
+                            sharedPreferences.setString(
+                                loginToken, widget.user!.token);
+                            sharedPreferences.setString(
+                                loginID, widget.user!.id);
                             sharedPreferences.setString(
                                 logingender, selectedGender!);
                             sharedPreferences.setString(
@@ -529,13 +531,14 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                 loginName, _firstNameController.text);
                             sharedPreferences.setString(
                                 loginpropic,
-                              updateUserResponse['pro_pic'] ??
-                                  widget.user!.propic);
+                                updateUserResponse['pro_pic'] ??
+                                    widget.user!.propic);
                             Profiledata.setusreid(widget.user!.id);
                             Profiledata.settoken(widget.user!.token);
                             Profiledata.setmailid(_emailController.text);
-                            Profiledata.setpropic(updateUserResponse['pro_pic'] ??
-                                widget.user!.propic);
+                            Profiledata.setpropic(
+                                updateUserResponse['pro_pic'] ??
+                                    widget.user!.propic);
                             Profiledata.setphone(_phoneNoController.text);
                             Profiledata.setgender(selectedGender!);
                             Profiledata.setname(_firstNameController.text);
@@ -545,12 +548,10 @@ class _NewProfilePageState extends State<NewProfilePage> {
                             //     duration: const Duration(seconds: 3));
                             showToast(updatedSuccessText);
 
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                  const HomePage(title: "title")));
-
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const HomePage(title: "title")));
                           } else {
-
                             setState(() {
                               isLoading = false;
                             });
