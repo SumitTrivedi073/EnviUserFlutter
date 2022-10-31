@@ -33,9 +33,9 @@ var welcome = "Welcome!";
 var mobilevalidation = "Please enter phone number";
 var verifymsg =
     "We have sent you a One- Time Password\n (OTP). Please enter it here:";
-var resend = "Resend OTP";
+var resend = "RESEND OTP";
 var numberedit = "EDIT MOBILE";
-var verify = "Verify";
+var verify = "VERIFY";
 var reviewprofile = "Please review your profile";
 var loginwithdeffrentnumber = "Log in with a different number";
 var continuebut = "Continue";
