@@ -351,7 +351,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           children: [
             AppBarInsideWidget(
               pagetitle: widget.title,
-              isBackButtonNeeded: false,
+              isBackButtonNeeded: true,
             ),
             Card(
               margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
