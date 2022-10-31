@@ -121,11 +121,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
-            // robotoTextWidget(
-            //     textval: reviewprofile,
-            //     colorval: AppColor.black,
-            //     sizeval: 16.0,
-            //     fontWeight: FontWeight.normal),
+
             const SizedBox(
               height: 20,
             ),
@@ -162,7 +158,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               child: const Icon(
                                 Icons.edit_note_outlined,
                                 size: 30,
-                                color: AppColor.darkGreen,
+                                color: AppColor.grey,
                               ),
                             ),
                           ],
@@ -338,6 +334,4 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
       ),
     );
   }
-
-
 }
