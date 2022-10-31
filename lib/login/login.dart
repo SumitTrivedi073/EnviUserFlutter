@@ -148,16 +148,19 @@ class _LoginpageState extends State<Loginpage> {
                           ),
                           robotoTextWidget(
                               textval:
-                                  'OTP SENT TO +${countrycontroller.text} ${phoneController.text}',
-                              colorval: AppColor.black,
+                                  'OTP is sent to +${countrycontroller.text} ${phoneController.text}',
+                              colorval: AppColor.grey,
                               sizeval: 14.0,
                               fontWeight: FontWeight.w600),
                           if (_start > 0)
-                            robotoTextWidget(
-                                textval: "00:$_start",
-                                colorval: AppColor.black,
-                                sizeval: 17.0,
-                                fontWeight: FontWeight.bold),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: robotoTextWidget(
+                                  textval: "00:$_start",
+                                  colorval: AppColor.red,
+                                  sizeval: 17.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -167,10 +170,12 @@ class _LoginpageState extends State<Loginpage> {
                               LengthLimitingTextInputFormatter(6)
                             ],
                             keyboardType: TextInputType.phone,
-                            style: const TextStyle(color: AppColor.black),
+                            style: const TextStyle(
+                                color: AppColor.black, fontSize: 22),
                             decoration: const InputDecoration(
                               hintText: "Enter OTP",
-                              hintStyle: TextStyle(color: Colors.black45),
+                              hintStyle: TextStyle(
+                                  color: Colors.black45, fontSize: 20),
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -215,7 +220,7 @@ class _LoginpageState extends State<Loginpage> {
                             isLoading = true;
                           });
                           verifyotp();
-                        }else{
+                        } else {
                           showSnackbar(context, 'Please enter valid OTP!');
                         }
                       },
@@ -343,11 +348,12 @@ class _LoginpageState extends State<Loginpage> {
                                   textAlign: TextAlign.center,
                                   controller: countrycontroller,
                                   keyboardType: TextInputType.phone,
-                                  style: const TextStyle(color: AppColor.black),
+                                  style: const TextStyle(
+                                      color: AppColor.black, fontSize: 22),
                                   decoration: const InputDecoration(
                                     prefixText: '+',
                                     hintStyle: TextStyle(
-                                        color: Colors.black45, fontSize: 18),
+                                        color: Colors.black45, fontSize: 22),
                                   ),
                                   validator: (value) {
                                     if (value!.isEmpty) {
@@ -368,11 +374,12 @@ class _LoginpageState extends State<Loginpage> {
                                     LengthLimitingTextInputFormatter(12)
                                   ],
                                   keyboardType: TextInputType.number,
-                                  style: const TextStyle(color: AppColor.black),
+                                  style: const TextStyle(
+                                      color: AppColor.black, fontSize: 22),
                                   decoration: const InputDecoration(
-                                    hintText: "phone number",
+                                    hintText: "Phone number",
                                     hintStyle: TextStyle(
-                                        color: Colors.black45, fontSize: 18),
+                                        color: Colors.black45, fontSize: 22),
                                   ),
                                   validator: (value) {
                                     if (value!.isEmpty ||
@@ -387,7 +394,7 @@ class _LoginpageState extends State<Loginpage> {
                             ],
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 30,
                           ),
                         ],
                       )),
