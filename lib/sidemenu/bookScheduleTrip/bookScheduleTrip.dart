@@ -188,13 +188,12 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                            String message='';
                           var hours = AppConfig().getadvance_booking_time_limit()/60;
                           var minutes = AppConfig().getadvance_booking_time_limit()%60;
-                          if (hours>1 && minutes>1) {
-                            message = "Please select a time slot, no earlier than ${hours.toStringAsFixed(0)} hours ${minutes.toStringAsFixed(0)} min from now.";
-                          }else if (hours>1 && minutes<1) {
-                            message = "Please select a time slot, no earlier than ${hours.toStringAsFixed(0)} hours from now.";
+
+                           if (hours>1 && minutes>1) {
+                            message = "Please select a time slot, no earlier than ${hours.toInt()} hours ${minutes.toInt()} min from now.";
                           }else {
                             message =
-                            "Please select a time slot, no earlier than ${minutes.toStringAsFixed(0)} min from now.";
+                            "Please select a time slot, no earlier than ${minutes.toInt()} min from now.";
                           }
                           utility.showInSnackBar(
                               value:message,
