@@ -208,6 +208,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
     return SafeArea(
         child: Scaffold(
       body:  Container(
+        height: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(PageBackgroundImage),
@@ -217,7 +218,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
           child: Column(
             children: [
               AppBarInsideWidget(title: 'Profile Page'),
-            Container(
+            Expanded(
               child:  SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.only(left: 20,right: 20),
