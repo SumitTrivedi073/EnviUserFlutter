@@ -61,7 +61,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                  child:  ClipRRect(
                      borderRadius: BorderRadius.circular(40.0),
                      child: Image.network(
-                       encodeImgURLString(Profiledata().getpropic()),
+                       encodeImgURLString(Profiledata.propic),
                        errorBuilder: (context, error, stackTrace) {
                          return Image.asset(
                            Images.personPlaceHolderImage,
