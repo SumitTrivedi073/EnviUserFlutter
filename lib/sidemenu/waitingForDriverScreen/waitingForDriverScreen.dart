@@ -34,11 +34,8 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   late String duration = "0 Minute";
   bool isLoaded = false;
-  int _contentAmount = 0;
   Timer? fullScreenDisableTimer = null;
-
   bool showFullScreen = true;
-  ExpansionStatus _expansionStatus = ExpansionStatus.contracted;
 
   @override
   void initState() {
@@ -139,9 +136,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                     ],
                   ),
                 )
-              : Container(
-                  child: CircularProgressIndicator(),
-                );
+              : const CircularProgressIndicator();
         }),
       ),
     );

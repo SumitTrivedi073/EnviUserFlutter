@@ -57,17 +57,11 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                                 Navigator.pop(context);
                               })
                       : SizedBox(),
-                  robotoTextWidget(
-                    textval: widget.title,
-                    colorval: AppColor.lightwhite,
-                    sizeval: 18.0,
-                    fontWeight: FontWeight.w800,
-                  ),
-                 Padding(padding: EdgeInsets.only(right: 10),
+                 Padding(padding: EdgeInsets.all(5),
                  child:  ClipRRect(
-                     borderRadius: BorderRadius.circular(50.0),
+                     borderRadius: BorderRadius.circular(40.0),
                      child: Image.network(
-                       encodeImgURLString(Profiledata().getpropic()),
+                       encodeImgURLString(Profiledata.propic),
                        errorBuilder: (context, error, stackTrace) {
                          return Image.asset(
                            Images.personPlaceHolderImage,
@@ -82,6 +76,16 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
 
                 ],
               )),
+        Align(alignment: Alignment.center,
+        child:   Container(
+          margin: EdgeInsets.only(top: 20),
+          child: robotoTextWidget(
+            textval: widget.title,
+            colorval: AppColor.lightwhite,
+            sizeval: 18.0,
+            fontWeight: FontWeight.w800,
+          ),
+        ),)
         ],
       ),
     );

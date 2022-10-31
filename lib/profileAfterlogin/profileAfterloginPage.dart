@@ -102,14 +102,9 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
       child: Center(
         child: Column(
           children: <Widget>[
-            // Image.asset(
-            //   "assets/images/logo.png",
-            //   width: 276,
-            //   fit: BoxFit.fill,
-            // ),
             Image.asset(
               "assets/images/envi-logo-small.png",
-              width: 112,
+              width: 140,
               height: 140,
               fit: BoxFit.none,
             ),
@@ -191,21 +186,6 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                             height: 100,
                             width: 100,
                           ),
-                          //  FadeInImage.assetNetwork(
-                          //     height: 100,
-                          //     width: 100,
-                          //     fit: BoxFit.fill,
-                          //     imageErrorBuilder:
-                          //         (context, error, stackTrace) {
-                          //       return Image.asset(
-                          //         Images.personPlaceHolderImage,
-                          //         height: 50,
-                          //         width: 50,
-                          //       );
-                          //     },
-                          //     placeholder:
-                          //         'assets/images/envi-logo-small.png',
-                          //     image: encodeImgURLString(user!.propic))
                         ),
                         const SizedBox(
                           height: 5,
