@@ -159,7 +159,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: widget.title,
+              pagetitle: widget.title,
               isBackButtonNeeded: true,
             ),
             Container(

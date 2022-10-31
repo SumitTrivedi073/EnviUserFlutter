@@ -113,7 +113,7 @@ print("========${widget.lat}${widget.lng}");
           Column(
             children: [
               AppBarInsideWidget(
-                title: ConfirmLocation,
+                pagetitle: ConfirmLocation,
                 isBackButtonNeeded: true,
               ),
               Card(

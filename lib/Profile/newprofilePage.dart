@@ -217,7 +217,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
           ),
           child: Column(
             children: [
-              AppBarInsideWidget(title: 'Profile Page'),
+              AppBarInsideWidget(pagetitle: 'Profile Page'),
             Expanded(
               child:  SingleChildScrollView(
                 child: Container(

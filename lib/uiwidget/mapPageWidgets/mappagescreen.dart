@@ -161,6 +161,7 @@ class MyMapState extends State {
           _controller
               ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
         }
+        GetAddressFromLatLong(latlong!);
       });
     }
   }
