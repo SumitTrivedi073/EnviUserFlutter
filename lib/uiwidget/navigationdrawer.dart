@@ -80,10 +80,12 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProfileAfterloginPage(
-                              profiledatamodel: user,
-                            )));
+                        builder: (context) => NewProfilePage(
+                          user: user,
+                          isUpdate: true,
+                        )));
               },
+
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,10 +116,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-          // const Padding(
-          //     padding: EdgeInsets.only(left: 70),
-          //     child: Divider(color: Colors.white)),
-          const SizedBox(
+             const SizedBox(
             height: 10,
           ),
           ListTile(
@@ -280,14 +279,14 @@ class _NavigationPageState extends State<NavigationDrawer> {
         sizeval: 20.0,
       ),
       const SizedBox(
-        height: 10,
+        height: 5,
       ),
-      // const robotoTextWidget(
-      //   textval: 'SILVER LEVEL',
-      //   colorval: AppColor.lightgreen,
-      //   fontWeight: FontWeight.w600,
-      //   sizeval: 14.0,
-      // ),
+      robotoTextWidget(
+        textval: Profiledata().getmailid().toString(),
+        colorval: Colors.grey,
+        fontWeight: FontWeight.w400,
+        sizeval: 10.0,
+      ),
     ]);
   }
 
