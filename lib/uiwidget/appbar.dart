@@ -1,4 +1,6 @@
 import 'package:envi/appConfig/Profiledata.dart';
+import 'package:envi/theme/string.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
@@ -51,25 +53,10 @@ class _AppBarPageState extends State<AppBarWidget> {
                         Scaffold.of(context).openDrawer();
                       },
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        children: const [
-                          Text(
-                            "ENVI",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'SFCompactText',
-                                fontWeight: FontWeight.w200,
-                                fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
                     ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
                           child: Image.network(
-                            encodeImgURLString(Profiledata().getpropic()),
+                            encodeImgURLString(Profiledata.propic),
                             errorBuilder: (context, error, stackTrace) {
                               return Image.asset(
                                 Images.personPlaceHolderImage,
@@ -87,6 +74,16 @@ class _AppBarPageState extends State<AppBarWidget> {
               ),
             ),
           ),
+          Align(alignment: Alignment.center,
+            child:   Container(
+              margin: EdgeInsets.only(top: 20),
+              child: robotoTextWidget(
+                textval: appName,
+                colorval: AppColor.lightwhite,
+                sizeval: 18.0,
+                fontWeight: FontWeight.w800,
+              ),
+            ),)
         ],
       ),
     );

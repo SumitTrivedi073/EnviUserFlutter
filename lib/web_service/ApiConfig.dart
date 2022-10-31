@@ -1,5 +1,5 @@
 import 'package:envi/web_service/ApiConstants.dart' as ApiConstants;
 
-var ENVIRONMENT = 'PRO';
-var releaseType = ApiConstants.production;
-var isEmulation = false;
+var ENVIRONMENT = 'QA';
+var releaseType = ApiConstants.qa;
+var isEmulation = true;
