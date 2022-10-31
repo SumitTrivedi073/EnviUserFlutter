@@ -81,7 +81,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                             AppBarInsideWidget(
-                              title: appName,
+                              pagetitle: appName,
                               isBackButtonNeeded: false,
                             ),
                             const SizedBox(

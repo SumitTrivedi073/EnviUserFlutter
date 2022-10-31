@@ -347,7 +347,7 @@ class _LoginpageState extends State<Loginpage> {
                                   decoration: const InputDecoration(
                                     prefixText: '+',
                                     hintStyle: TextStyle(
-                                        color: Colors.black45, fontSize: 18),
+                                        color: Colors.black45, fontSize: 16),
                                   ),
                                   validator: (value) {
                                     if (value!.isEmpty) {
@@ -372,7 +372,7 @@ class _LoginpageState extends State<Loginpage> {
                                   decoration: const InputDecoration(
                                     hintText: "phone number",
                                     hintStyle: TextStyle(
-                                        color: Colors.black45, fontSize: 18),
+                                        color: Colors.black45, fontSize: 16),
                                   ),
                                   validator: (value) {
                                     if (value!.isEmpty ||

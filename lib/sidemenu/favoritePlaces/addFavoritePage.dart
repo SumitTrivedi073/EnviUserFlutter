@@ -115,7 +115,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: TitelEditFavoritePlace,
+              pagetitle: TitelEditFavoritePlace,
               isBackButtonNeeded: true,
             ),
             Form(
