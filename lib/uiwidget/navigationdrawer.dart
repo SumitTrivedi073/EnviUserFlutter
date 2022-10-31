@@ -81,48 +81,42 @@ class _NavigationPageState extends State<NavigationDrawer> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => NewProfilePage(
-                          user: user!,
+                          user: user,
                           isUpdate: true,
                         )));
               },
-              child: Container(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 70.0,
-                              width: 70.0,
-                              margin: const EdgeInsets.only(top: 20.0),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: getsmallNetworkImage(context,
-                                    encodeImgURLString(Profiledata.propic)),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            userDetails(),
-                          ]),
+
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      Container(
+                        height: 70.0,
+                        width: 70.0,
+                        margin: const EdgeInsets.only(top: 20.0),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: getsmallNetworkImage(
+                              context, encodeImgURLString(Profiledata.propic)),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      userDetails(),
                     ]),
-              ),
+                  ]),
             ),
           ),
           const SizedBox(
             height: 10,
           ),
-          // const Padding(
-          //     padding: EdgeInsets.only(left: 70),
-          //     child: Divider(color: Colors.white)),
-          const SizedBox(
+             const SizedBox(
             height: 10,
           ),
           ListTile(
@@ -172,7 +166,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-       
+
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/favorite-places.svg",
@@ -285,14 +279,14 @@ class _NavigationPageState extends State<NavigationDrawer> {
         sizeval: 20.0,
       ),
       const SizedBox(
-        height: 10,
+        height: 5,
       ),
-      // const robotoTextWidget(
-      //   textval: 'SILVER LEVEL',
-      //   colorval: AppColor.lightgreen,
-      //   fontWeight: FontWeight.w600,
-      //   sizeval: 14.0,
-      // ),
+      robotoTextWidget(
+        textval: Profiledata().getmailid().toString(),
+        colorval: Colors.grey,
+        fontWeight: FontWeight.w400,
+        sizeval: 10.0,
+      ),
     ]);
   }
 

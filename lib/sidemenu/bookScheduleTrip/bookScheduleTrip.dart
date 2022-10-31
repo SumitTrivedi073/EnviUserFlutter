@@ -60,6 +60,13 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     // _controller2.text = DateFormat('HH:mm').format(mindatime);
     // _controller1.text = mindatime.toString();
   }
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

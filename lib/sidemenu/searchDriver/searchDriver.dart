@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../uiwidget/driverListWidget.dart';
+import '../home/homePage.dart';
 
 class SearchDriver extends StatefulWidget {
   final GlobalKey<DriverListItemPageState> _key = GlobalKey();
@@ -37,8 +38,12 @@ class _SearchDriverPageState extends State<SearchDriver> {
       Column(children: [
         AppBarInsideWidget(
           onPressBack: () {
-            Navigator.pop(context);
-            Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+            // Navigator.pop(context);
+            // Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const HomePage(title: "title")));
           },
           title: "Envi",
           isBackButtonNeeded: true,

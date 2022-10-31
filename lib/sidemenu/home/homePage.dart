@@ -26,14 +26,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  late String name="";
+  late String name = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserName();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -73,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               AppBarWidget(),
-               CardBanner(
+              CardBanner(
                   title: 'Welcome $name',
                   image: 'assets/images/welcome_card_dashboard.png'),
               const ScheduleListAlertConsumer(),
@@ -85,12 +91,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getUserName() async {
-
     setState(() {
       name = Profiledata().getname();
-
     });
   }
-
-
 }
