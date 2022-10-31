@@ -287,12 +287,12 @@ class _NavigationPageState extends State<NavigationDrawer> {
       const SizedBox(
         height: 10,
       ),
-      const robotoTextWidget(
-        textval: 'SILVER LEVEL',
-        colorval: AppColor.lightgreen,
-        fontWeight: FontWeight.w600,
-        sizeval: 14.0,
-      ),
+      // const robotoTextWidget(
+      //   textval: 'SILVER LEVEL',
+      //   colorval: AppColor.lightgreen,
+      //   fontWeight: FontWeight.w600,
+      //   sizeval: 14.0,
+      // ),
     ]);
   }
 
