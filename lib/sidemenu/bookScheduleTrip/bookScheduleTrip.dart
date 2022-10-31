@@ -59,7 +59,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
 
     print("mindatime===========>$mindatime");
   }
-  
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -185,18 +185,21 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                                         .format(inputDate)),
                           );
                         } else {
-                           String message='';
-                          var hours = AppConfig().getadvance_booking_time_limit()/60;
-                          var minutes = AppConfig().getadvance_booking_time_limit()%60;
+                          int hours =
+                              (AppConfig().getadvance_booking_time_limit() / 60)
+                                  .toInt();
+                          int minutes =
+                              (AppConfig().getadvance_booking_time_limit() % 60)
+                                  .toInt();
 
-                           if (hours>1 && minutes>1) {
-                            message = "Please select a time slot, no earlier than ${hours.toInt()} hours ${minutes.toInt()} min from now.";
-                          }else {
-                            message =
-                            "Please select a time slot, no earlier than ${minutes.toInt()} min from now.";
-                          }
+                          var hourStr = hours >= 1 ? '${hours} hour(s)' : '';
+                          var minStr = minutes >= 1 ? '${minutes} min(s)' : '';
+
+                          String message =
+                              "Please select a time slot, no earlier than ${hourStr} ${minStr}";
+
                           utility.showInSnackBar(
-                              value:message,
+                              value: message,
                               context: context,
                               duration: const Duration(seconds: 3));
                         }
