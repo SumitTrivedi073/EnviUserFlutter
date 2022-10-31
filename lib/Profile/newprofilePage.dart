@@ -117,15 +117,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
     super.initState();
   }
 
-  Future<File> getImageFileFromAssets() async {
-    var bytes = await rootBundle.load('assets/images/logo.png');
-    String tempPath = (await getTemporaryDirectory()).path;
-    File file = File('$tempPath/profile.png');
-    await file.writeAsBytes(
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-
-    return file;
-  }
 
 //update user
   Future<dynamic> userEditProfile({
@@ -230,9 +221,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
             children: [
               Image.asset(
                 "assets/images/envi-logo-small.png",
-                width: 112,
-                height: 140,
-                fit: BoxFit.none,
+                fit: BoxFit.fill,
               ),
               const SizedBox(
                 height: 10,

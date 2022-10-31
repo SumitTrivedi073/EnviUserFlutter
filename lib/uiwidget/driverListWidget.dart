@@ -80,7 +80,6 @@ class DriverListItemPageState extends State<DriverListItem> {
     setState(() {
       isLoading = true;
     });
-         print("data$data");
     dynamic res = await HTTP.post(searchDriver(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
@@ -99,7 +98,6 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
-        print("ErrorMsg========>${jsonDecode(res.body)['msg']}");
         Errormsg = jsonDecode(res.body)['msg'];
 
       setState(() {
@@ -169,7 +167,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                             direction: Axis.horizontal,
                             allowHalfRating: true,
                             itemCount: 5,
-                            itemSize: 14,
+                           itemSize: 14,
                             itemPadding:
                                 const EdgeInsets.symmetric(horizontal: 2.0),
                             itemBuilder: (context, _) => const Icon(
