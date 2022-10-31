@@ -126,7 +126,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: TitleUpcomingRides,
+              pagetitle: TitleUpcomingRides,
               isBackButtonNeeded: true,
             ),
             Expanded(

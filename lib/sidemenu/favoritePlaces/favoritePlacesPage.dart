@@ -99,7 +99,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
         child: Column(
           children: [
             AppBarInsideWidget(
-              title: TitelFavoritePlaces,
+              pagetitle: TitelFavoritePlaces,
               isBackButtonNeeded: true,
             ),
 

@@ -48,7 +48,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                   liveTripData: value.liveTripData!,
                 ),
                 Column(children: [
-                  const AppBarInsideWidget(title: "Envi",isBackButtonNeeded: false,),
+                  const AppBarInsideWidget(pagetitle: "Envi",isBackButtonNeeded: false,),
                   const SizedBox(height: 5),
                   CardBanner(
                       title: DriverOnRide,
