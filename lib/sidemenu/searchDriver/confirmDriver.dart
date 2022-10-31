@@ -1,20 +1,10 @@
-import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart';
-import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../../../web_service/HTTP.dart' as HTTP;
-import '../../appConfig/Profiledata.dart';
-import '../../theme/color.dart';
 import '../../theme/mapStyle.dart';
-import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/confirmDriverPopup.dart';
-import '../../uiwidget/robotoTextWidget.dart';
-import '../../web_service/APIDirectory.dart';
-import '../home/homePage.dart';
 import '../pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'model/driverListModel.dart' as DriverListModel;
 
@@ -42,7 +32,6 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   LatLng? latlong = null;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  late UserTripModel userTripModel;
 
 
   @override
