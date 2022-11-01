@@ -417,13 +417,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                           ..style = PaintingStyle.stroke,
                         color: Colors.white,
                       )))
-
-            // robotoTextWidget(
-            //     textval: moveText,
-            //     backgroundColor: Color.fromARGB(255, 241, 232, 151),
-            //     colorval: Colors.black26,
-            //     sizeval: 20,
-            //     fontWeight: FontWeight.w800)),
           ],
         ),
         Align(
@@ -500,11 +493,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                                 isFavourite: widget
                                                     .endLocation!.isFavourite,
                                               )
-
-                                              // ToAddressLatLong(
-                                              //   address: Address,
-                                              //   position: latlong,
-                                              // ),
                                               )),
                                   (Route<dynamic> route) => true);
                             } else {
@@ -551,10 +539,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                                                     .startLocation!.isFavourite,
                                               )
 
-                                              // ToAddressLatLong(
-                                              //   address: Address,
-                                              //   position: latlong,
-                                              // ),
                                               )),
                                   (Route<dynamic> route) => true);
                             } else {
@@ -608,8 +592,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   }
 
   getLocation(LatLng position) async {
-    // Position position = await Geolocator.getCurrentPosition(
-    //     desiredAccuracy: LocationAccuracy.high);
     setState(() {
       latlong = LatLng(position.latitude, position.longitude);
       _cameraPosition = CameraPosition(
