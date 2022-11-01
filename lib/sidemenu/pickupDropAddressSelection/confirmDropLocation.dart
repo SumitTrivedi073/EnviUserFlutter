@@ -61,7 +61,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
   late LatLng latlong;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  String Address = PickUp;
+  String Address = 'Select Location';
   LatLng initialLatLng = const LatLng(0, 0);
   bool moveMarkerAnimate = true;
 

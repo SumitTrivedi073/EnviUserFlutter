@@ -205,7 +205,12 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     return Scaffold(
       body: Stack(
         children: [
-          googleMap,
+          polylines.isNotEmpty?
+          googleMap:Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
         ],
       ),
     );

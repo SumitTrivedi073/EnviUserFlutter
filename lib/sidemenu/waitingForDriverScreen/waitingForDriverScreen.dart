@@ -34,7 +34,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   late String duration = "0 Minute";
   bool isLoaded = false;
-  Timer? fullScreenDisableTimer = null;
+  Timer? fullScreenDisableTimer;
   bool showFullScreen = true;
 
   @override
@@ -47,12 +47,15 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
     if (fullScreenDisableTimer != null && fullScreenDisableTimer!.isActive) {
       fullScreenDisableTimer!.cancel();
     }
-
-    fullScreenDisableTimer = Timer(const Duration(seconds: 10), () {
-      setState(() {
-        showFullScreen = false;
+    if(mounted) {
+      fullScreenDisableTimer = Timer(const Duration(seconds: 10), () {
+        if(mounted) {
+          setState(() {
+            showFullScreen = false;
+          });
+        }
       });
-    });
+    }
   }
 
   @override
@@ -267,8 +270,10 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-    setState(() {
-      duration = durationToPickupLocation;
-    });
+    if(mounted) {
+      setState(() {
+        duration = durationToPickupLocation;
+      });
+    }
   }
 }
