@@ -247,7 +247,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           jsonData['landingPageSettings']['autoExpiryDuration']);
 
       LandingPageConfig.setinfoPopupFrequency(
-          "EVERY_LAUNCH");
+          jsonData['landingPageSettings']['infoPopupFrequency']);
 
       LandingPageConfig.setinfoPopupTitle(
           jsonData['landingPageSettings']['infoPopupTitle']);
@@ -427,7 +427,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                         padding: EdgeInsets.all(5),
                         child: robotoTextWidget(
                             textval:
-                                'Latest Envi App are available please update first and enjoy',
+                                'Latest Envi App is available please update first and enjoy',
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w600),
