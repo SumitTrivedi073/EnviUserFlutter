@@ -497,7 +497,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context,rootNavigator: true).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);
   }
@@ -524,7 +524,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       Profiledata.setgender("");
       Profiledata.setname("");
 
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
           builder: (BuildContext context) => const Loginpage()));
       setState(() {});
     } else {

@@ -322,13 +322,13 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           infoPopupFrequencyText, LandingPageConfig().getinfoPopupFrequency());
 
       if (Platform.isAndroid) {
-        if (AndroidAppVersion <= AppConfig.minAndroidVersion) {
+        if (AndroidAppVersion < AppConfig.minAndroidVersion) {
           softwareVersionUpdatePopup();
         } else {
           showInfoPopup();
         }
       } else if (Platform.isIOS) {
-        if (IOSAppVersion <= AppConfig.minAndroidVersion) {
+        if (IOSAppVersion < AppConfig.miniOSVersion) {
           softwareVersionUpdatePopup();
         } else {
           showInfoPopup();
