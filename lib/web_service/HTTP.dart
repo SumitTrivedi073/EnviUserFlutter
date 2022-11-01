@@ -8,7 +8,7 @@ import '../appConfig/Profiledata.dart';
 import 'Constant.dart';
 
 Response? AccessPermissionHandler(response) {
-  if (response.statusCode == 401) {
+  if (response !=null && response.statusCode == 401) {
     Fluttertoast.showToast(
         msg: 'ACCESS DENIED',
         toastLength: Toast.LENGTH_SHORT,
@@ -17,9 +17,10 @@ Response? AccessPermissionHandler(response) {
         backgroundColor: Color.fromARGB(255, 163, 5, 5),
         textColor: Colors.white,
         fontSize: 16.0,
-        webBgColor: "#b80419",
-        webPosition: ToastGravity.CENTER,
-        webShowClose: true);
+        // webBgColor: "#b80419",
+        // webPosition: ToastGravity.CENTER,
+        // webShowClose: true
+        );
 
     return null;
   } else {
