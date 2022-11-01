@@ -206,10 +206,8 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       body: Stack(
         children: [
           polylines.isNotEmpty?
-          googleMap:Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+          googleMap:const Center(
+            child: CircularProgressIndicator(),
           ),
         ],
       ),
@@ -251,7 +249,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
     carMarker = Marker(
-        markerId: MarkerId("Driver Location"),
+        markerId: const MarkerId("Driver Location"),
         position: carCurrentLocation,
         infoWindow: const InfoWindow(
           //popup info
@@ -331,7 +329,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
         //New marker location
         carMarker = Marker(
-            markerId: MarkerId("Driver Location"),
+            markerId: const MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
