@@ -58,6 +58,12 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                                 Navigator.pop(context);
                               })
                       : const SizedBox(),
+                  robotoTextWidget(
+                    textval: widget.pagetitle,
+                    colorval: AppColor.lightwhite,
+                    sizeval: 18.0,
+                    fontWeight: FontWeight.w800,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(5),
                     child: ClipRRect(
@@ -78,19 +84,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                   ),
                 ],
               )),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: robotoTextWidget(
-                textval: widget.pagetitle,
-                colorval: AppColor.lightwhite,
-                sizeval: 18.0,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          )
-        ],
+      ],
       ),
     );
   }
