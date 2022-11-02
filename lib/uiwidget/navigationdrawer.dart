@@ -30,7 +30,6 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationDrawer> {
-  String? email;
 
   @override
   void setState(fn) {
@@ -43,14 +42,8 @@ class _NavigationPageState extends State<NavigationDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    init();
   }
 
-  init() async {
-    setState(() {
-      email = Profiledata().getmailid();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

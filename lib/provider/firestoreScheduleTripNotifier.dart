@@ -39,8 +39,6 @@ class firestoreScheduleTripNotifier extends ChangeNotifier {
               DateTime? scheduleDate = DateFormat.yMd().parse(dt1);
               DateTime? currentDate = DateFormat.yMd().parse(dt2);
 
-              print("scheduleDate===========>$scheduleDate");
-              print("currentDate===========>$currentDate");
               if (jsonData != null && jsonData
                   .toString()
                   .isNotEmpty) {

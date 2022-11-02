@@ -403,8 +403,10 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         _firstLoad();
+        showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+      }else {
+        showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
       }
-      showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
     }
   }
 }
