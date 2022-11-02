@@ -49,31 +49,38 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   void _firstLoad() async {
-    setState(() {
-      _isFirstLoadRunning = true;
-    });
 
-    userId = Profiledata().getusreid();
-
-    dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
-    if (res != null && res.statusCode != null && res.statusCode == 200) {
-      print(jsonDecode(res.body)['schedule_trip_list']);
+    try {
       setState(() {
-        if (jsonDecode(res.body)['schedule_trip_list'] != null &&
-            jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
-          arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
-              .map((i) => ScheduleTripModel.fromJson(i))
-              .toList();
-        }
+        _isFirstLoadRunning = true;
       });
-    } else {
+      userId = Profiledata().getusreid();
+
+      dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+      if (res != null && res.statusCode != null && res.statusCode == 200) {
+        //  print(jsonDecode(res.body)['schedule_trip_list']);
+        setState(() {
+          if (jsonDecode(res.body)['schedule_trip_list'] != null &&
+              jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
+            arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
+                .map((i) => ScheduleTripModel.fromJson(i))
+                .toList();
+          }
+        });
+      } else {
+        setState(() {
+          _isFirstLoadRunning = false;
+        });
+      }
       setState(() {
         _isFirstLoadRunning = false;
       });
+    } on Exception catch (exception) {
+    print(exception) ;// only executed if error is of type Exception
+    } catch (error) {
+      print(error) ; // executed for errors of all types other than Exception
     }
-    setState(() {
-      _isFirstLoadRunning = false;
-    });
+
   }
 
   void _loadMore() async {
