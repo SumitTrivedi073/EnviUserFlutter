@@ -48,8 +48,6 @@ class _AppBarPageState extends State<AppBarWidget> {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        print("your menu action here");
-
                         Scaffold.of(context).openDrawer();
                       },
                     ),

@@ -123,7 +123,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                               MaterialPageRoute(
                                   builder: (context) => SelectPickupDropAddress(
                                         currentLocation: widget.currentLocation,
-                                        title: pickUpLocation,
+                                        title: dropLocation,
                                         tripType: _status,
                                       )),
                               (route) => true);
@@ -159,7 +159,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                                         SelectPickupDropAddress(
                                           currentLocation:
                                           widget.currentLocation,
-                                          title: pickUpLocation,
+                                          title: dropLocation,
                                           tripType: _status,
                                         )),
                                     (route) => true);

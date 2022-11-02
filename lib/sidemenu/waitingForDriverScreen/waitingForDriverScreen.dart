@@ -8,7 +8,6 @@ import 'package:envi/uiwidget/mapPageWidgets/mapDirectionWidgetPickup.dart';
 import 'package:envi/uiwidget/otpViewWidget.dart';
 import 'package:envi/uiwidget/timerbutton.dart';
 import 'package:envi/web_service/Constant.dart';
-import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,7 +30,6 @@ class WaitingForDriverScreen extends StatefulWidget {
 }
 
 class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
-  GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   late String duration = "0 Minute";
   bool isLoaded = false;
   Timer? fullScreenDisableTimer;
