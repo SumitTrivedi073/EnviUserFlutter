@@ -67,7 +67,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             SelectPickupDropAddress(
-                                                title: pickUpLocation,tripType: widget.tripType ,)),
+                                                title: dropLocation,tripType: widget.tripType ,)),
                                     (route) => true);
                               },
                               child: Container(
