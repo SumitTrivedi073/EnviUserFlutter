@@ -57,7 +57,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      print(jsonDecode(res.body)['schedule_trip_list']);
+    //  print(jsonDecode(res.body)['schedule_trip_list']);
       setState(() {
         if (jsonDecode(res.body)['schedule_trip_list'] != null &&
             jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
