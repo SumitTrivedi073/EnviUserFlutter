@@ -73,7 +73,7 @@ class MyMapState extends State {
                   _controller?.animateCamera(
                       CameraUpdate.newCameraPosition(_cameraPosition!));
                 },
-                myLocationEnabled: false,
+                myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 mapToolbarEnabled: false,
                 zoomGesturesEnabled: true,
