@@ -26,7 +26,6 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
     return Consumer<firestoreScheduleTripNotifier>(
         builder: (context, value, child) {
       if (value.scheduleTrip != null) {
-        print("scheduleTripConsumer===========${value.scheduleTrip!.status}");
         return  Flexible(
                 child: Wrap(children: [
                 GestureDetector(
@@ -79,7 +78,6 @@ class _ScheduleListAlertConsumerState extends State<ScheduleListAlertConsumer> {
                 )
               ]));
       } else {
-        print("scheduleTripConsumer===========null");
         return Container();
       }
     });

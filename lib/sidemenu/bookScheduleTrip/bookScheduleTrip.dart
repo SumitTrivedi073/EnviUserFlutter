@@ -70,7 +70,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
     return Scaffold(
         body: Stack(children: [
       MapDirectionWidget(
