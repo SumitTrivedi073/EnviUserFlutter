@@ -22,7 +22,6 @@ getPadding({@required context, top: 0.0, right: 0.0, bottom: 0.0, left: 0.0}) {
 
 getsmallNetworkImage(context, path) {
   if (path != null && path != null) {
-    print(path);
     return CircleAvatar(
         radius: 18,
         foregroundImage: NetworkImage(
