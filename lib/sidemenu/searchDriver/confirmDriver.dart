@@ -1,21 +1,15 @@
-import 'package:envi/sidemenu/searchDriver/model/userTripModel.dart';
-import 'package:envi/sidemenu/waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../../../web_service/HTTP.dart' as HTTP;
-import '../../appConfig/Profiledata.dart';
-import '../../theme/color.dart';
+import 'package:provider/provider.dart';
+import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../theme/mapStyle.dart';
-import '../../theme/string.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/confirmDriverPopup.dart';
-import '../../uiwidget/robotoTextWidget.dart';
-import '../../web_service/APIDirectory.dart';
-import '../home/homePage.dart';
+import '../../web_service/Constant.dart';
 import '../pickupDropAddressSelection/model/searchPlaceModel.dart';
+import '../waitingForDriverScreen/waitingForDriverScreen.dart';
 import 'model/driverListModel.dart' as DriverListModel;
 
 class ConfirmDriver extends StatefulWidget {
@@ -42,7 +36,6 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   LatLng? latlong = null;
   CameraPosition? _cameraPosition;
   GoogleMapController? _controller;
-  late UserTripModel userTripModel;
 
 
   @override
@@ -56,10 +49,27 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-      (latlong != null)
-          ? GoogleMap(
+    return Consumer<firestoreLiveTripDataNotifier>(
+        builder: (context, value, child)
+    {
+      //If this was not given, it was throwing error like setState is called during build . RAGHU VT
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && value.liveTripData != null) {
+          if (value.liveTripData!.tripInfo!.tripStatus == TripStatusRequest ||
+              value.liveTripData!.tripInfo!.tripStatus == TripStatusAlloted ||
+              value.liveTripData!.tripInfo!.tripStatus == TripStatusArrived) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        WaitingForDriverScreen()),
+                    (Route<dynamic> route) => false);
+          }
+        }
+      });
+      return Scaffold(
+          body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+            (latlong != null)
+                ? GoogleMap(
               mapType: MapType.normal,
               initialCameraPosition: _cameraPosition!,
               onMapCreated: (GoogleMapController controller) {
@@ -76,31 +86,32 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
               rotateGesturesEnabled: false,
               zoomControlsEnabled: false,
             )
-          : Container(),
+                : Container(),
 
-      Column(children: const [
-        AppBarInsideWidget(
-          pagetitle: "Booking Confirmation",
-          isBackButtonNeeded: true,
-        ),
-        SizedBox(height: 5),
-      ]),
-          Container(
-            color: Color(0xFFB0000000),
-          ),
-          Align(
-              alignment: Alignment.center,
-              child:SizedBox(
-                child: ConfirmDriverPopup(
-                  driverDetail: widget.driverDetail,
-                  priceDetail: widget.priceDetail,
-                  fromAddress: widget.fromAddress,
-                  toAddress: widget.toAddress,
+            Column(children: const [
+              AppBarInsideWidget(
+                pagetitle: "Booking Confirmation",
+                isBackButtonNeeded: true,
+              ),
+              SizedBox(height: 5),
+            ]),
+            Container(
+              color: Color(0xFFB0000000),
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  child: ConfirmDriverPopup(
+                    driverDetail: widget.driverDetail,
+                    priceDetail: widget.priceDetail,
+                    fromAddress: widget.fromAddress,
+                    toAddress: widget.toAddress,
 
-                ),
-              )
-          ),
-    ]));
+                  ),
+                )
+            ),
+          ]));
+    });
   }
 
 

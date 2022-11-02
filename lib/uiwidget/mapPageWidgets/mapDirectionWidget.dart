@@ -27,24 +27,15 @@ class MapDirectionWidget extends StatefulWidget{
 class _MapDirectionWidgetState extends State<MapDirectionWidget> {
 
   GoogleMapController? mapController; //contrller for Google map
-  PolylinePoints polylinePoints = PolylinePoints();
-
   String googleAPiKey = GoogleApiKey;
-
   Set<Marker> markers = Set(); //markers for google map
-  Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
-
-
   late LatLng pickupLocation = LatLng(widget.fromAddress!.latLng.latitude, widget.fromAddress!.latLng.longitude);
   late  LatLng destinationLocation =  LatLng(widget.toAddress!.latLng.latitude, widget.toAddress!.latLng.longitude);
-  late String _sessionToken;
-  var uuid = const Uuid();
 
 
 
   @override
   void initState() {
-    _sessionToken = uuid.v4();
     markers.add(Marker( //add start location marker
       markerId: MarkerId(pickupLocation.toString()),
       position: pickupLocation, //position of marker
@@ -77,7 +68,6 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
           zoom: 10.0, //initial zoom level
         ),
         markers: markers, //markers to show on map
-        polylines: Set<Polyline>.of(polylines.values), //polylines
         mapType: MapType.normal,
         rotateGesturesEnabled: false,
         zoomControlsEnabled: true,
@@ -88,5 +78,12 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
         },
       ),
     );
+  }
+  @override
+  void dispose() {
+    if(mapController!=null){
+      mapController!.dispose();
+    }
+    super.dispose();
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert' as convert;
+import 'dart:io' show Platform;
 
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/appConfig/landingPageSettings.dart';
@@ -8,21 +9,24 @@ import 'package:envi/database/favoritesDataDao.dart';
 import 'package:envi/provider/firestoreLiveTripDataNotifier.dart';
 import 'package:envi/provider/firestoreScheduleTripNotifier.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
+import 'package:envi/theme/color.dart';
 import 'package:envi/theme/string.dart';
 import 'package:envi/theme/theme.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/web_service/APIDirectory.dart';
+import 'package:envi/web_service/ApiConstants.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'appConfig/Profiledata.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../web_service/HTTP.dart' as HTTP;
+import 'appConfig/Profiledata.dart';
 import 'database/database.dart';
 import 'login/login.dart';
 import 'notificationService/local_notification_service.dart';
@@ -47,7 +51,7 @@ Future<void> main() async {
         await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
     final dao = database.taskDao;
 
-    runApp(MyApp());
+    runApp(const MyApp());
     checkPermission();
   },
       (error, stack) =>
@@ -127,16 +131,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
   void receiveNotification() {
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('@drawable/ic_notification');
+        const AndroidInitializationSettings('@drawable/ic_notification');
     const DarwinInitializationSettings initializationSettingsDarwin =
-    DarwinInitializationSettings(
+        DarwinInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
       requestAlertPermission: true,
-
     );
-    var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsDarwin);
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsDarwin);
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -297,9 +301,11 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
       AppConfig.setgoogleDirectionDriverIntervalInMin(
-          jsonData['applicationConfig']['searchConfig']['googleDirectionWFDriverIntervalInMin']);
+          jsonData['applicationConfig']['searchConfig']
+              ['googleDirectionWFDriverIntervalInMin']);
       AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
-          jsonData['applicationConfig']['searchConfig']['googleDirectionWFDriverIntervalMaxTrialCount']);
+          jsonData['applicationConfig']['searchConfig']
+              ['googleDirectionWFDriverIntervalMaxTrialCount']);
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -314,62 +320,31 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           infoPopupImageUrlText, LandingPageConfig().getinfoPopupImgagedUrl());
       sharedPreferences.setString(
           infoPopupFrequencyText, LandingPageConfig().getinfoPopupFrequency());
-      if (LandingPageConfig().getshowInfoPopup()) {
-        switch (LandingPageConfig().getinfoPopupFrequency()) {
-          case 'EVERY_LAUNCH':
-            displayInfoPopup(sharedPreferences.getInt(autoExpiryDurationText)!);
-            break;
-          case 'DAILY_ONCE':
-            if (sharedPreferences.getString(dailyOnceTimeText) == null) {
-              displayInfoPopup(
-                  sharedPreferences.getInt(autoExpiryDurationText)!);
-              sharedPreferences.setString(
-                  dailyOnceTimeText, DateTime.now().toString());
-            } else {
-              if (hrsBetween(
-                      DateTime.parse(
-                          sharedPreferences.getString(dailyOnceTimeText)!),
-                      DateTime.now()) >
-                  24) {
-                displayInfoPopup(
-                    sharedPreferences.getInt(autoExpiryDurationText)!);
-                sharedPreferences.setString(
-                    dailyOnceTimeText, DateTime.now().toString());
-              }
-            }
-            break;
-          case 'ONLY_ONCE':
-            if (sharedPreferences.getString(infoPopupIdText) == null) {
-              displayInfoPopup(
-                  sharedPreferences.getInt(autoExpiryDurationText)!);
-            } else {
-              if (sharedPreferences.getString(infoPopupIdText) !=
-                  LandingPageConfig().getinfoPopupId()) {
-                displayInfoPopup(
-                    sharedPreferences.getInt(autoExpiryDurationText)!);
-              }
-            }
-            sharedPreferences.setString(
-                infoPopupIdText, LandingPageConfig().getinfoPopupId());
-            break;
-          default:
-            break;
+
+      if (Platform.isAndroid) {
+        if (AndroidAppVersion < AppConfig.minAndroidVersion) {
+          softwareVersionUpdatePopup();
+        } else {
+          showInfoPopup();
+        }
+      } else if (Platform.isIOS) {
+        if (IOSAppVersion < AppConfig.miniOSVersion) {
+          softwareVersionUpdatePopup();
+        } else {
+          showInfoPopup();
         }
       }
-    } else {}
+    }
   }
 
   Future displayInfoPopup(int miliSecond) {
     return showDialog(
         context: context,
         builder: ((context) {
-          Future.delayed(
-            Duration(milliseconds: miliSecond + 5000),
-            () {
-              Navigator.of(context).pop();
+          Future.delayed(Duration(milliseconds: miliSecond + 5000), () {
+            Navigator.of(context, rootNavigator: true).pop();
             },
           );
-
           return Dialog(
               child: Image.network(
             encodeImgURLString(
@@ -423,6 +398,118 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       }
     } else {
       setState(() {});
+    }
+  }
+
+  Future softwareVersionUpdatePopup() {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              content: SizedBox(
+                height: 120,
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: robotoTextWidget(
+                            textval: appName,
+                            colorval: AppColor.darkGreen,
+                            sizeval: 16,
+                            fontWeight: FontWeight.w800),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(5),
+                        child: robotoTextWidget(
+                            textval:
+                                'Latest Envi App is available please update first and enjoy',
+                            colorval: AppColor.black,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (Platform.isAndroid) {
+                              launchUrl(
+                                Uri.parse(AppConfig().getandroidAppUrl()),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            } else if (Platform.isIOS) {
+                              launchUrl(
+                                Uri.parse(AppConfig().getiosAppUrl()),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColor.darkGreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(5), // <-- Radius
+                            ),
+                          ),
+                          child: const robotoTextWidget(
+                            textval: 'Ok',
+                            colorval: AppColor.white,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
+        }));
+  }
+
+  void showInfoPopup() {
+    if (LandingPageConfig().getshowInfoPopup()) {
+      switch (LandingPageConfig().getinfoPopupFrequency()) {
+        case 'EVERY_LAUNCH':
+          displayInfoPopup(sharedPreferences.getInt(autoExpiryDurationText)!);
+          break;
+        case 'DAILY_ONCE':
+          if (sharedPreferences.getString(dailyOnceTimeText) == null) {
+            displayInfoPopup(sharedPreferences.getInt(autoExpiryDurationText)!);
+            sharedPreferences.setString(
+                dailyOnceTimeText, DateTime.now().toString());
+          } else {
+            if (hrsBetween(
+                    DateTime.parse(
+                        sharedPreferences.getString(dailyOnceTimeText)!),
+                    DateTime.now()) >
+                24) {
+              displayInfoPopup(
+                  sharedPreferences.getInt(autoExpiryDurationText)!);
+              sharedPreferences.setString(
+                  dailyOnceTimeText, DateTime.now().toString());
+            }
+          }
+          break;
+        case 'ONLY_ONCE':
+          if (sharedPreferences.getString(infoPopupIdText) == null) {
+            displayInfoPopup(sharedPreferences.getInt(autoExpiryDurationText)!);
+          } else {
+            if (sharedPreferences.getString(infoPopupIdText) !=
+                LandingPageConfig().getinfoPopupId()) {
+              displayInfoPopup(
+                  sharedPreferences.getInt(autoExpiryDurationText)!);
+            }
+          }
+          sharedPreferences.setString(
+              infoPopupIdText, LandingPageConfig().getinfoPopupId());
+          break;
+        default:
+          break;
+      }
     }
   }
 }
