@@ -79,4 +79,11 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
       ),
     );
   }
+  @override
+  void dispose() {
+    if(mapController!=null){
+      mapController!.dispose();
+    }
+    super.dispose();
+  }
 }

@@ -73,7 +73,7 @@ class MyMapState extends State {
                   _controller?.animateCamera(
                       CameraUpdate.newCameraPosition(_cameraPosition!));
                 },
-                myLocationEnabled: true,
+                myLocationEnabled: false,
                 myLocationButtonEnabled: false,
                 mapToolbarEnabled: false,
                 zoomGesturesEnabled: true,
@@ -189,6 +189,9 @@ class MyMapState extends State {
   @override
   void dispose() {
     // TODO: implement dispose
+    if(_controller!=null){
+      _controller!.dispose();
+    }
     super.dispose();
   }
 }

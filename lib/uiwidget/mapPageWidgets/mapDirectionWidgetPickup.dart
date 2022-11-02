@@ -412,6 +412,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       timer!.cancel();
       GOOGLE_API_INVOCATIONS = 9999; //to Ensure we don't call this again
     }
+    if(mapController!=null){
+      mapController!.dispose();
+    }
     super.dispose();
   }
 

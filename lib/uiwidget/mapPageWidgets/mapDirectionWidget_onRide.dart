@@ -190,8 +190,16 @@ class _MapDirectionWidgetOnRideState
         ],
       ),
     );
-  }
 
+
+  }
+  @override
+  void dispose() {
+    if(mapController!=null){
+      mapController!.dispose();
+    }
+    super.dispose();
+  }
   addMarker() async {
     var pickupMarker = Marker(
       //add start location marker
