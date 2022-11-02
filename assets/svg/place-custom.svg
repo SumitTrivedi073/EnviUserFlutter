@@ -1,13 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="23" viewBox="0 0 18 23">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #00c400;
-      }
-    </style>
-  </defs>
-  <g id="place-custom" transform="translate(-192.504 -70)">
-    <path id="Path_302" data-name="Path 302" class="cls-1" d="M267.5,80a5.006,5.006,0,1,0-3.534-1.466A5,5,0,0,0,267.5,80Zm0-8a3,3,0,1,1-2.121.879A3,3,0,0,1,267.5,72Z" transform="translate(-65.996)"/>
-    <path id="Path_303" data-name="Path 303" class="cls-1" d="M201.6,262.45h-.2a8.675,8.675,0,0,0-8.9,8.407v2.593a1,1,0,0,0,1,1h16a1,1,0,0,0,1-1v-2.593a8.675,8.675,0,0,0-8.9-8.407Zm6.9,10h-14v-1.593a6.676,6.676,0,0,1,6.9-6.407h.2a6.676,6.676,0,0,1,6.9,6.407Z" transform="translate(0 -181.45)"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="23">
+    <defs>
+        <style>
+            .cls-1{fill:#00c400}
+        </style>
+    </defs>
+    <g id="place-custom" transform="translate(-192.504 -70)">
+        <path id="Path_302" data-name="Path 302" class="cls-1" d="M267.5 80a5.006 5.006 0 1 0-3.534-1.466A5 5 0 0 0 267.5 80Zm0-8a3 3 0 1 1-2.121.879A3 3 0 0 1 267.5 72Z" transform="translate(-65.996)"/>
+        <path id="Path_303" data-name="Path 303" class="cls-1" d="M201.6 262.45h-.2a8.675 8.675 0 0 0-8.9 8.407v2.593a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2.593a8.675 8.675 0 0 0-8.9-8.407Zm6.9 10h-14v-1.593a6.676 6.676 0 0 1 6.9-6.407h.2a6.676 6.676 0 0 1 6.9 6.407Z" transform="translate(0 -181.45)"/>
+    </g>
 </svg>

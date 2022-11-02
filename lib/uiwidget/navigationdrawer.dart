@@ -30,7 +30,6 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationDrawer> {
-  String? email;
 
   @override
   void setState(fn) {
@@ -43,14 +42,8 @@ class _NavigationPageState extends State<NavigationDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    init();
   }
 
-  init() async {
-    setState(() {
-      email = Profiledata().getmailid();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -497,10 +490,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
-
+    Navigator.of(context,rootNavigator: true).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+        (Route<dynamic> route) => false);
   }
 
   Future<void> deleteacountApiCall(BuildContext context) async {
@@ -525,7 +517,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       Profiledata.setgender("");
       Profiledata.setname("");
 
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
           builder: (BuildContext context) => const Loginpage()));
       setState(() {});
     } else {

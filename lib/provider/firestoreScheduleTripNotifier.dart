@@ -30,29 +30,31 @@ class firestoreScheduleTripNotifier extends ChangeNotifier {
           if (res.type != DocumentChangeType.removed) {
             var encodedJson = json.encode(data, toEncodable: myEncode);
             var jsonData = json.decode(encodedJson);
-            DateTime date = DateTime.parse(
-                res.doc['scheduledAt'].toDate().toString());
+            if(res.doc['scheduledAt']!=null&&res.doc['scheduledAt'].toString().isNotEmpty) {
+              DateTime date = DateTime.parse(
+                  res.doc['scheduledAt'].toDate().toString());
 
-            String dt1 = DateFormat.yMd().format(date);
-            String dt2 = DateFormat.yMd().format(DateTime.now());
-            DateTime? scheduleDate = DateFormat.yMd().parse(dt1);
-            DateTime? currentDate = DateFormat.yMd().parse(dt2);
+              String dt1 = DateFormat.yMd().format(date);
+              String dt2 = DateFormat.yMd().format(DateTime.now());
+              DateTime? scheduleDate = DateFormat.yMd().parse(dt1);
+              DateTime? currentDate = DateFormat.yMd().parse(dt2);
 
-            if (jsonData != null && jsonData
-                .toString()
-                .isNotEmpty) {
-              if (scheduleDate.isAtSameMomentAs(currentDate) ||
-                  scheduleDate.isAfter(currentDate)) {
-                scheduleTrip = ScheduleTrip.fromJson(jsonData);
+              if (jsonData != null && jsonData
+                  .toString()
+                  .isNotEmpty) {
+                if (scheduleDate.isAtSameMomentAs(currentDate) ||
+                    scheduleDate.isAfter(currentDate)) {
+                  scheduleTrip = ScheduleTrip.fromJson(jsonData);
+                } else {
+                  collectionRef.doc(res.doc.id).delete().then(
+                        (doc) => print("Document deleted"),
+                    onError: (e) => print("Error updating document $e"),
+                  );
+                  scheduleTrip = null;
+                }
               } else {
                 scheduleTrip = null;
-                collectionRef.doc(res.doc.id).delete().then(
-                      (doc) => print("Document deleted"),
-                  onError: (e) => print("Error updating document $e"),
-                );
               }
-            } else {
-              scheduleTrip = null;
             }
           }else{
             scheduleTrip = null;

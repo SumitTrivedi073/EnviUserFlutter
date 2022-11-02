@@ -9,6 +9,7 @@ import 'package:envi/web_service/APIDirectory.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:envi/web_service/autoCompleteService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
@@ -174,7 +175,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
               address: _placeList[i]["description"],
               title: _placeList[i]["description"],
               isFavourite: 'N',
-              latLng: LatLng(0.0, 0.0),
+              latLng: const LatLng(0.0, 0.0),
             ));
           }
         });
@@ -567,7 +568,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                           : Images.toLocationImage,
                                   width: 20,
                                   height: 20,
-                                  color: AppColor.darkGreen,
+                                  theme: const SvgTheme(currentColor: AppColor.darkGreen,fontSize: 14.0, xHeight: 20),
+
                                 ),
                               ),
                             ),
@@ -723,7 +725,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Widget toTextWidget() {
     return TextField(
-      style: TextStyle(fontWeight: FontWeight.w600),
+      style: const TextStyle(fontWeight: FontWeight.w600),
       autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,

@@ -34,7 +34,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   late String duration = "0 Minute";
   bool isLoaded = false;
-  Timer? fullScreenDisableTimer = null;
+  Timer? fullScreenDisableTimer;
   bool showFullScreen = true;
 
   @override
@@ -47,12 +47,15 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
     if (fullScreenDisableTimer != null && fullScreenDisableTimer!.isActive) {
       fullScreenDisableTimer!.cancel();
     }
-
-    fullScreenDisableTimer = Timer(const Duration(seconds: 10), () {
-      setState(() {
-        showFullScreen = false;
+    if(mounted) {
+      fullScreenDisableTimer = Timer(const Duration(seconds: 10), () {
+        if(mounted) {
+          setState(() {
+            showFullScreen = false;
+          });
+        }
       });
-    });
+    }
   }
 
   @override
@@ -82,61 +85,65 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
               }
             }
           });
-          return value.liveTripData != null
-              ? Scaffold(
-                  body: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      MapDirectionWidgetPickup(
-                        key: widget._key,
-                        liveTripData: value.liveTripData!,
-                        callback: retrieveDuration,
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            if (showFullScreen) FromToData(value.liveTripData!),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  showFullScreen = true;
-                                  disableFullScreen();
-                                });
-                              },
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  DriverDetailWidget(
-                                    duration: duration,
-                                  ),
-                                  TimerButton(
-                                    liveTripData: value.liveTripData!,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(children: [
-                        const AppBarInsideWidget(
-                          pagetitle: "Envi",
-                          isBackButtonNeeded: false,
-                        ),
-                        const SizedBox(height: 5),
-                        if (showFullScreen) getCardBanner(value.liveTripData!),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child:
-                              OTPView(otp: value.liveTripData!.tripInfo!.otp),
-                        ),
-                      ]),
-                    ],
+          if(value.liveTripData != null) {
+            return Scaffold(
+              body: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  MapDirectionWidgetPickup(
+                    key: widget._key,
+                    liveTripData: value.liveTripData!,
+                    callback: retrieveDuration,
                   ),
-                )
-              : const CircularProgressIndicator();
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        if (showFullScreen) FromToData(value.liveTripData!),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showFullScreen = true;
+                              disableFullScreen();
+                            });
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              DriverDetailWidget(
+                                duration: duration,
+                              ),
+                              TimerButton(
+                                liveTripData: value.liveTripData!,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(children: [
+                    const AppBarInsideWidget(
+                      pagetitle: "Envi",
+                      isBackButtonNeeded: false,
+                    ),
+                    const SizedBox(height: 5),
+                    if (showFullScreen) getCardBanner(value.liveTripData!),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child:
+                      OTPView(otp: value.liveTripData!.tripInfo!.otp),
+                    ),
+                  ]),
+                ],
+              ),
+            );
+          }else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         }),
       ),
     );
@@ -267,8 +274,10 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-    setState(() {
-      duration = durationToPickupLocation;
-    });
+    if(mounted) {
+      setState(() {
+        duration = durationToPickupLocation;
+      });
+    }
   }
 }

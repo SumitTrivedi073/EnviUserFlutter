@@ -189,6 +189,9 @@ class MyMapState extends State {
   @override
   void dispose() {
     // TODO: implement dispose
+    if(_controller!=null){
+      _controller!.dispose();
+    }
     super.dispose();
   }
 }

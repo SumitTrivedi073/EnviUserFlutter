@@ -89,8 +89,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
   getDirections() async {
     if (GOOGLE_API_INVOCATIONS > GOOGLE_API_INVOCATION_LIMIT) {
-      print(
-          "RAGHUVTTRACKING: calling google map direction API LIMIT EXCEEDED==========>${GOOGLE_API_INVOCATIONS}, Limit : ${GOOGLE_API_INVOCATION_LIMIT}  Configued interval ${GOOGLE_API_INNTERVAL_MINUTES}");
       return;
     }
     String request =
@@ -135,7 +133,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         timer = Timer(
            Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
           () {
-            print("RAGHUVTTRACKING:Calling direction API within timer");
             getDirections();
           },
         );
@@ -205,7 +202,10 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     return Scaffold(
       body: Stack(
         children: [
-          googleMap,
+          polylines.isNotEmpty?
+          googleMap:const Center(
+            child: CircularProgressIndicator(),
+          ),
         ],
       ),
     );
@@ -246,7 +246,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
     carMarker = Marker(
-        markerId: MarkerId("Driver Location"),
+        markerId: const MarkerId("Driver Location"),
         position: carCurrentLocation,
         infoWindow: const InfoWindow(
           //popup info
@@ -326,7 +326,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
         //New marker location
         carMarker = Marker(
-            markerId: MarkerId("Driver Location"),
+            markerId: const MarkerId("Driver Location"),
             position: newPos,
             icon: BitmapDescriptor.fromBytes(markerIcon),
             anchor: const Offset(0.5, 0.5),
@@ -367,9 +367,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       carCurrentLocation.longitude,
     );
 
-    print(
-        "GADIST: COnclusion: original $new_time , New Implemetation: $alternateTime ");
-
     waitingTimeDisplayCB(alternateTime);
   }
 
@@ -405,9 +402,11 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   @override
   void dispose() {
     if (timer != null && timer!.isActive) {
-      print("RAGHUVTTRACKING: Timer is getting Cancelled");
       timer!.cancel();
       GOOGLE_API_INVOCATIONS = 9999; //to Ensure we don't call this again
+    }
+    if(mapController!=null){
+      mapController!.dispose();
     }
     super.dispose();
   }
@@ -422,14 +421,11 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       var lng = step.startLocation.lng;
       var dist = calculateDistance(latitude, longitude, lat, lng);
       if (dist < min) {
-        print(
-            'GADIST: Iterating Closest point check $i , dist:$dist, currentMin: $min');
         min = dist;
         index = i;
       }
     }
 
-    print('GADIST: ****Selected Index $index ,  currentMin: $min');
     double diffDistance = distancecorrectionFactor *
         calculateDistance(
             latitude,
@@ -438,14 +434,9 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             currentTravelLeg.steps[index].startLocation.lng);
 
     double dur = (duration / googleDistance) * diffDistance;
-
-    print(
-        'GADIST: Diff Duration $dur $latitude $longitude ${currentTravelLeg.steps[index].startLocation.lat},${currentTravelLeg.steps[index].startLocation.lng}, diff distance: $diffDistance,orig ga distance: $googleDistance orig dur:$duration');
-
     for (int i = index; i < currentTravelLeg.steps.length; i++) {
       var step = currentTravelLeg.steps[i];
       dur += step.duration.value.toDouble();
-      print('GADIST: Duration after $i iteration=> $dur');
     }
 
     return dur;
