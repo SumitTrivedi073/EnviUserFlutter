@@ -239,14 +239,14 @@ class ContentPriceClass {
 
   factory ContentPriceClass.fromJson(Map<String, dynamic> json) =>
       ContentPriceClass(
-        skuId: json["sku_id"],
-        type: json["type"],
-        subcategory: json["subcategory"],
-        perKmFare: json["perKMFare"].toDouble(),
-        minFare: json["minFare"].toDouble(),
-        passengerCapacity: json["passengerCapacity"].toDouble(),
-        bootSpace: json["bootSpace"] ?? "MEDIUM",
-        maxKmRange: json["maxKmRange"].toDouble(),
+        skuId: json["sku_id"]!=null?json["sku_id"]:"",
+        type: json["type"]!=null?json["type"]:"",
+        subcategory: json["subcategory"]!=null?json["subcategory"]:"",
+        perKmFare: json["perKMFare"]!=null?json["perKMFare"].toDouble():0.0,
+        minFare: json["minFare"]!=null?json["minFare"].toDouble():0.0,
+        passengerCapacity: json["passengerCapacity"]!=null?json["passengerCapacity"].toDouble():0.0,
+        bootSpace: json["bootSpace"]!=null?json["bootSpace"] : "MEDIUM",
+        maxKmRange: json["maxKmRange"]!=null?json["maxKmRange"].toDouble():0.0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -345,20 +345,20 @@ class VehiclePriceClassPriceClass {
 
   factory VehiclePriceClassPriceClass.fromJson(Map<String, dynamic> json) =>
       VehiclePriceClassPriceClass(
-        skuId: json["sku_id"],
-        type: json["type"],
-        subcategory: json["subcategory"],
-        perKmFare: json["perKMFare"].toDouble(),
-        minFare: json["minFare"].toDouble(),
-        distance: json["distance"].toDouble(),
-        discountPercent: json["discountPercent"].toDouble(),
-        sellerDiscount: json["seller_discount"].toDouble(),
-        baseFare: json["base_fare"].toDouble(),
-        tollCharges: json["toll_charges"].toDouble(),
-        stateTax: json["state_tax"].toDouble(),
-        advancePaid: json["advancePaid"].toDouble(),
-        amountToBeCollected: json["amount_to_be_collected"].toDouble(),
-        totalFare: json["total_fare"].toDouble(),
+        skuId: json["sku_id"]!=null?json["sku_id"]:"",
+        type: json["type"]!=null?json["type"]:"",
+        subcategory: json["subcategory"]!=null?json["subcategory"]:"",
+        perKmFare: json["perKMFare"]!=null?json["perKMFare"].toDouble():0.0,
+        minFare: json["minFare"]!=null?json["minFare"].toDouble():0.0,
+        distance: json["distance"]!=null?json["distance"].toDouble():0.0,
+        discountPercent: json["discountPercent"]!=null?json["discountPercent"].toDouble():0.0,
+        sellerDiscount: json["seller_discount"]!=null?json["seller_discount"].toDouble():0.0,
+        baseFare: json["base_fare"]!=null?json["base_fare"].toDouble():0.0,
+        tollCharges: json["toll_charges"]!=null?json["toll_charges"].toDouble():0.0,
+        stateTax:json["state_tax"]!=null? json["state_tax"].toDouble():0.0,
+        advancePaid: json["advancePaid"]!=null?json["advancePaid"].toDouble():0.0,
+        amountToBeCollected:json["amount_to_be_collected"]!=null? json["amount_to_be_collected"].toDouble():0.0,
+        totalFare:json["total_fare"]!=null? json["total_fare"].toDouble():0.0,
       );
 
   Map<String, dynamic> toJson() => {
