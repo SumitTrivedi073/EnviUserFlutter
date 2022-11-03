@@ -113,7 +113,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                           child: robotoTextWidget(
                             textval: BookNow,
                             colorval: AppColor.white,
-                            sizeval: 16.0,
+                            sizeval: 15.0,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
