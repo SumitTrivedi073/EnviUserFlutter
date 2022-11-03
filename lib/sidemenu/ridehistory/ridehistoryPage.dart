@@ -79,6 +79,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
 
               if (arrtrip.length != _limit) {
                 _hasNextPage = false;
+                _isFirstLoadRunning = false;
               }
 
 
@@ -114,6 +115,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           setState(() {
             if (fetchedPosts.length != _limit) {
               _hasNextPage = false;
+              _isLoadMoreRunning = false;
             }
             arrtrip.addAll(fetchedPosts);
           });
@@ -122,6 +124,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
           // and therefore, we will not send another GET request
           setState(() {
             _hasNextPage = false;
+            _isLoadMoreRunning = false;
           });
         }
       } else {
