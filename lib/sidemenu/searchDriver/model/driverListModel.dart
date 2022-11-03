@@ -10,6 +10,8 @@ import 'dart:convert';
 
 import 'dart:convert';
 
+import '../../../utils/utility.dart';
+
 DriverListModel driverListModelFromJson(String str) =>
     DriverListModel.fromJson(json.decode(str));
 
@@ -348,17 +350,17 @@ class VehiclePriceClassPriceClass {
         skuId: json["sku_id"],
         type: json["type"],
         subcategory: json["subcategory"],
-        perKmFare: json["perKMFare"].toDouble(),
-        minFare: json["minFare"].toDouble(),
-        distance: json["distance"].toDouble(),
-        discountPercent: json["discountPercent"].toDouble(),
-        sellerDiscount: json["seller_discount"].toDouble(),
-        baseFare: json["base_fare"].toDouble(),
-        tollCharges: json["toll_charges"].toDouble(),
-        stateTax: json["state_tax"].toDouble(),
-        advancePaid: json["advancePaid"].toDouble(),
-        amountToBeCollected: json["amount_to_be_collected"].toDouble(),
-        totalFare: json["total_fare"].toDouble(),
+        perKmFare: nullSafeFloat(json, "perKMFare"),
+        minFare: nullSafeFloat(json, "minFare"),
+        distance: nullSafeFloat(json, "distance"),
+        discountPercent: nullSafeFloat(json, "discountPercent"),
+        sellerDiscount: nullSafeFloat(json, "seller_discount"),
+        baseFare: nullSafeFloat(json, "base_fare"),
+        tollCharges: nullSafeFloat(json, "toll_charges"),
+        stateTax: nullSafeFloat(json, "state_tax"),
+        advancePaid: nullSafeFloat(json, "advancePaid"),
+        amountToBeCollected: nullSafeFloat(json, "amount_to_be_collected"),
+        totalFare: nullSafeFloat(json, "total_fare"),
       );
 
   Map<String, dynamic> toJson() => {
