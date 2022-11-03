@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/mapStyle.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
@@ -137,11 +138,18 @@ class MyMapState extends State {
   }
 
   Future getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
+    var permission = Permission.locationWhenInUse.status;
+    print(permission);
     if (permission != PermissionStatus.granted) {
-      LocationPermission permission = await Geolocator.requestPermission();
-      if (permission != PermissionStatus.granted) getLocation();
-      return;
+      final status = await Permission.location.request();
+
+      print(status);
+      if (status != PermissionStatus.granted) {
+        //getLocation();
+        showToast("You need location permission for use this App");
+        return;
+      }
+
     }
     getLocation();
   }
