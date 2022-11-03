@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -159,4 +160,11 @@ Future<void> deleteAlldata() async {
     await dao.deleteTask(res);
   }
   //await dao.deleteTasks(data);
+}
+
+double nullSafeFloat(obj, value) {
+  if (obj == null || obj[value] == null)
+    return 0.0;
+  else
+    return obj[value].toDouble();
 }
