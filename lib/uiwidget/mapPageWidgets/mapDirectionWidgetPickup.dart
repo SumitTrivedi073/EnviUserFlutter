@@ -75,7 +75,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   StreamSink<List<Marker>> get mapMarkerSink => _mapMarkerSC.sink;
 
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
-  late double distancecorrectionFactor, googleDistance, duration;
+  late double distancecorrectionFactor, googleDistance, duration = 0.0;
   late Leg currentTravelLeg;
 
   @override
@@ -202,7 +202,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     return Scaffold(
       body: Stack(
         children: [
-          polylines.isNotEmpty?
+          polylineCoordinates!=null && polylineCoordinates.isNotEmpty?
           googleMap:const Center(
             child: CircularProgressIndicator(),
           ),

@@ -372,8 +372,9 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     dynamic response =
         await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
     if (response != null && response.statusCode == 200) {
-      List<dynamic> jsonData =
-          convert.jsonDecode(response.body)['content']['address'];
+      if (convert.jsonDecode(response.body)['content']!=null &&convert.jsonDecode(response.body)['content']['address'] != null){
+        List<dynamic> jsonData =
+        convert.jsonDecode(response.body)['content']['address'];
       // print(jsonData);
       for (var res in jsonData) {
         if (res["address"] != null || res["address"] != "") {
@@ -405,6 +406,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           }
         }
       }
+    }
     } else {
       setState(() {});
     }

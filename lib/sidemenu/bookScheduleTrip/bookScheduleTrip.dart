@@ -57,7 +57,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
 
-    print("mindatime===========>$mindatime");
   }
 
   @override
@@ -123,14 +122,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                       lastDate: DateTime(2100),
                       icon: const Icon(Icons.event),
                       dateLabelText: pickupdate,
-                      /*
-                         Restricted for day's code
-                         selectableDayPredicate: (date) {
-                           if (date.weekday == 6 || date.weekday == 7) {
-                             return false;
-                           }
-                           return true;
-                         },*/
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -321,7 +312,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         ),
         const SizedBox(height: 10),
         const Text(
-          "Schedual At",
+          "Schedule At",
           style: TextStyle(
               color: AppColor.butgreen,
               fontFamily: 'Roboto',
@@ -355,6 +346,17 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         ),
         const SizedBox(
           height: 10,
+        ),
+        const Text(
+          "Fare & Distance",
+          style: TextStyle(
+              color: AppColor.butgreen,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600,
+              fontSize: 14),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Card(
           shape: RoundedRectangleBorder(

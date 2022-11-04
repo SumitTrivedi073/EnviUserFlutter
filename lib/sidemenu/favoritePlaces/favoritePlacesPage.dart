@@ -2,6 +2,7 @@ import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../database/database.dart';
@@ -48,11 +49,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
     final Map<int, String> values = {
       for (int i = 0; i < split.length; i++) i: split[i]
     };
-    print(values); // {0: grubs, 1:  sheep}
-
     final value1 = values[0];
     final value2 = values[1] ?? '';
-    //final value3 = values[2] ?? '';
     return (values.length != 1) ? '$value1,$value2' : '$value1';
   }
 
@@ -76,7 +74,6 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
       arraddress = temparr;
     });
     //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
-    print("==========${arraddress}");
   }
 
   void comebackFromADD(String a) {}
@@ -139,7 +136,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                         "assets/svg/add-place-plus.svg",
                         width: 22,
                         height: 24,
-                        color: AppColor.white,
+                        theme:  const SvgTheme(currentColor: AppColor.white,fontSize: 14.0, xHeight: 20),
                       ),
                       SizedBox(
                         width: 10,
@@ -245,10 +242,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(children: [
-                  SvgPicture.asset(
-                    "assets/svg/place-custom.svg",
-                    width: 22,
-                    height: 24,
+                  Icon(
+                    Icons.person,
+                    size: 30,
                     color: AppColor.darkGreen,
                   ),
                   const SizedBox(
@@ -345,10 +341,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(children: [
-                          SvgPicture.asset(
-                            "assets/svg/place-home.svg",
-                            width: 22,
-                            height: 24,
+                          Icon(
+                            Icons.home,
+                            size: 30,
                             color: AppColor.darkGreen,
                           ),
                           SizedBox(
@@ -424,10 +419,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(children: [
-                          SvgPicture.asset(
-                            "assets/svg/place-work.svg",
-                            width: 22,
-                            height: 24,
+                         Icon(
+                            CupertinoIcons.building_2_fill,
+                            size: 30,
                             color: AppColor.darkGreen,
                           ),
                           SizedBox(

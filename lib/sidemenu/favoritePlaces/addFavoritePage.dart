@@ -19,9 +19,7 @@ import '../../theme/string.dart';
 import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
-import '../../utils/utility.dart';
 import '../../web_service/ApiCollection.dart';
-import '../../web_service/Constant.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
   final FavoritesData? data;
@@ -66,23 +64,22 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
       _cameraPosition = CameraPosition(
           target: LatLng(double.parse(widget.data!.latitude),
               double.parse(widget.data!.longitude)),
-          zoom: 10.0);
+          zoom: 18.0);
       editidentifire = widget.data!.identifier;
 
       editid = widget.data!.id;
     } else {
       getCurrentLocation();
       _cameraPosition =
-          const CameraPosition(target: LatLng(0.0, 0.0), zoom: 10.0);
+          const CameraPosition(target: LatLng(0.0, 0.0), zoom: 18.0);
     }
-    // _controller = new ScrollController()..addListener(_loadMore);
   }
 
   void FromLocationSearch(String fulladdress, double lat, double long) {
     setState(() {
       print(fulladdress);
       address = fulladdress;
-      _cameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 10.0);
+      _cameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 18.0);
       latlong = LatLng(lat, long);
       if (_controller != null) {
         _controller
@@ -95,11 +92,6 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     dao = database.taskDao;
-    //List<FavoritesData>  temparr =  await dao.getFavoriate() ;
-    // setState(() {
-    //
-    // });
-    //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
   }
 
   @override
@@ -120,37 +112,37 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
             ),
             Form(
                 key: _formKey,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 22,
-                      ),
-                      Container(
-                          color: AppColor.white.withOpacity(0.1),
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    robotoTextWidget(
-                                      textval: PlaceTitle,
-                                      colorval: AppColor.grey,
-                                      sizeval: 14.0,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ]),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Card(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 22,
+                    ),
+                    Container(
+                        color: AppColor.white.withOpacity(0.1),
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(children: [
+                                  robotoTextWidget(
+                                    textval: PlaceTitle,
+                                    colorval: AppColor.grey,
+                                    sizeval: 14.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ]),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
                                 child: TextFormField(
                                   controller: titlecontroller,
                                   readOnly: widget.titleEditable == "0"
@@ -169,185 +161,180 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                   },
                                 ),
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(children: [
+                                  robotoTextWidget(
+                                    textval: Address,
+                                    colorval: AppColor.grey,
+                                    sizeval: 14.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ]),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SearchFavoriateLocation(
+                                                    title: selectlocation,
+                                                    onCriteriaChanged:
+                                                        FromLocationSearch)),
+                                        (route) => true);
+                                    print("Tapped a Container");
+                                  },
+                                  child: Card(
+                                      child: Padding(
+                                          padding:
+                                              const EdgeInsets.all(5),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width -60,
+                                            height: 50,
+                                            child: robotoTextWidget(
+                                              textval: address,
+                                              colorval: AppColor.black,
+                                              sizeval: 16.0,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ))),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 22,
+                            ),
+                            SizedBox(
+                                height: 300,
+                                child: Stack(children: [
+                                  GoogleMap(
+                                    mapType: MapType.normal,
+                                    initialCameraPosition: _cameraPosition!,
+                                    onMapCreated:
+                                        (GoogleMapController controller) {
+                                      controller
+                                          .setMapStyle(MapStyle.mapStyles);
+                                      _controller = (controller);
+
+                                      _controller?.animateCamera(
+                                          CameraUpdate.newCameraPosition(
+                                              _cameraPosition!));
+                                    },
+                                    myLocationEnabled: false,
+                                    myLocationButtonEnabled: false,
+                                    mapToolbarEnabled: false,
+                                    zoomGesturesEnabled: false,
+                                    scrollGesturesEnabled: false,
+                                    tiltGesturesEnabled: false,
+                                    rotateGesturesEnabled: false,
+                                    zoomControlsEnabled: false,
+                                  ),
+                                  Center(
+                                    child: Image.asset(
+                                      "assets/images/destination-marker.png",
+                                      scale: 2,
+                                    ),
+                                  ),
+                                ])),
+                            const SizedBox(
+                              height: 22,
+                            ),
+                            if (widget.isforedit == "0")
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(children: [
-                                    robotoTextWidget(
-                                      textval: Address,
-                                      colorval: AppColor.grey,
-                                      sizeval: 14.0,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                    MaterialButton(
+                                      height: 40,
+                                      onPressed: () {
+                                        ApiCall_Delete_Favorite(widget.data!.id,
+                                            widget.data!.identifier);
+                                      },
+                                      child: Row(children: [
+                                        SvgPicture.asset(
+                                          "assets/svg/place-delete.svg",
+                                          width: 22,
+                                          height: 24,
+                                          color: AppColor.red,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        robotoTextWidget(
+                                            textval: widget.titleEditable == "0"
+                                                ? Deletelocation
+                                                : Clearlocation,
+                                            colorval: AppColor.red,
+                                            sizeval: 16.0,
+                                            fontWeight: FontWeight.normal),
+                                      ]),
+                                    )
                                   ]),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SearchFavoriateLocation(
-                                                      title: selectlocation,
-                                                      onCriteriaChanged:
-                                                          FromLocationSearch)),
-                                          (route) => true);
-                                      print("Tapped a Container");
-                                    },
-                                    child: Card(
-                                        child: Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          50,
-                                      height: 50,
-                                      child: robotoTextWidget(
-                                        textval: address,
-                                        colorval: AppColor.black,
-                                        sizeval: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    )),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 22,
-                              ),
-                              Container(
-                                  height: 300,
-                                  child: Stack(children: [
-                                    GoogleMap(
-                                      mapType: MapType.normal,
-                                      initialCameraPosition: _cameraPosition!,
-                                      onMapCreated:
-                                          (GoogleMapController controller) {
-                                        controller
-                                            .setMapStyle(MapStyle.mapStyles);
-                                        _controller = (controller);
-
-                                        _controller?.animateCamera(
-                                            CameraUpdate.newCameraPosition(
-                                                _cameraPosition!));
-                                      },
-                                      myLocationEnabled: true,
-                                      myLocationButtonEnabled: false,
-                                      mapToolbarEnabled: false,
-                                      zoomGesturesEnabled: true,
-                                      rotateGesturesEnabled: true,
-                                      zoomControlsEnabled: false,
-                                      onCameraIdle: () {
-                                        // GetAddressFromLatLong(latlong);
-                                      },
-                                      onCameraMove: (CameraPosition position) {
-                                        // latlong = LatLng(position.target.latitude, position.target.longitude);
-                                      },
-                                    ),
-                                    Center(
-                                      child: Image.asset(
-                                        "assets/images/destination-marker.png",
-                                        scale: 2,
-                                      ),
-                                    ),
-                                  ])),
-                              const SizedBox(
-                                height: 22,
-                              ),
-                              if (widget.isforedit == "0")
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(children: [
-                                      MaterialButton(
-                                        height: 40,
-                                        onPressed: () {
-                                          ApiCall_Delete_Favorite(
-                                              widget.data!.id,
-                                              widget.data!.identifier);
-                                        },
-                                        child: Row(children: [
-                                          SvgPicture.asset(
-                                            "assets/svg/place-delete.svg",
-                                            width: 22,
-                                            height: 24,
-                                            color: AppColor.red,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          robotoTextWidget(
-                                              textval:
-                                                  widget.titleEditable == "0"
-                                                      ? Deletelocation
-                                                      : Clearlocation,
-                                              colorval: AppColor.red,
-                                              sizeval: 16.0,
-                                              fontWeight: FontWeight.normal),
-                                        ]),
-                                      )
-                                    ]),
-                                  ],
-                                ),
-                            ],
-                          )),
-                    ],
-                  ),
+                          ],
+                        )),
+                  ],
                 )),
-            Container(
-              color: AppColor.alfaorange,
-
-              //padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.only(bottom: 50),
-              child: MaterialButton(
-                color: AppColor.darkgrey,
-                height: 40,
+            SizedBox(
+              width: 100,
+              child: ElevatedButton(
                 onPressed: () async {
-                  final isValid = _formKey.currentState!.validate();
-                  if (!isValid) {
-                    return;
-                  }
-                  _formKey.currentState!.save();
-
-                  if (widget.titleEditable == "0") {
-                    if (titlecontroller.text == "Home" ||
-                        titlecontroller.text == "Work") {
+                  if (mounted) {
+                    final isValid = _formKey.currentState!.validate();
+                    if (!isValid) {
                       return;
                     }
-                  }
-                  print("======");
-                  if (widget.isforedit != "0") {
-                    var detail = await dao.findDataByaddressg(address);
+                    _formKey.currentState!.save();
 
-                    if (detail == null) {
-                      print("======api");
-                      ApiCall_Add_Favorite();
-                    } else {
-                      print("=====${detail}");
-                      ApiCall_update_Favorite(detail.id, detail.identifier);
+                    if (widget.titleEditable == "0") {
+                      if (titlecontroller.text == "Home" ||
+                          titlecontroller.text == "Work") {
+                        return;
+                      }
                     }
-                  } else {
-                    if (editidentifire == "0") {
-                      ApiCall_Add_Favorite();
+                    if (widget.isforedit != "0") {
+                      var detail = await dao.findDataByaddressg(address);
+
+                      if (detail == null) {
+                        ApiCall_Add_Favorite();
+                      } else {
+                        ApiCall_update_Favorite(detail.id, detail.identifier);
+                      }
                     } else {
-                      ApiCall_update_Favorite(editid, editidentifire);
+                      if (editidentifire == "0") {
+                        ApiCall_Add_Favorite();
+                      } else {
+                        ApiCall_update_Favorite(editid, editidentifire);
+                      }
                     }
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: AppColor.darkGreen,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                ),
                 child: robotoTextWidget(
-                    textval: savetext,
-                    colorval: AppColor.white,
-                    sizeval: 16.0,
-                    fontWeight: FontWeight.bold),
+                  textval: savetext,
+                  colorval: AppColor.white,
+                  sizeval: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(
@@ -378,7 +365,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
       _cameraPosition = CameraPosition(
         bearing: 0,
         target: LatLng(position.latitude, position.longitude),
-        zoom: 14.0,
+        zoom: 18.0,
       );
       if (_controller != null) {
         _controller
@@ -426,7 +413,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         await dao.insertTask(task);
         Navigator.pop(context, {"isbact": true});
       }
-      showSnackbar(context,(jsonDecode(response.body)['message'].toString()));
+      showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -460,7 +447,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
 
         Navigator.pop(context, {"isbact": true});
       }
-      showSnackbar(context,(jsonDecode(response.body)['message'].toString()));
+      showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }
 
@@ -487,7 +474,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         await dao.deleteTask(task);
         Navigator.pop(context, {"isbact": true});
       }
-      showSnackbar(context,(jsonDecode(response.body)['message'].toString()));
+      showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }
 }
