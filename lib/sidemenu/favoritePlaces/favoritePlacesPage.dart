@@ -104,7 +104,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
 
             Expanded(
               child: _isFirstLoadRunning
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : Container(
@@ -124,7 +124,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                       var come = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AddEditFavoritePlacesPage(
+                              builder: (context) => const AddEditFavoritePlacesPage(
                                     isforedit: "1",
                                     titleEditable: "0",
                                     data: null,
@@ -138,7 +138,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                         height: 24,
                         theme:  const SvgTheme(currentColor: AppColor.white,fontSize: 14.0, xHeight: 20),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       robotoTextWidget(
@@ -150,8 +150,8 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                   ),
                 )),
             if (_isLoadMoreRunning == true)
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 40),
+              const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 40),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -161,7 +161,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
               Container(
                 padding: const EdgeInsets.only(top: 30, bottom: 40),
                 color: Colors.green,
-                child: Center(
+                child: const Center(
                   child: Text(
                     'You have fetched all of the content',
                     style: TextStyle(
@@ -201,14 +201,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const SizedBox(
-            height: 20,
-          ),
-
-          //CellRow2(index),
           GestureDetector(
             onTap: () async {
-              var come = await Navigator.push(
+               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddEditFavoritePlacesPage(
@@ -216,13 +211,12 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                             titleEditable: "0",
                             data: arraddress[index],
                           )));
-              print("Tapped a Container");
               getdata();
             },
             child: CellRow1(index),
           ),
           const SizedBox(
-            height: 20,
+            height: 5,
           ),
           Container(
             height: 1,
@@ -242,13 +236,13 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(children: [
-                  Icon(
+                  const Icon(
                     Icons.person,
                     size: 30,
                     color: AppColor.darkGreen,
                   ),
                   const SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   robotoTextWidget(
                     textval: getTrimmedAddress(arraddress[index].title),
@@ -264,14 +258,14 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
               children: [
                 Row(children: [
                   const SizedBox(
-                    width: 22,
+                    width: 35,
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width - 98,
                     child: robotoTextWidget(
                       textval: arraddress[index].address,
                       colorval: AppColor.darkgrey,
-                      sizeval: 14.0,
+                      sizeval: 12.0,
                       fontWeight: FontWeight.normal,
                     ),
                   )
@@ -282,224 +276,214 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
         ));
   }
 
-  Container presetplace() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+  Column presetplace() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 22,
+        ),
+        Row(children: [
           const SizedBox(
-            height: 22,
+            width: 22,
           ),
-          Row(children: [
-            const SizedBox(
-              width: 22,
-            ),
-            robotoTextWidget(
-              textval: presetplacetext,
-              colorval: AppColor.grey,
-              sizeval: 14.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ]),
+          robotoTextWidget(
+            textval: presetplacetext,
+            colorval: AppColor.grey,
+            sizeval: 14.0,
+            fontWeight: FontWeight.normal,
+          ),
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 1,
+          color: AppColor.border,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        GestureDetector(
+          onTap: () async {
+           Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddEditFavoritePlacesPage(
+                          isforedit: "0",
+                          titleEditable: "1",
+                          data: homeDetail == null
+                              ? FavoritesData.optional(
+                                  title: "Home",
+                                  address: "",
+                                  longitude: "0.0",
+                                  latitude: " 0.0",
+                                  identifier: "0")
+                              : homeDetail!,
+                        )));
+            getdata();
+          },
+          child: Container(
+              color: AppColor.white.withOpacity(0.1),
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        const Icon(
+                          Icons.home,
+                          size: 30,
+                          color: AppColor.darkGreen,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        robotoTextWidget(
+                          textval: hometext,
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ]),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        const SizedBox(
+                          width: 42,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 98,
+                          child: robotoTextWidget(
+                            textval:
+                                homeDetail == null ? "" : homeDetail!.address,
+                            colorval: AppColor.darkgrey,
+                            sizeval: 12.0,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      ]),
+                    ],
+                  ),
+                ],
+              )),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 1,
+          color: AppColor.border,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        GestureDetector(
+          onTap: () async {
+           await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddEditFavoritePlacesPage(
+                          isforedit: "0",
+                          titleEditable: "1",
+                          data: workDetail == null
+                              ? FavoritesData.optional(
+                                  title: "Work",
+                                  address: "",
+                                  longitude: "0.0",
+                                  latitude: " 0.0",
+                                  identifier: "0")
+                              : workDetail!,
+                        )));
+            getdata();
+          },
+          child: Container(
+              color: AppColor.white.withOpacity(0.1),
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                       const Icon(
+                          CupertinoIcons.building_2_fill,
+                          size: 30,
+                          color: AppColor.darkGreen,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        robotoTextWidget(
+                          textval: worktext,
+                          colorval: AppColor.black,
+                          sizeval: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ]),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        const SizedBox(
+                          width: 42,
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width *
+                                (209 / 360),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width - 98,
+                              child: robotoTextWidget(
+                                textval: workDetail == null
+                                    ? ""
+                                    : workDetail!.address,
+                                colorval: AppColor.darkgrey,
+                                sizeval: 12.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )),
+                      ]),
+                    ],
+                  ),
+                ],
+              )),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 1,
+          color: AppColor.border,
+        ),
+        const SizedBox(
+          height: 22,
+        ),
+        Row(children: [
           const SizedBox(
-            height: 5,
+            width: 22,
           ),
-          Container(
-            height: 1,
-            color: AppColor.border,
+          robotoTextWidget(
+            textval: customplacetext,
+            colorval: AppColor.grey,
+            sizeval: 14.0,
+            fontWeight: FontWeight.normal,
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () async {
-              var come = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddEditFavoritePlacesPage(
-                            isforedit: "0",
-                            titleEditable: "1",
-                            data: homeDetail == null
-                                ? FavoritesData.optional(
-                                    title: "Home",
-                                    address: "",
-                                    longitude: "0.0",
-                                    latitude: " 0.0",
-                                    identifier: "0")
-                                : homeDetail!,
-                          )));
-              print("Tapped a Container");
-              getdata();
-            },
-            child: Container(
-                color: AppColor.white.withOpacity(0.1),
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                          Icon(
-                            Icons.home,
-                            size: 30,
-                            color: AppColor.darkGreen,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          robotoTextWidget(
-                            textval: hometext,
-                            colorval: AppColor.black,
-                            sizeval: 14.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ]),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                          SizedBox(
-                            width: 42,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width - 98,
-                            child: robotoTextWidget(
-                              textval:
-                                  homeDetail == null ? "" : homeDetail!.address,
-                              colorval: AppColor.darkgrey,
-                              sizeval: 14.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          )
-                        ]),
-                      ],
-                    ),
-                  ],
-                )),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            height: 1,
-            color: AppColor.border,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () async {
-              var come = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddEditFavoritePlacesPage(
-                            isforedit: "0",
-                            titleEditable: "1",
-                            data: workDetail == null
-                                ? FavoritesData.optional(
-                                    title: "Work",
-                                    address: "",
-                                    longitude: "0.0",
-                                    latitude: " 0.0",
-                                    identifier: "0")
-                                : workDetail!,
-                          )));
-              getdata();
-            },
-            child: Container(
-                color: AppColor.white.withOpacity(0.1),
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                         Icon(
-                            CupertinoIcons.building_2_fill,
-                            size: 30,
-                            color: AppColor.darkGreen,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          robotoTextWidget(
-                            textval: worktext,
-                            colorval: AppColor.black,
-                            sizeval: 14.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ]),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(children: [
-                          SizedBox(
-                            width: 42,
-                          ),
-                          Container(
-                              width: MediaQuery.of(context).size.width *
-                                  (209 / 360),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width - 98,
-                                child: robotoTextWidget(
-                                  textval: workDetail == null
-                                      ? ""
-                                      : workDetail!.address,
-                                  colorval: AppColor.darkgrey,
-                                  sizeval: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              )),
-
-                          // robotoTextWidget(
-                          //   textval: "arraddress[index].address",
-                          //   colorval: AppColor.darkgrey,
-                          //   sizeval: 14.0,
-                          //   fontWeight: FontWeight.normal,
-                          // ),
-                        ]),
-                      ],
-                    ),
-                  ],
-                )),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            height: 1,
-            color: AppColor.border,
-          ),
-          const SizedBox(
-            height: 22,
-          ),
-          Row(children: [
-            const SizedBox(
-              width: 22,
-            ),
-            robotoTextWidget(
-              textval: customplacetext,
-              colorval: AppColor.grey,
-              sizeval: 14.0,
-              fontWeight: FontWeight.normal,
-            ),
-          ]),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            height: 1,
-            color: AppColor.border,
-          ),
-        ],
-      ),
+        ]),
+        const SizedBox(
+          height: 5,
+        ),
+        Container(
+          height: 1,
+          color: AppColor.border,
+        ),
+      ],
     );
   }
 }
