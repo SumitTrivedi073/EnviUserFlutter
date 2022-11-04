@@ -60,9 +60,11 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                 ),
                 ExpansionTile(
                   onExpansionChanged: (value) {
-                    setState(() {
-                      arrowClicked = !arrowClicked;
-                    });
+                   if(mounted){
+                     setState(() {
+                       arrowClicked = !arrowClicked;
+                     });
+                   }
                   },
                   //  backgroundColor: Colors.white,
                   leading: (arrowClicked)
@@ -86,9 +88,9 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                             children: [
                               robotoTextWidget(
                                   textval: distanceTravelledText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo!
@@ -96,19 +98,20 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w200),
                               const SizedBox(
                                 height: 10,
                               ),
                             ],
                           ),
+                          SizedBox(height: 5,),
                           Row(
                             children: [
                               robotoTextWidget(
                                   textval: ratePerKmText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo!
@@ -116,19 +119,20 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w200),
                               const SizedBox(
                                 height: 10,
                               ),
                             ],
                           ),
+                          SizedBox(height: 5,),
                           Row(
                             children: [
                               robotoTextWidget(
                                   textval: totalFareText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo
@@ -142,14 +146,15 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               ),
                             ],
                           ),
+                          SizedBox(height: 5,),
                           widget.livetripData!.tripInfo
                           !.arrivalAtDestination!.discount.toDouble()!=0.0? Row(
                             children: [
                               robotoTextWidget(
                                   textval: lessDiscountText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo
@@ -157,20 +162,21 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w200),
                               const SizedBox(
                                 height: 10,
                               ),
                             ],
                           ):Container(),
+                          SizedBox(height: 5,),
                           widget.livetripData!.tripInfo
                           !.arrivalAtDestination!.tollAmount.toDouble()!=0.0? Row(
                             children: [
                               robotoTextWidget(
                                   textval: tollsText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                   textval: widget.livetripData!.tripInfo
@@ -178,19 +184,20 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                       .toString(),
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w200),
                               const SizedBox(
                                 height: 10,
                               ),
                             ],
                           ):Container(),
+                          SizedBox(height: 5,),
                           Row(
                             children: [
                               robotoTextWidget(
                                   textval: taxesText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                   textval: totalTax.toString() != null
@@ -198,19 +205,20 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                       : '0',
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.w200),
                               const SizedBox(
                                 height: 10,
                               ),
                             ],
                           ),
+                          SizedBox(height: 5,),
                           Row(
                             children: [
                               robotoTextWidget(
                                   textval: amountPayableText,
-                                  colorval: AppColor.grey,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
                                 textval: widget.livetripData!.tripInfo
@@ -224,7 +232,8 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                 height: 10,
                               ),
                             ],
-                          )
+                          ),
+                          SizedBox(height: 5,),
                         ])),
                   ],
                 ),

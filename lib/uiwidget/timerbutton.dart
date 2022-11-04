@@ -167,19 +167,25 @@ class _TimerButtonState extends State<TimerButton>
   }
 
   void animateButton() {
-    setState(() {
-      state = 1;
-    });
+   if(mounted){
+     setState(() {
+       state = 1;
+     });
+   }
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (counter > 1) {
-        setState(() {
-          counter--;
-        });
+        if(mounted) {
+          setState(() {
+            counter--;
+          });
+        }
       } else {
-        setState(() {
-          state = 2;
-        });
+        if(mounted){
+          setState(() {
+            state = 2;
+          });
+        }
         timer.cancel();
       }
     });
@@ -214,9 +220,13 @@ class _TimerButtonState extends State<TimerButton>
                       direction: Axis.vertical,
                       groupValue: reasonForCancellation,
                       horizontalAlignment: MainAxisAlignment.spaceAround,
-                      onChanged: (value) => setState(() {
+                      onChanged: (value) => (){
+                        if(mounted){
+                          setState(() {
                             reasonForCancellation = value.toString();
-                          }),
+                          });
+                        }
+                      },
                       items: _status,
                       textStyle: const TextStyle(
                           fontSize: 15,
@@ -258,10 +268,12 @@ class _TimerButtonState extends State<TimerButton>
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
+                            if(mounted){
                               setState(() {
                                 isLoading = true;
                                 cancelTripAPI(context);
                               });
+                            }
 
                             },
                             style: ElevatedButton.styleFrom(
@@ -318,18 +330,24 @@ class _TimerButtonState extends State<TimerButton>
             :0.0
       }
     };
-    setState(() {
-      isLoading = true;
-    });
+    if(mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     dynamic res = await HTTP.post(cancelTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-      });
+      if(mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if(mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 }

@@ -193,24 +193,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                 const SizedBox(
                   height: 5,
                 ),
-                /* Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(vertical: 2.0),
-                  height: 170.0,
-                  child: Center(
-                    child: ListView.builder(
-                      // controller: _controller,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return driverListItems(index);
-                      },
-                      itemCount: 1,
-                      padding: const EdgeInsets.all(3),
-                    ),
-                  ),
-                )*/
                 CarouselSlider(
-
                   items: List.generate(vehiclePriceClasses.length,
                       (index) => driverListItems(index)),
                   carouselController: carouselController,

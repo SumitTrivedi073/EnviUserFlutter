@@ -541,7 +541,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           },
                           child: Card(
                             elevation: 4,
-                            child: ListTile(
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: ListTile(
                                 horizontalTitleGap: 1.0,
                                 title: robotoTextWidget(
                                   textval: searchPlaceList![index].title,
@@ -559,15 +561,16 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   (searchPlaceList![index].title == 'Work')
                                       ? "assets/svg/place-work.svg"
                                       : (searchPlaceList![index].title ==
-                                              'Home')
-                                          ? "assets/svg/place-home.svg"
-                                          : Images.toLocationImage,
+                                      'Home')
+                                      ? "assets/svg/place-home.svg"
+                                      : Images.toLocationImage,
                                   width: 25,
                                   height: 25,
                                   theme: const SvgTheme(currentColor: AppColor.darkGreen),
 
                                 ),
                               ),
+                            ),
 
                           ),
                         );
