@@ -70,8 +70,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         _isFirstLoadRunning = false;
         if (jsonDecode(res.body)['content']['result'] != null) {
           carbonProfile = jsonDecode(res.body)['content']['carbonProfile'];
-          print(
-              'RAGHU CARBON PROFILE ${carbonProfile} '); //totalLifeTimeKMs, totalLifeTimeTrips, carbonSaved
           arrtrip = (jsonDecode(res.body)['content']['result'] as List)
               .map((i) => RideHistoryModel.fromJson(i))
               .toList();
@@ -244,15 +242,15 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
               Icons.nights_stay_sharp,
               color: AppColor.black,
             ),
-            robotoTextWidget(
+            arrtrip[index].start_time!=null && arrtrip[index].start_time!="NA"? robotoTextWidget(
               textval:
                   "${getdayTodayTomarrowYesterday(arrtrip[index].start_time)}",
               colorval: AppColor.black,
               sizeval: 15.0,
               fontWeight: FontWeight.bold,
-            ),
+            ):Container(),
           ]),
-          arrtrip[index].price.totalFare != 'NA'
+          arrtrip[index].price.totalFare!=null &&  arrtrip[index].price.totalFare != 'NA'
               ? robotoTextWidget(
                   textval: "₹ ${arrtrip[index].price.totalFare}",
                   colorval: AppColor.black,

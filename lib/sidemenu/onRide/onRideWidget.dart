@@ -120,7 +120,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                   .tripInfo!.pickupLocation!.pickupAddress
                                   .toString(),
                               colorval: AppColor.black,
-                              sizeval: 16,
+                              sizeval: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -152,7 +152,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                         textval:
                             '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
-                        sizeval: 14,
+                        sizeval: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -178,7 +178,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                   .tripInfo!.dropLocation!.dropAddress
                                   .toString(),
                               colorval: AppColor.black,
-                              sizeval: 16,
+                              sizeval: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

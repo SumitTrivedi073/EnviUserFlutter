@@ -111,10 +111,12 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   child: FromToData(value.liveTripData!))),
                         GestureDetector(
                           onTap: () {
+                          if(mounted){
                             setState(() {
                               showFullScreen = true;
                               disableFullScreen();
                             });
+                          }
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -218,7 +220,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .tripInfo!.pickupLocation!.pickupAddress
                                   .toString(),
                               colorval: AppColor.black,
-                              sizeval: 16,
+                              sizeval: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -250,7 +252,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                         textval:
                             '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
-                        sizeval: 14,
+                        sizeval: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -276,7 +278,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .tripInfo!.dropLocation!.dropAddress
                                   .toString(),
                               colorval: AppColor.black,
-                              sizeval: 16,
+                              sizeval: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
