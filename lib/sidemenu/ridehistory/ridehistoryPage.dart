@@ -81,8 +81,6 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 _hasNextPage = false;
                 _isFirstLoadRunning = false;
               }
-
-
           }
         }
 
@@ -159,7 +157,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                       child: CircularProgressIndicator(),
                     )
                   : Container(
-                      margin: const EdgeInsets.only(right: 10.0),
+                      margin: const EdgeInsets.only(right: 5.0),
                       child: _buildPosts(context)),
             ),
             // when the _loadMore function is running
@@ -294,7 +292,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width - 185,
+                        width: MediaQuery.of(context).size.width -100,
                         child: robotoTextWidget(
                           textval: arrtrip[index].toAddress,
                           colorval: AppColor.black,
@@ -317,7 +315,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                         width: 5,
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width - 185,
+                        width: MediaQuery.of(context).size.width - 100,
                         child: robotoTextWidget(
                           textval: arrtrip[index].fromAddress,
                           colorval: AppColor.greyblack,
@@ -415,79 +413,82 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     );
   }
 
-  Card totalTripHeader() {
-    return Card(
-      elevation: 5,
-      semanticContainer: true,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      color: AppColor.detailheader,
-      child: Container(
+  Container totalTripHeader() {
+    return Container(
+      margin: EdgeInsets.only(left: 10,right: 10),
+      child: Card(
+        elevation: 5,
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         color: AppColor.detailheader,
-        // height: 66,
-        margin: const EdgeInsets.only(left: 5, right: 5),
-        padding: const EdgeInsets.only(top: 9, bottom: 5, right: 5),
-        foregroundDecoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: Column(
-                children: const [
-                  RotatedBox(
-                    quarterTurns: 3,
-                    child: robotoTextWidget(
-                      textval: "YOUR\nSTATS",
-                      colorval: AppColor.greyblack,
-                      sizeval: 13.0,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  )
-                ],
-              )),
-              Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      robotoTextWidget(
-                        textval: (carbonProfile != null)
-                            ? " ${carbonProfile['totalLifeTimeTrips']}"
-                            : '--', //Change here
-                        colorval: AppColor.white,
-                        sizeval: 22.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const robotoTextWidget(
-                        textval: "Rides Taken",
-                        colorval: AppColor.lightwhite,
-                        sizeval: 13.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ],
-                  )),
-              Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      robotoTextWidget(
-                        textval: (carbonProfile != null)
-                            ? "${carbonProfile['carbonSaved']}"
-                            : '--', //Change Here
-                        colorval: AppColor.white,
-                        sizeval: 22.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const robotoTextWidget(
-                        textval: "CO2 Emission Prevented",
-                        colorval: AppColor.lightwhite,
-                        sizeval: 10.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ],
-                  )),
-            ],
+        child: Container(
+          color: AppColor.detailheader,
+          // height: 66,
+          margin: const EdgeInsets.only(left: 5, right: 5),
+          padding: const EdgeInsets.only(top: 9, bottom: 5, right: 5),
+          foregroundDecoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: Column(
+                      children: const [
+                        RotatedBox(
+                          quarterTurns: 3,
+                          child: robotoTextWidget(
+                            textval: "YOUR\nSTATS",
+                            colorval: AppColor.greyblack,
+                            sizeval: 13.0,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        )
+                      ],
+                    )),
+                Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        robotoTextWidget(
+                          textval: (carbonProfile != null)
+                              ? " ${carbonProfile['totalLifeTimeTrips']}"
+                              : '--', //Change here
+                          colorval: AppColor.white,
+                          sizeval: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        const robotoTextWidget(
+                          textval: "Rides Taken",
+                          colorval: AppColor.lightwhite,
+                          sizeval: 13.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    )),
+                Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        robotoTextWidget(
+                          textval: (carbonProfile != null)
+                              ? "${carbonProfile['carbonSaved']}"
+                              : '--', //Change Here
+                          colorval: AppColor.white,
+                          sizeval: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        const robotoTextWidget(
+                          textval: "CO2 Emission Prevented",
+                          colorval: AppColor.lightwhite,
+                          sizeval: 10.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    )),
+              ],
+            ),
           ),
         ),
       ),

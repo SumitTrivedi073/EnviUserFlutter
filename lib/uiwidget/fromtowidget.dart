@@ -71,11 +71,11 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     (route) => true);
                               },
                               child: Container(
-                                padding: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(3),
                                 child: robotoTextWidget(
                                   textval: widget.fromAddress!.address,
                                   colorval: AppColor.black,
-                                  sizeval: 16,
+                                  sizeval: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -108,7 +108,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                     child: robotoTextWidget(
                       textval: widget.distance,
                       colorval: AppColor.black,
-                      sizeval: 14,
+                      sizeval: 12,
                       fontWeight: FontWeight.w600,
                     ),
                   )
@@ -143,11 +143,11 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                     (route) => true);
                               },
                               child: Container(
-                                padding: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(3),
                                 child: robotoTextWidget(
                                   textval: widget.toAddress!.address,
                                   colorval: AppColor.black,
-                                  sizeval: 16,
+                                  sizeval: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
