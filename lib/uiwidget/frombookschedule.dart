@@ -48,7 +48,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
           ),
           elevation: 5,
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: [
                 GestureDetector(
@@ -75,7 +75,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                               child: robotoTextWidget(
                                 textval: widget.address,
                                 colorval: AppColor.black,
-                                sizeval: 18,
+                                sizeval: 14,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

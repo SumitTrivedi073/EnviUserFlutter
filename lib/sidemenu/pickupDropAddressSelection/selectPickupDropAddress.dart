@@ -216,9 +216,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () async {
-                            print("serch index$index");
-                            print(
-                                "serch index${searchPlaceList![index].isFavourite}");
                             String isFavourite =
                                 searchPlaceList![index].isFavourite;
                             if (useGoogleApi) {
@@ -544,20 +541,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           },
                           child: Card(
                             elevation: 4,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: ListTile(
+                            child: ListTile(
+                                horizontalTitleGap: 1.0,
                                 title: robotoTextWidget(
                                   textval: searchPlaceList![index].title,
-                                  colorval: AppColor.black,
+                                  colorval: AppColor.greyblack,
                                   sizeval: 14.0,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 subtitle: robotoTextWidget(
                                   textval: searchPlaceList![index].address,
-                                  colorval: AppColor.black,
+                                  colorval: AppColor.darkgrey,
                                   sizeval: 12.0,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w400,
                                 ),
                                 leading: SvgPicture.asset(
                                   (searchPlaceList![index].title == 'Work')
@@ -566,13 +562,13 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                               'Home')
                                           ? "assets/svg/place-home.svg"
                                           : Images.toLocationImage,
-                                  width: 20,
-                                  height: 20,
-                                  theme: const SvgTheme(currentColor: AppColor.darkGreen,fontSize: 14.0, xHeight: 20),
+                                  width: 25,
+                                  height: 25,
+                                  theme: const SvgTheme(currentColor: AppColor.darkGreen),
 
                                 ),
                               ),
-                            ),
+
                           ),
                         );
                       },
@@ -673,7 +669,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField fromTextWidget() {
     return TextField(
-      style: const TextStyle(fontWeight: FontWeight.w600),
+      style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 14),
       autofocus: false,
       focusNode: startFocusNode,
       onSubmitted: (value) {
@@ -725,7 +721,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Widget toTextWidget() {
     return TextField(
-      style: const TextStyle(fontWeight: FontWeight.w600),
+      style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 14),
       autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,

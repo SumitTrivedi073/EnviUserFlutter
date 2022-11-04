@@ -307,7 +307,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                           child: robotoTextWidget(
                             textval: arrtrip[index].fromAddress,
                             colorval: AppColor.black,
-                            sizeval: 16,
+                            sizeval: 14,
                             fontWeight: FontWeight.w200,
                           ),
                         ),
@@ -331,7 +331,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                           child: robotoTextWidget(
                             textval: arrtrip[index].toAddress,
                             colorval: AppColor.black,
-                            sizeval: 16,
+                            sizeval: 14,
                             fontWeight: FontWeight.w200,
                           ),
                         ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -7,13 +6,11 @@ import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../sidemenu/bookScheduleTrip/model/vehiclePriceClasses.dart';
 import '../sidemenu/home/homePage.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../theme/string.dart';
-import '../utils/utility.dart';
 import '../web_service/ApiCollection.dart';
 
 class CarCategoriesWidget extends StatefulWidget {
@@ -22,6 +19,7 @@ class CarCategoriesWidget extends StatefulWidget {
   final void Function(vehiclePriceClassesModel) callback;
   final void Function(String) callback2;
   final String scheduledAt;
+
   const CarCategoriesWidget(
       {Key? key,
       this.toAddress,
@@ -40,9 +38,11 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   var listItemCount = 0;
   var distance;
   List<vehiclePriceClassesModel> vehiclePriceClasses = [];
-  int? selectedIndex;
+  int? selectedIndex = 0;
   CarouselController carouselController = CarouselController();
   bool isLoading = false;
+  bool isForwardArrowGreen = true;
+  bool isBackArrowGreen = true;
 
   @override
   void setState(fn) {
@@ -77,6 +77,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             .toList();
         distance = jsonDecode(response.body)['content']['estimatedDistance'];
         widget.callback2(distance.toStringAsFixed(2));
+        widget.callback(vehiclePriceClasses[0]);
       });
     } else {
       var errmsg = jsonDecode(response.body)['msg'];
@@ -192,17 +193,50 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                 const SizedBox(
                   height: 5,
                 ),
-                Container(
+                /* Container(
+                  alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(vertical: 2.0),
                   height: 170.0,
-                  child: ListView.builder(
-                    // controller: _controller,
+                  child: Center(
+                    child: ListView.builder(
+                      // controller: _controller,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return driverListItems(index);
+                      },
+                      itemCount: 1,
+                      padding: const EdgeInsets.all(3),
+                    ),
+                  ),
+                )*/
+                CarouselSlider(
+
+                  items: List.generate(vehiclePriceClasses.length,
+                      (index) => driverListItems(index)),
+                  carouselController: carouselController,
+                  options: CarouselOptions(
+                    enableInfiniteScroll: false,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return driverListItems(index);
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: false,
+                    disableCenter: false,
+                    viewportFraction: 0.85,
+                    onPageChanged: (index, reason) {
+                      selectedIndex = index;
+                      setState(() {
+                        if (selectedIndex == 0) {
+                          isBackArrowGreen = false;
+                        } else {
+                          isBackArrowGreen = true;
+                        }
+                        if (selectedIndex == vehiclePriceClasses.length - 1) {
+                          isForwardArrowGreen = false;
+                        } else {
+                          isForwardArrowGreen = true;
+                        }
+                      });
                     },
-                    itemCount: vehiclePriceClasses.length,
-                    padding: const EdgeInsets.all(3),
+                    autoPlay: false,
                   ),
                 )
               ],
@@ -211,172 +245,172 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   }
 
   Widget driverListItems(int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedIndex = index;
-          print("selectedIndex========>$selectedIndex");
-          widget.callback(vehiclePriceClasses[index]);
-        });
-      },
-      child: Card(
-        margin: const EdgeInsets.all(5),
-        color: const Color(0xFFE4F3F5),
-        shape: selectedIndex == index
-            ? RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.green, width: 2.0),
-                borderRadius: BorderRadius.circular(5.0))
-            : RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.white, width: 2.0),
-                borderRadius: BorderRadius.circular(5.0)),
-        child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      "assets/svg/car-type-sedan.svg",
-                      width: 40,
-                      height: 30,
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      children: [
-                        robotoTextWidget(
-                            textval: vehiclePriceClasses[index].type.toString(),
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w200),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset('assets/images/passengers-icon.png',
-                                    height: 15, width: 15, fit: BoxFit.cover),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                robotoTextWidget(
-                                    textval:
-                                        "${vehiclePriceClasses[index].passengerCapacity} People",
-                                    colorval: AppColor.black,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w200)
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Row(
-                              children: [
-                                Image.asset('assets/images/weight-icon.png',
-                                    height: 15, width: 15, fit: BoxFit.cover),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                robotoTextWidget(
-                                    textval: vehiclePriceClasses[index]
-                                        .bootSpace
-                                        .toString(),
-                                    colorval: AppColor.black,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w200)
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  color: AppColor.border,
-                  height: 2,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    robotoTextWidget(
-                        textval: estimateFare,
-                        colorval: AppColor.darkgrey,
-                        sizeval: 12,
-                        fontWeight: FontWeight.w600),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.info_outlined,
-                          size: 20.0,
-                          color: Colors.grey,
-                        ))
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    robotoTextWidget(
-                        textval:
-                            "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
-                        colorval: AppColor.black,
-                        sizeval: 18,
-                        fontWeight: FontWeight.w800),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    if (vehiclePriceClasses[index].discountPercent != "0")
-                      Text(
-                        getTotalPrice(
-                            vehiclePriceClasses[index].total_fare.toDouble(),
-                            vehiclePriceClasses[index]
-                                .seller_discount
-                                .toDouble()),
-                        textAlign: TextAlign.justify,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColor.black,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Roboto',
-                            decoration: TextDecoration.lineThrough),
+    return
+       GestureDetector(
+        onTap: (){
+          setState(() {
+            selectedIndex = index;
+            widget.callback(vehiclePriceClasses[index]);
+          });
+        },
+        child: Card(
+          margin: const EdgeInsets.all(5),
+          color: const Color(0xFFE4F3F5),
+          shape: selectedIndex == index
+              ? RoundedRectangleBorder(
+              side: const BorderSide(color: Colors.green, width: 2.0),
+              borderRadius: BorderRadius.circular(5.0))
+              : RoundedRectangleBorder(
+              side: const BorderSide(color: Colors.white, width: 2.0),
+              borderRadius: BorderRadius.circular(5.0)),
+          child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/svg/car-type-sedan.svg",
+                        width: 40,
+                        height: 30,
                       ),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    if (vehiclePriceClasses[index].discountPercent != "0")
+                      const SizedBox(
+                        width: 20,
+                      ),
                       Column(
                         children: [
-                          const robotoTextWidget(
-                              textval: "Special Offer",
-                              colorval: AppColor.purple,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w800),
                           robotoTextWidget(
-                              textval:
-                                  '${vehiclePriceClasses[index].discountPercent.toString()} % Off',
-                              colorval: AppColor.purple,
-                              sizeval: 13,
-                              fontWeight: FontWeight.w400),
+                              textval: vehiclePriceClasses[index].type.toString(),
+                              colorval: AppColor.black,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w200),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset('assets/images/passengers-icon.png',
+                                      height: 15, width: 15, fit: BoxFit.cover),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  robotoTextWidget(
+                                      textval:
+                                      "${vehiclePriceClasses[index].passengerCapacity} People",
+                                      colorval: AppColor.black,
+                                      sizeval: 14,
+                                      fontWeight: FontWeight.w200)
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Image.asset('assets/images/weight-icon.png',
+                                      height: 15, width: 15, fit: BoxFit.cover),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  robotoTextWidget(
+                                      textval: vehiclePriceClasses[index]
+                                          .bootSpace
+                                          .toString(),
+                                      colorval: AppColor.black,
+                                      sizeval: 14,
+                                      fontWeight: FontWeight.w200)
+                                ],
+                              )
+                            ],
+                          )
                         ],
                       )
-                  ],
-                ),
-              ],
-            )),
-      ),
-    );
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    color: AppColor.border,
+                    height: 2,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      robotoTextWidget(
+                          textval: estimateFare,
+                          colorval: AppColor.darkgrey,
+                          sizeval: 12,
+                          fontWeight: FontWeight.w600),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.info_outlined,
+                            size: 20.0,
+                            color: Colors.grey,
+                          ))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      robotoTextWidget(
+                          textval:
+                          "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
+                          colorval: AppColor.black,
+                          sizeval: 18,
+                          fontWeight: FontWeight.w800),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      if (vehiclePriceClasses[index].discountPercent != "0")
+                        Text(
+                          getTotalPrice(
+                              vehiclePriceClasses[index].total_fare.toDouble(),
+                              vehiclePriceClasses[index]
+                                  .seller_discount
+                                  .toDouble()),
+                          textAlign: TextAlign.justify,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Roboto',
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      if (vehiclePriceClasses[index].discountPercent != "0")
+                        Column(
+                          children: [
+                            const robotoTextWidget(
+                                textval: "Special Offer",
+                                colorval: AppColor.purple,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w800),
+                            robotoTextWidget(
+                                textval:
+                                '${vehiclePriceClasses[index].discountPercent.toString()} % Off',
+                                colorval: AppColor.purple,
+                                sizeval: 13,
+                                fontWeight: FontWeight.w400),
+                          ],
+                        )
+                    ],
+                  ),
+                ],
+              )),
+        ),
+      );
   }
 
   String getTotalPrice(double totalFare, double discount) {
