@@ -168,3 +168,25 @@ double nullSafeFloat(obj, value) {
   else
     return obj[value].toDouble();
 }
+
+//This is to strip of unnecessory chars from address
+String formatAddress(String address) {
+  var formated = address
+      .replaceAllMapped(
+          new RegExp(r'[A-Za-z0-9]+\+[A-Za-z0-9]+,(.*)', caseSensitive: false),
+          (Match m) => "${m[1]}")
+      .replaceAllMapped(
+          new RegExp(r'(^.*).*karnataka[+ \n\t\r\f]*,*.*',
+              caseSensitive: false),
+          (Match m) => "${m[1]}")
+      .replaceAllMapped(
+          new RegExp(r'(^.*).*india[ \n\t\r\f]*,*.*', caseSensitive: false),
+          (Match m) => "${m[1]}")
+      .replaceAll(new RegExp("[0-9]{6}"), '') //pincode
+      .replaceAll(new RegExp("[+ \n\t\r\f],"), '')
+      .replaceAll(new RegExp("[+ \n\t\r\f,]\$"), '')
+      .replaceAll(new RegExp("^[,]"), '')
+      .replaceAll(new RegExp("[,]\$"), '');
+
+  return formated;
+}
