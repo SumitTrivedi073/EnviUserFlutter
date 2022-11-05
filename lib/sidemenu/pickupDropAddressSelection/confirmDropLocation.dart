@@ -234,7 +234,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       apiCallUpdateFavorite(detail.id, detail.title, startLocation,
           detail.identifier, detail.isFavourite);
     }
-    var toDetail = await dao!.findDataByaddressg(endLocation.address);
+    var toDetail = await dao?.findDataByaddressg(endLocation.address);
     if (startLocation.address != endLocation.address) {
       if (toDetail == null) {
         apiCallAddFavoritetoaddress(endLocation);
