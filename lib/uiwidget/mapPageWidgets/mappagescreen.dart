@@ -163,7 +163,7 @@ class MyMapState extends State {
         _cameraPosition = CameraPosition(
           bearing: 0,
           target: LatLng(position.latitude, position.longitude),
-          zoom: 14.0,
+          zoom: 16.0,
         );
         if (_controller != null) {
           _controller
@@ -185,9 +185,10 @@ class MyMapState extends State {
           : place.subAdministrativeArea!;
       isoId = place.isoCountryCode;
       setState(() {
-        Address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place
-            .postalCode}, ${place.country}';
+        Address = '${place.street}, ${place.subLocality}, ${place.locality}';
+        Address = Address.replaceAll(",", "");
+        Address = Address.replaceAll('  ', ' ');
+        
       });
     }catch(e){
       print("Exception==========>${e.toString()}");

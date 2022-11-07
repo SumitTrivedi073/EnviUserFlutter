@@ -8,11 +8,8 @@ import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/images.dart';
 import 'package:envi/theme/mapStyle.dart';
-import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
-import 'package:envi/web_service/Constant.dart';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,7 +22,6 @@ import '../../database/favoritesData.dart';
 import '../../database/favoritesDataDao.dart';
 import '../../enum/BookingTiming.dart';
 import '../../theme/string.dart';
-import '../../utils/utility.dart';
 import '../../web_service/ApiCollection.dart';
 import '../bookScheduleTrip/bookScheduleTrip.dart';
 import '../home/homePage.dart';
@@ -165,7 +161,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
         addressToAdd.isFavourite);
-    print(response.body);
 
     if (response != null) {
       if (response.statusCode == 200) {

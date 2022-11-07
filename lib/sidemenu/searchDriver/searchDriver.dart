@@ -38,15 +38,15 @@ class _SearchDriverPageState extends State<SearchDriver> {
       Column(children: [
         AppBarInsideWidget(
           onPressBack: () {
-            // Navigator.pop(context);
-            // Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
-            if (!mounted) return;
+             Navigator.pop(context);
+             Navigator.pop(context, [widget.fromAddress, widget.toAddress]);
+           /* if (!mounted) return;
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) => const HomePage(
                           title: "",
                         )),
-                (Route<dynamic> route) => false);
+                (Route<dynamic> route) => false);*/
           },
           pagetitle: "Envi",
           isBackButtonNeeded: true,

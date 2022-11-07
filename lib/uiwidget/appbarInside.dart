@@ -58,7 +58,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                               })
                       : const SizedBox(),
                   robotoTextWidget(
-                    textval: widget.pagetitle,
+                    textval: widget.pagetitle.toTitleCase(),
                     colorval: AppColor.lightwhite,
                     sizeval: 18.0,
                     fontWeight: FontWeight.w800,

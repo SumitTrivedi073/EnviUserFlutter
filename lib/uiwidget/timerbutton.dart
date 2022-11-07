@@ -94,6 +94,7 @@ class _TimerButtonState extends State<TimerButton>
               minWidth: double.infinity,
               height: 48.0,
               color: AppColor.red,
+              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0) ),
               child: setUpButtonChild(),
             ),
           )
@@ -222,7 +223,6 @@ class _TimerButtonState extends State<TimerButton>
                       horizontalAlignment: MainAxisAlignment.spaceAround,
                       onChanged: (value) {
                           setState(() {
-                            print("value========>$value");
                             reasonForCancellation = value.toString();
                           });
 

@@ -83,6 +83,8 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
               myLocationButtonEnabled: false,
               mapToolbarEnabled: false,
               zoomGesturesEnabled: false,
+              scrollGesturesEnabled: false,
+              tiltGesturesEnabled: false,
               rotateGesturesEnabled: false,
               zoomControlsEnabled: false,
             )
@@ -95,10 +97,10 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
               ),
               SizedBox(height: 5),
             ]),
-            Container(
+            /*Container(
               color: Color(0xFFB0000000),
             ),
-            Align(
+           */ Align(
                 alignment: Alignment.center,
                 child: SizedBox(
                   child: ConfirmDriverPopup(
