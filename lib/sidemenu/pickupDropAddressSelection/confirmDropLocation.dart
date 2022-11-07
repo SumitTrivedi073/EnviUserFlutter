@@ -632,7 +632,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           ? place.subLocality
           : place.subAdministrativeArea;
       Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+          '${place.street}, ${place.subLocality}, ${place.locality}';
     });
   }
 }
