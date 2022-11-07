@@ -278,7 +278,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
       counter--;
       if (counter == 0) {
-        moveMarkerAnimate = true;
+        moveMarkerAnimate = false;
         timer.cancel();
       }
     });
@@ -405,12 +405,12 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         background: Paint()
-                          ..color = Color.fromARGB(255, 95, 105, 172)
+                          ..color = Color.fromARGB(255, 163, 235, 211)
                           ..strokeWidth = 20
                           ..strokeJoin = StrokeJoin.round
                           ..strokeCap = StrokeCap.round
                           ..style = PaintingStyle.stroke,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
           ],
         ),
