@@ -185,6 +185,7 @@ String formatAddress(String address) {
       .replaceAll(new RegExp("[0-9]{6}"), '') //pincode
       .replaceAll(new RegExp("[+ \n\t\r\f],"), '')
       .replaceAll(new RegExp("[+ \n\t\r\f,]\$"), '')
+      .replaceAll(new RegExp("[+ \n\t\r\f]"), ' ')
       .replaceAll(new RegExp("^[,]"), '')
       .replaceAll(new RegExp("[,]\$"), '');
 
