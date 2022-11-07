@@ -150,6 +150,11 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         if (message != null) {
           print("New Notification");
           checkLoginStatus();
+
+          Future.delayed(Duration(milliseconds:  9000), () {
+            ShowPushNotificationExpand(context,message.notification!.title,message.notification!.body);
+          },
+          );
         }
       },
     );
@@ -162,6 +167,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data11 ${message.data}");
+
+          //showToast(message.notification!.body.toString());
           LocalNotificationService.createanddisplaynotification(message);
         }
       },
@@ -174,7 +181,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
-          print("message.data22 ${message.data['_id']}");
+          Future.delayed(Duration(milliseconds:  4000), () {
+            ShowPushNotificationExpand(context,message.notification!.title,message.notification!.body);
+          },
+          );
         }
       },
     );
@@ -514,4 +524,68 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       }
     }
   }
+  Widget ShowPushNotificationExpand(BuildContext context,titel,message) {
+    return AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        content: Wrap(children: [
+          Column(mainAxisSize: MainAxisSize.min, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                titel,
+                style: const TextStyle(
+                    color: AppColor.butgreen,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Wrap(
+                children: [
+                  Text(
+                    message,
+                    style: TextStyle(
+                        color: AppColor.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColor.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                  ),
+                  child: robotoTextWidget(
+                    textval: cancel,
+                    colorval: AppColor.greyblack,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+
+              ],
+            ),
+          ]),
+        ]));
+  }
+
 }
