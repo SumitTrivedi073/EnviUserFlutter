@@ -375,7 +375,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         Container(
                           padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
-                            textval: Address,
+                            textval: formatAddress(Address),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w600,

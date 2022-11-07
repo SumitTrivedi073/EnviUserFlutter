@@ -417,7 +417,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                                 .robotoRegular18Gray,
                                             border: InputBorder.none,
                                             contentPadding:
-                                              EdgeInsets.all(10.0),
+                                                EdgeInsets.all(10.0),
                                             isDense: true,
                                             fillColor:
                                                 AppColor.textfieldlightgrey),
@@ -471,7 +471,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                               color: AppColor.greyblack,
                               child: Text(
                                 (widget.isUpdate)
-                                    ? 'Update Account'
+                                    ? 'UPDATE'
                                     : createAccountText,
                                 style: AppTextStyle.robotoBold20White,
                               ),
@@ -526,7 +526,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
         sharedPreferences.setString(
             loginpropic, updateUserResponse['pro_pic'] ?? widget.user!.propic);
         Profiledata.setusreid(widget.user!.id);
-      
+
         Profiledata.settoken(widget.user!.token);
         Profiledata.setmailid(_emailController.text);
         Profiledata.setpropic(

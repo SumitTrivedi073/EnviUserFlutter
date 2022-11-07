@@ -101,7 +101,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   @override
   void initState() {
     super.initState();
-    FromLocationText.text = widget.currentLocation!.address;
+    FromLocationText.text = formatAddress(widget.currentLocation!.address);
     _sessionToken = uuid.v4();
     startFocusNode = FocusNode();
     endFocusNode = FocusNode();
@@ -232,8 +232,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 if (startFocusNode.hasFocus) {
                                   setState(() {
                                     // startPosition = details.result;
-                                    FromLocationText.text =
-                                        details.result!.formattedAddress!;
+                                    FromLocationText.text = formatAddress(
+                                        details.result!.formattedAddress!);
                                     startingAddress = SearchPlaceModel(
                                         id: searchPlaceList![index].id,
                                         address:
@@ -276,8 +276,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      FromLocationText.text =
-                                          startingAddress!.address;
+                                      FromLocationText.text = formatAddress(
+                                          startingAddress!.address);
                                     });
                                     endFocusNode.requestFocus();
                                     getLocalSuggestions('');
@@ -308,15 +308,15 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      FromLocationText.text =
-                                          startingAddress!.address;
+                                      FromLocationText.text = formatAddress(
+                                          startingAddress!.address);
                                     });
                                   }
                                 } else {
                                   setState(() {
                                     // endPosition = details.result;
-                                    ToLocationText.text =
-                                        details.result!.formattedAddress!;
+                                    ToLocationText.text = formatAddress(
+                                        details.result!.formattedAddress!);
                                     endAddress = SearchPlaceModel(
                                         id: searchPlaceList![index].id,
                                         address:
@@ -357,7 +357,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      ToLocationText.text = endAddress!.address;
+                                      ToLocationText.text =
+                                          formatAddress(endAddress!.address);
                                     });
                                     startFocusNode.requestFocus();
                                     getLocalSuggestions('');
@@ -388,7 +389,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      ToLocationText.text = endAddress!.address;
+                                      ToLocationText.text =
+                                          formatAddress(endAddress!.address);
                                     });
                                   }
                                 }
@@ -397,8 +399,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               if (mounted) {
                                 if (startFocusNode.hasFocus) {
                                   setState(() {
-                                    FromLocationText.text =
-                                        searchPlaceList![index].address;
+                                    FromLocationText.text = formatAddress(
+                                        searchPlaceList![index].address);
                                     startingAddress = searchPlaceList![index];
                                     searchPlaceList = [];
                                   });
@@ -429,8 +431,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      FromLocationText.text =
-                                          startingAddress!.address;
+                                      FromLocationText.text = formatAddress(
+                                          startingAddress!.address);
                                       getLocalSuggestions('');
                                     });
                                     endFocusNode.requestFocus();
@@ -464,14 +466,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      FromLocationText.text =
-                                          startingAddress!.address;
+                                      FromLocationText.text = formatAddress(
+                                          startingAddress!.address);
                                     });
                                   }
                                 } else {
                                   setState(() {
-                                    ToLocationText.text =
-                                        searchPlaceList![index].address;
+                                    ToLocationText.text = formatAddress(
+                                        searchPlaceList![index].address);
                                     endAddress = searchPlaceList![index];
                                     searchPlaceList = [];
                                   });
@@ -503,7 +505,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      ToLocationText.text = endAddress!.address;
+                                      ToLocationText.text =
+                                          formatAddress(endAddress!.address);
                                     });
                                     startFocusNode.requestFocus();
                                     getLocalSuggestions('');
@@ -534,53 +537,52 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                     }
 
                                     setState(() {
-                                      ToLocationText.text = endAddress!.address;
+                                      ToLocationText.text =
+                                          formatAddress(endAddress!.address);
                                     });
                                   }
                                 }
                               }
                             }
                           },
-                          child: Card(
-                            elevation: 4,
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: ListTile(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10),
-                                minLeadingWidth: 30,
-                                horizontalTitleGap: 0.0,
-                                title: robotoTextWidget(
-                                  textval: searchPlaceList![index].title,
-                                  colorval: AppColor.greyblack,
-                                  sizeval: 14.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                subtitle: robotoTextWidget(
-                                  textval: formatAddress(
-                                      searchPlaceList![index].address),
-                                  colorval: AppColor.darkgrey,
-                                  sizeval: 12.0,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                leading: SvgPicture.asset(
-                                  (searchPlaceList![index].title == 'Work')
-                                      ? "assets/svg/place-work.svg"
-                                      : (isLocalDbsuggestion &&
-                                              searchPlaceList![index].title !=
-                                                  'Home' &&
-                                              searchPlaceList![index].title !=
-                                                  'Work')
-                                          ? "assets/svg/ride-history.svg"
-                                          : (searchPlaceList![index].title ==
-                                                  'Home')
-                                              ? "assets/svg/place-home.svg"
-                                              : Images.toLocationImage,
-                                  width: 20,
-                                  height: 20,
-                                  theme: const SvgTheme(
-                                      currentColor: AppColor.darkGreen),
-                                ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: ListTile(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              minLeadingWidth: 30,
+                              horizontalTitleGap: 0.0,
+                              title: robotoTextWidget(
+                                textval: searchPlaceList![index].title,
+                                colorval: AppColor.greyblack,
+                                sizeval: 14.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              subtitle: robotoTextWidget(
+                                textval: formatAddress(
+                                    searchPlaceList![index].address),
+                                colorval: AppColor.darkgrey,
+                                sizeval: 12.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              leading: SvgPicture.asset(
+                                (searchPlaceList![index].title == 'Work')
+                                    ? "assets/svg/place-work.svg"
+                                    : (isLocalDbsuggestion &&
+                                            searchPlaceList![index].title !=
+                                                'Home' &&
+                                            searchPlaceList![index].title !=
+                                                'Work')
+                                        ? "assets/svg/ride-history.svg"
+                                        : (searchPlaceList![index].title ==
+                                                'Home')
+                                            ? "assets/svg/place-home.svg"
+                                            : Images.toLocationImage,
+                                width: 18,
+                                height: 18,
+                                color: AppColor.grey,
+                                theme: const SvgTheme(
+                                    currentColor: AppColor.darkGreen),
                               ),
                             ),
                           ),
