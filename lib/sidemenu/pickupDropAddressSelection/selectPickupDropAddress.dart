@@ -534,7 +534,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
                             child: ListTile(
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 10),
