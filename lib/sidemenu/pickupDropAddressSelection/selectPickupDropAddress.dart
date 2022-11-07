@@ -56,8 +56,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   late String _sessionToken;
   var uuid = const Uuid();
 
-  DetailsResult? startPosition;
-  DetailsResult? endPosition;
   late FocusNode startFocusNode;
   late FocusNode endFocusNode;
   late GooglePlace googlePlace;
@@ -81,10 +79,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   }
 
   Future<void> getLocalSuggestions(String val) async {
+    isLocalDbsuggestion = true;
     searchPlaceList = await AutocompleteService().getdata(val);
     setState(() {});
   }
 
+  bool isLocalDbsuggestion = true;
   // getTrimmedAddress(String val) {
   //   final split = val.split(',');
   //   final Map<int, String> values = {
@@ -137,6 +137,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 .map((i) => SearchPlaceModel.fromJson(i))
                 .toList();
             useGoogleApi = false;
+            isLocalDbsuggestion = false;
           } else {
             googleAPI(value);
           }
@@ -545,7 +546,10 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             child: Padding(
                               padding: EdgeInsets.all(5),
                               child: ListTile(
-                                horizontalTitleGap: 1.0,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                                minLeadingWidth: 30,
+                                horizontalTitleGap: 0.0,
                                 title: robotoTextWidget(
                                   textval: searchPlaceList![index].title,
                                   colorval: AppColor.greyblack,
@@ -553,7 +557,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   fontWeight: FontWeight.w600,
                                 ),
                                 subtitle: robotoTextWidget(
-                                  textval: formatAddress(searchPlaceList![index].address),
+                                  textval: formatAddress(
+                                      searchPlaceList![index].address),
                                   colorval: AppColor.darkgrey,
                                   sizeval: 12.0,
                                   fontWeight: FontWeight.w400,
@@ -561,18 +566,23 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                 leading: SvgPicture.asset(
                                   (searchPlaceList![index].title == 'Work')
                                       ? "assets/svg/place-work.svg"
-                                      : (searchPlaceList![index].title ==
-                                      'Home')
-                                      ? "assets/svg/place-home.svg"
-                                      : Images.toLocationImage,
-                                  width: 25,
-                                  height: 25,
-                                  theme: const SvgTheme(currentColor: AppColor.darkGreen),
-
+                                      : (isLocalDbsuggestion &&
+                                              searchPlaceList![index].title !=
+                                                  'Home' &&
+                                              searchPlaceList![index].title !=
+                                                  'Work')
+                                          ? "assets/svg/ride-history.svg"
+                                          : (searchPlaceList![index].title ==
+                                                  'Home')
+                                              ? "assets/svg/place-home.svg"
+                                              : Images.toLocationImage,
+                                  width: 20,
+                                  height: 20,
+                                  theme: const SvgTheme(
+                                      currentColor: AppColor.darkGreen),
                                 ),
                               ),
                             ),
-
                           ),
                         );
                       },
@@ -589,20 +599,19 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Card EditFromToWidget() {
     return Card(
-        semanticContainer: true,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         elevation: 5,
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               GestureDetector(
                   onTap: () {},
                   child: Container(
-                    height: 50,
+                    height: 45,
                     margin: const EdgeInsets.only(left: 10),
                     child: Row(
                       children: [
@@ -619,9 +628,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           InkWell(
                             onTap: () {},
                             child: Container(
-                              padding: const EdgeInsets.only(right: 8),
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              // margin:
+                              //     const EdgeInsets.only(left: 10, right: 10),
                               child: fromTextWidget(),
                             ),
                           ),
@@ -639,7 +647,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                     //  print("Tapped a Container");
                   },
                   child: Container(
-                    height: 50,
+                    height: 45,
                     margin: const EdgeInsets.only(left: 10),
                     child: Row(
                       children: [
@@ -649,16 +657,15 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           height: 20,
                         ),
                         const SizedBox(
-                          width: 5,
+                          width: 8,
                         ),
                         Flexible(
                             child: Wrap(children: [
                           InkWell(
                             onTap: () {},
                             child: Container(
-                              padding: const EdgeInsets.only(right: 8),
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              // margin:
+                              //     const EdgeInsets.only(left: 10, right: 10),
                               child: toTextWidget(),
                             ),
                           ),
@@ -673,7 +680,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   TextField fromTextWidget() {
     return TextField(
-      style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 14),
+      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
       autofocus: false,
       focusNode: startFocusNode,
       onSubmitted: (value) {
@@ -702,6 +709,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       showCursor: true,
       controller: FromLocationText,
       decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(0, 12, 0, 12),
           hintText: FromLocationHint,
           border: InputBorder.none,
           focusColor: Colors.white,
@@ -725,7 +733,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Widget toTextWidget() {
     return TextField(
-      style: const TextStyle(fontWeight: FontWeight.w600,fontSize: 14),
+      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
       autofocus: false,
       focusNode: endFocusNode,
       showCursor: true,
