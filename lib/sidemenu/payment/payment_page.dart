@@ -108,13 +108,15 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   selectedOption(String val) {
-    setState(() {
-      selectedPayOption = val;
-      if (selectedPayOption == 'online') {
-        createOrder();
-      }
-      updatePayment(selectedPayOption, passangerTripMasterId);
-    });
+   if(mounted){
+     setState(() {
+       selectedPayOption = val;
+       if (selectedPayOption == 'online') {
+         createOrder();
+       }
+       updatePayment(selectedPayOption, passangerTripMasterId);
+     });
+   }
   }
 
   Future<void> updatePayment(
@@ -172,17 +174,21 @@ class _PaymentPageState extends State<PaymentPage> {
       );
       response.then((value) {
         // Transaction successfull
-        setState(() {
-          result = value.toString();
-        });
+        if (mounted) {
+          setState(() {
+            result = value.toString();
+          });
+        }
       }).catchError((onError) {
         if (onError is PlatformException) {
           result = onError.message! + " \n  " + onError.details.toString();
-          setState(() {
-            result = onError.message.toString() +
-                " \n  " +
-                onError.details.toString();
-          });
+          if (mounted) {
+            setState(() {
+              result = onError.message.toString() +
+                  " \n  " +
+                  onError.details.toString();
+            });
+          }
         } else {
           result = onError.toString();
           print(result);

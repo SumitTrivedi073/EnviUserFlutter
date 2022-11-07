@@ -30,7 +30,6 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Title=======>${widget.pagetitle}");
   }
 
   @override

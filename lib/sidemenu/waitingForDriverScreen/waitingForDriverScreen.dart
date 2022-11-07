@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:envi/UiWidget/cardbanner.dart';
 import 'package:envi/sidemenu/home/homePage.dart';
 import 'package:envi/theme/string.dart';
@@ -34,6 +35,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   bool isLoaded = false;
   Timer? fullScreenDisableTimer;
   bool showFullScreen = true;
+  int delay = 13, fadeInFadeOut = 3 , fadeInFadeOutDelay =  10;
 
   @override
   void initState() {
@@ -45,9 +47,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
     if (fullScreenDisableTimer != null && fullScreenDisableTimer!.isActive) {
       fullScreenDisableTimer!.cancel();
     }
-    if(mounted) {
-      fullScreenDisableTimer = Timer(const Duration(seconds: 10), () {
-        if(mounted) {
+    if (mounted) {
+      fullScreenDisableTimer = Timer(Duration(seconds: delay), () {
+        if (mounted) {
           setState(() {
             showFullScreen = false;
           });
@@ -83,7 +85,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
               }
             }
           });
-          if(value.liveTripData != null) {
+          if (value.liveTripData != null) {
             return Scaffold(
               body: Stack(
                 alignment: Alignment.center,
@@ -98,13 +100,23 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        if (showFullScreen) FromToData(value.liveTripData!),
+                        if (showFullScreen)
+                          FadeIn(
+                              animate: true,
+                              duration:  Duration(seconds: fadeInFadeOut),
+                              child: FadeOut(
+                                  animate: true,
+                                  delay: Duration(seconds: fadeInFadeOutDelay),
+                                  duration:  Duration(seconds: fadeInFadeOut),
+                                  child: FromToData(value.liveTripData!))),
                         GestureDetector(
                           onTap: () {
+                          if(mounted){
                             setState(() {
                               showFullScreen = true;
                               disableFullScreen();
                             });
+                          }
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -127,17 +139,24 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                       isBackButtonNeeded: false,
                     ),
                     const SizedBox(height: 5),
-                    if (showFullScreen) getCardBanner(value.liveTripData!),
+                    if (showFullScreen)
+                      FadeIn(
+                          animate: true,
+                          duration:  Duration(seconds: fadeInFadeOut),
+                          child: FadeOut(
+                              animate: true,
+                              delay: Duration(seconds: fadeInFadeOutDelay),
+                              duration:  Duration(seconds: fadeInFadeOut),
+                              child: getCardBanner(value.liveTripData!))),
                     Align(
                       alignment: Alignment.topRight,
-                      child:
-                      OTPView(otp: value.liveTripData!.tripInfo!.otp),
+                      child: OTPView(otp: value.liveTripData!.tripInfo!.otp),
                     ),
                   ]),
                 ],
               ),
             );
-          }else {
+          } else {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -170,6 +189,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   Widget FromToData(TripDataModel liveTripData) {
     return Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+        // Just change the Image.asset widget to anything you want to fade in/out:
         child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -200,7 +220,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .tripInfo!.pickupLocation!.pickupAddress
                                   .toString(),
                               colorval: AppColor.black,
-                              sizeval: 16,
+                              sizeval: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -232,7 +252,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                         textval:
                             '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
-                        sizeval: 14,
+                        sizeval: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -258,7 +278,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                   .tripInfo!.dropLocation!.dropAddress
                                   .toString(),
                               colorval: AppColor.black,
-                              sizeval: 16,
+                              sizeval: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -272,7 +292,7 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   }
 
   retrieveDuration(String durationToPickupLocation) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         duration = durationToPickupLocation;
       });

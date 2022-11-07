@@ -234,7 +234,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       apiCallUpdateFavorite(detail.id, detail.title, startLocation,
           detail.identifier, detail.isFavourite);
     }
-    var toDetail = await dao!.findDataByaddressg(endLocation.address);
+    var toDetail = await dao?.findDataByaddressg(endLocation.address);
     if (startLocation.address != endLocation.address) {
       if (toDetail == null) {
         apiCallAddFavoritetoaddress(endLocation);
@@ -402,7 +402,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
             const SizedBox(
               height: 10,
             ),
-
             if (moveMarkerAnimate)
               Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -456,106 +455,109 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
-                        if (widget.status ==
-                            AddressConfirmation.bothUnconfirmed) {
-                          List<SearchPlaceModel> att = [];
-                          att.add(SearchPlaceModel(
-                            id: '',
-                            address: Address,
-                            title: toAddressName!,
-                            latLng: latlong,
-                            isFavourite: isFavourite,
-                          ));
-                          Navigator.pop(context, att);
-                        } else {
+                        if (Address != 'Select Location') {
                           if (widget.status ==
-                              AddressConfirmation.fromAddressConfirmed) {
-                            localDbModifications(
-                                widget.startLocation!,
-                                SearchPlaceModel(
-                                  id: '',
-                                  title: toAddressName!,
-                                  address: Address,
-                                  latLng: latlong,
-                                  isFavourite: widget.endLocation!.isFavourite,
-                                ));
-                            if (widget.tripType == BookingTiming.now) {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          SearchDriver(
+                              AddressConfirmation.bothUnconfirmed) {
+                            List<SearchPlaceModel> att = [];
+                            att.add(SearchPlaceModel(
+                              id: '',
+                              address: Address,
+                              title: toAddressName ?? '',
+                              latLng: latlong,
+                              isFavourite: isFavourite,
+                            ));
+                            Navigator.pop(context, att);
+                          } else {
+                            if (widget.status ==
+                                AddressConfirmation.fromAddressConfirmed) {
+                              localDbModifications(
+                                  widget.startLocation!,
+                                  SearchPlaceModel(
+                                    id: '',
+                                    title: toAddressName ?? '',
+                                    address: Address,
+                                    latLng: latlong,
+                                    isFavourite:
+                                        widget.endLocation!.isFavourite,
+                                  ));
+                              if (widget.tripType == BookingTiming.now) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            SearchDriver(
+                                                fromAddress:
+                                                    widget.startLocation,
+                                                toAddress: SearchPlaceModel(
+                                                  id: '',
+                                                  title: toAddressName ?? '',
+                                                  address: Address,
+                                                  latLng: latlong,
+                                                  isFavourite: widget
+                                                      .endLocation!.isFavourite,
+                                                ))),
+                                    (Route<dynamic> route) => true);
+                              } else {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            BookScheduleTrip(
                                               fromAddress: widget.startLocation,
                                               toAddress: SearchPlaceModel(
                                                 id: '',
-                                                title: toAddressName!,
+                                                title: toAddressName ?? '',
                                                 address: Address,
                                                 latLng: latlong,
                                                 isFavourite: widget
                                                     .endLocation!.isFavourite,
-                                              )
-                                              )),
-                                  (Route<dynamic> route) => true);
+                                              ),
+                                            )),
+                                    (Route<dynamic> route) => true);
+                              }
                             } else {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          BookScheduleTrip(
-                                            fromAddress: widget.startLocation,
-                                            toAddress: SearchPlaceModel(
-                                              id: '',
-                                              title: toAddressName!,
-                                              address: Address,
-                                              latLng: latlong,
-                                              isFavourite: widget
-                                                  .endLocation!.isFavourite,
-                                            ),
-                                          )),
-                                  (Route<dynamic> route) => true);
-                            }
-                          } else {
-                            localDbModifications(
-                                SearchPlaceModel(
-                                  id: '',
-                                  title: toAddressName!,
-                                  address: Address,
-                                  latLng: latlong,
-                                  isFavourite:
-                                      widget.startLocation!.isFavourite,
-                                ),
-                                widget.endLocation!);
+                              localDbModifications(
+                                  SearchPlaceModel(
+                                    id: '',
+                                    title: toAddressName ?? '',
+                                    address: Address,
+                                    latLng: latlong,
+                                    isFavourite:
+                                        widget.startLocation!.isFavourite,
+                                  ),
+                                  widget.endLocation!);
 
-                            if (widget.tripType == BookingTiming.now) {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          SearchDriver(
-                                              toAddress: widget.endLocation,
-                                              fromAddress: SearchPlaceModel(
-                                                id: '',
-                                                title: toAddressName!,
-                                                address: Address,
-                                                latLng: latlong,
-                                                isFavourite: widget
-                                                    .startLocation!.isFavourite,
-                                              )
-
-                                              )),
-                                  (Route<dynamic> route) => true);
-                            } else {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          BookScheduleTrip(
-                                              toAddress: widget.endLocation,
-                                              fromAddress: SearchPlaceModel(
-                                                id: '',
-                                                title: toAddressName!,
-                                                address: Address,
-                                                latLng: latlong,
-                                                isFavourite: widget
-                                                    .startLocation!.isFavourite,
-                                              ))),
-                                  (Route<dynamic> route) => true);
+                              if (widget.tripType == BookingTiming.now) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            SearchDriver(
+                                                toAddress: widget.endLocation,
+                                                fromAddress: SearchPlaceModel(
+                                                  id: '',
+                                                  title: toAddressName ?? '',
+                                                  address: Address,
+                                                  latLng: latlong,
+                                                  isFavourite: widget
+                                                      .startLocation!
+                                                      .isFavourite,
+                                                ))),
+                                    (Route<dynamic> route) => true);
+                              } else {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            BookScheduleTrip(
+                                                toAddress: widget.endLocation,
+                                                fromAddress: SearchPlaceModel(
+                                                  id: '',
+                                                  title: toAddressName ?? '',
+                                                  address: Address,
+                                                  latLng: latlong,
+                                                  isFavourite: widget
+                                                      .startLocation!
+                                                      .isFavourite,
+                                                ))),
+                                    (Route<dynamic> route) => true);
+                              }
                             }
                           }
                         }

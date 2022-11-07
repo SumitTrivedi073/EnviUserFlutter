@@ -137,6 +137,17 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
             const SizedBox(
               height: 10,
             ),
+            const Text(
+              "Fare & Distance",
+              style: TextStyle(
+                  color: AppColor.butgreen,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2.0),
