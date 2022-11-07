@@ -56,7 +56,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     super.initState();
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
-
   }
 
   @override

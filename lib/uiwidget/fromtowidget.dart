@@ -7,6 +7,7 @@ import '../enum/BookingTiming.dart';
 import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import '../sidemenu/pickupDropAddressSelection/selectPickupDropAddress.dart';
 import '../theme/string.dart';
+import '../utils/utility.dart';
 
 class FromToWidget extends StatefulWidget {
 
@@ -73,7 +74,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               child: Container(
                                 padding: const EdgeInsets.all(3),
                                 child: robotoTextWidget(
-                                  textval: widget.fromAddress!.address,
+                                  textval: formatAddress(widget.fromAddress!.address),
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w600,
@@ -145,7 +146,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               child: Container(
                                 padding: const EdgeInsets.all(3),
                                 child: robotoTextWidget(
-                                  textval: widget.toAddress!.address,
+                                  textval: formatAddress(widget.toAddress!.address),
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w600,

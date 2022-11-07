@@ -185,9 +185,8 @@ class MyMapState extends State {
           : place.subAdministrativeArea!;
       isoId = place.isoCountryCode;
       setState(() {
-        Address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place
-            .postalCode}, ${place.country}';
+        Address = formatAddress('${place.street}, ${place.subLocality}, ${place.locality}');
+        
       });
     }catch(e){
       print("Exception==========>${e.toString()}");

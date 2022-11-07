@@ -19,6 +19,7 @@ import '../../provider/model/tripDataModel.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/driverDetailWidget.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../utils/utility.dart';
 import '../onRide/onRideWidget.dart';
 
 class WaitingForDriverScreen extends StatefulWidget {
@@ -216,9 +217,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                           Container(
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
-                              textval: liveTripData
+                              textval:formatAddress( liveTripData
                                   .tripInfo!.pickupLocation!.pickupAddress
-                                  .toString(),
+                                  .toString()),
                               colorval: AppColor.black,
                               sizeval: 14,
                               fontWeight: FontWeight.w600,
@@ -274,9 +275,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                           Container(
                             padding: const EdgeInsets.all(5),
                             child: robotoTextWidget(
-                              textval: liveTripData
+                              textval:formatAddress(liveTripData
                                   .tripInfo!.dropLocation!.dropAddress
-                                  .toString(),
+                                  .toString()) ,
                               colorval: AppColor.black,
                               sizeval: 14,
                               fontWeight: FontWeight.w600,

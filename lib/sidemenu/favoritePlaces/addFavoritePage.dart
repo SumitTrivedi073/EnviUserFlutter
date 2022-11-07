@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:envi/database/favoritesData.dart';
 import 'package:envi/database/favoritesDataDao.dart';
 import 'package:envi/sidemenu/favoritePlaces/searchFavoriateLocation.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,8 +45,8 @@ class AddEditFavoritePlacesPage extends StatefulWidget {
 class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   final _formKey = GlobalKey<FormState>();
   late final FavoritesDataDao dao;
-  TextEditingController titlecontroller = new TextEditingController();
-  TextEditingController addresscontroller = new TextEditingController();
+  TextEditingController titlecontroller = TextEditingController();
+  TextEditingController addresscontroller = TextEditingController();
   CameraPosition? _cameraPosition;
   String address = "", editidentifire = "";
   GoogleMapController? _controller;
@@ -58,7 +60,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
 
     if (widget.isforedit == "0") {
       titlecontroller.text = widget.data!.title;
-      address = widget.data!.address;
+      address = formatAddress(widget.data!.address);
       latlong = LatLng(double.parse(widget.data!.latitude),
           double.parse(widget.data!.longitude));
       _cameraPosition = CameraPosition(
@@ -78,7 +80,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   void FromLocationSearch(String fulladdress, double lat, double long) {
     setState(() {
       print(fulladdress);
-      address = fulladdress;
+      address = formatAddress(fulladdress);
       _cameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 18.0);
       latlong = LatLng(lat, long);
       if (_controller != null) {
@@ -148,7 +150,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                   readOnly: widget.titleEditable == "0"
                                       ? false
                                       : true,
-                                  style: const TextStyle(color: AppColor.black),
+                                  style: const TextStyle(color: AppColor.black,fontSize: 14),
                                   decoration: const InputDecoration(
                                     hintText: "Please enter Title!",
                                     hintStyle: TextStyle(color: Colors.black45),
@@ -163,7 +165,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                               ),
                             ),
                             const SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,13 +204,14 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                               const EdgeInsets.all(5),
                                           child: SizedBox(
                                             width: MediaQuery.of(context).size.width -60,
-                                            height: 50,
+                                            height: 40,
+                                            child: Align(alignment: Alignment.centerLeft,
                                             child: robotoTextWidget(
-                                              textval: address,
+                                              textval: formatAddress(address),
                                               colorval: AppColor.black,
-                                              sizeval: 16.0,
+                                              sizeval: 14.0,
                                               fontWeight: FontWeight.normal,
-                                            ),
+                                            ),),
                                           ))),
                                 ),
                               ],
@@ -381,8 +384,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
-      address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      address = formatAddress('${place.street}, ${place.subLocality}, ${place.locality}');
     });
   }
 
