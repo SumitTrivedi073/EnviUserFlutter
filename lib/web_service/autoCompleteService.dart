@@ -10,17 +10,25 @@ import '../sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 
 class AutocompleteService {
   late final FavoritesDataDao dao;
-  Future<void> loadData() async {
-    //List<FavoritesData>  temparr =  await dao.getFavoriate() ;
-    // setState(() {
-    //
-    // });
-    //findTaskByidentifier("5bf57942-b1be-4df2-a9a9-1e588bf8e1dd");
+
+  List<String> title = [];
+  List<SearchPlaceModel> favPlaceList = [];
+
+  dynamic removeDuplicate(List<FavoritesData?> listtt) async {
+    if (listtt.isEmpty) {
+      return;
+    }
+    for (var i = 0; i < listtt.length; i++) {
+      for (var j = i + 1; j < listtt.length; j++) {
+        if (listtt[i]!.address.trim() == listtt[j]!.address.trim() &&
+            listtt[i]!.title.trim() == listtt[j]!.title.trim()) {
+          await dao.deleteTask(listtt[i]!);
+        }
+      }
+    }
+    return listtt;
   }
 
-  
-  List<String> title = [];
-      List<SearchPlaceModel> favPlaceList = [];
   Future<dynamic> getdata(String pat) async {
     final database =
         await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
@@ -33,6 +41,8 @@ class AutocompleteService {
     //     title.add(temparr[i].address);
     //   }
     // }
+
+    await removeDuplicate(await dao.displayDescByAddress(pat));
     List<FavoritesData?> favData = await dao.displayDescByAddress(pat);
 
     if (favData.isNotEmpty) {
@@ -41,11 +51,13 @@ class AutocompleteService {
             id: element!.id.toString(),
             address: element.address,
             title: element.title,
-            latLng: LatLng(
-                double.parse(element.latitude), double.parse(element.longitude)),isFavourite: element.isFavourite));
-          title.add(element.address);
+            latLng: LatLng(double.parse(element.latitude),
+                double.parse(element.longitude)),
+            isFavourite: element.isFavourite));
+        title.add(element.address);
       }
-      favPlaceList..sort((a, b) => a.isFavourite.toLowerCase().compareTo(b.isFavourite.toLowerCase()));
+      favPlaceList.sort((a, b) =>
+          a.isFavourite.toLowerCase().compareTo(b.isFavourite.toLowerCase()));
     }
 
     return favPlaceList;
@@ -53,20 +65,10 @@ class AutocompleteService {
 
   Future<List<String>> getSuggestions(String query) async {
     List<String> matches = <String>[];
-    await loadData();
+
     await getdata(query);
     matches.addAll(title);
     matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return matches;
   }
 }
-
-
-//  static List<String> getSuggestions(String query) {
-//     List<String> matches = <String>[];
-//     matches.addAll(cities);
-
-//     matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
-//     return matches;
-//   }
-// }

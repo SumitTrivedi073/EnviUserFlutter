@@ -23,6 +23,7 @@ import '../../enum/BookingTiming.dart';
 import '../../theme/color.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
+import '../../utils/utility.dart';
 import '../../web_service/Constant.dart';
 
 class SelectPickupDropAddress extends StatefulWidget {
@@ -552,7 +553,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                                   fontWeight: FontWeight.w600,
                                 ),
                                 subtitle: robotoTextWidget(
-                                  textval: searchPlaceList![index].address,
+                                  textval: formatAddress(searchPlaceList![index].address),
                                   colorval: AppColor.darkgrey,
                                   sizeval: 12.0,
                                   fontWeight: FontWeight.w400,
