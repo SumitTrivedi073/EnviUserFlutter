@@ -34,8 +34,8 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
           return const CircularProgressIndicator();
         } else {
           return Container(
-            margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-            child: Card(
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              child: Card(
                 semanticContainer: true,
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 shape: RoundedRectangleBorder(
@@ -44,139 +44,145 @@ class _DriverDetailWidgetState extends State<DriverDetailWidget> {
                 elevation: 5,
                 child: Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: Image.network(
-                                  encodeImgURLString(value
-                                      .liveTripData!.driverInfo!.driverImgUrl),
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      Images.personPlaceHolderImage,
-                                      height: 50,
-                                      width: 50,
-                                    );
-                                  },
-                                  fit: BoxFit.fill,
-                                  height: 50,
-                                  width: 50,
-                                )),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  robotoTextWidget(
-                                    textval: value
-                                                .liveTripData!.driverInfo!.name
-                                                .toString() !=
-                                            null
-                                        ? value.liveTripData!.driverInfo!.name
-                                            .toString()
-                                        : '',
-                                    colorval: AppColor.grey,
-                                    sizeval: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  robotoTextWidget(
-                                    textval: "${widget.duration} Away",
-                                    colorval: AppColor.black,
-                                    sizeval: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ])
-                          ],
+                  child: Stack(alignment: Alignment.centerRight, children: <
+                      Widget>[
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: AppColor.lightwhite,
+                        border: Border.all(
+                            color: AppColor.grey, // Set border color
+                            width: 1.0), // Set border width
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(5.0)), // Set rounded corner radius
+                      ),
+                      child: Center(
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.call,
+                            color: Colors.green,
+                          ),
+                          onPressed: () {
+                            makingPhoneCall(value
+                                        .liveTripData!.driverInfo!.phone
+                                        .toString() !=
+                                    null
+                                ? value.liveTripData!.driverInfo!.phone
+                                    .toString()
+                                : '');
+                          },
                         ),
                       ),
-                      Stack(
-                          alignment: Alignment.centerRight,
-                          children: <Widget>[
-                            const SizedBox(
-                              height: 2,
-                              child: Divider(
-                                color: AppColor.grey,
-                                height: 2,
+                    ),
+                    Container(
+                        margin: const EdgeInsets.only(right: 53),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      child: Image.network(
+                                        encodeImgURLString(value.liveTripData!
+                                            .driverInfo!.driverImgUrl),
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            Images.personPlaceHolderImage,
+                                            height: 50,
+                                            width: 50,
+                                          );
+                                        },
+                                        fit: BoxFit.fill,
+                                        height: 50,
+                                        width: 50,
+                                      )),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        robotoTextWidget(
+                                          textval: value.liveTripData!
+                                                      .driverInfo!.name
+                                                      .toString() !=
+                                                  null
+                                              ? value.liveTripData!.driverInfo!
+                                                  .name
+                                                  .toString()
+                                              : '',
+                                          colorval: AppColor.grey,
+                                          sizeval: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        robotoTextWidget(
+                                          textval: "${widget.duration} Away",
+                                          colorval: AppColor.black,
+                                          sizeval: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ])
+                                ],
                               ),
                             ),
                             Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: AppColor.lightwhite,
-                                border: Border.all(
-                                    color: AppColor.grey, // Set border color
-                                    width: 1.0), // Set border width
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(
-                                        5.0)), // Set rounded corner radius
-                              ),
-                              child: Center(
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.call,
-                                    color: Colors.green,
-                                  ),
-                                  onPressed: () {
-                                    makingPhoneCall(value
-                                                .liveTripData!.driverInfo!.phone
-                                                .toString() !=
-                                            null
-                                        ? value.liveTripData!.driverInfo!.phone
-                                            .toString()
-                                        : '');
-                                  },
-                                ),
+                              height: 2,
+                              margin: const EdgeInsets.only(top: 5, bottom: 5),
+                              child: const Divider(
+                                color: AppColor.darkgrey,
+                                height: 2,
                               ),
                             ),
-                          ]),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/svg/car-type-sedan.svg",
-                            width: 40,
-                            height: 30,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                robotoTextWidget(
-                                  textval:
-                                      '${value.liveTripData!.tripInfo!.priceClass!.type.toString()} - ${value.liveTripData!.tripInfo!.priceClass!.passengerCapacity.toString()} People',
-                                  colorval: AppColor.grey,
-                                  sizeval: 16,
-                                  fontWeight: FontWeight.w600,
+                                SvgPicture.asset(
+                                  "assets/svg/car-type-sedan.svg",
+                                  width: 40,
+                                  height: 30,
                                 ),
-                                robotoTextWidget(
-                                  textval: value.liveTripData!.driverInfo!
-                                              .vehicleNumber
-                                              .toString() !=
-                                          null
-                                      ? value.liveTripData!.driverInfo!
-                                          .vehicleNumber
-                                          .toString()
-                                      : '',
-                                  colorval: AppColor.black,
-                                  sizeval: 18,
-                                  fontWeight: FontWeight.w600,
+                                const SizedBox(
+                                  width: 10,
                                 ),
-                              ])
-                        ],
-                      )
-                    ],
-                  ),
-                )),
-          );
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      robotoTextWidget(
+                                        textval:
+                                            '${value.liveTripData!.tripInfo!.priceClass!.type.toString().toTitleCase()} - ${value.liveTripData!.tripInfo!.priceClass!.passengerCapacity.toString()} People',
+                                        colorval: AppColor.grey,
+                                        sizeval: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      robotoTextWidget(
+                                        textval: value.liveTripData!.driverInfo!
+                                                    .vehicleNumber
+                                                    .toString() !=
+                                                null
+                                            ? value.liveTripData!.driverInfo!
+                                                .vehicleNumber
+                                                .toUpperCase()
+                                            : '',
+                                        colorval: AppColor.black,
+                                        sizeval: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ])
+                              ],
+                            )
+                          ],
+                        )),
+                  ]),
+                ),
+              ));
         }
       },
     );

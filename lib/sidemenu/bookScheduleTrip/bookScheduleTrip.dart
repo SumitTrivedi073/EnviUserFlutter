@@ -97,62 +97,65 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               callback2: retrieveDistance,
               scheduledAt: scheduledAt,
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-                side: const BorderSide(
-                  color: AppColor.border,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: DateTimePicker(
-                      type: DateTimePickerType.date,
-                      dateMask: 'd MMM, yyyy',
-                      controller: _controller1,
-                      //initialValue: SelectedgoLiveDate,
-                      firstDate: DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                          DateTime.now().hour),
-                      lastDate: DateTime(2100),
-                      icon: const Icon(Icons.event),
-                      dateLabelText: pickupdate,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    height: 55,
-                    width: 1,
+            Container(
+              margin: EdgeInsets.only(top: 5,left: 10,right: 10),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2.0),
+                  side: const BorderSide(
                     color: AppColor.border,
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: DateTimePicker(
-                      type: DateTimePickerType.time,
-                      dateMask: 'HH:mm',
-                      controller: _controller2,
-                      firstDate: DateTime(
-                        DateTime.now().hour,
-                        DateTime.now().minute,
+                ),
+                child: Padding(padding: EdgeInsets.only(left: 5,right: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: DateTimePicker(
+                        type: DateTimePickerType.date,
+                        dateMask: 'd MMM, yyyy',
+                        controller: _controller1,
+                        //initialValue: SelectedgoLiveDate,
+                        firstDate: DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            DateTime.now().hour),
+                        lastDate: DateTime(2100),
+                        icon: const Icon(Icons.event),
+                        dateLabelText: pickupdate,
                       ),
-                      lastDate: DateTime(2100),
-                      icon: const Icon(Icons.access_time),
-                      timeLabelText: pickuptime,
-                      onSaved: (val) => setState(() {
-                        updatedtime();
-                      }),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 10),
+                    Container(
+                      height: 55,
+                      width: 1,
+                      color: AppColor.border,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DateTimePicker(
+                        type: DateTimePickerType.time,
+                        dateMask: 'HH:mm',
+                        controller: _controller2,
+                        firstDate: DateTime(
+                          DateTime.now().hour,
+                          DateTime.now().minute,
+                        ),
+                        lastDate: DateTime(2100),
+                        icon: const Icon(Icons.access_time),
+                        timeLabelText: pickuptime,
+                        onSaved: (val) => setState(() {
+                          updatedtime();
+                        }),
+                      ),
+                    ),
+                  ],
+                ),),
               ),
             ),
             Container(
-                height: 40,
-                margin: const EdgeInsets.all(5),
+                margin: const EdgeInsets.only(top: 5,left: 10,right: 10,bottom: 10),
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
@@ -208,15 +211,16 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   style: ElevatedButton.styleFrom(
                     primary: AppColor.greyblack,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                      borderRadius: BorderRadius.circular(5), // <-- Radius
                     ),
                   ),
+                  child: Padding(padding: EdgeInsets.all(15),
                   child: robotoTextWidget(
-                    textval: bookingConfirmation,
+                    textval: bookingConfirmation.toUpperCase(),
                     colorval: AppColor.white,
                     sizeval: 14,
                     fontWeight: FontWeight.w600,
-                  ),
+                  ),),
                 )),
           ],
         ),
@@ -227,7 +231,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   Widget _buildPopupDialog(BuildContext context, String schedualTime) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
       ),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         const Padding(
@@ -248,7 +252,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
             side: const BorderSide(
-              color: AppColor.border,
+              color: AppColor.grey,
+              width: 0.5
             ),
           ),
           child: Padding(
@@ -259,7 +264,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     robotoTextWidget(
-                        textval: SelectedVehicle!.type.toString(),
+                        textval: SelectedVehicle!.type.toString().toTitleCase(),
                         colorval: AppColor.black,
                         sizeval: 14,
                         fontWeight: FontWeight.w200),
@@ -325,8 +330,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
             side: const BorderSide(
-              color: AppColor.border,
-            ),
+              color: AppColor.grey,
+                width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -361,7 +366,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
             side: const BorderSide(
-              color: AppColor.border,
+              color: AppColor.grey,
+              width: 0.5,
             ),
           ),
           child: SizedBox(
@@ -391,8 +397,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                 const SizedBox(width: 10),
                 Container(
                   height: 55,
-                  width: 1,
-                  color: AppColor.border,
+                  color: AppColor.grey,
+                    width: 0.5
                 ),
                 const SizedBox(width: 10),
                 Container(
@@ -434,7 +440,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
             side: const BorderSide(
-              color: AppColor.border,
+              color: AppColor.grey,
+                width: 0.5
             ),
           ),
           child: Container(
@@ -470,7 +477,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
             side: const BorderSide(
-              color: AppColor.border,
+              color: AppColor.grey,
+                width: 0.5
             ),
           ),
           child: Container(
@@ -492,7 +500,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           height: 10,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -501,15 +509,16 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               style: ElevatedButton.styleFrom(
                 primary: AppColor.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                  borderRadius: BorderRadius.circular(5), // <-- Radius
                 ),
               ),
+              child: Padding(padding: EdgeInsets.all(10),
               child: robotoTextWidget(
                 textval: cancel,
                 colorval: AppColor.greyblack,
                 sizeval: 14,
                 fontWeight: FontWeight.w600,
-              ),
+              ),),
             ),
             ElevatedButton(
               onPressed: () {
@@ -519,15 +528,16 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               style: ElevatedButton.styleFrom(
                 primary: AppColor.greyblack,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                  borderRadius: BorderRadius.circular(5), // <-- Radius
                 ),
               ),
-              child: robotoTextWidget(
+              child:  Padding(padding: EdgeInsets.all(10),
+    child:robotoTextWidget(
                 textval: confirm,
                 colorval: AppColor.white,
                 sizeval: 14,
                 fontWeight: FontWeight.w600,
-              ),
+              )),
             ),
           ],
         )

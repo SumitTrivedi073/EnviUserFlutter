@@ -22,6 +22,7 @@ import '../../theme/theme.dart';
 import '../../uiwidget/appbarInside.dart';
 import '../../uiwidget/robotoTextWidget.dart';
 import '../../web_service/ApiCollection.dart';
+import '../../web_service/Constant.dart';
 
 class AddEditFavoritePlacesPage extends StatefulWidget {
   final FavoritesData? data;
@@ -105,7 +106,15 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+        body: Container(
+      height: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(PageBackgroundImage),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             AppBarInsideWidget(
@@ -126,23 +135,24 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(children: [
-                                  robotoTextWidget(
-                                    textval: PlaceTitle,
-                                    colorval: AppColor.grey,
-                                    sizeval: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ]),
-                              ],
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: robotoTextWidget(
+                                textval: PlaceTitle,
+                                colorval: AppColor.darkgrey,
+                                sizeval: 14.0,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
+
                             const SizedBox(
                               height: 5,
                             ),
-                            Card(
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey, width: 0.5),
+                                  color: Colors.white),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: TextFormField(
@@ -150,14 +160,17 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                   readOnly: widget.titleEditable == "0"
                                       ? false
                                       : true,
-                                  style: const TextStyle(color: AppColor.black,fontSize: 14),
+                                  style: const TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
                                   decoration: const InputDecoration(
                                     hintText: "Please enter Title!",
                                     hintStyle: TextStyle(color: Colors.black45),
                                   ),
                                   validator: (value) {
                                     if (value!.isEmpty) {
-                                      return 'Please enter valid OTP!';
+                                      return 'Please enter Title!';
                                     }
                                     return null;
                                   },
@@ -167,26 +180,26 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(children: [
-                                  robotoTextWidget(
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: robotoTextWidget(
                                     textval: Address,
-                                    colorval: AppColor.grey,
+                                    colorval: AppColor.darkgrey,
                                     sizeval: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ]),
-                              ],
-                            ),
+                                    fontWeight: FontWeight.w400,
+                                  )),
+
                             const SizedBox(
                               height: 5,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
+                            Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.grey, width: 0.5),
+                                    color: Colors.white),
+                                child:Padding(padding: const EdgeInsets.all(15),
+                                child: GestureDetector(
                                   onTap: () {
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
@@ -194,33 +207,31 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                                 SearchFavoriateLocation(
                                                     title: selectlocation,
                                                     onCriteriaChanged:
-                                                        FromLocationSearch)),
-                                        (route) => true);
+                                                    FromLocationSearch)),
+                                            (route) => true);
                                     print("Tapped a Container");
                                   },
-                                  child: Card(
+                                  child:  Align(alignment: Alignment.centerLeft,
                                       child: Padding(
-                                          padding:
-                                              const EdgeInsets.all(5),
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context).size.width -60,
-                                            height: 40,
-                                            child: Align(alignment: Alignment.centerLeft,
-                                            child: robotoTextWidget(
-                                              textval: formatAddress(address),
-                                              colorval: AppColor.black,
-                                              sizeval: 14.0,
-                                              fontWeight: FontWeight.normal,
-                                            ),),
-                                          ))),
-                                ),
-                              ],
-                            ),
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: robotoTextWidget(
+                                          textval: formatAddress(address),
+                                          colorval: AppColor.black,
+                                          sizeval: 14.0,
+                                          fontWeight: FontWeight.w600,
+
+                                        ),)),
+
+                                ),),),
+
                             const SizedBox(
                               height: 22,
                             ),
-                            SizedBox(
+                            Container(
                                 height: 300,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.grey, width: 0.5)),
                                 child: Stack(children: [
                                   GoogleMap(
                                     mapType: MapType.normal,
@@ -245,9 +256,10 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                     zoomControlsEnabled: false,
                                   ),
                                   Center(
-                                    child: Image.asset(
-                                      "assets/images/destination-marker.png",
-                                      scale: 2,
+                                    child: SvgPicture.asset(
+                                      "assets/svg/from-location-img.svg",
+                                      width: 20,
+                                      height: 20,
                                     ),
                                   ),
                                 ])),
@@ -282,7 +294,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                                 : Clearlocation,
                                             colorval: AppColor.red,
                                             sizeval: 16.0,
-                                            fontWeight: FontWeight.normal),
+                                            fontWeight: FontWeight.w600),
                                       ]),
                                     )
                                   ]),
@@ -292,8 +304,12 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                         )),
                   ],
                 )),
-            SizedBox(
-              width: 100,
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 20,right: 20),
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
                   if (mounted) {
@@ -327,17 +343,18 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: AppColor.darkGreen,
+                  primary: AppColor.greyblack,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                    borderRadius: BorderRadius.circular(5), // <-- Radius
                   ),
                 ),
+                child: Padding(padding: const EdgeInsets.all(15),
                 child: robotoTextWidget(
-                  textval: savetext,
+                  textval: savetext.toUpperCase(),
                   colorval: AppColor.white,
-                  sizeval: 14,
+                  sizeval: 18,
                   fontWeight: FontWeight.w600,
-                ),
+                ),),
               ),
             ),
             const SizedBox(
@@ -346,7 +363,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Future getCurrentLocation() async {
@@ -384,7 +401,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
-      address = formatAddress('${place.street}, ${place.subLocality}, ${place.locality}');
+      address = formatAddress(
+          '${place.street}, ${place.subLocality}, ${place.locality}');
     });
   }
 

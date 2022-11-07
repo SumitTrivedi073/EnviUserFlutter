@@ -99,7 +99,8 @@ class _PaymentPageState extends State<PaymentPage> {
                             PaymentModeOptionWidget(
                               tripDataModel: value.liveTripData!,
                               callback: selectedOption,
-                            )
+                            ),
+                                const SizedBox(height: 10,)
                           ]))))
               : Container();
         }),
