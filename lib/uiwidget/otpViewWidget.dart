@@ -38,7 +38,7 @@ class _OTPViewPageState extends State<OTPView> {
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
-                        topLeft: Radius.circular(30)),color: AppColor.darkalfaorange),
+                        topLeft: Radius.circular(30)),color: AppColor.alfaorange),
                 child:  const Center(child: robotoTextWidget(textval: "OTP",
                     colorval: AppColor.black,
                     sizeval: 12,
@@ -50,7 +50,7 @@ class _OTPViewPageState extends State<OTPView> {
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(30),
-                        topRight: Radius.circular(30)),color: AppColor.alfaorange),
+                        topRight: Radius.circular(30)),color: Color(0xFFFFDD6E)),
                 child:  Center(child: robotoTextWidget(textval: widget.otp.toString(),
                     colorval: AppColor.black,
                     sizeval: 14,

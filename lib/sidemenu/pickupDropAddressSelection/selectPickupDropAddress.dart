@@ -85,19 +85,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     setState(() {});
   }
 
-  // getTrimmedAddress(String val) {
-  //   final split = val.split(',');
-  //   final Map<int, String> values = {
-  //     for (int i = 0; i < split.length; i++) i: split[i]
-  //   };
-  //   print(values); // {0: grubs, 1:  sheep}
-
-  //   final value1 = values[0];
-  //   final value2 = values[1];
-  //   final value3 = values[2];
-  //   return '$value1,$value2,$value3';
-  // }
-
   @override
   void initState() {
     super.initState();

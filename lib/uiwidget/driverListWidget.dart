@@ -98,7 +98,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
-        Errormsg = jsonDecode(res.body)['msg'];
+      Errormsg = jsonDecode(res.body)['msg'];
 
       setState(() {
         isLoading = false;
@@ -121,249 +121,249 @@ class DriverListItemPageState extends State<DriverListItem> {
     var driverName = tmp.length > 10 ? '${tmp.substring(0, 9)}..' : tmp;
     return Wrap(children: [
       Container(
-          child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        child: Card(
-          margin: const EdgeInsets.all(5),
-          color: const Color(0xFFE4F3F5),
-          shape: selectedIndex == index
-              ? RoundedRectangleBorder(
-                  side: const BorderSide(color: Colors.green, width: 2.0),
-                  borderRadius: BorderRadius.circular(5.0))
-              : RoundedRectangleBorder(
-                  side: const BorderSide(color: Colors.white, width: 2.0),
-                  borderRadius: BorderRadius.circular(5.0)),
-          child: Padding(
-              padding: const EdgeInsets.all(8),
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          child: Card(
+              margin: const EdgeInsets.all(5),
+              color: const Color(0xFFE4F3F5),
+              shape: selectedIndex == index
+                  ? RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(5.0))
+                  : RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(5.0)),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Column(
+                  Container(
+                    color: const Color(0xFFD8EBED),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          robotoTextWidget(
-                              textval: driverName,
-                              colorval: AppColor.black,
-                              sizeval: 10,
-                              fontWeight: FontWeight.normal),
-                          robotoTextWidget(
-                              textval:
-                                  '${DriverList[index].durationToPickUpLocation} Minutes Away',
-                              colorval: AppColor.black,
-                              sizeval: 16,
-                              fontWeight: FontWeight.w600),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          RatingBar.builder(
-                            initialRating:
-                                DriverList[index].driverRating!.toDouble(),
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                           itemSize: 14,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          ),
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: Image.network(
-                                encodeImgURLString(DriverList[index].driverPhoto),
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    Images.personPlaceHolderImage,
-                                    height: 50,
-                                    width: 50,
-                                  );
-                                },
-                                fit: BoxFit.fill,
-                                height: 50,
-                                width: 50,
-                              ))
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/svg/car-type-sedan.svg",
-                        width: 40,
-                        height: 30,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        children: [
-                          robotoTextWidget(
-                              textval:
-                                  DriverList[index].priceClass!.type.toString(),
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w200),
-                          const SizedBox(
-                            height: 5,
+                          Column(
+                            children: [
+                              robotoTextWidget(
+                                  textval: driverName,
+                                  colorval: AppColor.black,
+                                  sizeval: 12,
+                                  fontWeight: FontWeight.w400),
+                              robotoTextWidget(
+                                  textval:
+                                      '${DriverList[index].durationToPickUpLocation} Minutes Away',
+                                  colorval: AppColor.black,
+                                  sizeval: 16,
+                                  fontWeight: FontWeight.w600),
+                            ],
                           ),
                           Row(
                             children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                      'assets/images/passengers-icon.png',
-                                      height: 15,
-                                      width: 15,
-                                      fit: BoxFit.cover),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  robotoTextWidget(
-                                      textval:
-                                          "${DriverList[index].priceClass!.passengerCapacity} People",
-                                      colorval: AppColor.black,
-                                      sizeval: 14,
-                                      fontWeight: FontWeight.w200)
-                                ],
+                              RatingBar.builder(
+                                initialRating:
+                                    DriverList[index].driverRating!.toDouble(),
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemSize: 14,
+                                itemPadding:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                },
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Image.asset('assets/images/weight-icon.png',
-                                      height: 15, width: 15, fit: BoxFit.cover),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  robotoTextWidget(
-                                      textval: DriverList[index]
-                                          .priceClass!
-                                          .bootSpace
-                                          .toString(),
-                                      colorval: AppColor.black,
-                                      sizeval: 14,
-                                      fontWeight: FontWeight.w200)
-                                ],
-                              )
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  child: Image.network(
+                                    encodeImgURLString(
+                                        DriverList[index].driverPhoto),
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        Images.personPlaceHolderImage,
+                                        height: 40,
+                                        width: 40,
+                                      );
+                                    },
+                                    fit: BoxFit.fill,
+                                    height: 40,
+                                    width: 40,
+                                  ))
                             ],
-                          )
+                          ),
                         ],
-                      )
-                    ],
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    color: AppColor.border,
-                    height: 2,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      robotoTextWidget(
-                          textval: estimateFare,
-                          colorval: AppColor.darkgrey,
-                          sizeval: 12,
-                          fontWeight: FontWeight.w600),
-                      const SizedBox(
-                        width: 30,
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.info_outlined,
-                            size: 20.0,
-                            color: Colors.grey,
-                          ))
-                    ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      robotoTextWidget(
-                          textval:
-                              "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
-                          colorval: AppColor.black,
-                          sizeval: 18,
-                          fontWeight: FontWeight.w800),
-                      const SizedBox(
-                        width: 25,
-                      ),
-                      vehiclePriceClasses[index]
-                                  .priceClass
-                                  .sellerDiscount!
-                                  .toDouble() !=
-                              0.0
-                          ? Text(
-                              getTotalPrice(
-                                  vehiclePriceClasses[index]
-                                      .priceClass
-                                      .totalFare!
-                                      .toDouble(),
-                                  vehiclePriceClasses[index]
-                                      .priceClass
-                                      .sellerDiscount!
-                                      .toDouble()),
-                              textAlign: TextAlign.justify,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Roboto',
-                                  decoration: TextDecoration.lineThrough),
-                            )
-                          : Container(),
-                      const SizedBox(
-                        width: 25,
-                      ),
-                      vehiclePriceClasses[index]
-                                      .priceClass
-                                      .discountPercent
-                                      .toString() !=
-                                  null &&
-                              vehiclePriceClasses[index]
-                                      .priceClass
-                                      .discountPercent !=
-                                  0.0
-                          ? Column(
+                  Padding(padding: EdgeInsets.all(8),
+                  child: Column(children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/svg/car-type-sedan.svg",
+                          width: 40,
+                          height: 30,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          children: [
+                            robotoTextWidget(
+                                textval: DriverList[index]
+                                    .priceClass!
+                                    .type
+                                    .toString()
+                                    .toCapitalized(),
+                                colorval: AppColor.black,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w200),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
                               children: [
-                                const robotoTextWidget(
-                                    textval: "Special Offer",
-                                    colorval: AppColor.purple,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w800),
-                                robotoTextWidget(
-                                    textval:
-                                        '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
-                                    colorval: AppColor.purple,
-                                    sizeval: 13,
-                                    fontWeight: FontWeight.w400),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                        'assets/images/passengers-icon.png',
+                                        height: 15,
+                                        width: 15,
+                                        fit: BoxFit.cover),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    robotoTextWidget(
+                                        textval:
+                                        "${DriverList[index].priceClass!.passengerCapacity} People",
+                                        colorval: AppColor.black,
+                                        sizeval: 14,
+                                        fontWeight: FontWeight.w200)
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset('assets/images/weight-icon.png',
+                                        height: 15, width: 15, fit: BoxFit.cover),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    robotoTextWidget(
+                                        textval: DriverList[index]
+                                            .priceClass!
+                                            .bootSpace
+                                            .toString(),
+                                        colorval: AppColor.black,
+                                        sizeval: 14,
+                                        fontWeight: FontWeight.w200)
+                                  ],
+                                )
                               ],
                             )
-                          : Container()
-                    ],
-                  ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      color: AppColor.border,
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        robotoTextWidget(
+                            textval: estimateFare,
+                            colorval: AppColor.darkgrey,
+                            sizeval: 12,
+                            fontWeight: FontWeight.w600),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.info_outlined,
+                              size: 25.0,
+                              color: Colors.grey,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        robotoTextWidget(
+                            textval:
+                            "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
+                            colorval: AppColor.black,
+                            sizeval: 30,
+                            fontWeight: FontWeight.w800),
+                        vehiclePriceClasses[index]
+                            .priceClass
+                            .sellerDiscount!
+                            .toDouble() !=
+                            0.0
+                            ? Text(
+                          getTotalPrice(
+                              vehiclePriceClasses[index]
+                                  .priceClass
+                                  .totalFare!
+                                  .toDouble(),
+                              vehiclePriceClasses[index]
+                                  .priceClass
+                                  .sellerDiscount!
+                                  .toDouble()),
+                          textAlign: TextAlign.justify,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontSize: 25,
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Roboto',
+                              decoration: TextDecoration.lineThrough),
+                        )
+                            : Container(),
+                        vehiclePriceClasses[index]
+                            .priceClass
+                            .discountPercent
+                            .toString() !=
+                            null &&
+                            vehiclePriceClasses[index]
+                                .priceClass
+                                .discountPercent !=
+                                0.0
+                            ? Column(
+                          children: [
+                            const robotoTextWidget(
+                                textval: "Special Offer",
+                                colorval: AppColor.purple,
+                                sizeval: 14,
+                                fontWeight: FontWeight.w800),
+                            robotoTextWidget(
+                                textval:
+                                '${vehiclePriceClasses[index].priceClass.discountPercent.toString()} % Off',
+                                colorval: AppColor.purple,
+                                sizeval: 13,
+                                fontWeight: FontWeight.w400),
+                          ],
+                        )
+                            : Container()
+                      ],
+                    ),
+                  ],),)
                 ],
               )),
         ),
-      ))
+      )
     ]);
   }
 
@@ -479,7 +479,6 @@ class DriverListItemPageState extends State<DriverListItem> {
                   ),
                 ),
                 Container(
-                    height: 40,
                     margin: const EdgeInsets.all(5),
                     width: double.infinity,
                     child: ElevatedButton(
@@ -499,15 +498,16 @@ class DriverListItemPageState extends State<DriverListItem> {
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                          borderRadius: BorderRadius.circular(5), // <-- Radius
                         ),
                       ),
+                      child: Padding(padding: EdgeInsets.all(15),
                       child: robotoTextWidget(
-                        textval: bookNow,
+                        textval: bookNow.toUpperCase(),
                         colorval: AppColor.white,
-                        sizeval: 14,
+                        sizeval: 16,
                         fontWeight: FontWeight.w600,
-                      ),
+                      ),),
                     ))
               ],
             ),
@@ -524,12 +524,14 @@ class DriverListItemPageState extends State<DriverListItem> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(padding: EdgeInsets.all(10),
-                  child: robotoTextWidget(
-                      textval: Errormsg,
-                      colorval: AppColor.darkGreen,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w800),),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: robotoTextWidget(
+                        textval: Errormsg,
+                        colorval: AppColor.darkGreen,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w800),
+                  ),
                   Container(
                       height: 40,
                       width: 120,
