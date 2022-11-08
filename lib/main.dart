@@ -144,17 +144,19 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
     FirebaseMessaging.instance.getInitialMessage().then(
       (message) {
         print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           print("New Notification");
           checkLoginStatus();
-
-          Future.delayed(Duration(milliseconds:  9000), () {
-            ShowPushNotificationExpand(context,message.notification!.title,message.notification!.body);
-          },
+          showToast(message.notification!.body.toString()
           );
+          // Future.delayed(Duration(milliseconds:  9000), () {
+          //   ShowPushNotificationExpand(message.notification!.title.toString(),message.notification!.body.toString());
+          // },
+          // );
         }
       },
     );
@@ -167,6 +169,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data11 ${message.data}");
+          // ShowPushNotificationExpand(message.notification!.title.toString(),message.notification!.body.toString());
 
           //showToast(message.notification!.body.toString());
           LocalNotificationService.createanddisplaynotification(message);
@@ -181,10 +184,13 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
-          Future.delayed(Duration(milliseconds:  4000), () {
-            ShowPushNotificationExpand(context,message.notification!.title,message.notification!.body);
-          },
-          );
+          showToast(message.notification!.body.toString());
+         //  Future.delayed(const Duration(milliseconds:  3000), () {
+         // ShowPushNotificationExpand("message.notification!.title.toString()","message.notification!.body.toString()");
+         //
+         //
+         // },
+         //  );
         }
       },
     );
@@ -524,68 +530,74 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       }
     }
   }
-  Widget ShowPushNotificationExpand(BuildContext context,titel,message) {
-    return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        content: Wrap(children: [
-          Column(mainAxisSize: MainAxisSize.min, children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Text(
-                titel,
-                style: const TextStyle(
-                    color: AppColor.butgreen,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18),
+  Future ShowPushNotificationExpand(String titel,String message) {
+
+   return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: ((context) {  return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          content: Wrap(children: [
+            Column(mainAxisSize: MainAxisSize.min, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(
+                  titel,
+                  style: const TextStyle(
+                      color: AppColor.butgreen,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Wrap(
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Wrap(
+                  children: [
+                    Text(
+                      message,
+                      style: TextStyle(
+                          color: AppColor.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    message,
-                    style: TextStyle(
-                        color: AppColor.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColor.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                    ),
+                    child: robotoTextWidget(
+                      textval: cancel,
+                      colorval: AppColor.greyblack,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  child: robotoTextWidget(
-                    textval: cancel,
-                    colorval: AppColor.greyblack,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
 
-              ],
-            ),
-          ]),
-        ]));
+                ],
+              ),
+            ]),
+          ]));
+      }),);
+
   }
 
 }
