@@ -199,7 +199,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                   ],
                 )),
             Expanded(
-              child: (searchPlaceList != null)
+              child: (searchPlaceList != null && searchPlaceList!.isNotEmpty)
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const AlwaysScrollableScrollPhysics(),
@@ -536,12 +536,14 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
                             child: ListTile(
+                              dense: true,
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               minLeadingWidth: 30,
                               horizontalTitleGap: 0.0,
                               title: robotoTextWidget(
-                                textval: searchPlaceList![index].title,
+                                textval: formatAddress(
+                                    searchPlaceList![index].title),
                                 colorval: AppColor.greyblack,
                                 sizeval: 14.0,
                                 fontWeight: FontWeight.w600,

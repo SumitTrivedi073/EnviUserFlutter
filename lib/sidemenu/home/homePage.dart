@@ -1,6 +1,7 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               AppBarWidget(),
               CardBanner(
-                  title: 'Welcome $name',
+                  title: 'Welcome ${name.toTitleCase()}',
                   image: 'assets/images/welcome_card_dashboard.png'),
               const ScheduleListAlertConsumer(),
             ],
