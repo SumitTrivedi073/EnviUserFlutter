@@ -119,7 +119,6 @@ class _NewProfilePageState extends State<NewProfilePage> {
     super.initState();
   }
 
-
 //update user
   Future<dynamic> userEditProfile({
     File? image,
@@ -140,9 +139,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
       request.files.add(http.MultipartFile.fromBytes(
         'pro_pic',
         File(image.path).readAsBytesSync(),
-        filename: image.path
-            .split("/")
-            .last,
+        filename: image.path.split("/").last,
       ));
     }
 
@@ -188,9 +185,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
       request.files.add(http.MultipartFile.fromBytes(
         'pro_pic',
         File(image.path).readAsBytesSync(),
-        filename: image.path
-            .split("/")
-            .last,
+        filename: image.path.split("/").last,
       ));
     }
     http.StreamedResponse response = await request.send();
@@ -213,285 +208,284 @@ class _NewProfilePageState extends State<NewProfilePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          body: Container(
-            height: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(PageBackgroundImage),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Column(
-              children: [
-                AppBarInsideWidget(pagetitle: 'Profile Page'),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/envi-logo-small.png",
-                            fit: BoxFit.fill,
+      body: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(PageBackgroundImage),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: [
+            AppBarInsideWidget(pagetitle: 'Profile Page'),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "assets/images/envi-logo-small.png",
+                        fit: BoxFit.fill,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        thankYouForChoosingEnviText,
+                        style: AppTextStyle.robotoBold20Black,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      (!widget.isUpdate)
+                          ? Text(
+                              letsSetUpyourProfileText,
+                              style: AppTextStyle.robotoRegular16,
+                            )
+                          : const SizedBox(),
+                      const SizedBox(height: 25),
+                      Form(
+                        key: _profileForm,
+                        child: Card(
+                          elevation: 2,
+                          shadowColor: AppColor.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            thankYouForChoosingEnviText,
-                            style: AppTextStyle.robotoBold20Black,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          (!widget.isUpdate)
-                              ? Text(
-                            letsSetUpyourProfileText,
-                            style: AppTextStyle.robotoRegular16,
-                          )
-                              : const SizedBox(),
-                          const SizedBox(height: 25),
-                          Form(
-                            key: _profileForm,
-                            child: Card(
-                              elevation: 2,
-                              shadowColor: AppColor.grey,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              color: AppColor.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
+                          color: AppColor.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () async {
-                                            getImage();
-                                          },
-                                          child: (widget.isUpdate)
-                                              ? (_image != null)
+                                    GestureDetector(
+                                      onTap: () async {
+                                        getImage();
+                                      },
+                                      child: (widget.isUpdate)
+                                          ? (_image != null)
                                               ? Image.file(
-                                            _image!,
-                                            width: 100.0,
-                                            height: 100.0,
-                                            fit: BoxFit.fitHeight,
-                                          )
+                                                  _image!,
+                                                  width: 100.0,
+                                                  height: 100.0,
+                                                  fit: BoxFit.fitHeight,
+                                                )
                                               : Image.network(
-                                            encodeImgURLString(
-                                                widget.user!.propic),
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Image.asset(
-                                                Images.personPlaceHolderImage,
-                                                height: 100,
-                                              );
-                                            },
-                                            fit: BoxFit.fill,
-                                            height: 100,
-                                            width: 100,
-                                          )
-                                              : (_image != null)
+                                                  encodeImgURLString(
+                                                      widget.user!.propic),
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return Image.asset(
+                                                      Images
+                                                          .personPlaceHolderImage,
+                                                      height: 100,
+                                                    );
+                                                  },
+                                                  fit: BoxFit.fill,
+                                                  height: 100,
+                                                  width: 100,
+                                                )
+                                          : (_image != null)
                                               ? Image.file(
-                                            _image!,
-                                            width: 100.0,
-                                            height: 100.0,
-                                            fit: BoxFit.fitHeight,
-                                          )
+                                                  _image!,
+                                                  width: 100.0,
+                                                  height: 100.0,
+                                                  fit: BoxFit.fitHeight,
+                                                )
                                               : Container(
-                                            color: AppColor.textfieldlightgrey,
-                                            height: 90,
-                                            width: 90,
-                                            child: const Icon(
-                                              Icons.camera_alt_outlined,
-                                              color: AppColor.grey,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 12,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            children: [
-                                              TextFormField(
-                                                controller: _firstNameController,
-                                                autovalidateMode:
-                                                AutovalidateMode
-                                                    .onUserInteraction,
-                                                validator: (value) {
-                                                  return Utility()
-                                                      .validatorText(
-                                                      value: value);
-                                                },
-                                                decoration: InputDecoration(
-                                                    contentPadding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        20, 12, 20, 12),
-                                                    hintText: nameText,
-                                                    filled: true,
-                                                    hintStyle:
-                                                    AppTextStyle
-                                                        .robotoRegular18Gray,
-                                                    border: InputBorder.none,
-                                                    fillColor: AppColor
-                                                        .textfieldlightgrey),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              DropDownWidget(
-                                                children: [
-                                                  maleText,
-                                                  femaleText,
-                                                  ratherNotSayText,
-                                                ],
-                                                endWidget: const Icon(
-                                                  Icons.arrow_drop_down,
-                                                  size: 30,
+                                                  color: AppColor
+                                                      .textfieldlightgrey,
+                                                  height: 90,
+                                                  width: 90,
+                                                  child: const Icon(
+                                                    Icons.camera_alt_outlined,
+                                                    color: AppColor.grey,
+                                                  ),
                                                 ),
-                                                hintText: genderText,
-                                                width: double.infinity,
-                                                borderRadius: BorderRadius.zero,
-                                                border: Border.all(
-                                                    color: AppColor.white,
-                                                    width: 0),
-                                                backGroundColor:
-                                                AppColor.textfieldlightgrey,
-                                                selectedValue: selectedGender,
-                                                defaultValue: selectedGender,
-                                                onChange: (val) {
-                                                  chooseGender(val);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    (widget.isUpdate)
-                                        ? TextFormField(
-                                      enabled: (widget.isUpdate) ? false : true,
-                                      controller: _phoneNoController,
-                                      autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                      validator: (value) {
-                                        return Utility().validatorText(
-                                            value: value,
-                                            shouldBeNumber: true,
-                                            minLimit: 10,
-                                            isMandatary: true,
-                                            maxLimit: 12);
-                                      },
-                                      decoration: const InputDecoration(
-                                          filled: true,
-                                          hintText: 'Phone Number',
-                                          hintStyle: AppTextStyle
-                                              .robotoRegular18Gray,
-                                          border: InputBorder.none,
-                                          contentPadding: const EdgeInsets.all(
-                                              10.0),
-                                          isDense: true,
-                                          fillColor: AppColor
-                                              .textfieldlightgrey),
-                                      style: AppTextStyle.robotoRegular18Gray,
-                                    )
-                                        : TextFormField(
-                                      enabled: (widget.isUpdate) ? false : true,
-                                      controller: _phoneNoController,
-                                      autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                      validator: (value) {
-                                        return Utility().validatorText(
-                                            value: value,
-                                            shouldBeNumber: true,
-                                            minLimit: 10,
-                                            isMandatary: true,
-                                            maxLimit: 12);
-                                      },
-                                      decoration: const InputDecoration(
-                                          filled: true,
-                                          hintText: 'Phone Number',
-                                          hintStyle: AppTextStyle
-                                              .robotoRegular18Gray,
-                                          border: InputBorder.none,
-                                          contentPadding: const EdgeInsets.all(
-                                              10.0),
-                                          isDense: true,
-                                          fillColor: AppColor
-                                              .textfieldlightgrey),
-                                      style: AppTextStyle.robotoRegular18,
                                     ),
                                     const SizedBox(
-                                      height: 20,
+                                      width: 12,
                                     ),
-                                    TextFormField(
-                                      enabled: (widget.isUpdate) ? false : true,
-                                      controller: _emailController,
-                                      autovalidateMode: AutovalidateMode
-                                          .onUserInteraction,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please fill this input field';
-                                        } else {
-                                          final isEmailCorrect = isEmail(value);
-                                          if (!isEmailCorrect) {
-                                            return 'Invalid Email';
-                                          } else {
-                                            return null;
-                                          }
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                          filled: true,
-                                          contentPadding:
-                                          EdgeInsets.fromLTRB(20, 12, 20, 12),
-                                          hintText: email,
-                                          hintStyle: AppTextStyle
-                                              .robotoRegular18Gray,
-                                          border: InputBorder.none,
-                                          fillColor: AppColor
-                                              .textfieldlightgrey),
-                                      textAlign: TextAlign.left,
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          TextFormField(
+                                            controller: _firstNameController,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            validator: (value) {
+                                              return Utility()
+                                                  .validatorText(value: value);
+                                            },
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 12, 20, 12),
+                                                hintText: nameText,
+                                                filled: true,
+                                                hintStyle: AppTextStyle
+                                                    .robotoRegular18Gray,
+                                                border: InputBorder.none,
+                                                fillColor: AppColor
+                                                    .textfieldlightgrey),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          DropDownWidget(
+                                            children: [
+                                              maleText,
+                                              femaleText,
+                                              ratherNotSayText,
+                                            ],
+                                            endWidget: const Icon(
+                                              Icons.arrow_drop_down,
+                                              size: 30,
+                                            ),
+                                            hintText: genderText,
+                                            width: double.infinity,
+                                            borderRadius: BorderRadius.zero,
+                                            border: Border.all(
+                                                color: AppColor.white,
+                                                width: 0),
+                                            backGroundColor:
+                                                AppColor.textfieldlightgrey,
+                                            selectedValue: selectedGender,
+                                            defaultValue: selectedGender,
+                                            onChange: (val) {
+                                              chooseGender(val);
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                (widget.isUpdate)
+                                    ? TextFormField(
+                                        enabled:
+                                            (widget.isUpdate) ? false : true,
+                                        controller: _phoneNoController,
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        validator: (value) {
+                                          return Utility().validatorText(
+                                              value: value,
+                                              shouldBeNumber: true,
+                                              minLimit: 10,
+                                              isMandatary: true,
+                                              maxLimit: 12);
+                                        },
+                                        decoration: const InputDecoration(
+                                            filled: true,
+                                            hintText: 'Phone Number',
+                                            hintStyle: AppTextStyle
+                                                .robotoRegular18Gray,
+                                            border: InputBorder.none,
+                                            contentPadding:
+                                                EdgeInsets.all(10.0),
+                                            isDense: true,
+                                            fillColor:
+                                                AppColor.textfieldlightgrey),
+                                        style: AppTextStyle.robotoRegular18Gray,
+                                      )
+                                    : TextFormField(
+                                        enabled:
+                                            (widget.isUpdate) ? false : true,
+                                        controller: _phoneNoController,
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        validator: (value) {
+                                          return Utility().validatorText(
+                                              value: value,
+                                              shouldBeNumber: true,
+                                              minLimit: 10,
+                                              isMandatary: true,
+                                              maxLimit: 12);
+                                        },
+                                        decoration: const InputDecoration(
+                                            filled: true,
+                                            hintText: 'Phone Number',
+                                            hintStyle: AppTextStyle
+                                                .robotoRegular18Gray,
+                                            border: InputBorder.none,
+                                            contentPadding:
+                                                EdgeInsets.all(10.0),
+                                            isDense: true,
+                                            fillColor:
+                                                AppColor.textfieldlightgrey),
+                                        style: AppTextStyle.robotoRegular18,
+                                      ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller: _emailController,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please fill this input field';
+                                    } else {
+                                      final isEmailCorrect = isEmail(value);
+                                      if (!isEmailCorrect) {
+                                        return 'Invalid Email';
+                                      } else {
+                                        return null;
+                                      }
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      filled: true,
+                                      contentPadding:
+                                          EdgeInsets.fromLTRB(20, 12, 20, 12),
+                                      hintText: email,
+                                      hintStyle:
+                                          AppTextStyle.robotoRegular18Gray,
+                                      border: InputBorder.none,
+                                      fillColor: AppColor.textfieldlightgrey),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          (!isLoading)
-                              ? MaterialButton(
-                            onPressed: () async {
-                              updateProfile();
-                            },
-                            height: 48,
-                            minWidth: double.infinity,
-                            color: AppColor.greyblack,
-                            child: Text(
-                              (widget.isUpdate)
-                                  ? 'Update Account'
-                                  : createAccountText,
-                              style: AppTextStyle.robotoBold20White,
-                            ),
-                          )
-                              : const Center(child: CircularProgressIndicator())
-                        ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      (!isLoading)
+                          ? MaterialButton(
+                              onPressed: () async {
+                                updateProfile();
+                              },
+                              height: 48,
+                              minWidth: double.infinity,
+                              color: AppColor.greyblack,
+                              child: Text(
+                                (widget.isUpdate)
+                                    ? 'UPDATE'
+                                    : createAccountText,
+                                style: AppTextStyle.robotoBold20White,
+                              ),
+                            )
+                          : const Center(child: CircularProgressIndicator())
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ));
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 
   Future<void> updateProfile() async {
@@ -500,7 +494,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
         isLoading = true;
       });
       SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
+          await SharedPreferences.getInstance();
 
       var id = sharedPreferences.getString(loginID);
 
@@ -519,41 +513,31 @@ class _NewProfilePageState extends State<NewProfilePage> {
             widget.user!.token,
             id ?? widget.user!.id,
             _firstNameController.text,
-            updateUserResponse['pro_pic'] ??
-                widget.user!.propic,
+            updateUserResponse['pro_pic'] ?? widget.user!.propic,
             selectedGender!,
             widget.user!.phone,
             widget.user!.mailid);
+        sharedPreferences.setString(loginEmail, _emailController.text);
+        sharedPreferences.setString(loginToken, widget.user!.token);
+        sharedPreferences.setString(loginID, widget.user!.id);
+        sharedPreferences.setString(logingender, selectedGender!);
+        sharedPreferences.setString(loginPhone, _phoneNoController.text);
+        sharedPreferences.setString(loginName, _firstNameController.text);
         sharedPreferences.setString(
-            loginEmail, _emailController.text);
-        sharedPreferences.setString(
-            loginToken, widget.user!.token);
-        sharedPreferences.setString(
-            loginID, widget.user!.id);
-        sharedPreferences.setString(
-            logingender, selectedGender!);
-        sharedPreferences.setString(
-            loginPhone, _phoneNoController.text);
-        sharedPreferences.setString(
-            loginName, _firstNameController.text);
-        sharedPreferences.setString(
-            loginpropic,
-            updateUserResponse['pro_pic'] ??
-                widget.user!.propic);
+            loginpropic, updateUserResponse['pro_pic'] ?? widget.user!.propic);
         Profiledata.setusreid(widget.user!.id);
+
         Profiledata.settoken(widget.user!.token);
         Profiledata.setmailid(_emailController.text);
         Profiledata.setpropic(
-            updateUserResponse['pro_pic'] ??
-                widget.user!.propic);
+            updateUserResponse['pro_pic'] ?? widget.user!.propic);
         Profiledata.setphone(_phoneNoController.text);
         Profiledata.setgender(selectedGender!);
         Profiledata.setname(_firstNameController.text);
         showToast(updatedSuccessText);
 
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) =>
-            const HomePage(title: "title")));
+            builder: (BuildContext context) => const HomePage(title: "title")));
       } else {
         setState(() {
           isLoading = false;
@@ -567,56 +551,42 @@ class _NewProfilePageState extends State<NewProfilePage> {
           isLoading = true;
         });
         SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+            await SharedPreferences.getInstance();
         final response = await registerNewUser(
             image: _image,
             name: _firstNameController.text,
             gender: selectedGender!,
             email: _emailController.text,
-            deviceId: sharedPreferences
-                .getString(deviceIdShared)!,
-            fcmToken: sharedPreferences
-                .getString(fcmTokenShared)!,
+            deviceId: sharedPreferences.getString(deviceIdShared)!,
+            fcmToken: sharedPreferences.getString(fcmTokenShared)!,
             phoneNo: _phoneNoController.text);
         setState(() {
           isLoading = false;
         });
         if (response) {
+          sharedPreferences.setString(loginEmail, _emailController.text);
           sharedPreferences.setString(
-              loginEmail, _emailController.text);
-          sharedPreferences.setString(loginToken,
-              registerNewUserResponse['content']['token']);
-          sharedPreferences.setString(loginID,
-              registerNewUserResponse['content']['userid']);
+              loginToken, registerNewUserResponse['content']['token']);
           sharedPreferences.setString(
-              logingender, selectedGender!);
-          sharedPreferences.setString(
-              loginPhone, _phoneNoController.text);
-          sharedPreferences.setString(
-              loginName, _firstNameController.text);
-          sharedPreferences.setString(
-              loginpropic,
-              encodeImgURLString(
-                  registerNewUserResponse['content']
-                  ['image']));
-          Profiledata.setusreid(
-              registerNewUserResponse['content']['userid']);
-          Profiledata.settoken(
-              registerNewUserResponse['content']['token']);
+              loginID, registerNewUserResponse['content']['userid']);
+          sharedPreferences.setString(logingender, selectedGender!);
+          sharedPreferences.setString(loginPhone, _phoneNoController.text);
+          sharedPreferences.setString(loginName, _firstNameController.text);
+          sharedPreferences.setString(loginpropic,
+              encodeImgURLString(registerNewUserResponse['content']['image']));
+          Profiledata.setusreid(registerNewUserResponse['content']['userid']);
+          Profiledata.settoken(registerNewUserResponse['content']['token']);
           Profiledata.setmailid(_emailController.text);
-          Profiledata.setpropic(encodeImgURLString(
-              registerNewUserResponse['content']['image']));
+          Profiledata.setpropic(
+              encodeImgURLString(registerNewUserResponse['content']['image']));
           Profiledata.setphone(_phoneNoController.text);
           Profiledata.setgender(selectedGender!);
           Profiledata.setname(_firstNameController.text);
           showToast('Registered Successfully');
           Future.delayed(const Duration(seconds: 2), () {
             if (!mounted) return;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        MainEntryPoint()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MainEntryPoint()));
           });
         } else {
           showToast(failedRegister);

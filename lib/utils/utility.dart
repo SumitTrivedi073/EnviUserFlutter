@@ -185,8 +185,14 @@ String formatAddress(String address) {
       .replaceAll(new RegExp("[0-9]{6}"), '') //pincode
       .replaceAll(new RegExp("[+ \n\t\r\f],"), '')
       .replaceAll(new RegExp("[+ \n\t\r\f,]\$"), '')
+      .replaceAll(new RegExp("[+ \n\t\r\f]"), ' ')
       .replaceAll(new RegExp("^[,]"), '')
       .replaceAll(new RegExp("[,]\$"), '');
 
   return formated;
+}
+
+extension StringCasingExtension on String {
+  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
 }

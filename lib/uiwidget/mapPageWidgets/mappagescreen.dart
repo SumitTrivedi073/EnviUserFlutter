@@ -175,7 +175,7 @@ class MyMapState extends State {
         _cameraPosition = CameraPosition(
           bearing: 0,
           target: LatLng(position.latitude, position.longitude),
-          zoom: 14.0,
+          zoom: 15.0,
         );
         if (_controller != null) {
           _controller
@@ -189,7 +189,7 @@ class MyMapState extends State {
   Future<void> GetAddressFromLatLong(LatLng position) async {
     try {
       List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       //print(placemarks);
       Placemark place = placemarks[0];
       placeName = (place.subLocality != '')
@@ -197,11 +197,15 @@ class MyMapState extends State {
           : place.subAdministrativeArea!;
       isoId = place.isoCountryCode;
       setState(() {
-        Address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place
-            .postalCode}, ${place.country}';
+        Address = '${place.street}, ${place.subLocality}, ${place.locality}';
+        // Address = Address.replaceAll(",", "");
+        // Address = Address.replaceAll('  ', ' ');
+        Address = formatAddress(Address);
       });
-    }catch(e){
+
+      print(
+          "RAGHUVTPLACE ${place.postalCode} ${place.name} ${place.administrativeArea}");
+    } catch (e) {
       print("Exception==========>${e.toString()}");
     }
   }
@@ -209,7 +213,7 @@ class MyMapState extends State {
   @override
   void dispose() {
     // TODO: implement dispose
-    if(_controller!=null){
+    if (_controller != null) {
       _controller!.dispose();
     }
     super.dispose();

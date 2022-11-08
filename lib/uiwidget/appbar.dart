@@ -76,7 +76,7 @@ class _AppBarPageState extends State<AppBarWidget> {
             child:   Container(
               margin: EdgeInsets.only(top: 20),
               child: robotoTextWidget(
-                textval: appName,
+                textval: appName.toTitleCase(),
                 colorval: AppColor.lightwhite,
                 sizeval: 18.0,
                 fontWeight: FontWeight.w800,

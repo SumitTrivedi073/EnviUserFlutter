@@ -51,14 +51,18 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                       sizeval: 14,
                       fontWeight: FontWeight.w400):Container(),
                   trailing: robotoTextWidget(
-                      textval: widget.livetripData!.tripInfo!
+                      textval: '₹ ${widget.livetripData!.tripInfo!
                           .arrivalAtDestination!.amountTobeCollected
-                          .toString(),
+                          .toDouble().round().toString()}',
                       colorval: AppColor.darkGreen,
-                      sizeval: 20,
+                      sizeval: 25,
                       fontWeight: FontWeight.w800),
                 ),
-                ExpansionTile(
+                Theme(
+                    data: ThemeData(
+                      dividerColor: Colors.transparent,
+                    ),
+                    child: ExpansionTile(
                   onExpansionChanged: (value) {
                    if(mounted){
                      setState(() {
@@ -69,10 +73,10 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                   //  backgroundColor: Colors.white,
                   leading: (arrowClicked)
                       ? const Icon(
-                          Icons.arrow_drop_up,
+                          Icons.arrow_drop_down,
                           color: AppColor.black,
                         )
-                      : const Icon(Icons.arrow_drop_down,
+                      : const Icon(Icons.arrow_right_rounded,
                           color: AppColor.black),
                   trailing: const Icon(Icons.share, color: AppColor.black),
                   title: robotoTextWidget(
@@ -93,18 +97,14 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo!
+                                  textval: '${widget.livetripData!.tripInfo!
                                       .arrivalAtDestination!.distanceTravelled
-                                      .toString(),
+                                      .toStringAsFixed(2)} Kms',
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w200),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
+                                  fontWeight: FontWeight.w200),],
                           ),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           Row(
                             children: [
                               robotoTextWidget(
@@ -114,18 +114,20 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo!
+                                  textval: '× ${widget.livetripData!.tripInfo!
                                       .arrivalAtDestination!.perKMPrice
-                                      .toString(),
+                                      .toStringAsFixed(2)} ₹',
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200),
-                              const SizedBox(
-                                height: 10,
-                              ),
                             ],
                           ),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 10),
+                          const Divider(
+                            color: AppColor.grey,
+                            height: 1,
+                          ),
+                          const SizedBox(height: 10),
                           Row(
                             children: [
                               robotoTextWidget(
@@ -135,18 +137,15 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo
-                                      !.arrivalAtDestination!.kmFare
-                                      .toString(),
+                                  textval: '${widget.livetripData!.tripInfo
+                                  !.arrivalAtDestination!.kmFare
+                                      .toStringAsFixed(2)} ₹',
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w800),
-                              const SizedBox(
-                                height: 10,
-                              ),
                             ],
                           ),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           widget.livetripData!.tripInfo
                           !.arrivalAtDestination!.discount.toDouble()!=0.0? Row(
                             children: [
@@ -157,18 +156,15 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo
+                                  textval: '- ${widget.livetripData!.tripInfo
                                   !.arrivalAtDestination!.discount
-                                      .toString(),
+                                      .toStringAsFixed(2)} ₹',
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200),
-                              const SizedBox(
-                                height: 10,
-                              ),
                             ],
                           ):Container(),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5),
                           widget.livetripData!.tripInfo
                           !.arrivalAtDestination!.tollAmount.toDouble()!=0.0? Row(
                             children: [
@@ -179,18 +175,15 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
-                                  textval: widget.livetripData!.tripInfo
+                                  textval: '${widget.livetripData!.tripInfo
                                   !.arrivalAtDestination!.tollAmount
-                                      .toString(),
+                                      .toStringAsFixed(2)} ₹',
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200),
-                              const SizedBox(
-                                height: 10,
-                              ),
                             ],
                           ):Container(),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               robotoTextWidget(
@@ -201,17 +194,19 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                               const Spacer(),
                               robotoTextWidget(
                                   textval: totalTax.toString() != null
-                                      ? totalTax.toString()
+                                      ? '${totalTax.toStringAsFixed(2)} ₹'
                                       : '0',
                                   colorval: AppColor.black,
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200),
-                              const SizedBox(
-                                height: 10,
-                              ),
                             ],
                           ),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 10,),
+                          const Divider(
+                            color: AppColor.grey,
+                            height: 1,
+                          ),
+                          const SizedBox(height: 10,),
                           Row(
                             children: [
                               robotoTextWidget(
@@ -221,22 +216,18 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
                               robotoTextWidget(
-                                textval: widget.livetripData!.tripInfo
+                                textval: '${widget.livetripData!.tripInfo
                                 !.arrivalAtDestination!.amountTobeCollected
-                                    .toDouble().round().toString(),
+                                    .toDouble().round().toString()} ₹',
                                 colorval: AppColor.black,
                                 sizeval: 14,
                                 fontWeight: FontWeight.w800,
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
                             ],
                           ),
-                          SizedBox(height: 5,),
                         ])),
                   ],
-                ),
+                )),
               ],
             ),
           )),

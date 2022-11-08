@@ -8,11 +8,8 @@ import 'package:envi/sidemenu/searchDriver/searchDriver.dart';
 import 'package:envi/theme/color.dart';
 import 'package:envi/theme/images.dart';
 import 'package:envi/theme/mapStyle.dart';
-import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
-import 'package:envi/web_service/Constant.dart';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -165,7 +162,6 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         addressToAdd.latLng.latitude,
         addressToAdd.latLng.longitude,
         addressToAdd.isFavourite);
-    print(response.body);
 
     if (response != null) {
       if (response.statusCode == 200) {
@@ -282,7 +278,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
       counter--;
       if (counter == 0) {
-        moveMarkerAnimate = true;
+        moveMarkerAnimate = false;
         timer.cancel();
       }
     });
@@ -375,7 +371,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         Container(
                           padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
-                            textval: Address,
+                            textval: formatAddress(Address),
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w600,
@@ -409,12 +405,12 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         background: Paint()
-                          ..color = Color.fromARGB(255, 95, 105, 172)
+                          ..color = Color.fromARGB(255, 163, 235, 211)
                           ..strokeWidth = 20
                           ..strokeJoin = StrokeJoin.round
                           ..strokeCap = StrokeCap.round
                           ..style = PaintingStyle.stroke,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
           ],
         ),
@@ -636,7 +632,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           ? place.subLocality
           : place.subAdministrativeArea;
       Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+          '${place.street}, ${place.subLocality}, ${place.locality}';
     });
   }
 }
