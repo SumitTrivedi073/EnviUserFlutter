@@ -1,6 +1,7 @@
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/uiwidget/estimate_fare_widget.dart';
 import 'package:envi/uiwidget/sos_view_widget.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -90,107 +91,129 @@ class _OnRideWidgetState extends State<OnRideWidget> {
   Widget FromToData(TripDataModel liveTripData) {
     return Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: Card(
+        // Just change the Image.asset widget to anything you want to fade in/out:
+        child:Card(
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
             elevation: 5,
             child: Padding(
               padding: const EdgeInsets.all(5),
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/svg/from-location-img.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Flexible(
-                            child: Wrap(children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            child: robotoTextWidget(
-                              textval: liveTripData
-                                  .tripInfo!.pickupLocation!.pickupAddress
-                                  .toString(),
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ])),
-                      ],
-                    ),
+              child: Stack(alignment: Alignment.centerRight, children: <Widget>[
+                Container(
+                  width: 50,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColor.lightwhite,
+                    border: Border.all(
+                        color: AppColor.grey, // Set border color
+                        width: 1.0), // Set border width
+                    borderRadius: const BorderRadius.all(Radius.circular(
+                        5.0)), // Set rounded corner radius
                   ),
-                  Stack(alignment: Alignment.centerRight, children: <Widget>[
-                    const SizedBox(
-                      height: 2,
-                      child: Divider(
-                        color: AppColor.darkgrey,
-                        height: 2,
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      width: 70,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: AppColor.lightwhite,
-                        border: Border.all(
-                            color: AppColor.grey, // Set border color
-                            width: 1.0), // Set border width
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0)), // Set rounded corner radius
-                      ),
+                  child:Padding(padding: EdgeInsets.all(8),
+                    child:  Align(alignment: Alignment.center,
                       child: robotoTextWidget(
-                        textval:
-                            '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
+                        textval:   '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
                         colorval: AppColor.black,
                         sizeval: 12,
                         fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ]),
-                  Container(
-                    margin: const EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/svg/to-location-img.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Flexible(
-                            child: Wrap(children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            child: robotoTextWidget(
-                              textval: liveTripData
-                                  .tripInfo!.dropLocation!.dropAddress
-                                  .toString(),
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w600,
+                      ),),),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(right: 53),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            print("Tapped a Container");
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/svg/from-location-img.svg",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Flexible(
+                                    child: Wrap(children: [
+                                      InkWell(
+                                        onTap: () {
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          child: robotoTextWidget(
+                                            textval: formatAddress(liveTripData
+                                                .tripInfo!.pickupLocation!.pickupAddress
+                                                .toString()),
+                                            colorval: AppColor.black,
+                                            sizeval: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ])),
+                              ],
                             ),
-                          ),
-                        ])),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )));
+                          )),
+                      Container(
+                        height: 2,
+                        margin: const EdgeInsets.only(top: 5,bottom: 5),
+                        child: const Divider(
+                          color: AppColor.darkgrey,
+                          height: 2,
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            print("Tapped a Container");
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/svg/to-location-img.svg",
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Flexible(
+                                    child: Wrap(children: [
+                                      InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          child: robotoTextWidget(
+                                            textval: formatAddress(liveTripData
+                                                .tripInfo!.dropLocation!.dropAddress
+                                                .toString()),
+                                            colorval: AppColor.black,
+                                            sizeval: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ])),
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
+                ),
+              ]),
+            ))
+    );
   }
-
   @override
   void dispose() {
     // TODO: implement dispose

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/mapStyle.dart';
@@ -138,18 +139,26 @@ class MyMapState extends State {
   }
 
   Future getCurrentLocation() async {
-    var permission = Permission.locationWhenInUse.status;
-    print(permission);
-    if (permission != PermissionStatus.granted) {
-      final status = await Permission.location.request();
 
-      print(status);
-      if (status != PermissionStatus.granted) {
-        //getLocation();
-        showToast("You need location permission for use this App");
+    if (Platform.isAndroid) {
+      var permission = Permission.locationWhenInUse.status;
+      print(permission);
+      if (permission != PermissionStatus.granted) {
+        final status = await Permission.location.request();
+        if (status != PermissionStatus.granted) {
+          showToast("You need location permission for use this App");
+          return;
+        }
+      }
+    }
+
+    if (Platform.isIOS) {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission != PermissionStatus.granted) {
+        LocationPermission permission = await Geolocator.requestPermission();
+        if (permission != PermissionStatus.granted) getLocation();
         return;
       }
-
     }
     getLocation();
   }
@@ -163,7 +172,7 @@ class MyMapState extends State {
         _cameraPosition = CameraPosition(
           bearing: 0,
           target: LatLng(position.latitude, position.longitude),
-          zoom: 14.0,
+          zoom: 15.0,
         );
         if (_controller != null) {
           _controller
@@ -177,7 +186,7 @@ class MyMapState extends State {
   Future<void> GetAddressFromLatLong(LatLng position) async {
     try {
       List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       //print(placemarks);
       Placemark place = placemarks[0];
       placeName = (place.subLocality != '')
@@ -185,11 +194,15 @@ class MyMapState extends State {
           : place.subAdministrativeArea!;
       isoId = place.isoCountryCode;
       setState(() {
-        Address =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place
-            .postalCode}, ${place.country}';
+        Address = '${place.street}, ${place.subLocality}, ${place.locality}';
+        // Address = Address.replaceAll(",", "");
+        // Address = Address.replaceAll('  ', ' ');
+        Address = formatAddress(Address);
       });
-    }catch(e){
+
+      print(
+          "RAGHUVTPLACE ${place.postalCode} ${place.name} ${place.administrativeArea}");
+    } catch (e) {
       print("Exception==========>${e.toString()}");
     }
   }
@@ -197,7 +210,7 @@ class MyMapState extends State {
   @override
   void dispose() {
     // TODO: implement dispose
-    if(_controller!=null){
+    if (_controller != null) {
       _controller!.dispose();
     }
     super.dispose();

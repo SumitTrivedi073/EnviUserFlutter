@@ -134,9 +134,9 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                     child: Row(children: [
                       SvgPicture.asset(
                         "assets/svg/add-place-plus.svg",
-                        width: 22,
-                        height: 24,
-                        theme:  const SvgTheme(currentColor: AppColor.white,fontSize: 14.0, xHeight: 20),
+                        width: 20,
+                        height: 20,
+                        theme:  const SvgTheme(currentColor: AppColor.white,fontSize: 12.0, xHeight: 20),
                       ),
                       const SizedBox(
                         width: 10,
@@ -228,7 +228,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
   Container CellRow1(int index) {
     return Container(
         color: AppColor.white.withOpacity(0.1),
-        padding: const EdgeInsets.only(left: 18, right: 18),
+        padding: const EdgeInsets.only(left: 10, right: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -237,7 +237,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
               children: [
                 Row(children: [
                   const Icon(
-                    Icons.person,
+                    Icons.person_outline,
                     size: 30,
                     color: AppColor.darkGreen,
                   ),
@@ -292,7 +292,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
             textval: presetplacetext,
             colorval: AppColor.grey,
             sizeval: 14.0,
-            fontWeight: FontWeight.normal,
+            fontWeight: FontWeight.w600,
           ),
         ]),
         const SizedBox(
@@ -333,13 +333,13 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(children: [
-                        const Icon(
-                          Icons.home,
-                          size: 30,
-                          color: AppColor.darkGreen,
+                        SvgPicture.asset(
+                          'assets/svg/place-home.svg',
+                          height: 20,
+                          width: 20,
                         ),
                         const SizedBox(
-                          width: 5,
+                          width: 10,
                         ),
                         robotoTextWidget(
                           textval: hometext,
@@ -411,10 +411,10 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(children: [
-                       const Icon(
-                          CupertinoIcons.building_2_fill,
-                          size: 30,
-                          color: AppColor.darkGreen,
+                        SvgPicture.asset(
+                          'assets/svg/place-work.svg',
+                          height: 20,
+                          width: 20,
                         ),
                         const SizedBox(
                           width: 10,
@@ -473,7 +473,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
             textval: customplacetext,
             colorval: AppColor.grey,
             sizeval: 14.0,
-            fontWeight: FontWeight.normal,
+            fontWeight: FontWeight.w600,
           ),
         ]),
         const SizedBox(

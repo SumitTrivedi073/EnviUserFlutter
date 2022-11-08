@@ -49,7 +49,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
     user = widget.profiledatamodel;
     super.initState();
   }
-  
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -119,11 +119,10 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
               height: 15,
             ),
             robotoTextWidget(
-                textval: "Welcome back, ${user!.name}!",
+                textval: "Welcome back, ${user!.name.toTitleCase()}!",
                 colorval: AppColor.black,
                 sizeval: 20.0,
                 fontWeight: FontWeight.bold),
-
             const SizedBox(
               height: 20,
             ),
@@ -160,7 +159,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                               child: const Icon(
                                 Icons.edit_note_outlined,
                                 size: 30,
-                                color: AppColor.grey,
+                                color: AppColor.darkGreen,
                               ),
                             ),
                           ],
@@ -198,7 +197,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           height: 5,
                         ),
                         robotoTextWidget(
-                            textval: user!.name,
+                            textval: user!.name.toTitleCase(),
                             colorval: AppColor.black,
                             sizeval: 18.0,
                             fontWeight: FontWeight.normal),
@@ -279,7 +278,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                                   builder: (context) => MainEntryPoint()));
                         },
                         child: robotoTextWidget(
-                            textval: continuebut,
+                            textval: continuebut.toUpperCase(),
                             colorval: AppColor.white,
                             sizeval: 17.0,
                             fontWeight: FontWeight.bold)),

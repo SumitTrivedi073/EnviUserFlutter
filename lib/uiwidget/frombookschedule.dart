@@ -38,7 +38,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: 140,
+      height: 110,
       margin: const EdgeInsets.only(left: 10, right: 10),
       child: Card(
           semanticContainer: true,
@@ -56,7 +56,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                       print("Tapped a Container");
                     },
                     child: Container(
-                      height: 50,
+                      height: 40,
                       margin: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
@@ -93,59 +93,62 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     height: 1,
                   ),
                 ),
-                SizedBox(
-                  height: 50,
+                Center( child: SizedBox(
+                  height: 40,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(8), // <-- Radius
+                      Container(
+                        width: 115,
+                        child: TextButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(5), // <-- Radius
+                                ),
                               ),
+                              backgroundColor:
+                              MaterialStateProperty.all(AppColor.darkGreen)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: robotoTextWidget(
+                              textval: BookNow,
+                              colorval: AppColor.white,
+                              sizeval: 15.0,
+                              fontWeight: FontWeight.w800,
                             ),
-                            backgroundColor:
-                                MaterialStateProperty.all(AppColor.darkGreen)),
-                        child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: robotoTextWidget(
-                            textval: BookNow,
-                            colorval: AppColor.white,
-                            sizeval: 15.0,
-                            fontWeight: FontWeight.w800,
                           ),
+                          onPressed: () {
+                            _status = BookingTiming.now;
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => SelectPickupDropAddress(
+                                      currentLocation: widget.currentLocation,
+                                      title: dropLocation,
+                                      tripType: _status,
+                                    )),
+                                    (route) => true);
+                          },
                         ),
-                        onPressed: () {
-                          _status = BookingTiming.now;
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => SelectPickupDropAddress(
-                                        currentLocation: widget.currentLocation,
-                                        title: dropLocation,
-                                        tripType: _status,
-                                      )),
-                              (route) => true);
-                        },
                       ),
                       AppConfig().getisScheduleFeatureEnabled()
                           ? TextButton(
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(8), // <-- Radius
+                                borderRadius: BorderRadius.circular(
+                                    5), // <-- Radius
                               ),
                             ),
-                            backgroundColor:
-                            MaterialStateProperty.all(AppColor.alfaorange)),
+                            backgroundColor: MaterialStateProperty.all(
+                                AppColor.alfaorange)),
                         child: Padding(
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
                             textval: BookForLater,
                             colorval: AppColor.black,
-                            sizeval: 16.0,
+                            sizeval: 15.0,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -164,14 +167,14 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                                         )),
                                     (route) => true);
                           } else {
-                            showSnackbar(context,serviceNotAvailable);
+                            showSnackbar(context, serviceNotAvailable);
                           }
                         },
                       )
                           : Container()
                     ],
                   ),
-                )
+                ),)
               ],
             ),
           )),

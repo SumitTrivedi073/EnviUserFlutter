@@ -19,6 +19,7 @@ import '../appConfig/landingPageSettings.dart';
 import '../login/model/LoginModel.dart';
 import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
+import '../theme/images.dart';
 import '../theme/string.dart';
 import '../theme/theme.dart';
 import '../utils/utility.dart';
@@ -93,10 +94,20 @@ class _NavigationPageState extends State<NavigationDrawer> {
                           shape: BoxShape.circle,
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50.0),
-                          child: getsmallNetworkImage(
-                              context, encodeImgURLString(Profiledata.propic)),
-                        ),
+                            borderRadius: BorderRadius.circular(40.0),
+                            child: Image.network(
+                              encodeImgURLString(Profiledata.propic),
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  Images.personPlaceHolderImage,
+                                  height: 40,
+                                  width: 40,
+                                );
+                              },
+                              fit: BoxFit.fill,
+                              height: 40,
+                              width: 40,
+                            )),
                       ),
                       const SizedBox(
                         width: 10,
@@ -266,7 +277,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
         height: 10,
       ),
       robotoTextWidget(
-        textval: Profiledata().getname().toString(),
+        textval: Profiledata().getname().toString().toTitleCase(),
         colorval: AppColor.grey,
         fontWeight: FontWeight.w800,
         sizeval: 20.0,
