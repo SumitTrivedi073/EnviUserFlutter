@@ -416,11 +416,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
 
   String getTotalPrice(double totalFare, double discount) {
     double num1 = totalFare;
-
     double num2 = discount;
-
     double sum = num1 + num2;
-    print('sum:$sum');
     return "${sum.toStringAsFixed(0)}";
   }
 }
