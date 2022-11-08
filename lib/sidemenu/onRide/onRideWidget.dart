@@ -102,9 +102,19 @@ class _OnRideWidgetState extends State<OnRideWidget> {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Stack(alignment: Alignment.centerRight, children: <Widget>[
-                Container(
-                  width: 50,
+                const Align(
                   alignment: Alignment.center,
+                  child: SizedBox(
+                    height: 1,
+                    child: Divider(
+                      color: AppColor.darkgrey,
+                      height: 1,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  alignment: Alignment.centerRight,
                   decoration: BoxDecoration(
                     color: AppColor.lightwhite,
                     border: Border.all(
@@ -113,17 +123,18 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                     borderRadius: const BorderRadius.all(Radius.circular(
                         5.0)), // Set rounded corner radius
                   ),
-                  child:Padding(padding: EdgeInsets.all(8),
-                    child:  Align(alignment: Alignment.center,
+                  child:Padding(padding: const EdgeInsets.all(8),
+                    child:  Align(alignment: Alignment.centerRight,
                       child: robotoTextWidget(
-                        textval:   '${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)} Km',
+                        textval:'${liveTripData.tripInfo!.priceClass!.distance.toStringAsFixed(2)}Km',
                         colorval: AppColor.black,
                         sizeval: 12,
                         fontWeight: FontWeight.w600,
                       ),),),
                 ),
+
                 Container(
-                  margin: const EdgeInsets.only(right: 53),
+                  margin: const EdgeInsets.only(right: 70),
                   child: Column(
                     children: [
                       GestureDetector(
@@ -150,11 +161,11 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval: formatAddress(liveTripData
+                                            textval:formatAddress(liveTripData
                                                 .tripInfo!.pickupLocation!.pickupAddress
                                                 .toString()),
                                             colorval: AppColor.black,
-                                            sizeval: 14,
+                                            sizeval: 13,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -163,14 +174,6 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                               ],
                             ),
                           )),
-                      Container(
-                        height: 2,
-                        margin: const EdgeInsets.only(top: 5,bottom: 5),
-                        child: const Divider(
-                          color: AppColor.darkgrey,
-                          height: 2,
-                        ),
-                      ),
                       GestureDetector(
                           onTap: () {
                             print("Tapped a Container");
@@ -198,7 +201,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                                 .tripInfo!.dropLocation!.dropAddress
                                                 .toString()),
                                             colorval: AppColor.black,
-                                            sizeval: 14,
+                                            sizeval: 13,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -214,6 +217,7 @@ class _OnRideWidgetState extends State<OnRideWidget> {
             ))
     );
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
