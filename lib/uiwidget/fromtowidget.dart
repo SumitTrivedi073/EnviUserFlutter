@@ -46,9 +46,20 @@ class _FromToWidgetPageState extends State<FromToWidget> {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Stack(alignment: Alignment.centerRight, children: <Widget>[
+
+                const Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: 1,
+                    child: Divider(
+                      color: AppColor.darkgrey,
+                      height: 1,
+                    ),
+                  ),
+                ),
                 widget.distance != null && widget.distance.isNotEmpty
                     ? Container(
-                        width: 50,
+                        width: 70,
                         alignment: Alignment.centerRight,
                         decoration: BoxDecoration(
                           color: AppColor.lightwhite,
@@ -59,9 +70,9 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               5.0)), // Set rounded corner radius
                         ),
                         child:Padding(padding: const EdgeInsets.all(8),
-                        child:  Align(alignment: Alignment.center,
+                        child:  Align(alignment: Alignment.centerRight,
                         child: robotoTextWidget(
-                          textval: widget.distance,
+                          textval: '${widget.distance}',
                           colorval: AppColor.black,
                           sizeval: 12,
                           fontWeight: FontWeight.w600,
@@ -69,7 +80,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                       )
                     : Container(),
                 Container(
-                  margin: const EdgeInsets.only(right: 53),
+                  margin: const EdgeInsets.only(right: 70),
                   child: Column(
                     children: [
                       GestureDetector(
@@ -98,7 +109,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                           child: robotoTextWidget(
                                             textval: formatAddress(widget.fromAddress!.address),
                                             colorval: AppColor.black,
-                                            sizeval: 14,
+                                            sizeval: 13,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -107,14 +118,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                               ],
                             ),
                           )),
-                      Container(
-                        height: 2,
-                        margin: const EdgeInsets.only(top: 5,bottom: 5),
-                        child: const Divider(
-                          color: AppColor.darkgrey,
-                          height: 2,
-                        ),
-                      ),
+
                       GestureDetector(
                           onTap: () {
                             print("Tapped a Container");
@@ -140,7 +144,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                           child: robotoTextWidget(
                                             textval: formatAddress(widget.toAddress!.address),
                                             colorval: AppColor.black,
-                                            sizeval: 14,
+                                            sizeval: 13,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),

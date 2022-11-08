@@ -236,7 +236,8 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
   }
 
   Widget driverListItems(int index) {
-    return Flexible(child: Wrap(children: [GestureDetector(
+    return
+    Wrap(children: [GestureDetector(
       onTap: () {
         setState(() {
           selectedIndex = index;
@@ -258,6 +259,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SvgPicture.asset(
                       "assets/svg/car-type-sedan.svg",
@@ -347,35 +349,46 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    robotoTextWidget(
-                        textval:
-                        "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
-                        colorval: AppColor.black,
-                        sizeval: 25,
-                        fontWeight: FontWeight.w800),
-                    vehiclePriceClasses[index].seller_discount.toDouble() != 0.0
-                        ? Text(
-                      getTotalPrice(
-                          vehiclePriceClasses[index]
-                              .total_fare
-                              .toDouble(),
-                          vehiclePriceClasses[index]
-                              .seller_discount
-                              .toDouble()),
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: const TextStyle(
-                          fontSize: 20,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Roboto',
-                          decoration: TextDecoration.lineThrough),
-                    )
-                        : Container(),
-                    vehiclePriceClasses[index].discountPercent.toString() !=
+                    Row(children: [
+                      robotoTextWidget(
+                          textval:
+                          "₹${vehiclePriceClasses[index].total_fare.toStringAsFixed(0)}",
+                          colorval: AppColor.black,
+                          sizeval: 30,
+                          fontWeight: FontWeight.w800),
+                      SizedBox(width: 10,),
+                      vehiclePriceClasses[index]
+                          .seller_discount
+                          .toDouble() !=
+                          0.0
+                          ? Text(
+                        '₹${getTotalPrice(
+                            vehiclePriceClasses[index]
+                                .total_fare
+                                .toDouble(),
+                            vehiclePriceClasses[index]
+                                .seller_discount
+                                .toDouble())}',
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            fontSize: 22,
+                            color: AppColor.black,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Roboto',
+                            decoration: TextDecoration.lineThrough),
+                      )
+                          : Container(),
+
+                    ],),
+                    vehiclePriceClasses[index]
+                        .discountPercent
+                        .toString() !=
                         null &&
-                        vehiclePriceClasses[index].discountPercent != 0.0
+                        vehiclePriceClasses[index]
+                            .discountPercent !=
+                            0.0
                         ? Column(
                       children: [
                         const robotoTextWidget(
@@ -394,10 +407,11 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                         : Container()
                   ],
                 ),
+
               ],
             )),
       ),
-    )],));
+    )],);
   }
 
   String getTotalPrice(double totalFare, double discount) {
@@ -407,6 +421,6 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
 
     double sum = num1 + num2;
     print('sum:$sum');
-    return "₹${sum.toStringAsFixed(0)}";
+    return "${sum.toStringAsFixed(0)}";
   }
 }
