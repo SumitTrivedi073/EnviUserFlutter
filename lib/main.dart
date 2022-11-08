@@ -549,7 +549,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: Text(
-                        title!,
+                        title!.toTitleCase(),
                         style: const TextStyle(
                             color: AppColor.butgreen,
                             fontFamily: 'Roboto',
@@ -581,7 +581,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                           width: 100,
                         child: ElevatedButton(
                           onPressed: () {
-                            OneContext().popDialog('ok');
+                            OneContext().popDialog('Ok');
                           },
                           style: ElevatedButton.styleFrom(
                             primary: AppColor.darkGreen,
