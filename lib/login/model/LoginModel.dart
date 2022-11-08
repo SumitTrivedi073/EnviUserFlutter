@@ -19,6 +19,8 @@ class LoginModel {
       } else {
         propic = encodeImgURLString(imageServerurl + json["propic"]);
       }
+    }else{
+      propic = "";
     }
     gender = json["gender"];
     phone = json["phone"];
