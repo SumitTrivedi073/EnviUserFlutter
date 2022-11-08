@@ -155,7 +155,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         if (message != null) {
           print("New Notification");
           checkLoginStatus();
-
+          ShowPushNotificationExpand(
+              message.notification!.title, message.notification!.body);
         }
       },
     );
