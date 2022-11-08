@@ -1,6 +1,7 @@
 import 'package:envi/provider/model/tripDataModel.dart';
 import 'package:envi/uiwidget/estimate_fare_widget.dart';
 import 'package:envi/uiwidget/sos_view_widget.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -149,9 +150,9 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval:liveTripData
+                                            textval: formatAddress(liveTripData
                                                 .tripInfo!.pickupLocation!.pickupAddress
-                                                .toString(),
+                                                .toString()),
                                             colorval: AppColor.black,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w600,
@@ -193,9 +194,9 @@ class _OnRideWidgetState extends State<OnRideWidget> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval: liveTripData
+                                            textval: formatAddress(liveTripData
                                                 .tripInfo!.dropLocation!.dropAddress
-                                                .toString(),
+                                                .toString()),
                                             colorval: AppColor.black,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w600,

@@ -95,7 +95,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
   void updateExistingUser() {
     _emailController.text = widget.user!.mailid;
     _phoneNoController.text = widget.user!.phone;
-    _firstNameController.text = widget.user!.name;
+    _firstNameController.text = widget.user!.name.toTitleCase();
     if (widget.user!.gender.toString().toLowerCase() == "m" ||
         widget.user!.gender.toString() == "Male") {
       selectedGender = "Male";

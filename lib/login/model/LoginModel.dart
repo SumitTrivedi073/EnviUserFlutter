@@ -13,10 +13,12 @@ class LoginModel {
     token = json['token'];
     id = json['userid'];
     name = json['name'];
-    if(json["propic"].toString().contains(imageServerurl)){
-      propic = encodeImgURLString(json["propic"]);
-    }else{
-      propic = encodeImgURLString(imageServerurl+json["propic"]);
+    if(json["propic"]!=null && json["propic"].toString().isNotEmpty) {
+      if (json["propic"].toString().contains(imageServerurl)) {
+        propic = encodeImgURLString(json["propic"]);
+      } else {
+        propic = encodeImgURLString(imageServerurl + json["propic"]);
+      }
     }
     gender = json["gender"];
     phone = json["phone"];

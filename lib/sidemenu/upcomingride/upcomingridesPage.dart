@@ -296,8 +296,8 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                       children: [
                         SvgPicture.asset(
                           "assets/svg/from-location-img.svg",
-                          width: 20,
-                          height: 20,
+                          width: 18,
+                          height: 18,
                         ),
                         const SizedBox(
                           width: 5,
@@ -324,10 +324,10 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                           height: 20,
                         ),
                         const SizedBox(
-                          width: 5,
+                          width: 12,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width - 80,
+                          width: MediaQuery.of(context).size.width - 82,
                           child: robotoTextWidget(
                             textval: arrtrip[index].toAddress,
                             colorval: AppColor.black,

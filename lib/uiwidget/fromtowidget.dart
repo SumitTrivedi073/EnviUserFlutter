@@ -49,7 +49,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                 widget.distance != null && widget.distance.isNotEmpty
                     ? Container(
                         width: 50,
-                        alignment: Alignment.center,
+                        alignment: Alignment.centerRight,
                         decoration: BoxDecoration(
                           color: AppColor.lightwhite,
                           border: Border.all(
@@ -58,7 +58,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                           borderRadius: const BorderRadius.all(Radius.circular(
                               5.0)), // Set rounded corner radius
                         ),
-                        child:Padding(padding: EdgeInsets.all(8),
+                        child:Padding(padding: const EdgeInsets.all(8),
                         child:  Align(alignment: Alignment.center,
                         child: robotoTextWidget(
                           textval: widget.distance,
@@ -96,7 +96,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval: widget.fromAddress!.address,
+                                            textval: formatAddress(widget.fromAddress!.address),
                                             colorval: AppColor.black,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w600,
@@ -138,7 +138,7 @@ class _FromToWidgetPageState extends State<FromToWidget> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval: widget.toAddress!.address,
+                                            textval: formatAddress(widget.toAddress!.address),
                                             colorval: AppColor.black,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w600,
