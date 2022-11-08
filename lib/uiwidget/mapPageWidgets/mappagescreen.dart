@@ -145,10 +145,7 @@ class MyMapState extends State {
       print(permission);
       if (permission != PermissionStatus.granted) {
         final status = await Permission.location.request();
-
-        print(status);
         if (status != PermissionStatus.granted) {
-          //getLocation();
           showToast("You need location permission for use this App");
           return;
         }
