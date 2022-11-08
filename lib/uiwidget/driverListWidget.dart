@@ -147,12 +147,15 @@ class DriverListItemPageState extends State<DriverListItem> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              robotoTextWidget(
-                                  textval: driverName,
-                                  colorval: AppColor.black,
-                                  sizeval: 12,
-                                  fontWeight: FontWeight.w400),
+                             Align(alignment: Alignment.topLeft,
+                             child:  robotoTextWidget(
+                                 textval: driverName,
+                                 colorval: AppColor.black,
+                                 sizeval: 12,
+                                 fontWeight: FontWeight.w400),),
                               robotoTextWidget(
                                   textval:
                                       '${DriverList[index].durationToPickUpLocation} Minutes Away',
@@ -206,6 +209,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                   Padding(padding: EdgeInsets.all(8),
                   child: Column(children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SvgPicture.asset(
                           "assets/svg/car-type-sedan.svg",
@@ -300,38 +304,42 @@ class DriverListItemPageState extends State<DriverListItem> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        robotoTextWidget(
-                            textval:
-                            "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
-                            colorval: AppColor.black,
-                            sizeval: 30,
-                            fontWeight: FontWeight.w800),
-                        vehiclePriceClasses[index]
-                            .priceClass
-                            .sellerDiscount!
-                            .toDouble() !=
-                            0.0
-                            ? Text(
-                          getTotalPrice(
-                              vehiclePriceClasses[index]
-                                  .priceClass
-                                  .totalFare!
-                                  .toDouble(),
-                              vehiclePriceClasses[index]
-                                  .priceClass
-                                  .sellerDiscount!
-                                  .toDouble()),
-                          textAlign: TextAlign.justify,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: const TextStyle(
-                              fontSize: 25,
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Roboto',
-                              decoration: TextDecoration.lineThrough),
-                        )
-                            : Container(),
+                       Row(children: [
+                         robotoTextWidget(
+                             textval:
+                             "₹${vehiclePriceClasses[index].priceClass.totalFare?.toStringAsFixed(0)}",
+                             colorval: AppColor.black,
+                             sizeval: 30,
+                             fontWeight: FontWeight.w800),
+                         SizedBox(width: 10,),
+                         vehiclePriceClasses[index]
+                             .priceClass
+                             .sellerDiscount!
+                             .toDouble() !=
+                             0.0
+                             ? Text(
+                           '₹${getTotalPrice(
+                               vehiclePriceClasses[index]
+                                   .priceClass
+                                   .totalFare!
+                                   .toDouble(),
+                               vehiclePriceClasses[index]
+                                   .priceClass
+                                   .sellerDiscount!
+                                   .toDouble())}',
+                           textAlign: TextAlign.justify,
+                           overflow: TextOverflow.ellipsis,
+                           maxLines: 2,
+                           style: const TextStyle(
+                               fontSize: 22,
+                               color: AppColor.black,
+                               fontWeight: FontWeight.w600,
+                               fontFamily: 'Roboto',
+                               decoration: TextDecoration.lineThrough),
+                         )
+                             : Container(),
+
+                       ],),
                         vehiclePriceClasses[index]
                             .priceClass
                             .discountPercent
@@ -386,9 +394,10 @@ class DriverListItemPageState extends State<DriverListItem> {
             margin: const EdgeInsets.all(5),
             child: Column(
               children: [
-                SizedBox(
+                driverList.length >1 ?SizedBox(
                   height: 40,
-                  child: Row(
+                  child: Column(children: [
+                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
@@ -433,9 +442,9 @@ class DriverListItemPageState extends State<DriverListItem> {
                                 },
                                 icon: Icon(Icons.arrow_forward_ios,
                                     color:
-                                        (selectedIndex != DriverList.length - 1)
-                                            ? Colors.green
-                                            : AppColor.grey)),
+                                    (selectedIndex != DriverList.length - 1)
+                                        ? Colors.green
+                                        : AppColor.grey)),
                             Container(
                               width: 1,
                               color: AppColor.grey,
@@ -445,11 +454,16 @@ class DriverListItemPageState extends State<DriverListItem> {
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  height: 1,
-                  color: AppColor.grey,
-                ),
+                    Container(
+                      height: 1,
+                      color: AppColor.grey,
+                    ),
+                  ],)
+                ):Container(height: 1,
+                decoration: BoxDecoration(
+                  color: Colors.transparent
+                ),),
+
                 const SizedBox(
                   height: 5,
                 ),

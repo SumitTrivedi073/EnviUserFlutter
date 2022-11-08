@@ -249,9 +249,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval:liveTripData
+                                            textval:formatAddress(liveTripData
                                                 .tripInfo!.pickupLocation!.pickupAddress
-                                                .toString(),
+                                                .toString()),
                                             colorval: AppColor.black,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w600,
@@ -293,9 +293,9 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
                                           child: robotoTextWidget(
-                                            textval: liveTripData
+                                            textval: formatAddress(liveTripData
                                                 .tripInfo!.dropLocation!.dropAddress
-                                                .toString(),
+                                                .toString()),
                                             colorval: AppColor.black,
                                             sizeval: 14,
                                             fontWeight: FontWeight.w600,

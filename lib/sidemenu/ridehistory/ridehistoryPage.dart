@@ -258,7 +258,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                   fontWeight: FontWeight.bold,
                 )
               : robotoTextWidget(
-                  textval: arrtrip[index].status,
+                  textval: arrtrip[index].status.toTitleCase(),
                   colorval: AppColor.black,
                   sizeval: 18.0,
                   fontWeight: FontWeight.bold,
@@ -438,7 +438,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                           quarterTurns: 3,
                           child: robotoTextWidget(
                             textval: "YOUR\nSTATS",
-                            colorval: AppColor.greyblack,
+                            colorval: AppColor.white,
                             sizeval: 13.0,
                             fontWeight: FontWeight.w800,
                           ),

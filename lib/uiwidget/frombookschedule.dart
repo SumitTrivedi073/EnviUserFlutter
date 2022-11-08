@@ -98,36 +98,39 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(8), // <-- Radius
+                      Container(
+                        width: 115,
+                        child: TextButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(5), // <-- Radius
+                                ),
                               ),
+                              backgroundColor:
+                              MaterialStateProperty.all(AppColor.darkGreen)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: robotoTextWidget(
+                              textval: BookNow,
+                              colorval: AppColor.white,
+                              sizeval: 15.0,
+                              fontWeight: FontWeight.w800,
                             ),
-                            backgroundColor:
-                            MaterialStateProperty.all(AppColor.darkGreen)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: robotoTextWidget(
-                            textval: BookNow,
-                            colorval: AppColor.white,
-                            sizeval: 15.0,
-                            fontWeight: FontWeight.w800,
                           ),
+                          onPressed: () {
+                            _status = BookingTiming.now;
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => SelectPickupDropAddress(
+                                      currentLocation: widget.currentLocation,
+                                      title: dropLocation,
+                                      tripType: _status,
+                                    )),
+                                    (route) => true);
+                          },
                         ),
-                        onPressed: () {
-                          _status = BookingTiming.now;
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => SelectPickupDropAddress(
-                                    currentLocation: widget.currentLocation,
-                                    title: dropLocation,
-                                    tripType: _status,
-                                  )),
-                                  (route) => true);
-                        },
                       ),
                       AppConfig().getisScheduleFeatureEnabled()
                           ? TextButton(
@@ -135,7 +138,7 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    8), // <-- Radius
+                                    5), // <-- Radius
                               ),
                             ),
                             backgroundColor: MaterialStateProperty.all(

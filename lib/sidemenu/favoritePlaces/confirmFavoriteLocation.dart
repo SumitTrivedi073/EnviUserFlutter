@@ -239,7 +239,7 @@ print("========${widget.lat}${widget.lng}");
     Placemark place = placemarks[0];
     setState(() {
       Address =
-      '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      '${place.street}, ${place.subLocality}, ${place.locality}';
     });
   }
 }
