@@ -21,6 +21,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,13 +49,13 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     final database =
-        await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+    await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
     final dao = database.taskDao;
 
     runApp(const MyApp());
     checkPermission();
   },
-      (error, stack) =>
+          (error, stack) =>
           FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.green,
             ),
+            builder: OneContext().builder,
             home: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Malbork',
@@ -126,14 +128,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     from = DateTime(
         from.year, from.month, from.day, from.hour, from.minute, from.second);
     to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
-    return (to.difference(from).inHours);
+    return (to
+        .difference(from)
+        .inHours);
   }
 
   void receiveNotification() {
     var initializationSettingsAndroid =
-        const AndroidInitializationSettings('@drawable/ic_notification');
+    const AndroidInitializationSettings('@drawable/ic_notification');
     const DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings(
+    DarwinInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
       requestAlertPermission: true,
@@ -146,51 +150,46 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.instance.getInitialMessage().then(
-      (message) {
+          (message) {
         print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           print("New Notification");
           checkLoginStatus();
-          showToast(message.notification!.body.toString()
-          );
-          // Future.delayed(Duration(milliseconds:  9000), () {
-          //   ShowPushNotificationExpand(message.notification!.title.toString(),message.notification!.body.toString());
-          // },
-          // );
+
         }
       },
     );
 
     // 2. This method only call when App in forground it mean app must be opened
     FirebaseMessaging.onMessage.listen(
-      (message) {
+          (message) {
         print("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data11 ${message.data}");
-          // ShowPushNotificationExpand(message.notification!.title.toString(),message.notification!.body.toString());
+   //       LocalNotificationService.createanddisplaynotification(message);
+          if (message != null) {
+              ShowPushNotificationExpand(
+                  message.notification!.title, message.notification!.body);
+            }
 
-          //showToast(message.notification!.body.toString());
-          LocalNotificationService.createanddisplaynotification(message);
         }
       },
     );
 
     // 3. This method only call when App in background and not terminated(not closed)
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (message) {
+          (message) {
         print("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
-          showToast(message.notification!.body.toString());
-         //  Future.delayed(const Duration(milliseconds:  3000), () {
-         // ShowPushNotificationExpand("message.notification!.title.toString()","message.notification!.body.toString()");
-         //
-         //
-         // },
-         //  );
+          if (message != null) {
+              ShowPushNotificationExpand(
+                  message.notification!.title, message.notification!.body);
+            }
+
         }
       },
     );
@@ -202,7 +201,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) => const Loginpage()),
-          (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
     } else {
       SetProfileData();
       GetAllFavouriteAddress();
@@ -228,8 +227,14 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(PageBackgroundImage),
@@ -290,7 +295,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       LandingPageConfig.setcustomerCare(
           jsonData['landingPageSettings']['customerCare']);
       AppConfig.setminAndroidVersion(jsonData['applicationConfig']
-          ['swVersionConfig']['minAndroidVersion']);
+      ['swVersionConfig']['minAndroidVersion']);
       AppConfig.setminiOSVersion(
           jsonData['applicationConfig']['swVersionConfig']['miniOSVersion']);
       AppConfig.setandroidAppUrl(
@@ -298,36 +303,36 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setiosAppUrl(
           jsonData['applicationConfig']['swVersionConfig']['iosAppUrl']);
       AppConfig.setadvance_booking_time_limit(jsonData['applicationConfig']
-          ['scheduleTripConfig']['advance_booking_time_limit']);
+      ['scheduleTripConfig']['advance_booking_time_limit']);
       AppConfig.setdriver_assignment_time_limit(jsonData['applicationConfig']
-          ['scheduleTripConfig']['driver_assignment_time_limit']);
+      ['scheduleTripConfig']['driver_assignment_time_limit']);
       AppConfig.setisScheduleFeatureEnabled(jsonData['applicationConfig']
-          ['scheduleTripConfig']['isScheduleFeatureEnabled']);
+      ['scheduleTripConfig']['isScheduleFeatureEnabled']);
       AppConfig.setscheduleFreeDriverDistance(jsonData['applicationConfig']
-          ['scheduleTripConfig']['scheduleFreeDriverDistance']);
+      ['scheduleTripConfig']['scheduleFreeDriverDistance']);
       AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
-          ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
+      ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
       AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
-              ['paymentOptions']
+      ['paymentOptions']
           .toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
       AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']
-          ['priceConfig']['isCancellationFeeApplicable']);
+      ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
       AppConfig.setgoogleDirectionDriverIntervalInMin(
           jsonData['applicationConfig']['searchConfig']
-              ['googleDirectionWFDriverIntervalInMin']);
+          ['googleDirectionWFDriverIntervalInMin']);
       AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
           jsonData['applicationConfig']['searchConfig']
-              ['googleDirectionWFDriverIntervalMaxTrialCount']);
+          ['googleDirectionWFDriverIntervalMaxTrialCount']);
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  const HomePage(title: "title")),
-          (Route<dynamic> route) => false);
+              const HomePage(title: "title")),
+              (Route<dynamic> route) => false);
       sharedPreferences.setInt(
           autoExpiryDurationText, LandingPageConfig().getautoExpiryDuration());
       // sharedPreferences.setString(
@@ -359,61 +364,62 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         builder: ((context) {
           Future.delayed(Duration(milliseconds: miliSecond + 5000), () {
             Navigator.of(context, rootNavigator: true).pop();
-            },
+          },
           );
           return Dialog(
               child: Image.network(
-            encodeImgURLString(
-              sharedPreferences.getString(infoPopupImageUrlText)!,
-            ),
-            fit: BoxFit.fill,
-          ));
+                encodeImgURLString(
+                  sharedPreferences.getString(infoPopupImageUrlText)!,
+                ),
+                fit: BoxFit.fill,
+              ));
         }));
   }
 
   void GetAllFavouriteAddress() async {
     final database =
-        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
+    await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     final dao = database.taskDao;
 
     dynamic response =
-        await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
+    await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
     if (response != null && response.statusCode == 200) {
-      if (convert.jsonDecode(response.body)['content']!=null &&convert.jsonDecode(response.body)['content']['address'] != null){
+      if (convert.jsonDecode(response.body)['content'] != null &&
+          convert.jsonDecode(response.body)['content']['address'] != null) {
         List<dynamic> jsonData =
         convert.jsonDecode(response.body)['content']['address'];
-      // print(jsonData);
-      for (var res in jsonData) {
-        if (res["address"] != null || res["address"] != "") {
-          String title = "";
+        // print(jsonData);
+        for (var res in jsonData) {
+          if (res["address"] != null || res["address"] != "") {
+            String title = "";
 
-          if (res["name"] != "") {
-            title = res["name"];
-          } else {
-            final splitList = res["address"].split(",");
-            title = splitList[1];
-          }
-          try {
-            var data = await dao.findDataByaddressg(res["address"]);
-            if (data == null) {
-              final task = FavoritesData.optional(
-                  identifier: res["id"],
-                  address: res["address"],
-                  isFavourite: res["isFavourite"],
-                  latitude: res["location"]['coordinates'][1].toString(),
-                  longitude: res["location"]['coordinates'][0].toString(),
-                  title: title);
-              print(task);
-              await dao.insertTask(task);
+            if (res["name"] != "") {
+              title = res["name"];
             } else {
-              print("data$data");
+              final splitList = res["address"].split(",");
+              title = splitList[1];
             }
-          } catch (e) {
-            print(e.toString());
+            try {
+              var data = await dao.findDataByaddressg(res["address"]);
+              if (data == null) {
+                final task = FavoritesData.optional(
+                    identifier: res["id"],
+                    address: res["address"],
+                    isFavourite: res["isFavourite"],
+                    latitude: res["location"]['coordinates'][1].toString(),
+                    longitude: res["location"]['coordinates'][0].toString(),
+                    title: title);
+                print(task);
+                await dao.insertTask(task);
+              } else {
+                print("data$data");
+              }
+            } catch (e) {
+              print(e.toString());
+            }
           }
         }
       }
-    }
     } else {
       setState(() {});
     }
@@ -445,7 +451,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                         padding: EdgeInsets.all(5),
                         child: robotoTextWidget(
                             textval:
-                                'Latest Envi App is available please update first and enjoy',
+                            'Latest Envi App is available please update first and enjoy',
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w600),
@@ -470,7 +476,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                             primary: AppColor.darkGreen,
                             shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.circular(5), // <-- Radius
+                              BorderRadius.circular(5), // <-- Radius
                             ),
                           ),
                           child: const robotoTextWidget(
@@ -501,9 +507,9 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                 dailyOnceTimeText, DateTime.now().toString());
           } else {
             if (hrsBetween(
-                    DateTime.parse(
-                        sharedPreferences.getString(dailyOnceTimeText)!),
-                    DateTime.now()) >
+                DateTime.parse(
+                    sharedPreferences.getString(dailyOnceTimeText)!),
+                DateTime.now()) >
                 24) {
               displayInfoPopup(
                   sharedPreferences.getInt(autoExpiryDurationText)!);
@@ -530,74 +536,72 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       }
     }
   }
-  Future ShowPushNotificationExpand(String titel,String message) {
 
-   return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: ((context) {  return AlertDialog(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          content: Wrap(children: [
-            Column(mainAxisSize: MainAxisSize.min, children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Text(
-                  titel,
-                  style: const TextStyle(
-                      color: AppColor.butgreen,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Wrap(
-                  children: [
-                    Text(
-                      message,
-                      style: TextStyle(
-                          color: AppColor.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColor.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
+  Future ShowPushNotificationExpand(String? title, String? message) {
+    return OneContext().showDialog(
+        barrierDismissible: false,
+        builder: (_) =>
+            AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                content: Wrap(children: [
+                  Column(mainAxisSize: MainAxisSize.min, children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Text(
+                        title!,
+                        style: const TextStyle(
+                            color: AppColor.butgreen,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
                       ),
                     ),
-                    child: robotoTextWidget(
-                      textval: cancel,
-                      colorval: AppColor.greyblack,
-                      sizeval: 14,
-                      fontWeight: FontWeight.w600,
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Wrap(
+                        children: [
+                          Text(
+                            message!,
+                            style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                        Container(
+                          width: 100,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            OneContext().popDialog('ok');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColor.darkGreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  12), // <-- Radius
+                            ),
+                          ),
+                          child: robotoTextWidget(
+                            textval: 'Ok',
+                            colorval: AppColor.white,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        ),
 
-                ],
-              ),
-            ]),
-          ]));
-      }),);
-
+                  ]),
+                ]))
+    );
   }
 
 }
