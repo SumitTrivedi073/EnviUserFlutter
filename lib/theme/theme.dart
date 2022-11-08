@@ -21,12 +21,26 @@ getPadding({@required context, top: 0.0, right: 0.0, bottom: 0.0, left: 0.0}) {
 }
 
 getsmallNetworkImage(context, path) {
-  if (path != null && path != null) {
-    return CircleAvatar(
-        radius: 18,
-        foregroundImage: NetworkImage(
-          encodeImgURLString(path),
-        )); //Image.network(path,height: 40, fit: BoxFit.cover);
+  if (path != null) {
+    return ClipOval(
+      child: Image.network(
+        encodeImgURLString(path),
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            Images.personPlaceHolderImage,
+            height: 100,
+          );
+        },
+        fit: BoxFit.fill,
+        height: 40,
+        width: 40,
+      ),
+    );
+    // CircleAvatar(
+    //     radius: 18,
+    //     foregroundImage: NetworkImage(
+    //       encodeImgURLString(path),
+    //     )); //Image.network(path,height: 40, fit: BoxFit.cover);
   } else {
     return Container(
       color: AppColor.white,

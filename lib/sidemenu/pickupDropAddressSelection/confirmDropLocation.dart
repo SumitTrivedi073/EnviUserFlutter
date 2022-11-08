@@ -371,7 +371,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                         Container(
                           padding: const EdgeInsets.all(5),
                           child: robotoTextWidget(
-                            textval: formatAddress(Address),
+                            textval: Address,
                             colorval: AppColor.black,
                             sizeval: 14,
                             fontWeight: FontWeight.w600,
@@ -418,33 +418,33 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           alignment: Alignment.bottomCenter,
           child: Row(
             children: [
-              Expanded(
-                  child: Container(
-                height: 40,
-                margin: const EdgeInsets.all(5),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.pop(context);
-                    // Navigator.pop(context);
+              // Expanded(
+              //     child: Container(
+              //   height: 40,
+              //   margin: const EdgeInsets.all(5),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Navigator.pop(context);
+              //       // Navigator.pop(context);
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const HomePage(title: "title")));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: AppColor.greyblack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // <-- Radius
-                    ),
-                  ),
-                  child: robotoTextWidget(
-                    textval: cancel,
-                    colorval: AppColor.white,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )),
+              //       Navigator.of(context).push(MaterialPageRoute(
+              //           builder: (BuildContext context) =>
+              //               const HomePage(title: "title")));
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       primary: AppColor.greyblack,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(12), // <-- Radius
+              //       ),
+              //     ),
+              //     child: robotoTextWidget(
+              //       textval: cancel,
+              //       colorval: AppColor.white,
+              //       sizeval: 14,
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   ),
+              // )),
               Expanded(
                 child: Container(
                     height: 40,
@@ -631,8 +631,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       toAddressName = (place.subLocality != '')
           ? place.subLocality
           : place.subAdministrativeArea;
-      Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      Address = '${place.street},${place.locality}, ${place.subLocality}';
     });
   }
 }

@@ -266,7 +266,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
         height: 10,
       ),
       robotoTextWidget(
-        textval: Profiledata().getname().toString(),
+        textval: Profiledata().getname().toString().toTitleCase(),
         colorval: AppColor.grey,
         fontWeight: FontWeight.w800,
         sizeval: 20.0,
