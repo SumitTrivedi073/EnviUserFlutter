@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/mapStyle.dart';
@@ -138,15 +139,27 @@ class MyMapState extends State {
   }
 
   Future getCurrentLocation() async {
-    var permission = Permission.locationWhenInUse.status;
-    print(permission);
-    if (permission != PermissionStatus.granted) {
-      final status = await Permission.location.request();
 
-      print(status);
-      if (status != PermissionStatus.granted) {
-        //getLocation();
-        showToast("You need location permission for use this App");
+    if (Platform.isAndroid) {
+      var permission = Permission.locationWhenInUse.status;
+      print(permission);
+      if (permission != PermissionStatus.granted) {
+        final status = await Permission.location.request();
+
+        print(status);
+        if (status != PermissionStatus.granted) {
+          //getLocation();
+          showToast("You need location permission for use this App");
+          return;
+        }
+      }
+    }
+
+    if (Platform.isIOS) {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission != PermissionStatus.granted) {
+        LocationPermission permission = await Geolocator.requestPermission();
+        if (permission != PermissionStatus.granted) getLocation();
         return;
       }
     }
