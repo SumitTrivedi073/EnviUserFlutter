@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               AppBarWidget(),
               CardBanner(
-                  title: 'Welcome $name'.toTitleCase(),
+                  title: 'Welcome ${name.toTitleCase()}',
                   image: 'assets/images/welcome_card_dashboard.png'),
               const ScheduleListAlertConsumer(),
             ],
