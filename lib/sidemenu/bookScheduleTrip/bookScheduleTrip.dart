@@ -87,7 +87,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
             FromToWidget(
               fromAddress: widget.fromAddress,
               toAddress: widget.toAddress,
-              distance: "$distance Km",
+              distance: "$distance",
               tripType: BookingTiming.later,
             ),
             CarCategoriesWidget(
