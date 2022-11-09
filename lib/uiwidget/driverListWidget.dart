@@ -206,7 +206,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.all(8),
+                  Padding(padding: const EdgeInsets.all(8),
                   child: Column(children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,10 +216,8 @@ class DriverListItemPageState extends State<DriverListItem> {
                           width: 40,
                           height: 30,
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             robotoTextWidget(
                                 textval: DriverList[index]
@@ -311,7 +309,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                              colorval: AppColor.black,
                              sizeval: 30,
                              fontWeight: FontWeight.w800),
-                         SizedBox(width: 10,),
+                         const SizedBox(width: 10,),
                          vehiclePriceClasses[index]
                              .priceClass
                              .sellerDiscount!
@@ -392,7 +390,7 @@ class DriverListItemPageState extends State<DriverListItem> {
             child: Column(
               children: [
                 driverList.length >1 ?SizedBox(
-                  height: 40,
+                  height: 50,
                   child: Column(children: [
                     Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -457,7 +455,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                     ),
                   ],)
                 ):Container(height: 1,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.transparent
                 ),),
 
@@ -512,7 +510,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                           borderRadius: BorderRadius.circular(5), // <-- Radius
                         ),
                       ),
-                      child: Padding(padding: EdgeInsets.all(15),
+                      child: Padding(padding: const EdgeInsets.all(15),
                       child: robotoTextWidget(
                         textval: bookNow.toUpperCase(),
                         colorval: AppColor.white,

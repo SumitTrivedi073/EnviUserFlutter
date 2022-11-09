@@ -14,25 +14,39 @@ class TripDataModel {
     required this.driverInfo,
     required this.driverLocation,
     required this.passengerInfo,
+    required this.driverRating,
     required this.tripInfo,
   });
 
   DriverInfo? driverInfo;
   DriverLocation? driverLocation;
   PassengerInfo? passengerInfo;
+  DriverRating? driverRating;
   TripInfo? tripInfo;
 
   factory TripDataModel.fromJson(Map<String, dynamic> json) => TripDataModel(
-        driverInfo: json["driverInfo"]!=null ? DriverInfo.fromJson(json["driverInfo"]):null,
-        driverLocation: json["driverLocation"]!=null ? DriverLocation.fromJson(json["driverLocation"]):null,
-        passengerInfo: json["passengerInfo"]!=null ? PassengerInfo.fromJson(json["passengerInfo"]):null,
-        tripInfo: json["tripInfo"]!=null ? TripInfo.fromJson(json["tripInfo"]):null,
+        driverInfo: json["driverInfo"] != null
+            ? DriverInfo.fromJson(json["driverInfo"])
+            : null,
+        driverLocation: json["driverLocation"] != null
+            ? DriverLocation.fromJson(json["driverLocation"])
+            : null,
+        passengerInfo: json["passengerInfo"] != null
+            ? PassengerInfo.fromJson(json["passengerInfo"])
+            : null,
+    driverRating: json["driverRating"] != null
+            ? DriverRating.fromJson(json["driverRating"])
+            : null,
+        tripInfo: json["tripInfo"] != null
+            ? TripInfo.fromJson(json["tripInfo"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         "driverInfo": driverInfo!.toJson(),
         "driverLocation": driverLocation!.toJson(),
         "passengerInfo": passengerInfo!.toJson(),
+        "driverRating": driverRating!.toJson(),
         "tripInfo": tripInfo!.toJson(),
       };
 }
@@ -117,6 +131,23 @@ class PassengerInfo {
       };
 }
 
+class DriverRating {
+  DriverRating({
+    required this.rating,
+  });
+
+  int? rating;
+
+  factory DriverRating.fromJson(Map<String, dynamic> json) => DriverRating(
+    rating: json["rating"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "rating": rating,
+  };
+}
+
+
 class TripInfo {
   TripInfo({
     required this.priceClass,
@@ -143,16 +174,24 @@ class TripInfo {
   ArrivalAtDestination? arrivalAtDestination;
 
   factory TripInfo.fromJson(Map<String, dynamic> json) => TripInfo(
-        priceClass: json["priceClass"]!=null ? PriceClass.fromJson(json["priceClass"]):null,
+        priceClass: json["priceClass"] != null
+            ? PriceClass.fromJson(json["priceClass"])
+            : null,
         specialRemarks: json["specialRemarks"],
         paymentMode: json["paymentMode"],
         passengerTripMasterId: json["passengerTripMasterId"],
         tripStatus: json["tripStatus"],
         scheduledTrip: json["scheduledTrip"],
         otp: json["otp"],
-        dropLocation: json["dropLocation"] !=null ? DropLocation.fromJson(json["dropLocation"]):null,
-        pickupLocation: json["pickupLocation"]!=null ? PickupLocation.fromJson(json["pickupLocation"]):null,
-        arrivalAtDestination: json["arrivalAtDestination"] != null ? ArrivalAtDestination.fromJson(json["arrivalAtDestination"]) : null,
+        dropLocation: json["dropLocation"] != null
+            ? DropLocation.fromJson(json["dropLocation"])
+            : null,
+        pickupLocation: json["pickupLocation"] != null
+            ? PickupLocation.fromJson(json["pickupLocation"])
+            : null,
+        arrivalAtDestination: json["arrivalAtDestination"] != null
+            ? ArrivalAtDestination.fromJson(json["arrivalAtDestination"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {

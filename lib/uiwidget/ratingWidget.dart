@@ -75,10 +75,10 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
                       height: 7,
                     ),
                     RatingBar.builder(
-                      initialRating: 0,
+                      initialRating: widget.livetripData!.driverRating!=null && widget.livetripData!.driverRating!.rating!.toDouble()!=null ?widget.livetripData!.driverRating!.rating!.toDouble():0,
                       minRating: 1,
                       direction: Axis.horizontal,
-                      allowHalfRating: true,
+                      allowHalfRating: false,
                       itemCount: 5,
                       itemSize: 27,
                       unratedColor: AppColor.border,

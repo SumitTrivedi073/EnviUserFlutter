@@ -346,7 +346,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                                )),
                            SizedBox(width:5),
                            robotoTextWidget(
-                             textval: arrtrip[index].name,
+                             textval: arrtrip[index].name.toTitleCase(),
                              colorval: AppColor.darkgrey,
                              sizeval: 14.0,
                              fontWeight: FontWeight.w600,
@@ -366,9 +366,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 15),
-                ),
+
                 arrtrip[index].distance != 'NA'
                     ? robotoTextWidget(
                         textval: "Distance: ${arrtrip[index].distance} Km",
@@ -379,15 +377,15 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                     : robotoTextWidget(
                   textval: 'Vehicle No: ${arrtrip[index].vehicle.Vnumber}',
                   colorval: AppColor.darkgrey,
-                  sizeval: 13.0,
+                  sizeval: 12.0,
                   fontWeight: FontWeight.bold,
                 ),
               ]),
               arrtrip[index].distance != 'NA'
                   ?   robotoTextWidget(
-                textval: 'Vehicle Number: ${arrtrip[index].vehicle.Vnumber}',
+                textval: 'Vehicle Number: ${arrtrip[index].vehicle.Vnumber.toUpperCase()}',
                 colorval: AppColor.darkgrey,
-                sizeval: 13.0,
+                sizeval: 12.0,
                 fontWeight: FontWeight.w600,
               ):Container(),
             ],
