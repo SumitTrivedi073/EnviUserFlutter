@@ -44,6 +44,13 @@ class _AppBarPageState extends State<ConfirmDriverPopup> {
   bool isLoading = false;
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return   isLoading

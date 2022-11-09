@@ -57,6 +57,15 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     super.dispose();
   }
 
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+
   void _firstLoad() async {
     setState(() {
       _isFirstLoadRunning = true;

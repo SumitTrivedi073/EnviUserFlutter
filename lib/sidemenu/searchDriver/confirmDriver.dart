@@ -38,6 +38,15 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
   GoogleMapController? _controller;
 
 
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState

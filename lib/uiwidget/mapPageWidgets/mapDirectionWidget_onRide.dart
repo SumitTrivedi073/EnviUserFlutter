@@ -69,6 +69,14 @@ class _MapDirectionWidgetOnRideState
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
   late String _sessionToken;
   var uuid = const Uuid();
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
 
   @override
   void initState() {

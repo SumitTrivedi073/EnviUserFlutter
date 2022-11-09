@@ -26,6 +26,15 @@ class _SearchDriverPageState extends State<SearchDriver> {
   final pagecontroller = PageController();
   late String distance = "";
 
+
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

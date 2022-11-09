@@ -19,6 +19,14 @@ class PaymentBreakdownWidget extends StatefulWidget {
 
 class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
   bool arrowClicked = false;
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double totalTax =

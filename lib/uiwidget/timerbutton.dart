@@ -42,6 +42,13 @@ class _TimerButtonState extends State<TimerButton>
   ];
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();

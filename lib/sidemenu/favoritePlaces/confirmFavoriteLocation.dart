@@ -42,6 +42,16 @@ print("========${widget.lat}${widget.lng}");
     _cameraPosition =  CameraPosition(target: LatLng(widget.lat, widget.lng), zoom: 10.0);
    // getCurrentLocation();
   }
+
+
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   void LoadMap() async {
     print("========${widget.lat},${widget.lng}");
     setState(() {

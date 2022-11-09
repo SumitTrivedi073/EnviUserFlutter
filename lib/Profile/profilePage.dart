@@ -25,6 +25,13 @@ class _profilePageState extends State<ProfilePage> {
 
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
 
 
   @override

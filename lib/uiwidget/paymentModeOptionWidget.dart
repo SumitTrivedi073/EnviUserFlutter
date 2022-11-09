@@ -27,6 +27,13 @@ class _PaymentModeOptionWidgetState extends State<PaymentModeOptionWidget> {
   
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     PaymentOption = PaymentOption.replaceAll("[", "");
     PaymentOption = PaymentOption.replaceAll("]", "");
