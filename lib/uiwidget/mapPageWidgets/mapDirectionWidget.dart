@@ -35,6 +35,13 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
 
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     markers.add(Marker( //add start location marker
       markerId: MarkerId(pickupLocation.toString()),

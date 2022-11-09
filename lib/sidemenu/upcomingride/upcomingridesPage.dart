@@ -48,6 +48,15 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     super.dispose();
   }
 
+
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   void _firstLoad() async {
 
     try {

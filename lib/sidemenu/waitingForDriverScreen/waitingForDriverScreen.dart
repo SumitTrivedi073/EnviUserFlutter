@@ -43,6 +43,14 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
     super.initState();
     disableFullScreen();
   }
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
 
   disableFullScreen() {
     if (fullScreenDisableTimer != null && fullScreenDisableTimer!.isActive) {

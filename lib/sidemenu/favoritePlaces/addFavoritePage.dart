@@ -54,6 +54,15 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   late LatLng latlong;
   int? editid;
 
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();

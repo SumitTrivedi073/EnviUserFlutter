@@ -21,15 +21,23 @@ void main() {
 class MyHomePage extends StatefulWidget {
   @override
   State createState() {
-    // TODO: implement createState
+  
     return MyHomePageState();
   }
 }
 
 class MyHomePageState extends State {
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Scaffold(
       body: MyMap(),
     );
@@ -39,7 +47,7 @@ class MyHomePageState extends State {
 class MyMap extends StatefulWidget {
   @override
   State createState() {
-    // TODO: implement createState
+   
     return MyMapState();
   }
 }
@@ -54,14 +62,14 @@ class MyMapState extends State {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+   
     return (latlong != null)
         ? SafeArea(
             child: Stack(

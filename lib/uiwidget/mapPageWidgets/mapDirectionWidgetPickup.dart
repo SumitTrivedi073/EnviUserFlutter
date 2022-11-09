@@ -83,6 +83,13 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   late Leg currentTravelLeg;
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     //fetch direction polylines from Google API
     super.initState();

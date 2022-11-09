@@ -51,6 +51,16 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
   List<AutocompletePrediction> predictions = [];
   int searctType = 0;
 
+
+  
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState

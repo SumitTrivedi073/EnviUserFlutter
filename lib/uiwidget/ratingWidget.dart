@@ -27,7 +27,15 @@ class RatingBarWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _RatingBarWidgetPageState();
 }
 
+
 class _RatingBarWidgetPageState extends State<RatingBarWidget> {
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
