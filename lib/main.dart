@@ -360,11 +360,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
-    return showDialog(
-        context: context,
-        builder: ((context) {
+    return OneContext().showDialog(
+        builder: (_) {
           Future.delayed(Duration(milliseconds: miliSecond + 5000), () {
-            Navigator.of(context, rootNavigator: true).pop();
+            OneContext().popDialog('Ok');
           },
           );
           return Dialog(
@@ -374,7 +373,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                 ),
                 fit: BoxFit.fill,
               ));
-        }));
+        });
   }
 
   void GetAllFavouriteAddress() async {
@@ -426,12 +425,11 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     }
   }
 
-  Future softwareVersionUpdatePopup() {
-    return showDialog(
+  void softwareVersionUpdatePopup() {
+    OneContext().showDialog(
         barrierDismissible: false,
-        context: context,
-        builder: ((context) {
-          return AlertDialog(
+        builder: (_) =>
+           AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -491,8 +489,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                     ],
                   ),
                 ),
-              ));
-        }));
+              ))
+        );
   }
 
   void showInfoPopup() {
