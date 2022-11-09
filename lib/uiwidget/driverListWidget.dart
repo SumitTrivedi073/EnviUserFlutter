@@ -217,6 +217,7 @@ class DriverListItemPageState extends State<DriverListItem> {
                           height: 30,
                         ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             robotoTextWidget(
                                 textval: DriverList[index]

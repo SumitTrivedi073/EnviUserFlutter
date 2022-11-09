@@ -418,36 +418,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           alignment: Alignment.bottomCenter,
           child: Row(
             children: [
-              // Expanded(
-              //     child: Container(
-              //   height: 40,
-              //   margin: const EdgeInsets.all(5),
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       // Navigator.pop(context);
-              //       // Navigator.pop(context);
-
-              //       Navigator.of(context).push(MaterialPageRoute(
-              //           builder: (BuildContext context) =>
-              //               const HomePage(title: "title")));
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       primary: AppColor.greyblack,
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(12), // <-- Radius
-              //       ),
-              //     ),
-              //     child: robotoTextWidget(
-              //       textval: cancel,
-              //       colorval: AppColor.white,
-              //       sizeval: 14,
-              //       fontWeight: FontWeight.w600,
-              //     ),
-              //   ),
-              // )),
               Expanded(
                 child: Container(
-                    height: 40,
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
@@ -561,15 +533,16 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                          borderRadius: BorderRadius.circular(5), // <-- Radius
                         ),
                       ),
+                      child: Padding(padding: EdgeInsets.all(15),
                       child: robotoTextWidget(
                         textval: confirmText,
                         colorval: AppColor.white,
                         sizeval: 14,
                         fontWeight: FontWeight.w600,
-                      ),
+                      ),),
                     )),
               ),
             ],
