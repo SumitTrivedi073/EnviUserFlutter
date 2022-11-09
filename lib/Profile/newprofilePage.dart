@@ -218,11 +218,14 @@ class _NewProfilePageState extends State<NewProfilePage> {
         ),
         child: Column(
           children: [
-            AppBarInsideWidget(pagetitle: 'Profile Page'),
+            const AppBarInsideWidget(
+              pagetitle: 'Profile Page',
+              customMargin:  EdgeInsets.fromLTRB(10, 10, 10, 10),
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
+                  padding:const EdgeInsets.only(left: 20, right: 20),
                   child: Column(
                     children: [
                       Image.asset(

@@ -344,10 +344,12 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           ),
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             AppBarInsideWidget(
               pagetitle: widget.title,
               isBackButtonNeeded: true,
+              customMargin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             ),
             Card(
               margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -418,36 +420,8 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           alignment: Alignment.bottomCenter,
           child: Row(
             children: [
-              // Expanded(
-              //     child: Container(
-              //   height: 40,
-              //   margin: const EdgeInsets.all(5),
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       // Navigator.pop(context);
-              //       // Navigator.pop(context);
-
-              //       Navigator.of(context).push(MaterialPageRoute(
-              //           builder: (BuildContext context) =>
-              //               const HomePage(title: "title")));
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       primary: AppColor.greyblack,
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(12), // <-- Radius
-              //       ),
-              //     ),
-              //     child: robotoTextWidget(
-              //       textval: cancel,
-              //       colorval: AppColor.white,
-              //       sizeval: 14,
-              //       fontWeight: FontWeight.w600,
-              //     ),
-              //   ),
-              // )),
               Expanded(
                 child: Container(
-                    height: 40,
                     margin: const EdgeInsets.all(5),
                     child: ElevatedButton(
                       onPressed: () {
@@ -561,14 +535,17 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.greyblack,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12), // <-- Radius
+                          borderRadius: BorderRadius.circular(5), // <-- Radius
                         ),
                       ),
-                      child: robotoTextWidget(
-                        textval: confirmText,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
+                      child: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: robotoTextWidget(
+                          textval: confirmText,
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     )),
               ),
@@ -631,8 +608,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       toAddressName = (place.subLocality != '')
           ? place.subLocality
           : place.subAdministrativeArea;
-      Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}';
+      Address = '${place.street}, ${place.subLocality}, ${place.locality}';
     });
   }
 }

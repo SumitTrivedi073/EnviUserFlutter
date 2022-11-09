@@ -45,7 +45,7 @@ class _TimerButtonState extends State<TimerButton>
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(AppConfig().getisCancellationFeeApplicable()== true) {
+    if (AppConfig().getisCancellationFeeApplicable() == true) {
       if (state == 0) {
         animateButton();
       }
@@ -82,21 +82,26 @@ class _TimerButtonState extends State<TimerButton>
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
             child: MaterialButton(
-              onPressed: () => {
-                //payment not charge that's whywhen cancel booking provide false
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      cancelBooking(context, false),
-                )
-              },
-              elevation: 4.0,
-              minWidth: double.infinity,
-              height: 48.0,
-              color: AppColor.red,
-              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0) ),
-              child: setUpButtonChild(),
-            ),
+                onPressed: () => {
+                      //payment not charge that's whywhen cancel booking provide false
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            cancelBooking(context, false),
+                      )
+                    },
+                elevation: 4.0,
+                minWidth: double.infinity,
+                height: 48.0,
+                color: AppColor.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: (!isLoading)
+                    ? setUpButtonChild()
+                    : const Center(
+                        child: CircularProgressIndicator(
+                        color: AppColor.white,
+                      ))),
           )
         ],
       ),
@@ -111,8 +116,8 @@ class _TimerButtonState extends State<TimerButton>
         width: double.infinity,
         child: MaterialButton(
             onPressed: () => {
-              //payment not charge that's whywhen cancel booking provide false
-              showDialog(
+                  //payment not charge that's whywhen cancel booking provide false
+                  showDialog(
                     context: context,
                     builder: (BuildContext context) =>
                         cancelBooking(context, false),
@@ -139,9 +144,9 @@ class _TimerButtonState extends State<TimerButton>
         width: double.infinity,
         child: MaterialButton(
             onPressed: () => {
-              //payment charge that's why when cancel booking provide true
+                  //payment charge that's why when cancel booking provide true
 
-              showDialog(
+                  showDialog(
                     context: context,
                     builder: (BuildContext context) =>
                         cancelBooking(context, true),
@@ -158,7 +163,8 @@ class _TimerButtonState extends State<TimerButton>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    cancelBookingText("$CancelBooking - ₹${AppConfig().getcancellationFee().toString()}"),
+                    cancelBookingText(
+                        "$CancelBooking - ₹${AppConfig().getcancellationFee().toString()}"),
                   ],
                 ),
               ],
@@ -168,21 +174,21 @@ class _TimerButtonState extends State<TimerButton>
   }
 
   void animateButton() {
-   if(mounted){
-     setState(() {
-       state = 1;
-     });
-   }
+    if (mounted) {
+      setState(() {
+        state = 1;
+      });
+    }
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (counter > 1) {
-        if(mounted) {
+        if (mounted) {
           setState(() {
             counter--;
           });
         }
       } else {
-        if(mounted){
+        if (mounted) {
           setState(() {
             state = 2;
           });
@@ -195,7 +201,7 @@ class _TimerButtonState extends State<TimerButton>
   @override
   void dispose() {
     super.dispose();
-    if (timer!=null && timer!.isActive) {
+    if (timer != null && timer!.isActive) {
       timer!.cancel();
     }
   }
@@ -222,10 +228,9 @@ class _TimerButtonState extends State<TimerButton>
                       groupValue: reasonForCancellation,
                       horizontalAlignment: MainAxisAlignment.spaceAround,
                       onChanged: (value) {
-                          setState(() {
-                            reasonForCancellation = value.toString();
-                          });
-
+                        setState(() {
+                          reasonForCancellation = value.toString();
+                        });
                       },
                       items: _status,
                       textStyle: const TextStyle(
@@ -280,20 +285,20 @@ class _TimerButtonState extends State<TimerButton>
                                     BorderRadius.circular(12), // <-- Radius
                               ),
                             ),
-                            child:  isLoading
+                            child: isLoading
                                 ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 1.5,
-                                ))
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 1.5,
+                                    ))
                                 : robotoTextWidget(
-                              textval: confirm,
-                              colorval: AppColor.white,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
+                                    textval: confirm,
+                                    colorval: AppColor.white,
+                                    sizeval: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                           )),
                     ],
                   )
@@ -306,39 +311,35 @@ class _TimerButtonState extends State<TimerButton>
     Map data;
     data = {
       "passengerTripMasterId":
-      widget.liveTripData!.tripInfo!.passengerTripMasterId != null
-          ? widget.liveTripData!.tripInfo!.passengerTripMasterId
-          :"",
+          widget.liveTripData!.tripInfo!.passengerTripMasterId != null
+              ? widget.liveTripData!.tripInfo!.passengerTripMasterId
+              : "",
       "driverTripMasterId": widget.liveTripData!.driverInfo!.driverId != null
           ? widget.liveTripData!.driverInfo!.driverId
-          :"",
+          : "",
       "reason": reasonForCancellation != null
           ? reasonForCancellation
-          :ShorterWaitingTime,
+          : ShorterWaitingTime,
       "driverId": widget.liveTripData!.driverInfo!.driverId != null
           ? widget.liveTripData!.driverInfo!.driverId
-          :"",
+          : "",
       "location": {
-        "latitude": latlong != null
-            ? latlong!.latitude
-            :0.0,
-        "longitude": latlong != null
-            ? latlong!.longitude
-            :0.0
+        "latitude": latlong != null ? latlong!.latitude : 0.0,
+        "longitude": latlong != null ? latlong!.longitude : 0.0
       }
     };
-      setState(() {
-        isLoading = true;
-      });
+    setState(() {
+      isLoading = true;
+    });
     dynamic res = await HTTP.post(cancelTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-        setState(() {
-          isLoading = false;
-        });
+      setState(() {
+        isLoading = false;
+      });
     } else {
-        setState(() {
-          isLoading = false;
-        });
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

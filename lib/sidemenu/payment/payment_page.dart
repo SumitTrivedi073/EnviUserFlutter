@@ -134,7 +134,7 @@ class _PaymentPageState extends State<PaymentPage> {
       SosModel sosModel = SosModel.fromJson(jsonData);
       showSnackbar(context, sosModel.message);
     } else {
-      throw "Can't update.";
+      print('Rating not Submitted');
     }
   }
 
