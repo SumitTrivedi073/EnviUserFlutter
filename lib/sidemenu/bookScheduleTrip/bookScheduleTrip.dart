@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:date_time_picker/date_time_picker.dart';
+import 'package:bottom_picker/bottom_picker.dart';
 import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/theme.dart';
@@ -38,10 +38,9 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   bool isverify = false;
   vehiclePriceClassesModel? SelectedVehicle;
   late DateTime mindatime;
-
-  final TextEditingController _controller1 =
-      TextEditingController(text: DateTime.now().toString());
-  final TextEditingController _controller2 = TextEditingController(text: '');
+  late DateTime SelectedDate;
+  String selectedTimetext = "";
+  String selectedDatetext = "";
 
   void getSelectvehicle(vehiclePriceClassesModel object) {
     SelectedVehicle = object;
@@ -56,6 +55,11 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
     super.initState();
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
+    SelectedDate = mindatime;
+    var outputFormat = DateFormat("d MMM, yyyy");
+    setState(() {
+      selectedDatetext = outputFormat.format(SelectedDate);
+    });
   }
 
   @override
@@ -98,83 +102,105 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               scheduledAt: scheduledAt,
             ),
             Container(
-              margin: EdgeInsets.only(top: 5,left: 10,right: 10),
+              margin: EdgeInsets.only(left: 10, right: 10),
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(2.0),
                   side: const BorderSide(
-                    color: AppColor.border,
+                    color: AppColor.darkgrey,
                   ),
                 ),
-                child: Padding(padding: EdgeInsets.only(left: 5,right: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: DateTimePicker(
-                        type: DateTimePickerType.date,
-                        dateMask: 'd MMM, yyyy',
-                        controller: _controller1,
-                        //initialValue: SelectedgoLiveDate,
-                        firstDate: DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            DateTime.now().hour),
-                        lastDate: DateTime(2100),
-                        icon: const Icon(Icons.event),
-                        dateLabelText: pickupdate,
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 5, bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          robotoTextWidget(
+                            textval: pickupdate,
+                            colorval: AppColor.darkgrey,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.event,
+                                color: AppColor.grey,
+                              ),
+                              MaterialButton(
+                                height: 20,
+                                onPressed: () {
+                                  _openDatePicker(context);
+                                },
+                                child: robotoTextWidget(
+                                  textval: selectedDatetext,
+                                  colorval: AppColor.black,
+                                  sizeval: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 55,
-                      width: 1,
-                      color: AppColor.border,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: DateTimePicker(
-                        type: DateTimePickerType.time,
-                        dateMask: 'HH:mm',
-                        controller: _controller2,
-                        firstDate: DateTime(
-                          DateTime.now().hour,
-                          DateTime.now().minute,
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: AppColor.darkgrey,
                         ),
-                        lastDate: DateTime(2100),
-                        icon: const Icon(Icons.access_time),
-                        timeLabelText: pickuptime,
-                        onSaved: (val) => setState(() {
-                          updatedtime();
-                        }),
-                      ),
-                    ),
-                  ],
-                ),),
+                        Column(
+                              children: [
+                                robotoTextWidget(
+                                  textval: pickuptime,
+                                  colorval: AppColor.darkgrey,
+                                  sizeval: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                Row(
+                                  children: [const Icon(
+                                    Icons.access_time,
+                                    color: AppColor.grey,
+                                  ),  MaterialButton(
+                                    height: 20,
+                                    onPressed: () {
+                                      _openTimePicker(context);
+                                    },
+                                    child: robotoTextWidget(
+                                      textval: selectedTimetext,
+                                      colorval: AppColor.black,
+                                      sizeval: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),],
+                                )
+                              ],
+                            )
+                      ],
+                  ),
+                ),
               ),
             ),
             Container(
-                margin: const EdgeInsets.only(top: 5,left: 10,right: 10,bottom: 10),
+                margin: const EdgeInsets.only(
+                    top: 5, left: 10, right: 10, bottom: 10),
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (!_controller2.text.isEmpty) {
+                    if (selectedTimetext.isNotEmpty) {
                       if (SelectedVehicle != null &&
                           SelectedVehicle!.type != "") {
-                        DateTime dt =
-                            DateTime.parse(_controller1.text.toString());
-                        var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
-                        var inputDate = inputFormat.parse(
-                            "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}");
-                        if ((mindatime.difference(inputDate).inMinutes) <= 0) {
+                        if ((mindatime.difference(SelectedDate).inMinutes) <=
+                            0) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) =>
                                 _buildPopupDialog(
                                     context,
                                     DateFormat('d MMM, yyyy HH:mm')
-                                        .format(inputDate)),
+                                        .format(SelectedDate)),
                           );
                         } else {
                           int hours =
@@ -214,13 +240,15 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                       borderRadius: BorderRadius.circular(5), // <-- Radius
                     ),
                   ),
-                  child: Padding(padding: EdgeInsets.all(15),
-                  child: robotoTextWidget(
-                    textval: bookingConfirmation.toUpperCase(),
-                    colorval: AppColor.white,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
-                  ),),
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: robotoTextWidget(
+                      textval: bookingConfirmation.toUpperCase(),
+                      colorval: AppColor.white,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 )),
           ],
         ),
@@ -251,10 +279,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-              width: 0.5
-            ),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 5),
@@ -329,9 +354,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-                width: 0.5),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -395,11 +418,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  height: 55,
-                  color: AppColor.grey,
-                    width: 0.5
-                ),
+                Container(height: 55, color: AppColor.grey, width: 0.5),
                 const SizedBox(width: 10),
                 Container(
                     margin: const EdgeInsets.only(right: 10),
@@ -439,10 +458,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-                width: 0.5
-            ),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -476,10 +492,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-                width: 0.5
-            ),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -512,13 +525,15 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   borderRadius: BorderRadius.circular(5), // <-- Radius
                 ),
               ),
-              child: Padding(padding: EdgeInsets.all(10),
-              child: robotoTextWidget(
-                textval: cancel,
-                colorval: AppColor.greyblack,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              ),),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: robotoTextWidget(
+                  textval: cancel,
+                  colorval: AppColor.greyblack,
+                  sizeval: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -531,13 +546,14 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                   borderRadius: BorderRadius.circular(5), // <-- Radius
                 ),
               ),
-              child:  Padding(padding: EdgeInsets.all(10),
-    child:robotoTextWidget(
-                textval: confirm,
-                colorval: AppColor.white,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              )),
+              child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: robotoTextWidget(
+                    textval: confirm,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  )),
             ),
           ],
         )
@@ -546,23 +562,18 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   }
 
   Future<void> updatedtime() async {
-    DateTime dt = DateTime.parse(_controller1.text.toString());
-    var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
-    var inputDate = inputFormat.parse(
-        "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}"); // <-- dd/MM 24H format
+    // <-- dd/MM 24H format
     var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
     setState(() {
-      scheduledAt = outputFormat.format(inputDate);
+      scheduledAt = outputFormat.format(SelectedDate);
     });
   }
 
   Future<void> confirmBooking() async {
-    DateTime dt = DateTime.parse(_controller1.text.toString());
-    var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
-    var inputDate = inputFormat.parse(
-        "${DateFormat('yyyy-MM-dd').format(dt)} ${_controller2.text.toString()}"); // <-- dd/MM 24H format
+    // <-- dd/MM 24H format
     var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
-    var outputDate = outputFormat.format(inputDate);
+    var outputDate = outputFormat.format(SelectedDate);
+    print(outputDate);
     final response = await ApiCollection.AddnewSchedualeTrip(
         widget.fromAddress,
         widget.toAddress,
@@ -582,6 +593,81 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
       }
       showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
     }
+  }
+
+  void _openDatePicker(BuildContext context) {
+    BottomPicker.date(
+      title: pickupdate,
+      titleStyle: const TextStyle(
+        fontWeight: FontWeight.w800,
+        fontSize: 18,
+        color: Colors.white,
+      ),
+      onSubmit: (index) {
+        print(index);
+        // SelectedDate = index;
+        var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
+        SelectedDate = inputFormat.parse(
+            "${DateFormat('yyyy-MM-dd').format(index)} ${DateFormat('HH:mm').format(SelectedDate)}");
+        var outputFormat = DateFormat("d MMM, yyyy");
+        setState(() {
+          selectedDatetext = outputFormat.format(SelectedDate);
+        });
+        updatedtime();
+      },
+      onClose: () {
+        print('Picker closed');
+      },
+      buttonText: confirm.toUpperCase(),
+      buttonTextStyle: const TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w800),
+      pickerTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+      closeIconColor: AppColor.white,
+      buttonSingleColor: Colors.green,
+      backgroundColor: AppColor.greyblack,
+      initialDateTime: SelectedDate,
+      minDateTime: mindatime,
+    ).show(context);
+  }
+
+  void _openTimePicker(BuildContext context) {
+    BottomPicker.time(
+      title: pickuptime,
+      titleStyle: const TextStyle(
+        fontWeight: FontWeight.w800,
+        fontSize: 18,
+        color: Colors.white,
+      ),
+      onSubmit: (index) {
+        print(index);
+        SelectedDate = index;
+
+        var outputFormat = DateFormat("HH:mm aa");
+        setState(() {
+          selectedTimetext = outputFormat.format(SelectedDate);
+        });
+        updatedtime();
+      },
+      onClose: () {
+        print('Picker closed');
+      },
+      buttonText: confirm.toUpperCase(),
+      buttonTextStyle: const TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w800),
+      pickerTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+      closeIconColor: AppColor.white,
+      buttonSingleColor: Colors.green,
+      backgroundColor: AppColor.greyblack,
+      initialDateTime: SelectedDate,
+      minDateTime: mindatime,
+      use24hFormat: false,
+    ).show(context);
   }
 
   retrieveDistance(String distanceInKm) {
