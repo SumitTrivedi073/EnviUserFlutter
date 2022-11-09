@@ -69,6 +69,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   late LatLng previousLocation = const LatLng(0.0, 0.0);
   var carMarker, driverStartingLocation;
   final List<Marker> markers = <Marker>[];
+  late AnimationController animationController;
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
 
@@ -306,7 +307,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    final animationController = AnimationController(
+     animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
       vsync: provider, //From the widget
     );
@@ -408,6 +409,10 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     if(mapController!=null){
       mapController!.dispose();
     }
+    if(animationController!=null && animationController.isAnimating){
+      animationController.dispose();
+    }
+
     super.dispose();
   }
 
