@@ -344,10 +344,12 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           ),
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             AppBarInsideWidget(
               pagetitle: widget.title,
               isBackButtonNeeded: true,
+              customMargin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             ),
             Card(
               margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -536,13 +538,15 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
                           borderRadius: BorderRadius.circular(5), // <-- Radius
                         ),
                       ),
-                      child: Padding(padding: EdgeInsets.all(15),
-                      child: robotoTextWidget(
-                        textval: confirmText,
-                        colorval: AppColor.white,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w600,
-                      ),),
+                      child: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: robotoTextWidget(
+                          textval: confirmText,
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     )),
               ),
             ],
@@ -604,8 +608,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
       toAddressName = (place.subLocality != '')
           ? place.subLocality
           : place.subAdministrativeArea;
-      Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}';
+      Address = '${place.street}, ${place.subLocality}, ${place.locality}';
     });
   }
 }

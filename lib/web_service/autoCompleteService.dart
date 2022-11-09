@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:envi/utils/utility.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../database/database.dart';
@@ -20,7 +21,8 @@ class AutocompleteService {
     }
     for (var i = 0; i < listtt.length; i++) {
       for (var j = i + 1; j < listtt.length; j++) {
-        if (listtt[i]!.address.trim() == listtt[j]!.address.trim() &&
+        if (formatAddress(listtt[i]!.address.trim()) ==
+                formatAddress(listtt[j]!.address.trim()) &&
             listtt[i]!.title.trim() == listtt[j]!.title.trim()) {
           await dao.deleteTask(listtt[i]!);
         }
