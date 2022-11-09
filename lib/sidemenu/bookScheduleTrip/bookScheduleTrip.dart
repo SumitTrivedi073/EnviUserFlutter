@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bottom_picker/bottom_picker.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:envi/enum/BookingTiming.dart';
 import 'package:envi/sidemenu/pickupDropAddressSelection/model/searchPlaceModel.dart';
 import 'package:envi/theme/theme.dart';
@@ -40,8 +39,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   vehiclePriceClassesModel? SelectedVehicle;
   late DateTime mindatime;
   late DateTime SelectedDate;
-  String selectedTimetext ="";
-  String selectedDatetext ="";
+  String selectedTimetext = "";
+  String selectedDatetext = "";
 
   void getSelectvehicle(vehiclePriceClassesModel object) {
     SelectedVehicle = object;
@@ -103,103 +102,98 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               scheduledAt: scheduledAt,
             ),
             Container(
-              margin: EdgeInsets.only(top: 5,left: 10,right: 10),
+              margin: EdgeInsets.only(left: 10, right: 10),
               child: Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
+                  borderRadius: BorderRadius.circular(2.0),
                   side: const BorderSide(
-                    color: AppColor.border,
+                    color: AppColor.darkgrey,
                   ),
                 ),
-                child: Padding(padding: EdgeInsets.only(left: 5,right: 5,top: 20,bottom: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                  children: [  const Icon(
-                    Icons.event,
-                    color: AppColor.grey,
-                  ),Column(children: [
-
-
-                    robotoTextWidget(
-                      textval: pickupdate,
-                      colorval: AppColor.grey,
-                      sizeval: 12,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    MaterialButton(
-
-                      height: 20,
-                      onPressed: () {
-                        _openDatePicker(context);
-                      },
-                      child:  robotoTextWidget(
-                        textval: selectedDatetext!,
-                        colorval: AppColor.black,
-                        sizeval: 14,
-                        fontWeight: FontWeight.w700,
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 5, bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          robotoTextWidget(
+                            textval: pickupdate,
+                            colorval: AppColor.darkgrey,
+                            sizeval: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.event,
+                                color: AppColor.grey,
+                              ),
+                              MaterialButton(
+                                height: 20,
+                                onPressed: () {
+                                  _openDatePicker(context);
+                                },
+                                child: robotoTextWidget(
+                                  textval: selectedDatetext,
+                                  colorval: AppColor.black,
+                                  sizeval: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-
-                  ],)],)
-
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 55,
-                      width: 1,
-                      color: AppColor.border,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [  const Icon(
-                        Icons.access_time,
-                        color: AppColor.grey,
-                      ),Column(children: [
-
-
-                        robotoTextWidget(
-                          textval: pickuptime,
-                          colorval: AppColor.grey,
-                          sizeval: 12,
-                          fontWeight: FontWeight.normal,
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: AppColor.darkgrey,
                         ),
-                        MaterialButton(
-
-height: 20,
-                        onPressed: () {
-                          _openTimePicker(context);
-                        },
-                        child:  robotoTextWidget(
-                          textval: selectedTimetext!,
-                          colorval: AppColor.black,
-                          sizeval: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-
-                      ],)],),
-                    ),
-                  ],
-                ),),
+                        Column(
+                              children: [
+                                robotoTextWidget(
+                                  textval: pickuptime,
+                                  colorval: AppColor.darkgrey,
+                                  sizeval: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                Row(
+                                  children: [const Icon(
+                                    Icons.access_time,
+                                    color: AppColor.grey,
+                                  ),  MaterialButton(
+                                    height: 20,
+                                    onPressed: () {
+                                      _openTimePicker(context);
+                                    },
+                                    child: robotoTextWidget(
+                                      textval: selectedTimetext,
+                                      colorval: AppColor.black,
+                                      sizeval: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),],
+                                )
+                              ],
+                            )
+                      ],
+                  ),
+                ),
               ),
             ),
             Container(
-                margin: const EdgeInsets.only(top: 5,left: 10,right: 10,bottom: 10),
+                margin: const EdgeInsets.only(
+                    top: 5, left: 10, right: 10, bottom: 10),
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
                     if (selectedTimetext.isNotEmpty) {
                       if (SelectedVehicle != null &&
                           SelectedVehicle!.type != "") {
-
-
-                        if ((mindatime.difference(SelectedDate).inMinutes) <= 0) {
+                        if ((mindatime.difference(SelectedDate).inMinutes) <=
+                            0) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) =>
@@ -210,7 +204,8 @@ height: 20,
                           );
                         } else {
                           int hours =
-                              (AppConfig().getadvance_booking_time_limit() / 60).toInt();
+                              (AppConfig().getadvance_booking_time_limit() / 60)
+                                  .toInt();
                           int minutes =
                               (AppConfig().getadvance_booking_time_limit() % 60)
                                   .toInt();
@@ -245,13 +240,15 @@ height: 20,
                       borderRadius: BorderRadius.circular(5), // <-- Radius
                     ),
                   ),
-                  child: Padding(padding: EdgeInsets.all(15),
-                  child: robotoTextWidget(
-                    textval: bookingConfirmation.toUpperCase(),
-                    colorval: AppColor.white,
-                    sizeval: 14,
-                    fontWeight: FontWeight.w600,
-                  ),),
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: robotoTextWidget(
+                      textval: bookingConfirmation.toUpperCase(),
+                      colorval: AppColor.white,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 )),
           ],
         ),
@@ -282,10 +279,7 @@ height: 20,
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-              width: 0.5
-            ),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 5),
@@ -360,9 +354,7 @@ height: 20,
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-                width: 0.5),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -426,11 +418,7 @@ height: 20,
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  height: 55,
-                  color: AppColor.grey,
-                    width: 0.5
-                ),
+                Container(height: 55, color: AppColor.grey, width: 0.5),
                 const SizedBox(width: 10),
                 Container(
                     margin: const EdgeInsets.only(right: 10),
@@ -470,10 +458,7 @@ height: 20,
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-                width: 0.5
-            ),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -507,10 +492,7 @@ height: 20,
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
-            side: const BorderSide(
-              color: AppColor.grey,
-                width: 0.5
-            ),
+            side: const BorderSide(color: AppColor.grey, width: 0.5),
           ),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -543,13 +525,15 @@ height: 20,
                   borderRadius: BorderRadius.circular(5), // <-- Radius
                 ),
               ),
-              child: Padding(padding: EdgeInsets.all(10),
-              child: robotoTextWidget(
-                textval: cancel,
-                colorval: AppColor.greyblack,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              ),),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: robotoTextWidget(
+                  textval: cancel,
+                  colorval: AppColor.greyblack,
+                  sizeval: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -562,13 +546,14 @@ height: 20,
                   borderRadius: BorderRadius.circular(5), // <-- Radius
                 ),
               ),
-              child:  Padding(padding: EdgeInsets.all(10),
-    child:robotoTextWidget(
-                textval: confirm,
-                colorval: AppColor.white,
-                sizeval: 14,
-                fontWeight: FontWeight.w600,
-              )),
+              child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: robotoTextWidget(
+                    textval: confirm,
+                    colorval: AppColor.white,
+                    sizeval: 14,
+                    fontWeight: FontWeight.w600,
+                  )),
             ),
           ],
         )
@@ -585,7 +570,7 @@ height: 20,
   }
 
   Future<void> confirmBooking() async {
-   // <-- dd/MM 24H format
+    // <-- dd/MM 24H format
     var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
     var outputDate = outputFormat.format(SelectedDate);
     print(outputDate);
@@ -609,17 +594,18 @@ height: 20,
       showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
     }
   }
+
   void _openDatePicker(BuildContext context) {
     BottomPicker.date(
       title: pickupdate,
       titleStyle: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 15,
+        fontWeight: FontWeight.w800,
+        fontSize: 18,
         color: Colors.white,
       ),
       onSubmit: (index) {
         print(index);
-       // SelectedDate = index;
+        // SelectedDate = index;
         var inputFormat = DateFormat('yyyy-MM-dd HH:mm');
         SelectedDate = inputFormat.parse(
             "${DateFormat('yyyy-MM-dd').format(index)} ${DateFormat('HH:mm').format(SelectedDate)}");
@@ -632,30 +618,27 @@ height: 20,
       onClose: () {
         print('Picker closed');
       },
-      buttonText:  'Confirm',
-      buttonTextStyle:  const  TextStyle(
-          color:  Colors.white
-      ),
-      pickerTextStyle:  const TextStyle(
-        color:  Colors.white,
-        fontSize:  14,
-        fontWeight:  FontWeight.bold,
+      buttonText: confirm.toUpperCase(),
+      buttonTextStyle: const TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w800),
+      pickerTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
       ),
       closeIconColor: AppColor.white,
-      buttonSingleColor:  Colors.black,
-      backgroundColor: AppColor.greyblack.withOpacity(0.9),
+      buttonSingleColor: Colors.green,
+      backgroundColor: AppColor.greyblack,
       initialDateTime: SelectedDate,
       minDateTime: mindatime,
-      //bottomPickerTheme: BottomPickerTheme.orange,
-
     ).show(context);
   }
+
   void _openTimePicker(BuildContext context) {
     BottomPicker.time(
       title: pickuptime,
       titleStyle: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 15,
+        fontWeight: FontWeight.w800,
+        fontSize: 18,
         color: Colors.white,
       ),
       onSubmit: (index) {
@@ -671,24 +654,22 @@ height: 20,
       onClose: () {
         print('Picker closed');
       },
-      buttonText:  'Confirm',
-      buttonTextStyle:  const  TextStyle(
-          color:  Colors.white
-      ),
-      pickerTextStyle:  const TextStyle(
-        color:  Colors.white,
-        fontSize:  14,
-        fontWeight:  FontWeight.bold,
+      buttonText: confirm.toUpperCase(),
+      buttonTextStyle: const TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w800),
+      pickerTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
       ),
       closeIconColor: AppColor.white,
-      buttonSingleColor:  Colors.black,
-      backgroundColor: AppColor.greyblack.withOpacity(0.9),
+      buttonSingleColor: Colors.green,
+      backgroundColor: AppColor.greyblack,
       initialDateTime: SelectedDate,
       minDateTime: mindatime,
-      //gradientColors: [Color(0xfffdcbf1), Color(0xffe6dee9)],
       use24hFormat: false,
     ).show(context);
   }
+
   retrieveDistance(String distanceInKm) {
     setState(() {
       distance = distanceInKm;
