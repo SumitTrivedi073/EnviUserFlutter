@@ -11,12 +11,13 @@ class AppBarInsideWidget extends StatefulWidget {
   final String pagetitle;
   final bool isBackButtonNeeded;
   final dynamic onPressBack;
-
-   const AppBarInsideWidget(
+  final EdgeInsets? customMargin;
+  const AppBarInsideWidget(
       {Key? key,
       required this.pagetitle,
       this.isBackButtonNeeded = true,
-      this.onPressBack})
+      this.onPressBack,
+      this.customMargin})
       : super(key: key);
 
   @override
@@ -28,15 +29,16 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+ 
     return Container(
-      margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
+      margin: widget.customMargin ??
+          const EdgeInsets.only(top: 30, left: 10, right: 10),
       child: Stack(
         children: <Widget>[
           Card(
@@ -83,7 +85,7 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
                   ),
                 ],
               )),
-      ],
+        ],
       ),
     );
   }
