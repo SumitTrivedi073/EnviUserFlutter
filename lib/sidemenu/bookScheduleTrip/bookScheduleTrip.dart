@@ -611,7 +611,7 @@ height: 20,
   }
   void _openDatePicker(BuildContext context) {
     BottomPicker.date(
-      title: pickuptime,
+      title: pickupdate,
       titleStyle: const TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 15,
