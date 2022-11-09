@@ -270,6 +270,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                       width: 20,
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         robotoTextWidget(
                             textval: vehiclePriceClasses[index]
