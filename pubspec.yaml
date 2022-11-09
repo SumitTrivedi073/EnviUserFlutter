@@ -70,6 +70,7 @@ dependencies:
   url_launcher: ^6.1.5
   animate_do: ^2.1.0
   one_context: ^2.1.0
+  bottom_picker: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
