@@ -69,7 +69,9 @@ class _MapDirectionWidgetOnRideState
   Stream<List<Marker>> get mapMarkerStream => _mapMarkerSC.stream;
   late String _sessionToken;
   var uuid = const Uuid();
-  
+  List<LatLng> polylineCoordinates = [];
+
+
   @override
   void setState(fn) {
     if (mounted) {
@@ -89,8 +91,6 @@ class _MapDirectionWidgetOnRideState
   }
 
   getDirections() async {
-    List<LatLng> polylineCoordinates = [];
-
 
     String request =
         '$directionBaseURL?origin=${pickupLocation.latitude},${pickupLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
@@ -194,13 +194,18 @@ class _MapDirectionWidgetOnRideState
     return Scaffold(
       body: Stack(
         children: [
-          googleMap,
+          polylineCoordinates != null && polylineCoordinates.isNotEmpty
+              ? googleMap
+              : const Center(
+            child: CircularProgressIndicator(),
+          )
         ],
       ),
     );
 
 
   }
+
   @override
   void dispose() {
     if(mapController!=null){
