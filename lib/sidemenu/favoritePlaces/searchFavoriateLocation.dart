@@ -231,9 +231,6 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                           width: 20,
                           height: 20,
                         ),
-                        // onTap: () async {
-
-                        // },
                       ),
                     ),
                   ),
@@ -283,7 +280,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                           InkWell(
                             onTap: () {},
                             child: Container(
-                              padding: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.only(right: 5),
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: FromTextWidget(),
@@ -328,7 +325,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
       showCursor: true,
       controller: FromLocationText,
       decoration: InputDecoration(
-          hintText: FromLocationHint,
+          hintText: 'Select Location',
           border: InputBorder.none,
           focusColor: Colors.white,
           floatingLabelBehavior: FloatingLabelBehavior.never,

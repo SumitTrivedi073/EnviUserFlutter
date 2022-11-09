@@ -22,12 +22,15 @@ import '../../direction_model/leg.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/Constant.dart';
 
- int GOOGLE_API_INVOCATION_LIMIT = AppConfig().getgoogleDirectionDriverIntervalMaxTrialCount();
- int GOOGLE_API_INNTERVAL_MINUTES = AppConfig().getgoogleDirectionDriverIntervalInMin();
+int GOOGLE_API_INVOCATION_LIMIT =
+    AppConfig().getgoogleDirectionDriverIntervalMaxTrialCount();
+int GOOGLE_API_INNTERVAL_MINUTES =
+    AppConfig().getgoogleDirectionDriverIntervalInMin();
 
 class MapDirectionWidgetPickup extends StatefulWidget {
   TripDataModel? liveTripData;
   final void Function(String) callback;
+
   MapDirectionWidgetPickup(
       {Key? key, this.liveTripData, required this.callback})
       : super(key: key);
@@ -69,6 +72,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
   late LatLng previousLocation = const LatLng(0.0, 0.0);
   var carMarker, driverStartingLocation;
   final List<Marker> markers = <Marker>[];
+  AnimationController? animationController;
   Animation<double>? _animation;
   final _mapMarkerSC = StreamController<List<Marker>>();
 
@@ -102,8 +106,6 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             DirectionModel.fromJson(json.decode(response.body));
         List<PointLatLng> pointLatLng = [];
 
-
-
 //RAGHU VT  , We can have  multiple routes available. use the first one currently
 
         currentTravelLeg = directionModel.routes[0].legs[0];
@@ -131,7 +133,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         GOOGLE_API_INVOCATIONS++;
 
         timer = Timer(
-           Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
+          Duration(minutes: GOOGLE_API_INNTERVAL_MINUTES),
           () {
             getDirections();
           },
@@ -202,10 +204,11 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     return Scaffold(
       body: Stack(
         children: [
-          polylineCoordinates!=null && polylineCoordinates.isNotEmpty?
-          googleMap:const Center(
-            child: CircularProgressIndicator(),
-          ),
+          polylineCoordinates != null && polylineCoordinates.isNotEmpty
+              ? googleMap
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
         ],
       ),
     );
@@ -220,13 +223,14 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       width: 5,
     );
     polylines[id] = polyline;
-
     if (mounted) {
-      setState(() {});
+      setState(() {
+        if (previousLocation != carCurrentLocation) {
+          previousLocation = carCurrentLocation;
+        }
+      });
     }
-    if (previousLocation != carCurrentLocation) {
-      previousLocation = carCurrentLocation;
-    }
+
   }
 
   addMarker() async {
@@ -306,14 +310,14 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
     final Uint8List markerIcon =
         await getBytesFromAsset('assets/images/car-map.png', 70);
 
-    final animationController = AnimationController(
+    animationController = AnimationController(
       duration: const Duration(seconds: 5), //Animation duration of marker
       vsync: provider, //From the widget
     );
 
     Tween<double> tween = Tween(begin: 0, end: 1);
 
-    _animation = tween.animate(animationController)
+    _animation = tween.animate(animationController!)
       ..addListener(() async {
         //We are calculating new latitude and logitude for our marker
         final v = _animation!.value;
@@ -344,7 +348,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       });
 
     //Starting the animation
-    animationController.forward();
+    animationController!.forward();
     if (previousLocation != carCurrentLocation) {
       previousLocation = carCurrentLocation;
     }
@@ -405,9 +409,13 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
       timer!.cancel();
       GOOGLE_API_INVOCATIONS = 9999; //to Ensure we don't call this again
     }
-    if(mapController!=null){
+    if (mapController != null) {
       mapController!.dispose();
     }
+    if (animationController != null && animationController!.isAnimating) {
+      animationController!.dispose();
+    }
+
     super.dispose();
   }
 

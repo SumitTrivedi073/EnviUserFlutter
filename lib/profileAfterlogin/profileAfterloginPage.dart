@@ -311,7 +311,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                     child: robotoTextWidget(
                         textval: loginwithdeffrentnumber,
                         colorval: AppColor.black,
-                        sizeval: 17.0,
+                        sizeval: 14.0,
                         fontWeight: FontWeight.bold),
                   ),
                 )),
