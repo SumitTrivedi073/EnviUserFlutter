@@ -239,7 +239,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     return Container(
       color: AppColor.alfaorange.withOpacity(.3),
       height: 38,
-      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -386,9 +386,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         children: [
           MaterialButton(
             child: robotoTextWidget(
-              textval: arrtrip[index].status == "cancelled"
-                  ? "Already Cancelled"
-                  : CancelBooking,
+              textval: CancelBooking,
               colorval: const Color(0xFFED0000),
               sizeval: 14.0,
               fontWeight: FontWeight.bold,
@@ -403,6 +401,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   Future<void> cancelBooking(String passengerTripMasterId) async {
+
     final response =
         await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 

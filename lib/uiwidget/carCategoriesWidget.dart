@@ -166,8 +166,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             child: CircularProgressIndicator(),
           )
         : Container(
-            margin: EdgeInsets.only(
-              top: 5,
+            margin: const EdgeInsets.only(
               left: 10,
               right: 10,
             ),
