@@ -116,8 +116,9 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
       print(jsonDecode(res.body));
       var jsonData = json.decode(res.body);
       SosModel sosModel = SosModel.fromJson(jsonData);
-      showSnackbar(context,sosModel.message);
-
+      if(sosModel.message!=null) {
+        showSnackbar(context, sosModel.message);
+      }
     } else {
       throw "Rating Api not worked.";
     }

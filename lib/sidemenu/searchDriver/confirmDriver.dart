@@ -63,7 +63,7 @@ class _ConfirmDriverPageState extends State<ConfirmDriver> {
     {
       //If this was not given, it was throwing error like setState is called during build . RAGHU VT
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && value.liveTripData != null) {
+        if (mounted && value.liveTripData != null && value.liveTripData!.tripInfo != null) {
           if (value.liveTripData!.tripInfo!.tripStatus == TripStatusRequest ||
               value.liveTripData!.tripInfo!.tripStatus == TripStatusAlloted ||
               value.liveTripData!.tripInfo!.tripStatus == TripStatusArrived) {

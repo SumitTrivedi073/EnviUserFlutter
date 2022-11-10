@@ -247,7 +247,6 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
   Future<void> GetAddressFromLatLong(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
     Placemark place = placemarks[0];
    if(mounted){
      setState(() {
