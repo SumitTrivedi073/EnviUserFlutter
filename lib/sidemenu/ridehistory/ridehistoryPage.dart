@@ -67,35 +67,38 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
 
 
   void _firstLoad() async {
-    setState(() {
-      _isFirstLoadRunning = true;
-    });
-
+    if (mounted) {
+      setState(() {
+        _isFirstLoadRunning = true;
+      });
+    }
     userId = Profiledata().getusreid();
 
     dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        _isFirstLoadRunning = false;
-        if (jsonDecode(res.body)['content']['result'] != null) {
-          carbonProfile = jsonDecode(res.body)['content']['carbonProfile'];
-          arrtrip = (jsonDecode(res.body)['content']['result'] as List)
-              .map((i) => RideHistoryModel.fromJson(i))
-              .toList();
-          if (arrtrip.length > 0) {
-
+      {
+        setState(() {
+          _isFirstLoadRunning = false;
+          if (jsonDecode(res.body)['content']['result'] != null) {
+            carbonProfile = jsonDecode(res.body)['content']['carbonProfile'];
+            arrtrip = (jsonDecode(res.body)['content']['result'] as List)
+                .map((i) => RideHistoryModel.fromJson(i))
+                .toList();
+            if (arrtrip.length > 0) {
               if (arrtrip.length != _limit) {
                 _hasNextPage = false;
                 _isFirstLoadRunning = false;
               }
+            }
           }
-        }
-
-      });
+        });
+      }
     } else {
-      setState(() {
-        _isFirstLoadRunning = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isFirstLoadRunning = false;
+        });
+      }
     }
   }
 
@@ -104,9 +107,11 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
         _isFirstLoadRunning == false &&
         _isLoadMoreRunning == false &&
         _controller.position.extentAfter < 300) {
+      if (mounted) {
       setState(() {
         _isLoadMoreRunning = true;
       });
+      }
       pagecount += 1;
       dynamic res =
           await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
@@ -117,25 +122,31 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
                 .map((i) => RideHistoryModel.fromJson(i))
                 .toList();
         if (fetchedPosts.length > 0) {
-          setState(() {
-            if (fetchedPosts.length != _limit) {
-              _hasNextPage = false;
-              _isLoadMoreRunning = false;
-            }
-            arrtrip.addAll(fetchedPosts);
-          });
+          if (mounted) {
+            setState(() {
+              if (fetchedPosts.length != _limit) {
+                _hasNextPage = false;
+                _isLoadMoreRunning = false;
+              }
+              arrtrip.addAll(fetchedPosts);
+            });
+          }
         } else {
           // This means there is no more data
           // and therefore, we will not send another GET request
+          if (mounted) {
+            setState(() {
+              _hasNextPage = false;
+              _isLoadMoreRunning = false;
+            });
+          }
+        }
+      } else {
+        if (mounted) {
           setState(() {
-            _hasNextPage = false;
             _isLoadMoreRunning = false;
           });
         }
-      } else {
-        setState(() {
-          _isLoadMoreRunning = false;
-        });
       }
     }
   }
