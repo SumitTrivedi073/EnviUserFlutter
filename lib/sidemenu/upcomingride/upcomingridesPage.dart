@@ -403,29 +403,31 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     final response =
         await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 
-    if (mounted) {
+
       setState(() {
         _isFirstLoadRunning = true;
       });
-    }
+
     if (response != null) {
       if (response.statusCode == 200) {
-        if (mounted) {
+
           setState(() {
             _isFirstLoadRunning = false;
           });
-        }
+
         _firstLoad();
-        if ((response.body)['msg'] != null) {
+        if (jsonDecode(response.body)['msg'].toString() != 'null') {
           showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
         }
       } else {
-        if (mounted) {
+
           setState(() {
             _isFirstLoadRunning = false;
           });
-        }
-        showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+          if (jsonDecode(response.body)['msg'].toString() != 'null') {
+            showSnackbar(
+                context, (jsonDecode(response.body)['msg'].toString()));
+          }
       }
     }
   }

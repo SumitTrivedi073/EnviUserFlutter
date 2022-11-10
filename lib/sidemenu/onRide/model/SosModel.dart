@@ -16,7 +16,7 @@ class SosModel {
   String message;
 
   factory SosModel.fromJson(Map<String, dynamic> json) => SosModel(
-    message: json["message"],
+    message: json["message"]!=null?json["message"]:"Emergancy notification sent to admin.",
   );
 
   Map<String, dynamic> toJson() => {
