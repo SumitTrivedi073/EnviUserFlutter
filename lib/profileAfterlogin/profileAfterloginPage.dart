@@ -320,4 +320,9 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

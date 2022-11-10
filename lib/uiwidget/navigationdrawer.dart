@@ -31,7 +31,6 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationDrawer> {
-
   @override
   void setState(fn) {
     if (mounted) {
@@ -44,7 +43,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
     // TODO: implement initState
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +73,10 @@ class _NavigationPageState extends State<NavigationDrawer> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => NewProfilePage(
-                          user: user,
-                          isUpdate: true,
-                        )));
+                              user: user,
+                              isUpdate: true,
+                            )));
               },
-
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,7 +117,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-             const SizedBox(
+          const SizedBox(
             height: 10,
           ),
           ListTile(
@@ -170,7 +167,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
           const SizedBox(
             height: 10,
           ),
-
           ListTile(
             leading: SvgPicture.asset(
               "assets/svg/favorite-places.svg",
@@ -488,7 +484,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       dynamic res = await HTTP.get(userLogout());
-    } catch (e) {}
+    } catch (e) {
+      showToast(e.toString());
+    }
 
     showToast("Logout SuccessFully");
     sharedPreferences.clear();
@@ -501,7 +499,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-    Navigator.of(context,rootNavigator: true).pushAndRemoveUntil(
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
         (Route<dynamic> route) => false);
   }
@@ -528,7 +526,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
       Profiledata.setgender("");
       Profiledata.setname("");
 
-      Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
+      Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
           builder: (BuildContext context) => const Loginpage()));
       setState(() {});
     } else {
