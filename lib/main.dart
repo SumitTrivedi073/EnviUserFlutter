@@ -45,6 +45,12 @@ Future<Widget> initializeApp(ApplicationConfig appConfig) async {
   final database = await $FloorFlutterDatabase
       .databaseBuilder('envi_user.db')
       .build();
+
+  final GoogleMapsFlutterPlatform mapsImplementation =
+      GoogleMapsFlutterPlatform.instance;
+  if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    mapsImplementation.useAndroidViewSurface = true;
+  }
   checkPermission();
   return MyApp(appConfig);
 
