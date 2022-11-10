@@ -54,14 +54,12 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
   late LatLng latlong;
   int? editid;
 
-  
   @override
   void setState(fn) {
     if (mounted) {
       super.setState(fn);
     }
   }
-
 
   @override
   void initState() {
@@ -153,7 +151,6 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-
                             const SizedBox(
                               height: 5,
                             ),
@@ -192,35 +189,35 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: robotoTextWidget(
-                                    textval: Address,
-                                    colorval: AppColor.darkgrey,
-                                    sizeval: 14.0,
-                                    fontWeight: FontWeight.w400,
-                                  )),
-
+                                  textval: Address,
+                                  colorval: AppColor.darkgrey,
+                                  sizeval: 14.0,
+                                  fontWeight: FontWeight.w400,
+                                )),
                             const SizedBox(
                               height: 5,
                             ),
-                            Container(
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SearchFavoriateLocation(
+                                                title: selectlocation,
+                                                onCriteriaChanged:
+                                                    FromLocationSearch)),
+                                    (route) => true);
+                              },
+                              child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                         color: Colors.grey, width: 0.5),
                                     color: Colors.white),
-                                child:Padding(padding: const EdgeInsets.all(15),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SearchFavoriateLocation(
-                                                    title: selectlocation,
-                                                    onCriteriaChanged:
-                                                    FromLocationSearch)),
-                                            (route) => true);
-                                    print("Tapped a Container");
-                                  },
-                                  child:  Align(alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 5),
                                         child: robotoTextWidget(
@@ -228,11 +225,11 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                           colorval: AppColor.black,
                                           sizeval: 14.0,
                                           fontWeight: FontWeight.w600,
-
-                                        ),)),
-
-                                ),),),
-
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ),
                             const SizedBox(
                               height: 22,
                             ),
@@ -285,7 +282,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                                       height: 40,
                                       onPressed: () {
                                         ApiCall_Delete_Favorite(widget.data!.id,
-                                            widget.data!.identifier);
+                                            widget.data!.identifier, context);
                                       },
                                       child: Row(children: [
                                         SvgPicture.asset(
@@ -317,7 +314,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
               height: 30,
             ),
             Container(
-              margin: const EdgeInsets.only(left: 20,right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
@@ -357,13 +354,15 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                     borderRadius: BorderRadius.circular(5), // <-- Radius
                   ),
                 ),
-                child: Padding(padding: const EdgeInsets.all(15),
-                child: robotoTextWidget(
-                  textval: savetext.toUpperCase(),
-                  colorval: AppColor.white,
-                  sizeval: 18,
-                  fontWeight: FontWeight.w600,
-                ),),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: robotoTextWidget(
+                    textval: savetext.toUpperCase(),
+                    colorval: AppColor.white,
+                    sizeval: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
             const SizedBox(
@@ -442,6 +441,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         await dao.insertTask(task);
         Navigator.pop(context, {"isbact": true});
       }
+      if (!mounted) return;
       showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }
@@ -476,11 +476,14 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
 
         Navigator.pop(context, {"isbact": true});
       }
+      if (!mounted) return;
+
       showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }
 
-  Future<void> ApiCall_Delete_Favorite(int? id, String identifire) async {
+  Future<void> ApiCall_Delete_Favorite(
+      int? id, String identifire, context) async {
     dynamic userid = Profiledata().getusreid();
     final response =
         await ApiCollection.FavoriateDataDelete(userid, identifire);
@@ -503,6 +506,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         await dao.deleteTask(task);
         Navigator.pop(context, {"isbact": true});
       }
+      if (!mounted) return;
       showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }

@@ -6,18 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../../theme/string.dart';
 import '../../../uiwidget/robotoTextWidget.dart';
 import '../../../web_service/Constant.dart';
-
-import 'dart:convert' as convert;
-import '../../../../web_service/HTTP.dart' as HTTP;
 import '../../appConfig/Profiledata.dart';
 import '../../theme/theme.dart';
-import '../../utils/utility.dart';
 import '../../web_service/APIDirectory.dart';
 import '../../web_service/ApiCollection.dart';
-import '../ridehistory/model/rideHistoryModel.dart';
 import 'model/ScheduleTripModel.dart';
 
 class UpcomingRidesPage extends StatefulWidget {
@@ -34,6 +30,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   int _limit = 20;
   late dynamic userId;
   List<ScheduleTripModel> arrtrip = [];
+
   @override
   void initState() {
     super.initState();
@@ -48,8 +45,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     super.dispose();
   }
 
-
-
   @override
   void setState(fn) {
     if (mounted) {
@@ -58,19 +53,21 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   void _firstLoad() async {
-
     try {
       setState(() {
         _isFirstLoadRunning = true;
       });
       userId = Profiledata().getusreid();
 
-      dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+      dynamic res =
+          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
       if (res != null && res.statusCode != null && res.statusCode == 200) {
         //  print(jsonDecode(res.body)['schedule_trip_list']);
         setState(() {
           if (jsonDecode(res.body)['schedule_trip_list'] != null &&
-              jsonDecode(res.body)['schedule_trip_list'].toString().isNotEmpty) {
+              jsonDecode(res.body)['schedule_trip_list']
+                  .toString()
+                  .isNotEmpty) {
             arrtrip = (jsonDecode(res.body)['schedule_trip_list'] as List)
                 .map((i) => ScheduleTripModel.fromJson(i))
                 .toList();
@@ -85,11 +82,10 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
         _isFirstLoadRunning = false;
       });
     } on Exception catch (exception) {
-    print(exception) ;// only executed if error is of type Exception
+      print(exception); // only executed if error is of type Exception
     } catch (error) {
-      print(error) ; // executed for errors of all types other than Exception
+      print(error); // executed for errors of all types other than Exception
     }
-
   }
 
   void _loadMore() async {
@@ -294,57 +290,51 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/svg/from-location-img.svg",
-                          width: 18,
-                          height: 18,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 80,
-                          child: robotoTextWidget(
-                            textval: arrtrip[index].fromAddress,
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                      ],
+                    SvgPicture.asset(
+                      "assets/svg/from-location-img.svg",
+                      width: 18,
+                      height: 18,
                     ),
                     const SizedBox(
-                      height: 3,
+                      width: 10,
                     ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/svg/to-location-img.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 82,
-                          child: robotoTextWidget(
-                            textval: arrtrip[index].toAddress,
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 85,
+                      child: robotoTextWidget(
+                        textval: arrtrip[index].fromAddress,
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/svg/to-location-img.svg",
+                      width: 18,
+                      height: 18,
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 87,
+                      child: robotoTextWidget(
+                        textval: arrtrip[index].toAddress,
+                        colorval: AppColor.black,
+                        sizeval: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
                     ),
                   ],
                 ),
@@ -410,17 +400,34 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   Future<void> cancelBooking(String passengerTripMasterId) async {
-
     final response =
         await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 
+
+      setState(() {
+        _isFirstLoadRunning = true;
+      });
+
     if (response != null) {
-      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
+
+          setState(() {
+            _isFirstLoadRunning = false;
+          });
+
         _firstLoad();
-        showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
-      }else {
-        showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        if (jsonDecode(response.body)['msg'].toString() != 'null') {
+          showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        }
+      } else {
+
+          setState(() {
+            _isFirstLoadRunning = false;
+          });
+          if (jsonDecode(response.body)['msg'].toString() != 'null') {
+            showSnackbar(
+                context, (jsonDecode(response.body)['msg'].toString()));
+          }
       }
     }
   }

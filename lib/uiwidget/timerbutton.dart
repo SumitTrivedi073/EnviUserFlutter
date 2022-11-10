@@ -217,7 +217,7 @@ class _TimerButtonState extends State<TimerButton>
     return StatefulBuilder(builder: (context, StateSetter setState) {
       return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
           ),
           content: SizedBox(
             height: 240,
@@ -263,7 +263,7 @@ class _TimerButtonState extends State<TimerButton>
                               primary: AppColor.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.circular(12), // <-- Radius
+                                    BorderRadius.circular(5), // <-- Radius
                               ),
                             ),
                             child: robotoTextWidget(
@@ -289,18 +289,10 @@ class _TimerButtonState extends State<TimerButton>
                               primary: AppColor.greyblack,
                               shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.circular(12), // <-- Radius
+                                    BorderRadius.circular(5), // <-- Radius
                               ),
                             ),
-                            child: isLoading
-                                ? const SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 1.5,
-                                    ))
-                                : robotoTextWidget(
+                            child: robotoTextWidget(
                                     textval: confirm,
                                     colorval: AppColor.white,
                                     sizeval: 14,
@@ -335,18 +327,24 @@ class _TimerButtonState extends State<TimerButton>
         "longitude": latlong != null ? latlong!.longitude : 0.0
       }
     };
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     dynamic res = await HTTP.post(cancelTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 }

@@ -171,7 +171,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
             : 77.345492878187);
 
     if (previousLocation.latitude != 0.0 &&
-        previousLocation != carCurrentLocation) {
+        previousLocation != carCurrentLocation && mapController!=null) {
       animateCar(
         previousLocation.latitude,
         previousLocation.longitude,
@@ -187,7 +187,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         stream: mapMarkerStream,
         builder: (context, snapshot) {
           return GoogleMap(
-            mapType: MapType.normal,
+        //    mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
               //innital position in map
               target: carCurrentLocation, //initial position
@@ -356,28 +356,21 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
 
     //Starting the animation
     animationController!.forward();
-    if (previousLocation != carCurrentLocation) {
-      previousLocation = carCurrentLocation;
-    }
+   if(mounted){
+     setState(() {
+       if (previousLocation != carCurrentLocation) {
+         previousLocation = carCurrentLocation;
+       }
+     });
+   }
     updatePickupTime();
   }
 
   void updatePickupTime() {
-    double new_distance = distancecorrectionFactor *
-        calculateDistance(
-            carCurrentLocation.latitude,
-            carCurrentLocation.longitude,
-            pickupLocation.latitude,
-            pickupLocation.longitude);
-
-    double new_time = (duration / googleDistance) * new_distance;
-    // waitingTimeDisplayCB(new_time);
-
     double alternateTime = alternateDurationFromGoogleLegs(
       carCurrentLocation.latitude,
       carCurrentLocation.longitude,
     );
-
     waitingTimeDisplayCB(alternateTime);
   }
 

@@ -171,7 +171,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200),
                             ],
-                          ):Container(),
+                          ):Container(height: 1,),
                           const SizedBox(height: 5),
                           widget.livetripData!.tripInfo
                           !.arrivalAtDestination!.tollAmount.toDouble()!=0.0? Row(
@@ -190,7 +190,7 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   sizeval: 14,
                                   fontWeight: FontWeight.w200),
                             ],
-                          ):Container(),
+                          ):Container( height: 1,),
                           const SizedBox(height: 5),
                           Row(
                             children: [
@@ -200,13 +200,12 @@ class _PaymentBreakdownWidgetPageState extends State<PaymentBreakdownWidget> {
                                   sizeval: 14,
                                   fontWeight: FontWeight.w500),
                               const Spacer(),
-                              robotoTextWidget(
-                                  textval: totalTax.toString() != null
-                                      ? '${totalTax.toStringAsFixed(2)} ₹'
-                                      : '0',
+                              totalTax.toString() != null && totalTax.toString() != '0.0'  && totalTax.toString() != '0'
+                                  ?  robotoTextWidget(
+                                  textval:'${totalTax.toStringAsFixed(2)} ₹',
                                   colorval: AppColor.black,
                                   sizeval: 14,
-                                  fontWeight: FontWeight.w200),
+                                  fontWeight: FontWeight.w200):Container(height: 1,),
                             ],
                           ),
                           const SizedBox(height: 10,),

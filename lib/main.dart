@@ -26,7 +26,8 @@ import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import '../../../../web_service/HTTP.dart' as HTTP;
 import 'appConfig/Profiledata.dart';
 import 'database/database.dart';
@@ -366,11 +367,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
-    return showDialog(
-        context: context,
-        builder: ((context) {
+    return OneContext().showDialog(
+        builder: (_) {
           Future.delayed(Duration(milliseconds: miliSecond + 5000), () {
-            Navigator.of(context, rootNavigator: true).pop();
+            OneContext().popDialog('Ok');
           },
           );
           return Dialog(
@@ -380,7 +380,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                 ),
                 fit: BoxFit.fill,
               ));
-        }));
+        });
   }
 
   void GetAllFavouriteAddress() async {
@@ -432,12 +432,11 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     }
   }
 
-  Future softwareVersionUpdatePopup() {
-    return showDialog(
+  void softwareVersionUpdatePopup() {
+    OneContext().showDialog(
         barrierDismissible: false,
-        context: context,
-        builder: ((context) {
-          return AlertDialog(
+        builder: (_) =>
+           AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -497,8 +496,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                     ],
                   ),
                 ),
-              ));
-        }));
+              ))
+        );
   }
 
   void showInfoPopup() {

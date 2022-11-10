@@ -29,13 +29,11 @@ class _AppBarInsidePageState extends State<AppBarInsideWidget> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
- 
     return Container(
       margin: widget.customMargin ??
           const EdgeInsets.only(top: 30, left: 10, right: 10),

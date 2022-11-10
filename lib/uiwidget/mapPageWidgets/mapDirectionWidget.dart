@@ -75,13 +75,11 @@ class _MapDirectionWidgetState extends State<MapDirectionWidget> {
           zoom: 10.0, //initial zoom level
         ),
         markers: markers, //markers to show on map
-        mapType: MapType.normal,
+     //   mapType: MapType.normal,
         rotateGesturesEnabled: false,
         zoomControlsEnabled: true,
         onMapCreated: (controller) { //method called when map is created
-          setState(() {
             mapController = controller;
-          });
         },
       ),
     );
