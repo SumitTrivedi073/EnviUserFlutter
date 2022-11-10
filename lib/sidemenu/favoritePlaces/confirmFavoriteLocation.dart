@@ -3,6 +3,7 @@ import 'package:envi/theme/mapStyle.dart';
 import 'package:envi/theme/styles.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
+import 'package:envi/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -248,8 +249,10 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    setState(() {
-      Address = '${place.street}, ${place.subLocality}, ${place.locality}';
-    });
+   if(mounted){
+     setState(() {
+       Address = formatAddress('${place.street}, ${place.subLocality}, ${place.locality}');
+     });
+   }
   }
 }

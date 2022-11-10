@@ -25,7 +25,8 @@ import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import '../../../../web_service/HTTP.dart' as HTTP;
 import 'appConfig/Profiledata.dart';
 import 'database/database.dart';
@@ -51,6 +52,12 @@ Future<void> main() async {
     final database =
     await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
     final dao = database.taskDao;
+
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
 
     runApp(const MyApp());
     checkPermission();

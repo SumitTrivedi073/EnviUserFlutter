@@ -359,8 +359,13 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                       SizedBox(width: 10,),
                       vehiclePriceClasses[index]
                           .seller_discount
+                          .toDouble() !=null &&  vehiclePriceClasses[index]
+                          .seller_discount
                           .toDouble() !=
-                          0.0
+                          0.0 && vehiclePriceClasses[index]
+                          .seller_discount
+                          .toDouble() !=
+                          0
                           ? Text(
                         '₹${getTotalPrice(
                             vehiclePriceClasses[index]
@@ -382,13 +387,9 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                           : Container(),
 
                     ],),
-                    vehiclePriceClasses[index]
-                        .discountPercent
-                        .toString() !=
-                        null &&
-                        vehiclePriceClasses[index]
-                            .discountPercent !=
-                            0.0
+                    vehiclePriceClasses[index].discountPercent !=null
+                    && vehiclePriceClasses[index].discountPercent != '0.0'
+                        && vehiclePriceClasses[index].discountPercent != '0'
                         ? Column(
                       children: [
                         const robotoTextWidget(

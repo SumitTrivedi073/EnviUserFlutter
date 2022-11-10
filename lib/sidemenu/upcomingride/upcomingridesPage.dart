@@ -294,11 +294,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
             const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -309,10 +305,10 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                           height: 18,
                         ),
                         const SizedBox(
-                          width: 5,
+                          width: 10,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width - 80,
+                          width: MediaQuery.of(context).size.width - 85,
                           child: robotoTextWidget(
                             textval: arrtrip[index].fromAddress,
                             colorval: AppColor.black,
@@ -323,20 +319,20 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                       ],
                     ),
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                     Row(
                       children: [
                         SvgPicture.asset(
                           "assets/svg/to-location-img.svg",
-                          width: 20,
-                          height: 20,
+                          width: 18,
+                          height: 18,
                         ),
                         const SizedBox(
                           width: 12,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width - 82,
+                          width: MediaQuery.of(context).size.width - 87,
                           child: robotoTextWidget(
                             textval: arrtrip[index].toAddress,
                             colorval: AppColor.black,
@@ -348,8 +344,6 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
                     ),
                   ],
                 ),
-              ],
-            ),
             const SizedBox(
               height: 7,
             ),
@@ -410,16 +404,27 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   Future<void> cancelBooking(String passengerTripMasterId) async {
-
     final response =
         await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 
+    if(mounted){
+      setState(() { _isFirstLoadRunning = true;});
+    }
     if (response != null) {
-      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
+        if(mounted) {
+          setState(() {
+            _isFirstLoadRunning = false;
+          });
+        }
         _firstLoad();
         showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
       }else {
+        if(mounted) {
+          setState(() {
+            _isFirstLoadRunning = false;
+          });
+        }
         showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
       }
     }

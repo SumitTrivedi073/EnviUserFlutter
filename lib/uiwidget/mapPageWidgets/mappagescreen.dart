@@ -75,7 +75,7 @@ class MyMapState extends State {
             child: Stack(
             children: [
               GoogleMap(
-                mapType: MapType.normal,
+                //    mapType: MapType.normal,
                 initialCameraPosition: _cameraPosition!,
                 onMapCreated: (GoogleMapController controller) {
                   controller.setMapStyle(MapStyle.mapStyles);

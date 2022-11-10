@@ -170,7 +170,7 @@ class _MapDirectionWidgetOnRideState
         stream: mapMarkerStream,
         builder: (context, snapshot) {
           return GoogleMap(
-            mapType: MapType.normal,
+            //    mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
               //innital position in map
               target: carCurrentLocation, //initial position
