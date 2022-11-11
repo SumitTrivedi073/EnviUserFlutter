@@ -109,7 +109,9 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: appTheme(),
             builder: OneContext().builder,
-            home:MainEntryPoint(),
+            home:_flavorBanner(
+              MainEntryPoint(),
+            ),
             ));
   }
 }
