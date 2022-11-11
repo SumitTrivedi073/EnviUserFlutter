@@ -499,9 +499,9 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
-        (Route<dynamic> route) => false);
+
+    Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()));
   }
 
   Future<void> deleteacountApiCall(BuildContext context) async {
@@ -528,7 +528,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
 
       Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
           builder: (BuildContext context) => const Loginpage()));
-      setState(() {});
     } else {
       showToast("Failed to Delete");
     }

@@ -155,7 +155,7 @@ class _MapDirectionWidgetOnRideState
             : 77.345492878187);
 
 
-    if (previousLocation.latitude!=0.0 && previousLocation!=carCurrentLocation) {
+    if (previousLocation.latitude!=0.0 && previousLocation!=carCurrentLocation && mapController!=null) {
       animateCar(
         previousLocation.latitude,
         previousLocation.longitude,

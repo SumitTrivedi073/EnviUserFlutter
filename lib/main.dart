@@ -101,16 +101,10 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'Envi',
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.green,
-            ),
+            theme: appTheme(),
             builder: OneContext().builder,
-            home: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Malbork',
-              theme: appTheme(),
-              home: MainEntryPoint(),
-            )));
+            home:MainEntryPoint(),
+            ));
   }
 }
 
@@ -321,8 +315,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
       ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
       AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
-      ['paymentOptions']
-          .toString());
+      ['paymentOptions'].toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
       AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']
