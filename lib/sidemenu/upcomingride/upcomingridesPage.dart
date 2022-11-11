@@ -400,34 +400,31 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
   }
 
   Future<void> cancelBooking(String passengerTripMasterId) async {
+    setState(() {
+      _isFirstLoadRunning = true;
+    });
+
     final response =
         await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
 
-
-      setState(() {
-        _isFirstLoadRunning = true;
-      });
-
     if (response != null) {
       if (response.statusCode == 200) {
-
-          setState(() {
-            _isFirstLoadRunning = false;
-          });
-
         _firstLoad();
         if (jsonDecode(response.body)['msg'].toString() != 'null') {
           showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
         }
-      } else {
 
-          setState(() {
-            _isFirstLoadRunning = false;
-          });
-          if (jsonDecode(response.body)['msg'].toString() != 'null') {
-            showSnackbar(
-                context, (jsonDecode(response.body)['msg'].toString()));
-          }
+        //Raghu VT , set state resetting is done inside firstload
+        // setState(() {
+        //   _isFirstLoadRunning = false;
+        // });
+      } else {
+        setState(() {
+          _isFirstLoadRunning = false;
+        });
+        if (jsonDecode(response.body)['msg'].toString() != 'null') {
+          showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        }
       }
     }
   }
