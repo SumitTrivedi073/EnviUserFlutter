@@ -46,6 +46,7 @@ class SelectPickupDropAddress extends StatefulWidget {
 class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
   bool areBothAddressConfirmed = false;
   List<SearchPlaceModel>? searchPlaceList = [];
+  List<SearchPlaceModel>? tempSearchList = [];
   SearchPlaceModel? startingAddress;
   SearchPlaceModel? endAddress;
   List<dynamic> _placeList = [];
@@ -80,7 +81,23 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
 
   Future<void> getLocalSuggestions(String val) async {
     isLocalDbsuggestion = true;
-    searchPlaceList = await AutocompleteService().getdata(val);
+    //searchPlaceList = await AutocompleteService().getdata(val);
+    tempSearchList = await AutocompleteService().getdata(val);
+    for (var element in tempSearchList!) {
+      if (element.title == 'Home') {
+        searchPlaceList!.add(element);
+      }
+      if (element.title == 'Work') {
+        searchPlaceList!.add(element);
+      }
+    }
+    //searchPlaceList!.sort();
+    for (var element in tempSearchList!) {
+      if (element.title != 'Home' && element.title != 'Work') {
+        searchPlaceList!.add(element);
+      }
+    }
+
     setState(() {});
   }
 
