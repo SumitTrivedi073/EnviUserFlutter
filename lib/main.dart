@@ -99,18 +99,12 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
         child: MaterialApp(
-          title: 'Envi',
-          debugShowCheckedModeBanner: false,
-          theme: appTheme(),
-          builder: OneContext().builder,
-          home: MainEntryPoint(),
-          //  MaterialApp(
-          //   debugShowCheckedModeBanner: false,
-          //   title: 'Malbork',
-          //   theme: appTheme(),
-          //   home: MainEntryPoint(),
-          // )
-        ));
+            title: 'Envi',
+            debugShowCheckedModeBanner: false,
+            theme: appTheme(),
+            builder: OneContext().builder,
+            home:MainEntryPoint(),
+            ));
   }
 }
 
@@ -312,8 +306,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
           ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
       AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
-              ['paymentOptions']
-          .toString());
+      ['paymentOptions'].toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
       AppConfig.setisCancellationFeeApplicable(
