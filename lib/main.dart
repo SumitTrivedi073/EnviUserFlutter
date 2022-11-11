@@ -50,7 +50,7 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     final database =
-    await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+        await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
     final dao = database.taskDao;
 
     final GoogleMapsFlutterPlatform mapsImplementation =
@@ -62,7 +62,7 @@ Future<void> main() async {
     runApp(const MyApp());
     checkPermission();
   },
-          (error, stack) =>
+      (error, stack) =>
           FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
@@ -99,18 +99,18 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
         child: MaterialApp(
-            title: 'Envi',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.green,
-            ),
-            builder: OneContext().builder,
-            home: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Malbork',
-              theme: appTheme(),
-              home: MainEntryPoint(),
-            )));
+          title: 'Envi',
+          debugShowCheckedModeBanner: false,
+          theme: appTheme(),
+          builder: OneContext().builder,
+          home: MainEntryPoint(),
+          //  MaterialApp(
+          //   debugShowCheckedModeBanner: false,
+          //   title: 'Malbork',
+          //   theme: appTheme(),
+          //   home: MainEntryPoint(),
+          // )
+        ));
   }
 }
 
@@ -135,16 +135,14 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     from = DateTime(
         from.year, from.month, from.day, from.hour, from.minute, from.second);
     to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
-    return (to
-        .difference(from)
-        .inHours);
+    return (to.difference(from).inHours);
   }
 
   void receiveNotification() {
     var initializationSettingsAndroid =
-    const AndroidInitializationSettings('@drawable/ic_notification');
+        const AndroidInitializationSettings('@drawable/ic_notification');
     const DarwinInitializationSettings initializationSettingsDarwin =
-    DarwinInitializationSettings(
+        DarwinInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
       requestAlertPermission: true,
@@ -157,7 +155,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.instance.getInitialMessage().then(
-          (message) {
+      (message) {
         print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           print("New Notification");
@@ -170,17 +168,17 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
     // 2. This method only call when App in forground it mean app must be opened
     FirebaseMessaging.onMessage.listen(
-          (message) {
+      (message) {
         print("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data11 ${message.data}");
-   //       LocalNotificationService.createanddisplaynotification(message);
+          //       LocalNotificationService.createanddisplaynotification(message);
           if (message != null) {
-              ShowPushNotificationExpand(
-                  message.notification!.title, message.notification!.body);
-            }
+            ShowPushNotificationExpand(
+                message.notification!.title, message.notification!.body);
+          }
 
         }
       },
@@ -188,16 +186,15 @@ class _MainEntryPointState extends State<MainEntryPoint> {
 
     // 3. This method only call when App in background and not terminated(not closed)
     FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) {
+      (message) {
         print("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
           if (message != null) {
-              ShowPushNotificationExpand(
-                  message.notification!.title, message.notification!.body);
-            }
-
+            ShowPushNotificationExpand(
+                message.notification!.title, message.notification!.body);
+          }
         }
       },
     );
@@ -209,7 +206,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) => const Loginpage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     } else {
       SetProfileData();
       GetAllFavouriteAddress();
@@ -235,14 +232,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(PageBackgroundImage),
@@ -303,7 +294,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       LandingPageConfig.setcustomerCare(
           jsonData['landingPageSettings']['customerCare']);
       AppConfig.setminAndroidVersion(jsonData['applicationConfig']
-      ['swVersionConfig']['minAndroidVersion']);
+          ['swVersionConfig']['minAndroidVersion']);
       AppConfig.setminiOSVersion(
           jsonData['applicationConfig']['swVersionConfig']['miniOSVersion']);
       AppConfig.setandroidAppUrl(
@@ -311,36 +302,38 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setiosAppUrl(
           jsonData['applicationConfig']['swVersionConfig']['iosAppUrl']);
       AppConfig.setadvance_booking_time_limit(jsonData['applicationConfig']
-      ['scheduleTripConfig']['advance_booking_time_limit']);
+          ['scheduleTripConfig']['advance_booking_time_limit']);
       AppConfig.setdriver_assignment_time_limit(jsonData['applicationConfig']
-      ['scheduleTripConfig']['driver_assignment_time_limit']);
+          ['scheduleTripConfig']['driver_assignment_time_limit']);
       AppConfig.setisScheduleFeatureEnabled(jsonData['applicationConfig']
-      ['scheduleTripConfig']['isScheduleFeatureEnabled']);
+          ['scheduleTripConfig']['isScheduleFeatureEnabled']);
       AppConfig.setscheduleFreeDriverDistance(jsonData['applicationConfig']
-      ['scheduleTripConfig']['scheduleFreeDriverDistance']);
+          ['scheduleTripConfig']['scheduleFreeDriverDistance']);
       AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
-      ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
+          ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
       AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
-      ['paymentOptions']
+              ['paymentOptions']
           .toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
-      AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']
-      ['priceConfig']['isCancellationFeeApplicable']);
+      AppConfig.setisCancellationFeeApplicable(
+        jsonData['applicationConfig']
+          ['priceConfig']['isCancellationFeeApplicable']
+          );
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
       AppConfig.setgoogleDirectionDriverIntervalInMin(
           jsonData['applicationConfig']['searchConfig']
-          ['googleDirectionWFDriverIntervalInMin']);
+              ['googleDirectionWFDriverIntervalInMin']);
       AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
           jsonData['applicationConfig']['searchConfig']
-          ['googleDirectionWFDriverIntervalMaxTrialCount']);
+              ['googleDirectionWFDriverIntervalMaxTrialCount']);
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (BuildContext context) =>
-              const HomePage(title: "title")),
-              (Route<dynamic> route) => false);
+                  const HomePage(title: "title")),
+          (Route<dynamic> route) => false);
       sharedPreferences.setInt(
           autoExpiryDurationText, LandingPageConfig().getautoExpiryDuration());
       // sharedPreferences.setString(
@@ -367,34 +360,35 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
-    return OneContext().showDialog(
-        builder: (_) {
-          Future.delayed(Duration(milliseconds: miliSecond + 5000), () {
-            OneContext().popDialog('Ok');
-          },
-          );
-          return Dialog(
-              child: Image.network(
-                encodeImgURLString(
-                  sharedPreferences.getString(infoPopupImageUrlText)!,
-                ),
-                fit: BoxFit.fill,
-              ));
-        });
+    return OneContext().showDialog(builder: (_) {
+      Future.delayed(
+        Duration(milliseconds: miliSecond + 5000),
+        () {
+          OneContext().popDialog('Ok');
+        },
+      );
+      return Dialog(
+          child: Image.network(
+        encodeImgURLString(
+          sharedPreferences.getString(infoPopupImageUrlText)!,
+        ),
+        fit: BoxFit.fill,
+      ));
+    });
   }
 
   void GetAllFavouriteAddress() async {
     final database =
-    await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     final dao = database.taskDao;
 
     dynamic response =
-    await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
+        await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
     if (response != null && response.statusCode == 200) {
       if (convert.jsonDecode(response.body)['content'] != null &&
           convert.jsonDecode(response.body)['content']['address'] != null) {
         List<dynamic> jsonData =
-        convert.jsonDecode(response.body)['content']['address'];
+            convert.jsonDecode(response.body)['content']['address'];
         // print(jsonData);
         for (var res in jsonData) {
           if (res["address"] != null || res["address"] != "") {
@@ -435,69 +429,67 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   void softwareVersionUpdatePopup() {
     OneContext().showDialog(
         barrierDismissible: false,
-        builder: (_) =>
-           AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              content: SizedBox(
-                height: 120,
-                child: Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: robotoTextWidget(
-                            textval: appName,
-                            colorval: AppColor.darkGreen,
-                            sizeval: 16,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(5),
-                        child: robotoTextWidget(
-                            textval:
-                            'Latest Envi App is available please update first and enjoy',
-                            colorval: AppColor.black,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (Platform.isAndroid) {
-                              launchUrl(
-                                Uri.parse(AppConfig().getandroidAppUrl()),
-                                mode: LaunchMode.externalApplication,
-                              );
-                            } else if (Platform.isIOS) {
-                              launchUrl(
-                                Uri.parse(AppConfig().getiosAppUrl()),
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColor.darkGreen,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(5), // <-- Radius
-                            ),
-                          ),
-                          child: const robotoTextWidget(
-                            textval: 'Ok',
-                            colorval: AppColor.white,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w600,
+        builder: (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            content: SizedBox(
+              height: 120,
+              child: Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: robotoTextWidget(
+                          textval: appName,
+                          colorval: AppColor.darkGreen,
+                          sizeval: 16,
+                          fontWeight: FontWeight.w800),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: robotoTextWidget(
+                          textval:
+                              'Latest Envi App is available please update first and enjoy',
+                          colorval: AppColor.black,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (Platform.isAndroid) {
+                            launchUrl(
+                              Uri.parse(AppConfig().getandroidAppUrl()),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else if (Platform.isIOS) {
+                            launchUrl(
+                              Uri.parse(AppConfig().getiosAppUrl()),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.darkGreen,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(5), // <-- Radius
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                        child: const robotoTextWidget(
+                          textval: 'Ok',
+                          colorval: AppColor.white,
+                          sizeval: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ))
-        );
+              ),
+            )));
   }
 
   void showInfoPopup() {
@@ -513,9 +505,9 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                 dailyOnceTimeText, DateTime.now().toString());
           } else {
             if (hrsBetween(
-                DateTime.parse(
-                    sharedPreferences.getString(dailyOnceTimeText)!),
-                DateTime.now()) >
+                    DateTime.parse(
+                        sharedPreferences.getString(dailyOnceTimeText)!),
+                    DateTime.now()) >
                 24) {
               displayInfoPopup(
                   sharedPreferences.getInt(autoExpiryDurationText)!);
@@ -546,68 +538,63 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   Future ShowPushNotificationExpand(String? title, String? message) {
     return OneContext().showDialog(
         barrierDismissible: false,
-        builder: (_) =>
-            AlertDialog(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                content: Wrap(children: [
-                  Column(mainAxisSize: MainAxisSize.min, children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: Text(
-                        title!.toTitleCase(),
-                        style: const TextStyle(
-                            color: AppColor.butgreen,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18),
+        builder: (_) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            content: Wrap(children: [
+              Column(mainAxisSize: MainAxisSize.min, children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Text(
+                    title!.toTitleCase(),
+                    style: const TextStyle(
+                        color: AppColor.butgreen,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Wrap(
+                    children: [
+                      Text(
+                        message!,
+                        style: TextStyle(
+                            color: AppColor.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      OneContext().popDialog('Ok');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColor.darkGreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    child: robotoTextWidget(
+                      textval: 'Ok',
+                      colorval: AppColor.white,
+                      sizeval: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Wrap(
-                        children: [
-                          Text(
-                            message!,
-                            style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                        Container(
-                          width: 100,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            OneContext().popDialog('Ok');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColor.darkGreen,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  12), // <-- Radius
-                            ),
-                          ),
-                          child: robotoTextWidget(
-                            textval: 'Ok',
-                            colorval: AppColor.white,
-                            sizeval: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        ),
-
-                  ]),
-                ]))
-    );
+                  ),
+                ),
+              ]),
+            ])));
   }
-
 }

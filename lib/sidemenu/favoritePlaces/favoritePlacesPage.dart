@@ -129,7 +129,7 @@ class _FavoritePlacesPageState extends State<FavoritePlacesPage> {
                                     titleEditable: "0",
                                     data: null,
                                   )));
-                      getdata();
+                     await getdata();
                     },
                     child: Row(children: [
                       SvgPicture.asset(

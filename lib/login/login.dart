@@ -297,7 +297,7 @@ class _LoginpageState extends State<Loginpage> {
                     child: robotoTextWidget(
                         textval: loginwithdeffrentnumber,
                         colorval: AppColor.black,
-                        sizeval: 17.0,
+                        sizeval: 15.0,
                         fontWeight: FontWeight.bold),
                   ),
                 )),
