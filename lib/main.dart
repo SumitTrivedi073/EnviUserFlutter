@@ -60,7 +60,9 @@ Future<void> main() async {
     }
 
     runApp(const MyApp());
-    checkPermission();
+    if(Platform.isIOS) {
+      checkPermission();
+    }
   },
       (error, stack) =>
           FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
