@@ -174,7 +174,6 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    if (mounted) {
       setState(() {
         latlong = LatLng(position.latitude, position.longitude);
         _cameraPosition = CameraPosition(
@@ -188,14 +187,12 @@ class MyMapState extends State {
         }
         GetAddressFromLatLong(latlong!);
       });
-    }
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
     try {
       List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      //print(placemarks);
+          await placemarkFromCoordinates(position.latitude, position.longitude,localeIdentifier: 'en');
       Placemark place = placemarks[0];
       placeName = (place.subLocality != '')
           ? place.subLocality!
@@ -203,8 +200,6 @@ class MyMapState extends State {
       isoId = place.isoCountryCode;
       setState(() {
         Address = '${place.street}, ${place.subLocality}, ${place.locality}';
-        // Address = Address.replaceAll(",", "");
-        // Address = Address.replaceAll('  ', ' ');
         Address = formatAddress(Address);
       });
 
@@ -212,6 +207,7 @@ class MyMapState extends State {
           "RAGHUVTPLACE ${place.postalCode} ${place.name} ${place.administrativeArea}");
     } catch (e) {
       print("Exception==========>${e.toString()}");
+      showToast(e.toString());
     }
   }
 
