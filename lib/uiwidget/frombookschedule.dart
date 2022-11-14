@@ -93,88 +93,96 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     height: 1,
                   ),
                 ),
-                Center( child: SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 115,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(5), // <-- Radius
+                Center(
+                  child: SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 115,
+                          child: TextButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(5), // <-- Radius
+                                  ),
                                 ),
-                              ),
-                              backgroundColor:
-                              MaterialStateProperty.all(AppColor.darkGreen)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: robotoTextWidget(
-                              textval: BookNow,
-                              colorval: AppColor.white,
-                              sizeval: 15.0,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          onPressed: () {
-                            _status = BookingTiming.now;
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => SelectPickupDropAddress(
-                                      currentLocation: widget.currentLocation,
-                                      title: dropLocation,
-                                      tripType: _status,
-                                    )),
-                                    (route) => true);
-                          },
-                        ),
-                      ),
-                      AppConfig().getisScheduleFeatureEnabled()
-                          ? TextButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    5), // <-- Radius
+                                backgroundColor: MaterialStateProperty.all(
+                                    AppColor.darkGreen)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: robotoTextWidget(
+                                textval: BookNow,
+                                colorval: AppColor.white,
+                                sizeval: 15.0,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
-                            backgroundColor: MaterialStateProperty.all(
-                                AppColor.alfaorange)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: robotoTextWidget(
-                            textval: BookForLater,
-                            colorval: AppColor.black,
-                            sizeval: 15.0,
-                            fontWeight: FontWeight.w800,
+                            onPressed: () {
+                              _status = BookingTiming.now;
+                              if (!mounted) return;
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SelectPickupDropAddress(
+                                            currentLocation:
+                                                widget.currentLocation,
+                                            title: dropLocation,
+                                            tripType: _status,
+                                          )),
+                                  (route) => true);
+                            },
                           ),
                         ),
-                        onPressed: () {
-                          if (AppConfig().getisScheduleFeatureEnabled() ==
-                              true) {
-                            _status = BookingTiming.later;
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SelectPickupDropAddress(
-                                          currentLocation:
-                                          widget.currentLocation,
-                                          title: dropLocation,
-                                          tripType: _status,
-                                        )),
-                                    (route) => true);
-                          } else {
-                            showSnackbar(context, serviceNotAvailable);
-                          }
-                        },
-                      )
-                          : Container()
-                    ],
+                        AppConfig().getisScheduleFeatureEnabled()
+                            ? TextButton(
+                                style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            5), // <-- Radius
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        AppColor.alfaorange)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: robotoTextWidget(
+                                    textval: BookForLater,
+                                    colorval: AppColor.black,
+                                    sizeval: 15.0,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  if (AppConfig()
+                                          .getisScheduleFeatureEnabled() ==
+                                      true) {
+                                    _status = BookingTiming.later;
+                              if (!mounted) return;
+
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SelectPickupDropAddress(
+                                                  currentLocation:
+                                                      widget.currentLocation,
+                                                  title: dropLocation,
+                                                  tripType: _status,
+                                                )),
+                                        (route) => true);
+                                  } else {
+                                    showSnackbar(context, serviceNotAvailable);
+                                  }
+                                },
+                              )
+                            : Container()
+                      ],
+                    ),
                   ),
-                ),)
+                )
               ],
             ),
           )),

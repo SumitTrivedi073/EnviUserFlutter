@@ -12,7 +12,7 @@ class AppConfig {
   static String iosAppUrl = "";
   static int advance_booking_time_limit = 0;
   static int driver_assignment_time_limit = 0;
-  static bool isScheduleFeatureEnabled = false;
+  static bool isScheduleFeatureEnabled = true;
   static int scheduleFreeDriverDistance = 0;
   static int scheduleAllottedDriverDistance = 0;
   static String paymentOptions = "";
