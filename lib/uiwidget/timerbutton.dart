@@ -267,7 +267,7 @@ class _TimerButtonState extends State<TimerButton>
                               ),
                             ),
                             child: robotoTextWidget(
-                              textval: cancel,
+                              textval: backText,
                               colorval: AppColor.greyblack,
                               sizeval: 14,
                               fontWeight: FontWeight.w600,
@@ -293,11 +293,11 @@ class _TimerButtonState extends State<TimerButton>
                               ),
                             ),
                             child: robotoTextWidget(
-                                    textval: confirm,
-                                    colorval: AppColor.white,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              textval: okText,
+                              colorval: AppColor.white,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           )),
                     ],
                   )
