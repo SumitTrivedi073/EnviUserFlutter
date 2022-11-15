@@ -194,16 +194,17 @@ class MyMapState extends State {
           ? place.subLocality!
           : place.subAdministrativeArea!;
       isoId = place.isoCountryCode;
-      setState(() {
-        Address = '${place.street}, ${place.subLocality}, ${place.locality}';
-        Address = formatAddress(Address);
-      });
-
+      if(mounted) {
+        setState(() {
+          Address = '${place.street}, ${place.subLocality}, ${place.locality}';
+          Address = formatAddress(Address);
+        });
+      }
       print(
           "RAGHUVTPLACE ${place.postalCode} ${place.name} ${place.administrativeArea}");
     } catch (e) {
       print("Exception==========>${e.toString()}");
-      showToast('Unable to retrieve location , please try later');
+   //   showToast('Unable to retrieve location , please try later');
 
       //showToast(e.toString());
     }

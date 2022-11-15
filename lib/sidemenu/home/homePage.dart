@@ -1,10 +1,13 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
+import 'package:envi/theme/color.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/utils/utility.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../UiWidget/appbar.dart';
@@ -73,6 +76,7 @@ class _HomePageState extends State<HomePage> {
           }
         }
       });
+
       return Scaffold(
         drawer: NavigationDrawer(),
         body: Stack(alignment: Alignment.centerRight, children: <Widget>[
@@ -90,7 +94,6 @@ class _HomePageState extends State<HomePage> {
       );
     });
   }
-
   Future<void> getUserName() async {
     setState(() {
       name = Profiledata().getname();
