@@ -13,7 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../provider/model/tripDataModel.dart';
 import '../../theme/color.dart';
@@ -41,6 +42,12 @@ class _WaitingForDriverScreenState extends State<WaitingForDriverScreen> {
   @override
   void initState() {
     super.initState();
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
+
     disableFullScreen();
   }
   

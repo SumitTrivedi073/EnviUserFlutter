@@ -330,11 +330,9 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           jsonData['applicationConfig']['searchConfig']
               ['googleDirectionWFDriverIntervalMaxTrialCount']);
       if (!mounted) return;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const HomePage(title: "title")),
-          (Route<dynamic> route) => false);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+        return HomePage(title: 'title');
+      }));
       sharedPreferences.setInt(
           autoExpiryDurationText, LandingPageConfig().getautoExpiryDuration());
       // sharedPreferences.setString(
@@ -361,14 +359,14 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
+    print('miliSecond============>$miliSecond');
+    Timer? timer = Timer(Duration(milliseconds: miliSecond!=null && miliSecond!=0?miliSecond:10000), (){
+      print('popup dismiss');
+      OneContext().popDialog('cancel');
+    });
     return OneContext().showDialog(
       barrierDismissible: false,
-        builder: (_) {
-      Future.delayed(Duration(milliseconds: miliSecond!=null && miliSecond!=0
-          ? miliSecond:10000), () {
-          OneContext().popDialog('cancel');
-        },
-      );
+        builder: (_){
       return AlertDialog(
           content: Image.network(
         encodeImgURLString(
@@ -376,7 +374,11 @@ class _MainEntryPointState extends State<MainEntryPoint> {
         ),
         fit: BoxFit.fill,
       ));
-    });
+    }).then((value){
+      // dispose the timer in case something else has triggered the dismiss.
+      timer?.cancel();
+      timer = null;
+    });;
   }
 
   void GetAllFavouriteAddress() async {

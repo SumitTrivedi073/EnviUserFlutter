@@ -1,10 +1,13 @@
 import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
+import 'package:envi/theme/color.dart';
+import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/utils/utility.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../UiWidget/appbar.dart';
@@ -73,6 +76,7 @@ class _HomePageState extends State<HomePage> {
           }
         }
       });
+
       return Scaffold(
         drawer: NavigationDrawer(),
         body: Stack(alignment: Alignment.centerRight, children: <Widget>[
@@ -89,6 +93,76 @@ class _HomePageState extends State<HomePage> {
         ]),
       );
     });
+  }
+
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await _showExitBottomSheet(context);
+    return exitResult ?? false;
+  }
+
+  Future<bool?> _showExitBottomSheet(BuildContext context) async {
+    return await showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
+          child: _buildBottomSheet(context),
+        );
+      },
+    );
+  }
+
+  Widget _buildBottomSheet(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(
+          height: 24,
+        ),
+        robotoTextWidget(textval: "Do you really want to exit the app?",
+            colorval: AppColor.black, sizeval: 18, fontWeight: FontWeight.w400),
+        const SizedBox(
+          height: 24,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: robotoTextWidget(textval: 'CANCEL',
+                  colorval: AppColor.darkgrey, sizeval: 16, fontWeight: FontWeight.w600),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: robotoTextWidget(textval: 'YES, EXIT',
+                  colorval: AppColor.darkGreen, sizeval: 18, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Future<void> getUserName() async {
