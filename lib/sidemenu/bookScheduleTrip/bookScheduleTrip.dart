@@ -20,6 +20,9 @@ import '../../utils/utility.dart';
 import '../../web_service/ApiCollection.dart';
 import '../home/homePage.dart';
 import 'model/vehiclePriceClasses.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+
 
 class BookScheduleTrip extends StatefulWidget {
   final SearchPlaceModel? fromAddress;
@@ -53,6 +56,11 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
     mindatime = DateTime.now()
         .add(Duration(minutes: AppConfig().getadvance_booking_time_limit()));
     SelectedDate = mindatime;

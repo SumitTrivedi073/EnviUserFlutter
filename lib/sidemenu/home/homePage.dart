@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../../UiWidget/appbar.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../appConfig/Profiledata.dart';
@@ -20,6 +19,9 @@ import '../../web_service/Constant.dart';
 import '../onRide/onRideWidget.dart';
 import '../payment/payment_page.dart';
 import '../waitingForDriverScreen/waitingForDriverScreen.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -36,6 +38,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
     getUserName();
   }
 
