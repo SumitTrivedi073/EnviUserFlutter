@@ -99,7 +99,8 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                        AppConfig().getisNormalBookingFeatureEnabled()
+                            ? SizedBox(
                           width: 115,
                           child: TextButton(
                             style: ButtonStyle(
@@ -135,7 +136,8 @@ class _FromBookScheduleWidgetPageState extends State<FromBookScheduleWidget> {
                                   (route) => true);
                             },
                           ),
-                        ),
+                        )
+                            :Container(),
                         AppConfig().getisScheduleFeatureEnabled()
                             ? TextButton(
                                 style: ButtonStyle(

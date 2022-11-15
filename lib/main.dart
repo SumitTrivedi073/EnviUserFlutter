@@ -329,6 +329,12 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
           jsonData['applicationConfig']['searchConfig']
               ['googleDirectionWFDriverIntervalMaxTrialCount']);
+      if(jsonData['applicationConfig']['generalConfig'] !=null && jsonData['applicationConfig']['generalConfig']
+      ['isBookNowEnabled']!=null) {
+        AppConfig.setisNormalBookingFeatureEnabled(
+            jsonData['applicationConfig']['generalConfig']
+            ['isBookNowEnabled']);
+      }
       if (!mounted) return;
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
         return HomePage(title: 'title');
