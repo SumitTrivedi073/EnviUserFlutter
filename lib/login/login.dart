@@ -576,7 +576,7 @@ class _LoginpageState extends State<Loginpage> {
       LoginModel users = LoginModel.fromJson(jsonData['content']);
 
       setState(() {
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => ProfileAfterloginPage(
@@ -586,7 +586,7 @@ class _LoginpageState extends State<Loginpage> {
     } else {
       if (response.statusCode == 400) {
         if (!mounted) return;
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => NewProfilePage(
