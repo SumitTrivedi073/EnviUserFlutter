@@ -42,39 +42,28 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.notification!.title);
 }
 
-Future<void> main() async {
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-    LocalNotificationService.initialize();
-    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+Future<Widget> initializeApp(ApplicationConfig appConfig) async {
+  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  final database = await $FloorFlutterDatabase
+      .databaseBuilder('envi_user.db')
+      .build();
 
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-
-    final database =
-        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
-    final dao = database.taskDao;
-
-    final GoogleMapsFlutterPlatform mapsImplementation =
-        GoogleMapsFlutterPlatform.instance;
-    if (mapsImplementation is GoogleMapsFlutterAndroid) {
-      mapsImplementation.useAndroidViewSurface = true;
-    }
-
-    runApp(const MyApp());
-    if (Platform.isAndroid) {
-      var androidInfo = await DeviceInfoPlugin().androidInfo;
-      var sdkInt = androidInfo.version.sdkInt;
-      if(sdkInt>30){
-        checkPermission();
-      }
-    }else if(Platform.isIOS) {
+  final GoogleMapsFlutterPlatform mapsImplementation =
+      GoogleMapsFlutterPlatform.instance;
+  if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    mapsImplementation.useAndroidViewSurface = true;
+  }
+  if (Platform.isAndroid) {
+    var androidInfo = await DeviceInfoPlugin().androidInfo;
+    var sdkInt = androidInfo.version.sdkInt;
+    if(sdkInt>30){
       checkPermission();
     }
-  },
-      (error, stack) =>
-          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
+  }else if(Platform.isIOS) {
+    checkPermission();
+  }
+  return MyApp(appConfig);
+
 }
 
 Future checkPermission() async {
@@ -202,6 +191,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
             ShowPushNotificationExpand(
                 message.notification!.title, message.notification!.body);
           }
+
         }
       },
     );
