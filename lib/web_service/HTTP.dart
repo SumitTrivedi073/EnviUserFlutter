@@ -24,11 +24,8 @@ Response? AccessPermissionHandler(response) {
       // webPosition: ToastGravity.CENTER,
       // webShowClose: true
     );
-
-    return null;
-  } else {
-    return response;
   }
+  return response;
 }
 
 Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
@@ -69,11 +66,13 @@ Future<Object?> post(url, data, [headers]) async {
     final encodedData = data != null ? jsonEncode(data) : null;
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
 
-    var response = await http.post(
-      url,
-      headers: requestHeaders,
-      body: encodedData,
-    ).timeout(const Duration(minutes: 2));
+    var response = await http
+        .post(
+          url,
+          headers: requestHeaders,
+          body: encodedData,
+        )
+        .timeout(const Duration(minutes: 2));
     return AccessPermissionHandler(response);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
