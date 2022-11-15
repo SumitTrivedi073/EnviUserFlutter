@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert' as convert;
 import 'dart:io' show Platform;
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/appConfig/landingPageSettings.dart';
 import 'package:envi/database/favoritesData.dart';
@@ -22,12 +23,13 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+
 import '../../../../web_service/HTTP.dart' as HTTP;
 import 'appConfig/Profiledata.dart';
 import 'database/database.dart';
@@ -40,20 +42,39 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.notification!.title);
 }
 
-Future<Widget> initializeApp(ApplicationConfig appConfig) async {
-  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-  final database = await $FloorFlutterDatabase
-      .databaseBuilder('envi_user.db')
-      .build();
+Future<void> main() async {
+  runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+    LocalNotificationService.initialize();
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  final GoogleMapsFlutterPlatform mapsImplementation =
-      GoogleMapsFlutterPlatform.instance;
-  if (mapsImplementation is GoogleMapsFlutterAndroid) {
-    mapsImplementation.useAndroidViewSurface = true;
-  }
-  checkPermission();
-  return MyApp(appConfig);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
+    final database =
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
+    final dao = database.taskDao;
+
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
+
+    runApp(const MyApp());
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      var sdkInt = androidInfo.version.sdkInt;
+      if(sdkInt>30){
+        checkPermission();
+      }
+    }else if(Platform.isIOS) {
+      checkPermission();
+    }
+  },
+      (error, stack) =>
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
 Future checkPermission() async {
@@ -181,7 +202,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
             ShowPushNotificationExpand(
                 message.notification!.title, message.notification!.body);
           }
-
         }
       },
     );
@@ -314,13 +334,12 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
           ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
       AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
-      ['paymentOptions'].toString());
+              ['paymentOptions']
+          .toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
-      AppConfig.setisCancellationFeeApplicable(
-        jsonData['applicationConfig']
-          ['priceConfig']['isCancellationFeeApplicable']
-          );
+      AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']
+          ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
       AppConfig.setgoogleDirectionDriverIntervalInMin(
@@ -329,12 +348,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
           jsonData['applicationConfig']['searchConfig']
               ['googleDirectionWFDriverIntervalMaxTrialCount']);
+      if(jsonData['applicationConfig']['generalConfig'] !=null && jsonData['applicationConfig']['generalConfig']
+      ['isBookNowEnabled']!=null) {
+        AppConfig.setisNormalBookingFeatureEnabled(
+            jsonData['applicationConfig']['generalConfig']
+            ['isBookNowEnabled']);
+      }
       if (!mounted) return;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const HomePage(title: "title")),
-          (Route<dynamic> route) => false);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+        return HomePage(title: 'title');
+      }));
       sharedPreferences.setInt(
           autoExpiryDurationText, LandingPageConfig().getautoExpiryDuration());
       // sharedPreferences.setString(
@@ -361,21 +384,26 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
-    return OneContext().showDialog(builder: (_) {
-      Future.delayed(
-        Duration(milliseconds: miliSecond + 5000),
-        () {
-          OneContext().popDialog('Ok');
-        },
-      );
-      return Dialog(
-          child: Image.network(
+    print('miliSecond============>$miliSecond');
+    Timer? timer = Timer(Duration(milliseconds: miliSecond!=null && miliSecond!=0?miliSecond:10000), (){
+      print('popup dismiss');
+      OneContext().popDialog('cancel');
+    });
+    return OneContext().showDialog(
+      barrierDismissible: false,
+        builder: (_){
+      return AlertDialog(
+          content: Image.network(
         encodeImgURLString(
           sharedPreferences.getString(infoPopupImageUrlText)!,
         ),
         fit: BoxFit.fill,
       ));
-    });
+    }).then((value){
+      // dispose the timer in case something else has triggered the dismiss.
+      timer?.cancel();
+      timer = null;
+    });;
   }
 
   void GetAllFavouriteAddress() async {

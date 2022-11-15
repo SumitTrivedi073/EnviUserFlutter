@@ -272,7 +272,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                           Profiledata.setgender(user!.gender);
                           Profiledata.setname(user!.name);
                           if (!mounted) return;
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MainEntryPoint()));
@@ -303,7 +303,7 @@ class _profileAfterloginPageState extends State<ProfileAfterloginPage> {
                     minWidth: double.infinity,
                     height: 45,
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MainEntryPoint()));

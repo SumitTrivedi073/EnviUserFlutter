@@ -86,6 +86,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         isLoading = false;
       });
       showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => dialogueError(context, errmsg),
       );

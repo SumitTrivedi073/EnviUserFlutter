@@ -5,7 +5,8 @@ import 'package:envi/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import '../../UiWidget/cardbanner.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../theme/color.dart';
@@ -25,6 +26,18 @@ class OnRideWidget extends StatefulWidget {
 }
 
 class _OnRideWidgetState extends State<OnRideWidget> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      mapsImplementation.useAndroidViewSurface = true;
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

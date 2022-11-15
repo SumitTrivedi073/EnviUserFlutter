@@ -73,11 +73,9 @@ class _TimerButtonState extends State<TimerButton>
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    if (mounted) {
       setState(() {
         latlong = LatLng(position.latitude, position.longitude);
       });
-    }
   }
 
   @override
@@ -267,7 +265,7 @@ class _TimerButtonState extends State<TimerButton>
                               ),
                             ),
                             child: robotoTextWidget(
-                              textval: cancel,
+                              textval: backText,
                               colorval: AppColor.greyblack,
                               sizeval: 14,
                               fontWeight: FontWeight.w600,
@@ -293,11 +291,11 @@ class _TimerButtonState extends State<TimerButton>
                               ),
                             ),
                             child: robotoTextWidget(
-                                    textval: confirm,
-                                    colorval: AppColor.white,
-                                    sizeval: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              textval: okText,
+                              colorval: AppColor.white,
+                              sizeval: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           )),
                     ],
                   )
