@@ -21,13 +21,11 @@ void main() {
 class MyHomePage extends StatefulWidget {
   @override
   State createState() {
-  
     return MyHomePageState();
   }
 }
 
 class MyHomePageState extends State {
-  
   @override
   void setState(fn) {
     if (mounted) {
@@ -37,7 +35,6 @@ class MyHomePageState extends State {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: MyMap(),
     );
@@ -47,7 +44,6 @@ class MyHomePageState extends State {
 class MyMap extends StatefulWidget {
   @override
   State createState() {
-   
     return MyMapState();
   }
 }
@@ -62,14 +58,12 @@ class MyMapState extends State {
 
   @override
   void initState() {
-
     super.initState();
     getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-   
     return (latlong != null)
         ? SafeArea(
             child: Stack(
@@ -90,8 +84,8 @@ class MyMapState extends State {
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
-                  Timer(const Duration(seconds: 1), () {
-                    GetAddressFromLatLong(latlong!);
+                  Timer(const Duration(seconds: 1), () async {
+                   await GetAddressFromLatLong(latlong!);
                   });
                 },
                 onCameraMove: (CameraPosition position) {
@@ -147,7 +141,6 @@ class MyMapState extends State {
   }
 
   Future getCurrentLocation() async {
-
     if (Platform.isAndroid) {
       var permission = Permission.locationWhenInUse.status;
       print(permission);
@@ -193,8 +186,9 @@ class MyMapState extends State {
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
     try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude,localeIdentifier: 'en');
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude,
+          localeIdentifier: 'en');
       Placemark place = placemarks[0];
       placeName = (place.subLocality != '')
           ? place.subLocality!
@@ -209,7 +203,9 @@ class MyMapState extends State {
           "RAGHUVTPLACE ${place.postalCode} ${place.name} ${place.administrativeArea}");
     } catch (e) {
       print("Exception==========>${e.toString()}");
-      showToast(e.toString());
+      showToast('Unable to retrieve location , please try later');
+
+      //showToast(e.toString());
     }
   }
 
