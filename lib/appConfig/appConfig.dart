@@ -21,9 +21,9 @@ class AppConfig {
   static int cancellationFee = 0;
   static int googleDirectionDriverIntervalInMin = 0;
   static int googleDirectionDriverIntervalMaxTrialCount = 0;
-
   static int googleDirectionWFDriverIntervalInMin = 10;
   static int googleDirectionWFDriverIntervalMaxTrialCount = 3;
+  static bool isNormalBookingFeatureEnabled = true;
 
   static void setminAndroidVersion(int val) {
     minAndroidVersion = val;
@@ -136,5 +136,12 @@ class AppConfig {
   static setgoogleDirectionDriverIntervalMaxTrialCount(int val){googleDirectionDriverIntervalMaxTrialCount = val;}
   int getgoogleDirectionDriverIntervalMaxTrialCount(){
     return googleDirectionDriverIntervalMaxTrialCount;
+  }
+  static setisNormalBookingFeatureEnabled(bool val) {
+    isNormalBookingFeatureEnabled = val;
+  }
+
+  bool getisNormalBookingFeatureEnabled() {
+    return isNormalBookingFeatureEnabled;
   }
 }
