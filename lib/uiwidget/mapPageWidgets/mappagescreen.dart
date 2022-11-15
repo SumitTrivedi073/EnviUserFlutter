@@ -21,13 +21,11 @@ void main() {
 class MyHomePage extends StatefulWidget {
   @override
   State createState() {
-  
     return MyHomePageState();
   }
 }
 
 class MyHomePageState extends State {
-  
   @override
   void setState(fn) {
     if (mounted) {
@@ -37,7 +35,6 @@ class MyHomePageState extends State {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: MyMap(),
     );
@@ -47,7 +44,6 @@ class MyHomePageState extends State {
 class MyMap extends StatefulWidget {
   @override
   State createState() {
-   
     return MyMapState();
   }
 }
@@ -62,14 +58,12 @@ class MyMapState extends State {
 
   @override
   void initState() {
-
     super.initState();
     getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-   
     return (latlong != null)
         ? SafeArea(
             child: Stack(
@@ -90,8 +84,8 @@ class MyMapState extends State {
                 rotateGesturesEnabled: true,
                 zoomControlsEnabled: false,
                 onCameraIdle: () async {
-                  Timer(const Duration(seconds: 1), () {
-                    GetAddressFromLatLong(latlong!);
+                  Timer(const Duration(seconds: 1), () async {
+                   await GetAddressFromLatLong(latlong!);
                   });
                 },
                 onCameraMove: (CameraPosition position) {
@@ -147,7 +141,6 @@ class MyMapState extends State {
   }
 
   Future getCurrentLocation() async {
-
     if (Platform.isAndroid) {
       var permission = Permission.locationWhenInUse.status;
       print(permission);
@@ -174,28 +167,26 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    if (mounted) {
-      setState(() {
-        latlong = LatLng(position.latitude, position.longitude);
-        _cameraPosition = CameraPosition(
-          bearing: 0,
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 15.0,
-        );
-        if (_controller != null) {
-          _controller
-              ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
-        }
-        GetAddressFromLatLong(latlong!);
-      });
-    }
+    setState(() {
+      latlong = LatLng(position.latitude, position.longitude);
+      _cameraPosition = CameraPosition(
+        bearing: 0,
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 15.0,
+      );
+      if (_controller != null) {
+        _controller
+            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+      }
+      GetAddressFromLatLong(latlong!);
+    });
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
     try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      //print(placemarks);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude,
+          localeIdentifier: 'en');
       Placemark place = placemarks[0];
       placeName = (place.subLocality != '')
           ? place.subLocality!
@@ -203,8 +194,6 @@ class MyMapState extends State {
       isoId = place.isoCountryCode;
       setState(() {
         Address = '${place.street}, ${place.subLocality}, ${place.locality}';
-        // Address = Address.replaceAll(",", "");
-        // Address = Address.replaceAll('  ', ' ');
         Address = formatAddress(Address);
       });
 
@@ -212,6 +201,9 @@ class MyMapState extends State {
           "RAGHUVTPLACE ${place.postalCode} ${place.name} ${place.administrativeArea}");
     } catch (e) {
       print("Exception==========>${e.toString()}");
+      showToast('Unable to retrieve location , please try later');
+
+      //showToast(e.toString());
     }
   }
 

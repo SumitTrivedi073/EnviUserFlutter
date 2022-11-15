@@ -136,3 +136,5 @@ var showInfoPopupText = 'showInfoPopup';
 var dailyOnceTimeText = 'DailyOnceTime';
 var submitAllCapsText = 'SUBMIT';
 var selectlocation = "select location";
+var okText = 'Ok';
+var backText = 'Back';

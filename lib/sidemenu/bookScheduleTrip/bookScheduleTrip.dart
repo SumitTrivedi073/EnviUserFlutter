@@ -195,6 +195,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                         if ((mindatime.difference(SelectedDate).inMinutes) <=
                             0) {
                           showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) =>
                                 _buildPopupDialog(
