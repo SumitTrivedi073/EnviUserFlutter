@@ -167,19 +167,21 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      latlong = LatLng(position.latitude, position.longitude);
-      _cameraPosition = CameraPosition(
-        bearing: 0,
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 15.0,
-      );
-      if (_controller != null) {
-        _controller
-            ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
-      }
-      GetAddressFromLatLong(latlong!);
-    });
+    if(mounted) {
+      setState(() {
+        latlong = LatLng(position.latitude, position.longitude);
+        _cameraPosition = CameraPosition(
+          bearing: 0,
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 15.0,
+        );
+        if (_controller != null) {
+          _controller
+              ?.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
+        }
+        GetAddressFromLatLong(latlong!);
+      });
+    }
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {

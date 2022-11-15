@@ -37,7 +37,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
       super.setState(fn);
     }
   }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -235,7 +234,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              closeDrawer();
+             // closeDrawer();
               showDialog(
                 context: context,
                 builder: (BuildContext context) => dialogueLogout(context),
@@ -255,7 +254,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-              closeDrawer();
+            //  closeDrawer();
               showDialog(
                 context: context,
                 builder: (BuildContext context) => dialogueDelete(context),

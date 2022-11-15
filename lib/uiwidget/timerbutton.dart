@@ -73,11 +73,9 @@ class _TimerButtonState extends State<TimerButton>
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    if (mounted) {
       setState(() {
         latlong = LatLng(position.latitude, position.longitude);
       });
-    }
   }
 
   @override
