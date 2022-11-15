@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert' as convert;
 import 'dart:io' show Platform;
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/appConfig/landingPageSettings.dart';
 import 'package:envi/database/favoritesData.dart';
@@ -21,12 +22,13 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+
 import '../../../../web_service/HTTP.dart' as HTTP;
 import 'appConfig/Profiledata.dart';
 import 'database/database.dart';
@@ -50,7 +52,7 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     final database =
-        await $FloorFlutterDatabase.databaseBuilder('envi_uswer.db').build();
+        await $FloorFlutterDatabase.databaseBuilder('envi_user.db').build();
     final dao = database.taskDao;
 
     final GoogleMapsFlutterPlatform mapsImplementation =
@@ -60,7 +62,13 @@ Future<void> main() async {
     }
 
     runApp(const MyApp());
-    if(Platform.isIOS) {
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      var sdkInt = androidInfo.version.sdkInt;
+      if(sdkInt>30){
+        checkPermission();
+      }
+    }else if(Platform.isIOS) {
       checkPermission();
     }
   },
@@ -101,12 +109,12 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: firestoreScheduleTripNotifier()),
         ],
         child: MaterialApp(
-            title: 'Envi',
-            debugShowCheckedModeBanner: false,
-            theme: appTheme(),
-            builder: OneContext().builder,
-            home:MainEntryPoint(),
-            ));
+          title: 'Envi',
+          debugShowCheckedModeBanner: false,
+          theme: appTheme(),
+          builder: OneContext().builder,
+          home: MainEntryPoint(),
+        ));
   }
 }
 
@@ -175,7 +183,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
             ShowPushNotificationExpand(
                 message.notification!.title, message.notification!.body);
           }
-
         }
       },
     );
@@ -308,13 +315,12 @@ class _MainEntryPointState extends State<MainEntryPoint> {
       AppConfig.setscheduleAllottedDriverDistance(jsonData['applicationConfig']
           ['scheduleTripConfig']['scheduleAllottedDriverDistance']);
       AppConfig.setpaymentOptions(jsonData['applicationConfig']['paymentConfig']
-      ['paymentOptions'].toString());
+              ['paymentOptions']
+          .toString());
       AppConfig.setdefaultPaymentMode(
           jsonData['applicationConfig']['paymentConfig']['defaultPaymentMode']);
-      AppConfig.setisCancellationFeeApplicable(
-        jsonData['applicationConfig']
-          ['priceConfig']['isCancellationFeeApplicable']
-          );
+      AppConfig.setisCancellationFeeApplicable(jsonData['applicationConfig']
+          ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
       AppConfig.setgoogleDirectionDriverIntervalInMin(
@@ -355,15 +361,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
-    return OneContext().showDialog(builder: (_) {
-      Future.delayed(
-        Duration(milliseconds: miliSecond + 5000),
-        () {
-          OneContext().popDialog('Ok');
+    return OneContext().showDialog(
+      barrierDismissible: false,
+        builder: (_) {
+      Future.delayed(Duration(milliseconds: miliSecond!=null && miliSecond!=0
+          ? miliSecond:10000), () {
+          OneContext().popDialog('cancel');
         },
       );
-      return Dialog(
-          child: Image.network(
+      return AlertDialog(
+          content: Image.network(
         encodeImgURLString(
           sharedPreferences.getString(infoPopupImageUrlText)!,
         ),

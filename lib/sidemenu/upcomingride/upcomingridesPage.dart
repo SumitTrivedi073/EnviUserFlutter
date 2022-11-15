@@ -410,7 +410,8 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     if (response != null) {
       if (response.statusCode == 200) {
         _firstLoad();
-        if (jsonDecode(response.body)['msg'].toString() != 'null') {
+        if (jsonDecode(response.body)['msg'].toString() != 'null'&&
+            jsonDecode(response.body)['msg'].toString().isNotEmpty) {
           showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
         }
 

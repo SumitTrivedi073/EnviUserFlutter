@@ -174,6 +174,7 @@ class MyMapState extends State {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+    if(mounted) {
       setState(() {
         latlong = LatLng(position.latitude, position.longitude);
         _cameraPosition = CameraPosition(
@@ -187,6 +188,7 @@ class MyMapState extends State {
         }
         GetAddressFromLatLong(latlong!);
       });
+    }
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
