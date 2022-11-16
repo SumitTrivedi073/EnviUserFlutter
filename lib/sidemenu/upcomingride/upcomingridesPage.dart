@@ -410,21 +410,16 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     if (response != null) {
       if (response.statusCode == 200) {
         _firstLoad();
-        if (jsonDecode(response.body)['msg'].toString() != 'null'&&
-            jsonDecode(response.body)['msg'].toString().isNotEmpty) {
-          showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        if (jsonDecode(response.body)['message'].toString() != 'null'&&
+            jsonDecode(response.body)['message'].toString().isNotEmpty) {
+          showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
         }
-
-        //Raghu VT , set state resetting is done inside firstload
-        // setState(() {
-        //   _isFirstLoadRunning = false;
-        // });
       } else {
         setState(() {
           _isFirstLoadRunning = false;
         });
-        if (jsonDecode(response.body)['msg'].toString() != 'null') {
-          showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        if (jsonDecode(response.body)['message'].toString() != 'null') {
+          showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
         }
       }
     }

@@ -65,7 +65,7 @@ Future<void> main() async {
     if (Platform.isAndroid) {
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       var sdkInt = androidInfo.version.sdkInt;
-      if(sdkInt>30){
+      if(sdkInt>31){
         checkPermission();
       }
     }else if(Platform.isIOS) {
@@ -323,17 +323,25 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
-      AppConfig.setgoogleDirectionDriverIntervalInMin(
-          jsonData['applicationConfig']['searchConfig']
-              ['googleDirectionWFDriverIntervalInMin']);
-      AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
-          jsonData['applicationConfig']['searchConfig']
-              ['googleDirectionWFDriverIntervalMaxTrialCount']);
       if(jsonData['applicationConfig']['generalConfig'] !=null && jsonData['applicationConfig']['generalConfig']
       ['isBookNowEnabled']!=null) {
         AppConfig.setisNormalBookingFeatureEnabled(
             jsonData['applicationConfig']['generalConfig']
             ['isBookNowEnabled']);
+      }
+      if(jsonData['applicationConfig']['searchConfig'] !=null) {
+
+        AppConfig.setgoogleDirectionDriverIntervalInMin(
+            jsonData['applicationConfig']['searchConfig']
+            ['googleDirectionWFDriverIntervalInMin']);
+
+        AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
+            jsonData['applicationConfig']['searchConfig']
+            ['googleDirectionWFDriverIntervalMaxTrialCount']);
+
+        AppConfig.setmaxAllowedDistance(
+            jsonData['applicationConfig']['searchConfig']
+            ['maxAllowedDistance']);
       }
       if (!mounted) return;
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){

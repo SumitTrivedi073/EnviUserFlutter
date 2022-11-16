@@ -596,7 +596,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => const HomePage(title: "",)),
             (Route<dynamic> route) => false);
       }
-      showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+      showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
     }
   }
 

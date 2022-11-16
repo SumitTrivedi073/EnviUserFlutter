@@ -81,7 +81,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.callback(vehiclePriceClasses[0]);
       });
     } else {
-      var errmsg = jsonDecode(response.body)['msg'];
+      var errmsg = jsonDecode(response.body)['message'];
       setState(() {
         isLoading = false;
       });
@@ -171,7 +171,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
               left: 10,
               right: 10,
             ),
-            child: Card(
+            child: vehiclePriceClasses.length>0?Card(
               elevation: 5,
               margin: const EdgeInsets.all(5),
               child: Column(
@@ -235,7 +235,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   )
                 ],
               ),
-            ),
+            ):Container(),
           );
   }
 

@@ -143,7 +143,6 @@ class MyMapState extends State {
   Future getCurrentLocation() async {
     if (Platform.isAndroid) {
       var permission = Permission.locationWhenInUse.status;
-      print(permission);
       if (permission != PermissionStatus.granted) {
         final status = await Permission.location.request();
         if (status != PermissionStatus.granted) {
