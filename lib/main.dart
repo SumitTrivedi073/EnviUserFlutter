@@ -404,11 +404,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           if (res["address"] != null || res["address"] != "") {
             String title = "";
 
-            if (res["name"] != "") {
+            if (res["name"].toString().isNotEmpty) {
               title = res["name"];
             } else {
-              final splitList = res["address"].split(",");
-              title = splitList[1];
+              if(res["address"].toString().contains(",")) {
+                final splitList = res["address"].split(",");
+                title = splitList[1];
+              }else{
+                final splitList = res["address"];
+                title = splitList[1];
+              }
             }
             try {
               var data = await dao.findDataByaddressg(res["address"]);
@@ -420,7 +425,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                     latitude: res["location"]['coordinates'][1].toString(),
                     longitude: res["location"]['coordinates'][0].toString(),
                     title: title);
-                print(task);
                 await dao.insertTask(task);
               } else {
                 print("data$data");

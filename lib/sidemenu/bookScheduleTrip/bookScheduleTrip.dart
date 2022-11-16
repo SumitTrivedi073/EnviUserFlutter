@@ -593,12 +593,8 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
 
     if (response != null) {
       if (response.statusCode == 200) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => const HomePage(
-                      title: "",
-                    )),
-            (Route<dynamic> route) => true);
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => const HomePage(title: "",)),
+            (Route<dynamic> route) => false);
       }
       showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
     }

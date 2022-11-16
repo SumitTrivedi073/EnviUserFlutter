@@ -176,27 +176,31 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
               margin: const EdgeInsets.all(5),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          child: robotoTextWidget(
-                              textval:
-                                  '${vehiclePriceClasses.length} Ride Option',
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w800),
+                  vehiclePriceClasses.length >1 ?SizedBox(
+                      height: 50,
+                      child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: robotoTextWidget(
+                                  textval: '${vehiclePriceClasses.length} Ride Options',
+                                  colorval: AppColor.black,
+                                  sizeval: 14,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 1,
-                    color: AppColor.grey,
-                  ),
+                        Container(
+                          height: 1,
+                          color: AppColor.grey,
+                        ),
+                      ],)
+                  ):Container(height: 1,
+                    decoration: const BoxDecoration(
+                        color: Colors.transparent
+                    ),),
                   const SizedBox(
                     height: 5,
                   ),
@@ -207,7 +211,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     options: CarouselOptions(
                       enableInfiniteScroll: false,
                       scrollDirection: Axis.horizontal,
-                      aspectRatio: 2.2,
+                      aspectRatio: 2.0,
                       enlargeCenterPage: false,
                       disableCenter: false,
                       viewportFraction: 0.85,
@@ -255,7 +259,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             side: const BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(
@@ -301,7 +305,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                               ],
                             ),
                             const SizedBox(
-                              width: 10,
+                              width: 5,
                             ),
                             Row(
                               children: [
