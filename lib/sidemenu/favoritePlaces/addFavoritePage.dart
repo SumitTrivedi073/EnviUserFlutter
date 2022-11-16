@@ -69,12 +69,19 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     if (widget.isforedit == "0") {
       titlecontroller.text = widget.data!.title;
       address = formatAddress(widget.data!.address);
-      latlong = LatLng(double.parse(widget.data!.latitude),
-          double.parse(widget.data!.longitude));
-      _cameraPosition = CameraPosition(
-          target: LatLng(double.parse(widget.data!.latitude),
-              double.parse(widget.data!.longitude)),
-          zoom: 18.0);
+      if (widget.data!.identifier == '0') {
+        getCurrentLocation();
+        _cameraPosition =
+            const CameraPosition(target: LatLng(0.0, 0.0), zoom: 18.0);
+      } else {
+        latlong = LatLng(double.parse(widget.data!.latitude),
+            double.parse(widget.data!.longitude));
+        _cameraPosition = CameraPosition(
+            target: LatLng(double.parse(widget.data!.latitude),
+                double.parse(widget.data!.longitude)),
+            zoom: 18.0);
+      }
+
       editidentifire = widget.data!.identifier;
 
       editid = widget.data!.id;

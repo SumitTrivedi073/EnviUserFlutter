@@ -127,6 +127,7 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
           AppBarInsideWidget(
             pagetitle: ConfirmLocation,
             isBackButtonNeeded: true,
+            customMargin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           ),
           Card(
             margin: EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -248,10 +249,11 @@ class _ConfirmFavoriteLocationState extends State<ConfirmFavoriteLocation> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemarks[0];
-   if(mounted){
-     setState(() {
-       Address = formatAddress('${place.street}, ${place.subLocality}, ${place.locality}');
-     });
-   }
+    if (mounted) {
+      setState(() {
+        Address = formatAddress(
+            '${place.street}, ${place.subLocality}, ${place.locality}');
+      });
+    }
   }
 }
