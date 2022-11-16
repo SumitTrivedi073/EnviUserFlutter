@@ -29,3 +29,6 @@ var placeHolderImage =
     "https://play-lh.googleusercontent.com/33VZ5V5cOf0td4-tMvaFmtFErja4nURmwhQG5_UvoPQRTQDPBhrwNASAm6rvmbm6EL8=w480-h960-rw";
 var imageServerurl =
     "https://ecabdevstorage.blob.core.windows.net/ecabdevcontainer/";
+var twitterUrl = "https://twitter.com/malborktech";
+var instagramUrl = "https://www.instagram.com/envicabs/?hl=en";
+var FacebookUrl = "https://www.facebook.com/EnviCabs";

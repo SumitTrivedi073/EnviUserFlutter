@@ -6,6 +6,7 @@ import 'package:envi/sidemenu/ridehistory/ridehistoryPage.dart';
 import 'package:envi/sidemenu/upcomingride/upcomingridesPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/uiwidget/sfcompactTextWidget.dart';
+import 'package:envi/web_service/Constant.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -308,9 +309,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
 
   Row footerView() {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      // const Padding(
-      //     padding: EdgeInsets.only(left: 20),
-      //     child: Divider(color: Colors.white)),
       Expanded(
         flex: 1,
         child: Column(
@@ -329,19 +327,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
         flex: 1,
         child: GestureDetector(
           onTap: () {
-            var url = Uri.parse("https://twitter.com/malborktech");
-
-            _launchURLApp(url);
-          },
-          child: Image.asset(
-            "assets/images/twitter.png",
-          ),
-        ),
-      ),
-      Expanded(
-        child: GestureDetector(
-          onTap: () {
-            var url = Uri.parse("https://www.instagram.com/envicabs/?hl=en");
+            var url = Uri.parse(instagramUrl);
             _launchURLApp(url);
           },
           child: Image.asset(
@@ -350,9 +336,10 @@ class _NavigationPageState extends State<NavigationDrawer> {
         ),
       ),
       Expanded(
+        flex: 1,
         child: GestureDetector(
           onTap: () {
-            var url = Uri.parse("https://www.facebook.com/EnviCabs");
+            var url = Uri.parse(FacebookUrl);
 
             _launchURLApp(url);
           },
@@ -361,6 +348,19 @@ class _NavigationPageState extends State<NavigationDrawer> {
           ),
         ),
       ),
+      Expanded(
+        flex: 1,
+        child: GestureDetector(
+          onTap: () {
+            var url = Uri.parse(twitterUrl);
+            _launchURLApp(url);
+          },
+          child: Image.asset(
+            "assets/images/twitter.png",
+          ),
+        ),
+      ),
+
     ]);
   }
 
