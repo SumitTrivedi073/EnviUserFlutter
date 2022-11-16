@@ -51,15 +51,12 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
   List<AutocompletePrediction> predictions = [];
   int searctType = 0;
 
-
-  
   @override
   void setState(fn) {
     if (mounted) {
       super.setState(fn);
     }
   }
-
 
   @override
   void initState() {
@@ -219,28 +216,29 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                                   lng: longitude,
                                 )));
                   },
-                  child: Card(
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ListTile(
-                        title: robotoTextWidget(
-                          textval: searchPlaceList[index].title,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        subtitle: robotoTextWidget(
-                          textval: searchPlaceList[index].address,
-                          colorval: AppColor.black,
-                          sizeval: 12.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        leading: SvgPicture.asset(
-                          "assets/svg/to-location-img.svg",
-                          width: 20,
-                          height: 20,
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
+                    child: ListTile(
+                      dense: true,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
+                      title: robotoTextWidget(
+                        textval: searchPlaceList[index].title,
+                        colorval: AppColor.black,
+                        sizeval: 14.0,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      subtitle: robotoTextWidget(
+                        textval: searchPlaceList[index].address,
+                        colorval: AppColor.black,
+                        sizeval: 12.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      leading: SvgPicture.asset(
+                        "assets/svg/to-location-img.svg",
+                        width: 20,
+                        height: 20,
+                        color: AppColor.grey,
                       ),
                     ),
                   ),

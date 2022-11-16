@@ -415,7 +415,10 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
       ),
     )],);
   }
-
+ @override
+  void dispose() {
+    super.dispose();
+  }
   String getTotalPrice(double totalFare, double discount) {
     double num1 = totalFare;
     double num2 = discount;

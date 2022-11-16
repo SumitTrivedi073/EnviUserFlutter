@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../appConfig/Profiledata.dart';
@@ -37,10 +38,19 @@ class _NavigationPageState extends State<NavigationDrawer> {
       super.setState(fn);
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  _launchURLApp(url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -234,7 +244,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-             // closeDrawer();
+              // closeDrawer();
               showDialog(
                 context: context,
                 builder: (BuildContext context) => dialogueLogout(context),
@@ -254,13 +264,20 @@ class _NavigationPageState extends State<NavigationDrawer> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-            //  closeDrawer();
+              //  closeDrawer();
               showDialog(
                 context: context,
                 builder: (BuildContext context) => dialogueDelete(context),
               );
             },
           ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: footerView(),
+          )
         ],
       ),
     ));
@@ -290,28 +307,61 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   Row footerView() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Divider(color: Colors.white)),
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                SFCompactTextWidget(
-                    textval: "ENVI",
-                    colorval: AppColor.lightText,
-                    sizeval: 22.0,
-                    fontWeight: FontWeight.normal)
-              ],
-            ),
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+      // const Padding(
+      //     padding: EdgeInsets.only(left: 20),
+      //     child: Divider(color: Colors.white)),
+      Expanded(
+        flex: 1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            SFCompactTextWidget(
+                textval: "ENVI",
+                colorval: AppColor.lightText,
+                sizeval: 22.0,
+                fontWeight: FontWeight.normal)
+          ],
+        ),
+      ),
+      Expanded(
+        flex: 1,
+        child: GestureDetector(
+          onTap: () {
+            var url = Uri.parse("https://twitter.com/malborktech");
+
+            _launchURLApp(url);
+          },
+          child: Image.asset(
+            "assets/images/twitter.png",
           ),
-        ]);
+        ),
+      ),
+      Expanded(
+        child: GestureDetector(
+          onTap: () {
+            var url = Uri.parse("https://www.instagram.com/envicabs/?hl=en");
+            _launchURLApp(url);
+          },
+          child: Image.asset(
+            "assets/images/instagram.png",
+          ),
+        ),
+      ),
+      Expanded(
+        child: GestureDetector(
+          onTap: () {
+            var url = Uri.parse("https://www.facebook.com/EnviCabs");
+
+            _launchURLApp(url);
+          },
+          child: Image.asset(
+            "assets/images/facebook.png",
+          ),
+        ),
+      ),
+    ]);
   }
 
   void closeDrawer() {
@@ -498,9 +548,8 @@ class _NavigationPageState extends State<NavigationDrawer> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-
-    Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()));
+    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+        builder: (BuildContext context) => const Loginpage()));
   }
 
   Future<void> deleteacountApiCall(BuildContext context) async {
