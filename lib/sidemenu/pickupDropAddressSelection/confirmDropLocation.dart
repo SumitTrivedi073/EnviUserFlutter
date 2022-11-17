@@ -242,7 +242,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     }
   }
 
-  void showInSnackBar(String value) {
+  void showInSnackBar(String value, context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(value),
@@ -310,7 +310,7 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
           zoomControlsEnabled: false,
           onCameraIdle: () {
             Timer(const Duration(seconds: 1), () {
-              GetAddressFromLatLong(latlong);
+              GetAddressFromLatLong(latlong, context);
             });
           },
           onCameraMove: (CameraPosition position) {
@@ -477,7 +477,15 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     });
   }
 
-  Future<void> GetAddressFromLatLong(LatLng position) async {
+  @override
+  void dispose() {
+    if (_controller != null) {
+      _controller!.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> GetAddressFromLatLong(LatLng position, context) async {
     List<Placemark>? placemarks;
     try {
       placemarks =
@@ -488,7 +496,9 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
         placemarks = await placemarkFromCoordinates(
             position.latitude, position.longitude);
       } catch (e) {
-        showInSnackBar('Unable to retrieve location , please try later');
+        if (!mounted) return;
+        showInSnackBar(
+            'Unable to retrieve location , please try later', context);
         await Future.delayed(const Duration(seconds: 4), () {
           Navigator.of(context).pop();
         });
@@ -496,16 +506,20 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
 
       }
     }
-
+    Placemark place;
     //print(placemarks);
-    Placemark place = placemarks![0];
+    if (placemarks != null) {
+      place = placemarks[0];
+      setState(() {
+        toAddressName = (place.subLocality!.isNotEmpty)
+            ? place.subLocality
+            : (place.name!.isNotEmpty)
+                ? place.name
+                : place.locality;
 
-    setState(() {
-      toAddressName = (place.subLocality != '')
-          ? place.subLocality
-          : place.subAdministrativeArea;
-      Address = '${place.street}, ${place.subLocality}, ${place.locality}';
-    });
+        Address = '${place.street}, ${place.subLocality}, ${place.locality}';
+      });
+    }
   }
 
   void confirmLocation() {
