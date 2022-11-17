@@ -419,14 +419,17 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
       ),
     )],);
   }
- @override
+
+  @override
   void dispose() {
     super.dispose();
   }
+
   String getTotalPrice(double totalFare, double discount) {
     double num1 = totalFare;
     double num2 = discount;
     double sum = num1 + num2;
     return "${sum.toStringAsFixed(0)}";
   }
+
 }
