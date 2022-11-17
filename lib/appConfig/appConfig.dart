@@ -24,6 +24,7 @@ class AppConfig {
   static int googleDirectionWFDriverIntervalInMin = 10;
   static int googleDirectionWFDriverIntervalMaxTrialCount = 3;
   static bool isNormalBookingFeatureEnabled = true;
+  static int maxAllowedDistance = 150;
 
   static void setminAndroidVersion(int val) {
     minAndroidVersion = val;
@@ -143,5 +144,13 @@ class AppConfig {
 
   bool getisNormalBookingFeatureEnabled() {
     return isNormalBookingFeatureEnabled;
+  }
+
+  static setmaxAllowedDistance(int val) {
+    maxAllowedDistance = val;
+  }
+
+  int getmaxAllowedDistance() {
+    return maxAllowedDistance;
   }
 }

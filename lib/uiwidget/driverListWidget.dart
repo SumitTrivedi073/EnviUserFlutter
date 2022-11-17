@@ -98,7 +98,7 @@ class DriverListItemPageState extends State<DriverListItem> {
         widget.callback(distance.text.toString());
       });
     } else {
-      Errormsg = jsonDecode(res.body)['msg'];
+      Errormsg = jsonDecode(res.body)['message'];
 
       setState(() {
         isLoading = false;
