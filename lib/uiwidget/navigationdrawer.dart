@@ -1,7 +1,5 @@
 import 'package:envi/Profile/newprofilePage.dart';
-import 'package:envi/Profile/profilePage.dart';
 import 'package:envi/login/login.dart';
-import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/sidemenu/ridehistory/ridehistoryPage.dart';
 import 'package:envi/sidemenu/upcomingride/upcomingridesPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
@@ -10,7 +8,6 @@ import 'package:envi/web_service/Constant.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,7 +20,6 @@ import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
 import '../theme/images.dart';
 import '../theme/string.dart';
-import '../theme/theme.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 
@@ -272,9 +268,8 @@ class _NavigationPageState extends State<NavigationDrawer> {
               );
             },
           ),
-          const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: footerView(),
           )
         ],
@@ -306,59 +301,56 @@ class _NavigationPageState extends State<NavigationDrawer> {
   }
 
   Row footerView() {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      Expanded(
-        flex: 1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            SFCompactTextWidget(
-                textval: "ENVI",
-                colorval: AppColor.lightText,
-                sizeval: 22.0,
-                fontWeight: FontWeight.normal)
-          ],
-        ),
-      ),
-      Expanded(
-        flex: 1,
-        child: GestureDetector(
-          onTap: () {
-            var url = Uri.parse(instagramUrl);
-            _launchURLApp(url);
-          },
-          child: Image.asset(
-            "assets/images/instagram.png",
-          ),
-        ),
-      ),
-      Expanded(
-        flex: 1,
-        child: GestureDetector(
-          onTap: () {
-            var url = Uri.parse(FacebookUrl);
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          const SFCompactTextWidget(
+              textval: "ENVI",
+              colorval: AppColor.lightText,
+              sizeval: 22.0,
+              fontWeight: FontWeight.normal),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  var url = Uri.parse(instagramUrl);
+                  _launchURLApp(url);
+                },
+                child: Image.asset(
+                  "assets/images/instagram.png",
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  var url = Uri.parse(FacebookUrl);
 
-            _launchURLApp(url);
-          },
-          child: Image.asset(
-            "assets/images/facebook.png",
-          ),
-        ),
-      ),
-      Expanded(
-        flex: 1,
-        child: GestureDetector(
-          onTap: () {
-            var url = Uri.parse(twitterUrl);
-            _launchURLApp(url);
-          },
-          child: Image.asset(
-            "assets/images/twitter.png",
-          ),
-        ),
-      ),
-    ]);
+                  _launchURLApp(url);
+                },
+                child: Image.asset(
+                  "assets/images/facebook.png",
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  var url = Uri.parse(twitterUrl);
+                  _launchURLApp(url);
+                },
+                child: Image.asset(
+                  "assets/images/twitter.png",
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          )
+        ]);
   }
 
   void closeDrawer() {
@@ -391,7 +383,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 children: [
                   Text(
                     deleteaccountConfirmation,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColor.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w600),
@@ -529,7 +521,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      dynamic res = await HTTP.get(context,userLogout());
+      dynamic res = await HTTP.get(context, userLogout());
     } catch (e) {
       showToast(e.toString());
     }
@@ -556,7 +548,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     dynamic res = await HTTP.postwithoutdata(
-        context,userdeRegisterMe(), null); //post(userdeRegisterMe());
+        context, userdeRegisterMe(), null); //post(userdeRegisterMe());
     print(res.statusCode);
     if (res.statusCode == 200) {
       showToast("Deleted Account SuccessFully");
