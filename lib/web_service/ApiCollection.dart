@@ -1,11 +1,13 @@
 // import 'dart:ffi';
 
+import 'package:flutter/src/widgets/framework.dart';
+
 import '../../../../web_service/HTTP.dart' as HTTP;
 import 'APIDirectory.dart';
 
 class ApiCollection {
   static Future<dynamic> FavoriateDataAdd(
-      userid, title, fulladdress, lat, long, isFavourite) async {
+      userid, title, fulladdress, lat, long, isFavourite, BuildContext context) async {
     Map location = {
       "longitude": long,
       "latitude": lat,
@@ -21,12 +23,12 @@ class ApiCollection {
       "address": address,
     };
     print(data);
-    dynamic res = await HTTP.post(AddFavouriteAddressdata(), data);
+    dynamic res = await HTTP.post(context,AddFavouriteAddressdata(), data);
     return res;
   }
 
   static Future<dynamic> FavoriateDataUpdate(
-      userid, title, fulladdress, lat, long, isFavourite, id) async {
+      userid, title, fulladdress, lat, long, isFavourite, id, BuildContext context) async {
     Map location = {
       "longitude": long,
       "latitude": lat,
@@ -43,11 +45,11 @@ class ApiCollection {
       "address": address,
     };
     print(data);
-    dynamic res = await HTTP.post(EditFavouriteAddressdata(), data);
+    dynamic res = await HTTP.post(context,EditFavouriteAddressdata(), data);
     return res;
   }
 
-  static Future<dynamic> FavoriateDataDelete(userid, id) async {
+  static Future<dynamic> FavoriateDataDelete(userid, id, context) async {
     Map address = {
       "id": id,
     };
@@ -56,12 +58,12 @@ class ApiCollection {
       "address": address,
     };
     print(data);
-    dynamic res = await HTTP.post(DeleteFavouriteAddressdata(), data);
+    dynamic res = await HTTP.post(context,DeleteFavouriteAddressdata(), data);
     return res;
   }
 
   static Future<dynamic> getScheduleEstimationdata(from_latitude,
-      from_longitude, to_latitude, to_longitude, scheduledAt) async {
+      from_longitude, to_latitude, to_longitude, scheduledAt, BuildContext context) async {
     Map data = {};
     if (scheduledAt.toString().isNotEmpty) {
       data = {
@@ -80,12 +82,12 @@ class ApiCollection {
       };
     }
     print("SheduleEstimationdata==========>$data");
-    dynamic res = await HTTP.post(getScheduleEstimation(), data);
+    dynamic res = await HTTP.post(context,getScheduleEstimation(), data);
     return res;
   }
 
   static Future<dynamic> AddnewSchedualeTrip(fromLocation, toLocation,
-      scheduledAt, estimatedPrice, estimatedDistance, sku_id) async {
+      scheduledAt, estimatedPrice, estimatedDistance, sku_id, BuildContext context) async {
     Map data = {
       "from_address": fromLocation.address,
       "from_latitude": fromLocation.latLng.latitude,
@@ -99,12 +101,12 @@ class ApiCollection {
       "sku_id": sku_id,
     };
     print(data);
-    dynamic res = await HTTP.post(AddSchedualeTrip(), data);
+    dynamic res = await HTTP.post(context,AddSchedualeTrip(), data);
     return res;
   }
 
-  static Future<dynamic> cancelSchedualeTrip(passengerTripMasterId) async {
-    dynamic res = await HTTP.get(cancleSchedule(passengerTripMasterId));
+  static Future<dynamic> cancelSchedualeTrip(passengerTripMasterId, BuildContext context) async {
+    dynamic res = await HTTP.get(context,cancleSchedule(passengerTripMasterId));
     return res;
   }
 }

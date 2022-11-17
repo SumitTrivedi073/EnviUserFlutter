@@ -95,7 +95,7 @@ class _MapDirectionWidgetOnRideState
     String request =
         '$directionBaseURL?origin=${pickupLocation.latitude},${pickupLocation.longitude}&destination=${destinationLocation.latitude},${destinationLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
-    dynamic response = await HTTP.get(url);
+    dynamic response = await HTTP.get(context,url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
         DirectionModel directionModel = DirectionModel.fromJson(json.decode(response.body) );

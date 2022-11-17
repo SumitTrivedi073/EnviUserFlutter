@@ -128,7 +128,7 @@ class _PaymentPageState extends State<PaymentPage> {
       "paymentMode": selectedPayOption
     };
     var jsonData;
-    dynamic res = await HTTP.post(updatePaymentMode(), body);
+    dynamic res = await HTTP.post(context,updatePaymentMode(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);
       SosModel sosModel = SosModel.fromJson(jsonData);
@@ -145,7 +145,7 @@ class _PaymentPageState extends State<PaymentPage> {
       "passengerTripMasterId": tripDataModel.tripInfo!.passengerTripMasterId,
     };
     var jsonData;
-    dynamic res = await HTTP.post(CreateOrder(), body);
+    dynamic res = await HTTP.post(context,CreateOrder(), body);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       jsonData = convert.jsonDecode(res.body);
       print("jsonData=============>$jsonData");

@@ -90,7 +90,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
     };
     searctType = 0;
     searchPlaceList = [];
-    dynamic res = await HTTP.post(searchPlace(), data);
+    dynamic res = await HTTP.post(context,searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
         if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
@@ -130,7 +130,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
     String request =
         '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken';
     var url = Uri.parse(request);
-    dynamic response = await HTTP.get(url);
+    dynamic response = await HTTP.get(context,url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
         setState(() {

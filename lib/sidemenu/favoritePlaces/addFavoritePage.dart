@@ -429,7 +429,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         address,
         latlong.latitude,
         latlong.longitude,
-        "Y");
+        "Y",context);
     print(response.body);
 
     if (response != null) {
@@ -462,7 +462,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         latlong.latitude,
         latlong.longitude,
         "Y",
-        idetifire);
+        idetifire,context);
     print(response.body);
 
     if (response != null) {
@@ -493,7 +493,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
       int? id, String identifire, context) async {
     dynamic userid = Profiledata().getusreid();
     final response =
-        await ApiCollection.FavoriateDataDelete(userid, identifire);
+        await ApiCollection.FavoriateDataDelete(userid, identifire,context);
     print(response.body);
 
     if (response != null) {

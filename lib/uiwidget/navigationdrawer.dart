@@ -529,7 +529,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      dynamic res = await HTTP.get(userLogout());
+      dynamic res = await HTTP.get(context,userLogout());
     } catch (e) {
       showToast(e.toString());
     }
@@ -556,7 +556,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     dynamic res = await HTTP.postwithoutdata(
-        userdeRegisterMe(), null); //post(userdeRegisterMe());
+        context,userdeRegisterMe(), null); //post(userdeRegisterMe());
     print(res.statusCode);
     if (res.statusCode == 200) {
       showToast("Deleted Account SuccessFully");
