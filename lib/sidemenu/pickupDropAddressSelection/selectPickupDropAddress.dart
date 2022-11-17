@@ -115,6 +115,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     loadData();
     getLocalSuggestions('');
     startingAddress = widget.currentLocation;
+    if (widget.currentLocation!.title == '') {
+      startingAddress!.title == getTitle(widget.currentLocation!.address);
+    }
   }
 
   @override
@@ -143,8 +146,6 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 .toList();
             useGoogleApi = false;
             isLocalDbsuggestion = false;
-            print(' this is title');
-            print(searchPlaceList![2].title);
           } else {
             googleAPI(value);
           }
@@ -561,12 +562,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               minLeadingWidth: 30,
                               horizontalTitleGap: 0.0,
                               title: robotoTextWidget(
-                                textval: (searchPlaceList![index]
-                                        .title
-                                        .contains(' '))
-                                    ? formatAddress(
-                                        searchPlaceList![index].title)
-                                    : searchPlaceList![index].title,
+                                textval: searchPlaceList![index].title,
                                 colorval: AppColor.greyblack,
                                 sizeval: 14.0,
                                 fontWeight: FontWeight.w600,

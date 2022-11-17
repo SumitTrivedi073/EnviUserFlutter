@@ -192,10 +192,31 @@ String formatAddress(String address) {
   return formated;
 }
 
-extension StringCasingExtension on String {
-  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
-  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+//null title handling
+dynamic getTitle(String val) {
+  final split = val.split(',');
+  if (split.length > 1) {
+    final value1 = split[0].trim();
+    final value2 = split[1].trim();
+    return value1 + "" + value2 + "...";
+  }
+  // final Map<int, String> values = {
+  //   for (int i = 0; i < split.length; i++) i: split[i]
+  // };
+
+  final val1 = split[0].trim();
+  return val1;
 }
+
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}
+
 double calculateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;
   var c = cos;
@@ -205,5 +226,5 @@ double calculateDistance(lat1, lon1, lat2, lon2) {
 
   var res = 12742 * asin(sqrt(a));
 
- return res;
+  return res;
 }
