@@ -143,6 +143,8 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                 .toList();
             useGoogleApi = false;
             isLocalDbsuggestion = false;
+            print(' this is title');
+            print(searchPlaceList![2].title);
           } else {
             googleAPI(value);
           }
@@ -551,7 +553,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
+                            padding: const EdgeInsets.fromLTRB(1, 0, 1, 5),
                             child: ListTile(
                               dense: true,
                               contentPadding:
@@ -559,8 +561,12 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               minLeadingWidth: 30,
                               horizontalTitleGap: 0.0,
                               title: robotoTextWidget(
-                                textval: formatAddress(
-                                    searchPlaceList![index].title),
+                                textval: (searchPlaceList![index]
+                                        .title
+                                        .contains(' '))
+                                    ? formatAddress(
+                                        searchPlaceList![index].title)
+                                    : searchPlaceList![index].title,
                                 colorval: AppColor.greyblack,
                                 sizeval: 14.0,
                                 fontWeight: FontWeight.w600,
@@ -596,7 +602,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         );
                       },
                       itemCount: searchPlaceList!.length,
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(10),
                     )
                   : const SizedBox(),
             ),

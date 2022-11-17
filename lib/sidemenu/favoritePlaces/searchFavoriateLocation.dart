@@ -245,7 +245,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                 );
               },
               itemCount:
-                  searchPlaceList.length < 10 ? searchPlaceList.length : 10,
+                  searchPlaceList.length,
               padding: const EdgeInsets.all(8),
             )),
           ],
@@ -263,7 +263,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
         ),
         elevation: 5,
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               GestureDetector(
@@ -271,7 +271,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                     print("Tapped a Container");
                   },
                   child: Container(
-                    height: 50,
+                    height: 45,
                     margin: const EdgeInsets.only(left: 10),
                     child: Row(
                       children: [
@@ -288,9 +288,9 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                           InkWell(
                             onTap: () {},
                             child: Container(
-                              padding: const EdgeInsets.only(right: 5),
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              // padding: const EdgeInsets.only(right: 5),
+                              // margin:
+                              //     const EdgeInsets.only(left: 10, right: 10),
                               child: FromTextWidget(),
                             ),
                           ),
