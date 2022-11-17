@@ -12,7 +12,7 @@ import 'package:one_context/one_context.dart';
 import '../appConfig/Profiledata.dart';
 import 'Constant.dart';
 
-Response? AccessPermissionHandler(response) {
+Response? AccessPermissionHandler(response,context) {
   if (response != null && response.statusCode == 401) {
     Fluttertoast.showToast(
       msg: 'ACCESS DENIED',
@@ -27,7 +27,8 @@ Response? AccessPermissionHandler(response) {
       // webShowClose: true
 
     );
-    OneContext().push(MaterialPageRoute(builder: (_) => Loginpage()));
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => const Loginpage()),
+            (Route<dynamic> route) => false);
   }
   return response;
 }
@@ -46,14 +47,14 @@ Future<Map<String, String>> setRequestHeaders([additionalHeaders]) async {
   };
 }
 
-Future<Object?> get(url, [headers]) async {
+Future<Object?> get(BuildContext context,url, [headers]) async {
   print("url==> $url");
   try {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
     var response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(minutes: 2));
-    return AccessPermissionHandler(response);
+    return AccessPermissionHandler(response,context);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
   }
@@ -64,7 +65,7 @@ Future<Object?> get(url, [headers]) async {
   // }
 }
 
-Future<Object?> post(url, data, [headers]) async {
+Future<Object?> post(BuildContext context,url, data, [headers]) async {
   print("url==> $url");
   try {
     final encodedData = data != null ? jsonEncode(data) : null;
@@ -77,13 +78,13 @@ Future<Object?> post(url, data, [headers]) async {
           body: encodedData,
         )
         .timeout(const Duration(minutes: 2));
-    return AccessPermissionHandler(response);
+    return AccessPermissionHandler(response,context);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
   }
 }
 
-Future<Object?> put(url, data, [headers]) async {
+Future<Object?> put(BuildContext context,url, data, [headers]) async {
   print("url==> $url");
 
   try {
@@ -91,13 +92,13 @@ Future<Object?> put(url, data, [headers]) async {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
     var response =
         await http.put(url, body: encodedData, headers: requestHeaders);
-    return AccessPermissionHandler(response);
+    return AccessPermissionHandler(response,context);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
   }
 }
 
-Future<Object?> delete(url, [headers]) async {
+Future<Object?> delete(BuildContext context,url, [headers]) async {
   print("url==> $url");
   try {
     Map<String, String> requestHeaders = await setRequestHeaders(headers);
@@ -105,7 +106,7 @@ Future<Object?> delete(url, [headers]) async {
 
     var response = await http.delete(url, headers: requestHeaders);
     print('response in http delete after ');
-    return AccessPermissionHandler(response);
+    return AccessPermissionHandler(response,context);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
   }
@@ -150,20 +151,20 @@ Future<Object> postDataWithMutipleFiles(url, data, files, fieldName,
   }
 }
 
-Future<Object?> getwithoutHeader(url) async {
+Future<Object?> getwithoutHeader(BuildContext context,url) async {
   print("url==> $url");
 
   try {
     const contentType = 'application/json';
     Map<String, String> headerstemp = {'Access-Control-Allow-Origin': "*"};
     var response = await http.get(url, headers: headerstemp);
-    return AccessPermissionHandler(response);
+    return AccessPermissionHandler(response,context);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
   }
 }
 
-Future<Object?> postwithoutdata(url, [headers]) async {
+Future<Object?> postwithoutdata(BuildContext context,url, [headers]) async {
   print("url==> $url");
 
   try {
@@ -174,7 +175,7 @@ Future<Object?> postwithoutdata(url, [headers]) async {
       url,
       headers: requestHeaders,
     );
-    return AccessPermissionHandler(response);
+    return AccessPermissionHandler(response,context);
   } catch (e) {
     throw ExceptionHandlers().getExceptionString(e);
   }

@@ -60,7 +60,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       userId = Profiledata().getusreid();
 
       dynamic res =
-          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(context,getUserTripHistory(userId, pagecount, _limit));
       if (res != null && res.statusCode != null && res.statusCode == 200) {
         //  print(jsonDecode(res.body)['schedule_trip_list']);
         setState(() {
@@ -98,7 +98,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       });
       pagecount += 1;
       dynamic res =
-          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(context,getUserTripHistory(userId, pagecount, _limit));
 
       if (res.statusCode == 200) {
         _isLoadMoreRunning = false;
@@ -405,7 +405,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     });
 
     final response =
-        await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
+        await ApiCollection.cancelSchedualeTrip(passengerTripMasterId,context);
 
     if (response != null) {
       if (response.statusCode == 200) {

@@ -85,7 +85,7 @@ class _SOSViewPageState extends State<SOSView> {
 
     };
 
-    dynamic res = await HTTP.post(SosApi(), data);
+    dynamic res = await HTTP.post(context,SosApi(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       print(jsonDecode(res.body));
       var jsonData = json.decode(res.body);

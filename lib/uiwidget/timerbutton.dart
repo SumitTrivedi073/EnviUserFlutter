@@ -330,7 +330,7 @@ class _TimerButtonState extends State<TimerButton>
         isLoading = true;
       });
     }
-    dynamic res = await HTTP.post(cancelTrip(), data);
+    dynamic res = await HTTP.post(context,cancelTrip(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       if (mounted) {
         setState(() {

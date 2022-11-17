@@ -106,7 +106,7 @@ class MapDirectionWidgetPickupState extends State<MapDirectionWidgetPickup>
         '$directionBaseURL?origin=${carCurrentLocation.latitude},${carCurrentLocation.longitude}&destination=${pickupLocation.latitude},${pickupLocation.longitude}&mode=driving&transit_routing_preference=less_driving&sessiontoken=$_sessionToken&key=$googleAPiKey';
     var url = Uri.parse(request);
 
-    dynamic response = await HTTP.get(url);
+    dynamic response = await HTTP.get(context,url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
         DirectionModel directionModel =

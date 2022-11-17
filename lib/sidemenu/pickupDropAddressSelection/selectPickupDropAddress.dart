@@ -136,7 +136,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       "search": value,
     };
 
-    dynamic res = await HTTP.post(searchPlace(), data);
+    dynamic res = await HTTP.post(context,searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
         setState(() {
@@ -172,7 +172,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     String request =
         '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken&components=country:in';
     var url = Uri.parse(request);
-    dynamic response = await HTTP.get(url);
+    dynamic response = await HTTP.get(context,url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
         setState(() {

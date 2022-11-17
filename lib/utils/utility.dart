@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:envi/database/favoritesData.dart';
-import 'package:envi/theme/color.dart';
 import 'package:envi/web_service/Constant.dart';
 import 'package:flutter/material.dart';
-import 'package:envi/web_service/Constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -211,6 +210,7 @@ dynamic getTitle(String val) {
 extension StringCasingExtension on String {
   String toCapitalized() =>
       length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+
   String toTitleCase() => replaceAll(RegExp(' +'), ' ')
       .split(' ')
       .map((str) => str.toCapitalized())
