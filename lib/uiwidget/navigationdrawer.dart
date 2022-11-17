@@ -272,9 +272,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
               );
             },
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: footerView(),
@@ -360,7 +358,6 @@ class _NavigationPageState extends State<NavigationDrawer> {
           ),
         ),
       ),
-
     ]);
   }
 
