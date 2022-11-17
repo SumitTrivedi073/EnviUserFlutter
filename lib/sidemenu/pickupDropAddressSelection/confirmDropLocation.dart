@@ -511,11 +511,11 @@ class _ConfirmDropLocationState extends State<ConfirmDropLocation> {
     if (placemarks != null) {
       place = placemarks[0];
       setState(() {
-        toAddressName = (place.locality!.isNotEmpty)
-            ? place.locality
-            : (place.subLocality!.isNotEmpty)
-                ? place.subLocality
-                : place.name;
+        toAddressName = (place.subLocality!.isNotEmpty)
+            ? place.subLocality
+            : (place.name!.isNotEmpty)
+                ? place.name
+                : place.locality;
 
         Address = '${place.street}, ${place.subLocality}, ${place.locality}';
       });
