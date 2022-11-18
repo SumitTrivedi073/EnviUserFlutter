@@ -342,13 +342,13 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                       var detail = await dao.findDataByaddressg(address);
 
                       if (detail == null) {
-                        ApiCall_Add_Favorite();
+                        ApiCall_Add_Favorite(context);
                       } else {
                         ApiCall_update_Favorite(detail.id, detail.identifier);
                       }
                     } else {
                       if (editidentifire == "0") {
-                        ApiCall_Add_Favorite();
+                        ApiCall_Add_Favorite(context);
                       } else {
                         ApiCall_update_Favorite(editid, editidentifire);
                       }
@@ -421,7 +421,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     });
   }
 
-  Future<void> ApiCall_Add_Favorite() async {
+  Future<void> ApiCall_Add_Favorite(context) async {
     dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
@@ -429,7 +429,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         address,
         latlong.latitude,
         latlong.longitude,
-        "Y",context);
+        "Y",
+        context);
     print(response.body);
 
     if (response != null) {
@@ -446,6 +447,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
             title: titlecontroller.text.toString());
         print(task);
         await dao.insertTask(task);
+        if (!mounted) return;
         Navigator.pop(context, {"isbact": true});
       }
       if (!mounted) return;
@@ -462,7 +464,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         latlong.latitude,
         latlong.longitude,
         "Y",
-        idetifire,context);
+        idetifire,
+        context);
     print(response.body);
 
     if (response != null) {
@@ -493,7 +496,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
       int? id, String identifire, context) async {
     dynamic userid = Profiledata().getusreid();
     final response =
-        await ApiCollection.FavoriateDataDelete(userid, identifire,context);
+        await ApiCollection.FavoriateDataDelete(userid, identifire, context);
     print(response.body);
 
     if (response != null) {
