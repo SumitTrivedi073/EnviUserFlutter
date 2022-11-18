@@ -321,7 +321,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 25,
               ),
               GestureDetector(
                 onTap: () {
@@ -334,7 +334,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 25,
               ),
               GestureDetector(
                 onTap: () {
@@ -346,7 +346,7 @@ class _NavigationPageState extends State<NavigationDrawer> {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 25,
               ),
             ],
           )
