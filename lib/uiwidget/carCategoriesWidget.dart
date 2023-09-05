@@ -68,7 +68,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.fromAddress!.latLng.longitude,
         widget.toAddress!.latLng.latitude,
         widget.toAddress!.latLng.longitude,
-        widget.scheduledAt);
+        widget.scheduledAt,context);
     if (response != null && response.statusCode == 200) {
       setState(() {
         isLoading = false;
@@ -81,7 +81,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
         widget.callback(vehiclePriceClasses[0]);
       });
     } else {
-      var errmsg = jsonDecode(response.body)['msg'];
+      var errmsg = jsonDecode(response.body)['message'];
       setState(() {
         isLoading = false;
       });
@@ -171,32 +171,36 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
               left: 10,
               right: 10,
             ),
-            child: Card(
+            child: vehiclePriceClasses.length>0?Card(
               elevation: 5,
               margin: const EdgeInsets.all(5),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          child: robotoTextWidget(
-                              textval:
-                                  '${vehiclePriceClasses.length} Ride Option',
-                              colorval: AppColor.black,
-                              sizeval: 14,
-                              fontWeight: FontWeight.w800),
+                  vehiclePriceClasses.length >1 ?SizedBox(
+                      height: 50,
+                      child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: robotoTextWidget(
+                                  textval: '${vehiclePriceClasses.length} Ride Options',
+                                  colorval: AppColor.black,
+                                  sizeval: 14,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 1,
-                    color: AppColor.grey,
-                  ),
+                        Container(
+                          height: 1,
+                          color: AppColor.grey,
+                        ),
+                      ],)
+                  ):Container(height: 1,
+                    decoration: const BoxDecoration(
+                        color: Colors.transparent
+                    ),),
                   const SizedBox(
                     height: 5,
                   ),
@@ -207,7 +211,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                     options: CarouselOptions(
                       enableInfiniteScroll: false,
                       scrollDirection: Axis.horizontal,
-                      aspectRatio: 2.2,
+                      aspectRatio: 2.0,
                       enlargeCenterPage: false,
                       disableCenter: false,
                       viewportFraction: 0.85,
@@ -231,7 +235,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                   )
                 ],
               ),
-            ),
+            ):Container(),
           );
   }
 
@@ -255,7 +259,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
             side: const BorderSide(color: Colors.white, width: 2.0),
             borderRadius: BorderRadius.circular(5.0)),
         child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(
@@ -301,7 +305,7 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
                               ],
                             ),
                             const SizedBox(
-                              width: 10,
+                              width: 5,
                             ),
                             Row(
                               children: [
@@ -416,10 +420,16 @@ class _CarCategoriesWidgetState extends State<CarCategoriesWidget> {
     )],);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   String getTotalPrice(double totalFare, double discount) {
     double num1 = totalFare;
     double num2 = discount;
     double sum = num1 + num2;
     return "${sum.toStringAsFixed(0)}";
   }
+
 }

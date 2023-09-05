@@ -69,12 +69,19 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     if (widget.isforedit == "0") {
       titlecontroller.text = widget.data!.title;
       address = formatAddress(widget.data!.address);
-      latlong = LatLng(double.parse(widget.data!.latitude),
-          double.parse(widget.data!.longitude));
-      _cameraPosition = CameraPosition(
-          target: LatLng(double.parse(widget.data!.latitude),
-              double.parse(widget.data!.longitude)),
-          zoom: 18.0);
+      if (widget.data!.identifier == '0') {
+        getCurrentLocation();
+        _cameraPosition =
+            const CameraPosition(target: LatLng(0.0, 0.0), zoom: 18.0);
+      } else {
+        latlong = LatLng(double.parse(widget.data!.latitude),
+            double.parse(widget.data!.longitude));
+        _cameraPosition = CameraPosition(
+            target: LatLng(double.parse(widget.data!.latitude),
+                double.parse(widget.data!.longitude)),
+            zoom: 18.0);
+      }
+
       editidentifire = widget.data!.identifier;
 
       editid = widget.data!.id;
@@ -335,13 +342,13 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
                       var detail = await dao.findDataByaddressg(address);
 
                       if (detail == null) {
-                        ApiCall_Add_Favorite();
+                        ApiCall_Add_Favorite(context);
                       } else {
                         ApiCall_update_Favorite(detail.id, detail.identifier);
                       }
                     } else {
                       if (editidentifire == "0") {
-                        ApiCall_Add_Favorite();
+                        ApiCall_Add_Favorite(context);
                       } else {
                         ApiCall_update_Favorite(editid, editidentifire);
                       }
@@ -414,7 +421,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
     });
   }
 
-  Future<void> ApiCall_Add_Favorite() async {
+  Future<void> ApiCall_Add_Favorite(context) async {
     dynamic userid = Profiledata().getusreid();
     final response = await ApiCollection.FavoriateDataAdd(
         userid,
@@ -422,7 +429,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         address,
         latlong.latitude,
         latlong.longitude,
-        "Y");
+        "Y",
+        context);
     print(response.body);
 
     if (response != null) {
@@ -439,6 +447,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
             title: titlecontroller.text.toString());
         print(task);
         await dao.insertTask(task);
+        if (!mounted) return;
         Navigator.pop(context, {"isbact": true});
       }
       if (!mounted) return;
@@ -455,7 +464,8 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
         latlong.latitude,
         latlong.longitude,
         "Y",
-        idetifire);
+        idetifire,
+        context);
     print(response.body);
 
     if (response != null) {
@@ -486,7 +496,7 @@ class _AddEditFavoritePlacesPageState extends State<AddEditFavoritePlacesPage> {
       int? id, String identifire, context) async {
     dynamic userid = Profiledata().getusreid();
     final response =
-        await ApiCollection.FavoriateDataDelete(userid, identifire);
+        await ApiCollection.FavoriateDataDelete(userid, identifire, context);
     print(response.body);
 
     if (response != null) {

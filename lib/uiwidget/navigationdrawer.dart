@@ -1,17 +1,16 @@
 import 'package:envi/Profile/newprofilePage.dart';
-import 'package:envi/Profile/profilePage.dart';
 import 'package:envi/login/login.dart';
-import 'package:envi/profileAfterlogin/profileAfterloginPage.dart';
 import 'package:envi/sidemenu/ridehistory/ridehistoryPage.dart';
 import 'package:envi/sidemenu/upcomingride/upcomingridesPage.dart';
 import 'package:envi/uiwidget/robotoTextWidget.dart';
 import 'package:envi/uiwidget/sfcompactTextWidget.dart';
+import 'package:envi/web_service/Constant.dart';
 import 'package:envi/web_service/HTTP.dart' as HTTP;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../appConfig/Profiledata.dart';
@@ -21,7 +20,6 @@ import '../sidemenu/favoritePlaces/favoritePlacesPage.dart';
 import '../theme/color.dart';
 import '../theme/images.dart';
 import '../theme/string.dart';
-import '../theme/theme.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 
@@ -37,10 +35,19 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
       super.setState(fn);
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  _launchURLApp(url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -234,7 +241,7 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-             // closeDrawer();
+              // closeDrawer();
               showDialog(
                 context: context,
                 builder: (BuildContext context) => dialogueLogout(context),
@@ -254,13 +261,17 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
               fontWeight: FontWeight.normal,
             ),
             onTap: () {
-            //  closeDrawer();
+              //  closeDrawer();
               showDialog(
                 context: context,
                 builder: (BuildContext context) => dialogueDelete(context),
               );
             },
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: footerView(),
+          )
         ],
       ),
     ));
@@ -291,26 +302,54 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
 
   Row footerView() {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Divider(color: Colors.white)),
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                SFCompactTextWidget(
-                    textval: "ENVI",
-                    colorval: AppColor.lightText,
-                    sizeval: 22.0,
-                    fontWeight: FontWeight.normal)
-              ],
-            ),
-          ),
+          const SFCompactTextWidget(
+              textval: "ENVI",
+              colorval: AppColor.lightText,
+              sizeval: 22.0,
+              fontWeight: FontWeight.normal),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  var url = Uri.parse(instagramUrl);
+                  _launchURLApp(url);
+                },
+                child: Image.asset(
+                  "assets/images/instagram.png",
+                ),
+              ),
+              const SizedBox(
+                width: 25,
+              ),
+              GestureDetector(
+                onTap: () {
+                  var url = Uri.parse(FacebookUrl);
+
+                  _launchURLApp(url);
+                },
+                child: Image.asset(
+                  "assets/images/facebook.png",
+                ),
+              ),
+              const SizedBox(
+                width: 25,
+              ),
+              GestureDetector(
+                onTap: () {
+                  var url = Uri.parse(twitterUrl);
+                  _launchURLApp(url);
+                },
+                child: Image.asset(
+                  "assets/images/twitter.png",
+                ),
+              ),
+              const SizedBox(
+                width: 25,
+              ),
+            ],
+          )
         ]);
   }
 
@@ -344,7 +383,7 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
                 children: [
                   Text(
                     deleteaccountConfirmation,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColor.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w600),
@@ -482,7 +521,7 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      dynamic res = await HTTP.get(userLogout());
+      dynamic res = await HTTP.get(context, userLogout());
     } catch (e) {
       showToast(e.toString());
     }
@@ -498,9 +537,8 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
     Profiledata.setgender("");
     Profiledata.setname("");
 
-
-    Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (BuildContext context) => const Loginpage()));
+    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+        builder: (BuildContext context) => const Loginpage()));
   }
 
   Future<void> deleteacountApiCall(BuildContext context) async {
@@ -510,7 +548,7 @@ class _NavigationPageState extends State<NavigationDrawerWidget> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     dynamic res = await HTTP.postwithoutdata(
-        userdeRegisterMe(), null); //post(userdeRegisterMe());
+        context, userdeRegisterMe(), null); //post(userdeRegisterMe());
     print(res.statusCode);
     if (res.statusCode == 200) {
       showToast("Deleted Account SuccessFully");

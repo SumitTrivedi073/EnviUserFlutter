@@ -115,6 +115,9 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     loadData();
     getLocalSuggestions('');
     startingAddress = widget.currentLocation;
+    if (widget.currentLocation!.title == '') {
+      startingAddress!.title == getTitle(widget.currentLocation!.address);
+    }
   }
 
   @override
@@ -133,7 +136,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
       "search": value,
     };
 
-    dynamic res = await HTTP.post(searchPlace(), data);
+    dynamic res = await HTTP.post(context,searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
         setState(() {
@@ -169,7 +172,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
     String request =
         '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken&components=country:in';
     var url = Uri.parse(request);
-    dynamic response = await HTTP.get(url);
+    dynamic response = await HTTP.get(context,url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
         setState(() {
@@ -551,7 +554,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                             }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
+                            padding: const EdgeInsets.fromLTRB(1, 0, 1, 5),
                             child: ListTile(
                               dense: true,
                               contentPadding:
@@ -559,8 +562,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                               minLeadingWidth: 30,
                               horizontalTitleGap: 0.0,
                               title: robotoTextWidget(
-                                textval: formatAddress(
-                                    searchPlaceList![index].title),
+                                textval: searchPlaceList![index].title,
                                 colorval: AppColor.greyblack,
                                 sizeval: 14.0,
                                 fontWeight: FontWeight.w600,
@@ -596,7 +598,7 @@ class _SelectPickupDropAddressState extends State<SelectPickupDropAddress> {
                         );
                       },
                       itemCount: searchPlaceList!.length,
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(10),
                     )
                   : const SizedBox(),
             ),

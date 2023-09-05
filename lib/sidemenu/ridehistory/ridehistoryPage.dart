@@ -72,7 +72,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     }
     userId = Profiledata().getusreid();
 
-    dynamic res = await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+    dynamic res = await HTTP.get(context,getUserTripHistory(userId, pagecount, _limit));
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       {
         setState(() {
@@ -112,7 +112,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
       }
       pagecount += 1;
       dynamic res =
-          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(context,getUserTripHistory(userId, pagecount, _limit));
 
       if (res.statusCode == 200) {
         final List<RideHistoryModel> fetchedPosts =
@@ -526,7 +526,7 @@ class _RideHistoryPageState extends State<RideHistoryPage> {
     };
     print("data=======>$data");
     var jsonData = null;
-    dynamic res = await HTTP.post(SendInvoice(), data);
+    dynamic res = await HTTP.post(context,SendInvoice(), data);
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       setState(() {
         jsonData = convert.jsonDecode(res.body);

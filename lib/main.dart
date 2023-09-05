@@ -221,8 +221,8 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           (Route<dynamic> route) => false);
     } else {
       SetProfileData();
-      GetAllFavouriteAddress();
       getLandingPageSettings();
+      GetAllFavouriteAddress();
 
       // ignore: use_build_context_synchronously
       context.read<firestoreLiveTripDataNotifier>().listenToLiveUpdateStream();
@@ -264,8 +264,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   void getLandingPageSettings() async {
-    dynamic response = await HTTP.get(getfetchLandingPageSettings());
-    print(convert.jsonDecode(response.body));
+    dynamic response = await HTTP.get(context,getfetchLandingPageSettings());
     if (response != null && response.statusCode == 200) {
       var jsonData = convert.jsonDecode(response.body);
       print("jsonData==========>${jsonData.toString()}");
@@ -332,22 +331,24 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           ['priceConfig']['isCancellationFeeApplicable']);
       AppConfig.setcancellationFee(
           jsonData['applicationConfig']['priceConfig']['cancellationFee']);
-      AppConfig.setgoogleDirectionDriverIntervalInMin(
-          jsonData['applicationConfig']['searchConfig']
-              ['googleDirectionWFDriverIntervalInMin']);
-      AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
-          jsonData['applicationConfig']['searchConfig']
-              ['googleDirectionWFDriverIntervalMaxTrialCount']);
-      if(jsonData['applicationConfig']['generalConfig'] !=null && jsonData['applicationConfig']['generalConfig']
-      ['isBookNowEnabled']!=null) {
+      if (jsonData['applicationConfig']['generalConfig'] != null &&
+          jsonData['applicationConfig']['generalConfig']['isBookNowEnabled'] !=
+              null) {
         AppConfig.setisNormalBookingFeatureEnabled(
-            jsonData['applicationConfig']['generalConfig']
-            ['isBookNowEnabled']);
+            jsonData['applicationConfig']['generalConfig']['isBookNowEnabled']);
       }
-      if (!mounted) return;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
-        return HomePage(title: 'title');
-      }));
+      if (jsonData['applicationConfig']['searchConfig'] != null) {
+        AppConfig.setgoogleDirectionDriverIntervalInMin(
+            jsonData['applicationConfig']['searchConfig']
+                ['googleDirectionWFDriverIntervalInMin']);
+
+        AppConfig.setgoogleDirectionDriverIntervalMaxTrialCount(
+            jsonData['applicationConfig']['searchConfig']
+                ['googleDirectionWFDriverIntervalMaxTrialCount']);
+
+        AppConfig.setmaxAllowedDistance(jsonData['applicationConfig']
+            ['searchConfig']['maxAllowedDistance']);
+      }
       sharedPreferences.setInt(
           autoExpiryDurationText, LandingPageConfig().getautoExpiryDuration());
       // sharedPreferences.setString(
@@ -374,26 +375,31 @@ class _MainEntryPointState extends State<MainEntryPoint> {
   }
 
   Future displayInfoPopup(int miliSecond) {
-    print('miliSecond============>$miliSecond');
-    Timer? timer = Timer(Duration(milliseconds: miliSecond!=null && miliSecond!=0?miliSecond:10000), (){
-      print('popup dismiss');
+    Timer? timer = Timer(
+        Duration(
+            milliseconds: miliSecond != null && miliSecond != 0
+                ? miliSecond
+                : 10000), () {
       OneContext().popDialog('cancel');
     });
-    return OneContext().showDialog(
-      barrierDismissible: false,
-        builder: (_){
-      return AlertDialog(
-          content: Image.network(
-        encodeImgURLString(
-          sharedPreferences.getString(infoPopupImageUrlText)!,
-        ),
-        fit: BoxFit.fill,
-      ));
-    }).then((value){
+    return OneContext()
+        .showDialog(
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                  content: Image.network(
+                encodeImgURLString(
+                  sharedPreferences.getString(infoPopupImageUrlText)!,
+                ),
+                fit: BoxFit.fill,
+              ));
+            })
+        .then((value) {
       // dispose the timer in case something else has triggered the dismiss.
       timer?.cancel();
       timer = null;
-    });;
+    });
+    ;
   }
 
   void GetAllFavouriteAddress() async {
@@ -402,7 +408,7 @@ class _MainEntryPointState extends State<MainEntryPoint> {
     final dao = database.taskDao;
 
     dynamic response =
-        await HTTP.get(GetAllFavouriteAddressdata(Profiledata().getusreid()));
+        await HTTP.get(context,GetAllFavouriteAddressdata(Profiledata().getusreid()));
     if (response != null && response.statusCode == 200) {
       if (convert.jsonDecode(response.body)['content'] != null &&
           convert.jsonDecode(response.body)['content']['address'] != null) {
@@ -413,11 +419,16 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           if (res["address"] != null || res["address"] != "") {
             String title = "";
 
-            if (res["name"] != "") {
+            if (res["name"].toString().isNotEmpty) {
               title = res["name"];
             } else {
-              final splitList = res["address"].split(",");
-              title = splitList[1];
+              if (res["address"].toString().contains(",")) {
+                final splitList = res["address"].split(",");
+                title = splitList[1];
+              } else {
+                final splitList = res["address"];
+                title = splitList[1];
+              }
             }
             try {
               var data = await dao.findDataByaddressg(res["address"]);
@@ -429,7 +440,6 @@ class _MainEntryPointState extends State<MainEntryPoint> {
                     latitude: res["location"]['coordinates'][1].toString(),
                     longitude: res["location"]['coordinates'][0].toString(),
                     title: title);
-                print(task);
                 await dao.insertTask(task);
               } else {
                 print("data$data");
@@ -440,8 +450,10 @@ class _MainEntryPointState extends State<MainEntryPoint> {
           }
         }
       }
-    } else {
-      setState(() {});
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => const HomePage(title: "",)),
+              (Route<dynamic> route) => false);
+
     }
   }
 

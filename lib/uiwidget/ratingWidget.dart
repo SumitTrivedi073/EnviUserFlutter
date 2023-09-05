@@ -110,7 +110,7 @@ class _RatingBarWidgetPageState extends State<RatingBarWidget> {
   Future<void> submitRating(double rating) async {
 
     dynamic res =
-        await HTTP.get(submitDriverRating(widget.livetripData!.tripInfo!.passengerTripMasterId,rating));
+        await HTTP.get(context,submitDriverRating(widget.livetripData!.tripInfo!.passengerTripMasterId,rating));
 
     if (res != null && res.statusCode != null && res.statusCode == 200) {
       print(jsonDecode(res.body));

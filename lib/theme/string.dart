@@ -138,3 +138,5 @@ var submitAllCapsText = 'SUBMIT';
 var selectlocation = "select location";
 var okText = 'Ok';
 var backText = 'Back';
+var checkPickupDestinationCarefully = "Please check pickup and destination once something went wrong!";
+var notSearvingSelectedArea = "Extremely sorry for the inconvenience we are not serving for selected area";

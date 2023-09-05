@@ -220,12 +220,12 @@ class _NewProfilePageState extends State<NewProfilePage> {
           children: [
             const AppBarInsideWidget(
               pagetitle: 'Profile Page',
-              customMargin:  EdgeInsets.fromLTRB(10, 10, 10, 10),
+              customMargin: EdgeInsets.fromLTRB(10, 10, 10, 10),
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  padding:const EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
                   child: Column(
                     children: [
                       Image.asset(
@@ -316,6 +316,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                       child: Column(
                                         children: [
                                           TextFormField(
+                                            style: AppTextStyle.robotoRegular18,
                                             controller: _firstNameController,
                                             autovalidateMode: AutovalidateMode
                                                 .onUserInteraction,
@@ -326,7 +327,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                             decoration: InputDecoration(
                                                 contentPadding:
                                                     const EdgeInsets.fromLTRB(
-                                                        20, 12, 20, 12),
+                                                        8, 12, 20, 12),
                                                 hintText: nameText,
                                                 filled: true,
                                                 hintStyle: AppTextStyle
@@ -340,6 +341,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                             height: 10,
                                           ),
                                           DropDownWidget(
+                                            style: AppTextStyle.robotoRegular18,
                                             children: [
                                               maleText,
                                               femaleText,
@@ -359,6 +361,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                                 AppColor.textfieldlightgrey,
                                             selectedValue: selectedGender,
                                             defaultValue: selectedGender,
+                                            padding: const EdgeInsets.all(5),
                                             onChange: (val) {
                                               chooseGender(val);
                                             },
@@ -430,6 +433,7 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                   height: 20,
                                 ),
                                 TextFormField(
+                                  style: AppTextStyle.robotoRegular18,
                                   controller: _emailController,
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
@@ -447,8 +451,8 @@ class _NewProfilePageState extends State<NewProfilePage> {
                                   },
                                   decoration: InputDecoration(
                                       filled: true,
-                                      contentPadding:
-                                          EdgeInsets.fromLTRB(20, 12, 20, 12),
+                                      contentPadding: const EdgeInsets.fromLTRB(
+                                          10, 12, 20, 12),
                                       hintText: email,
                                       hintStyle:
                                           AppTextStyle.robotoRegular18Gray,

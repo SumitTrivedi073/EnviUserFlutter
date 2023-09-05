@@ -15,20 +15,22 @@ class AutocompleteService {
   List<String> title = [];
   List<SearchPlaceModel> favPlaceList = [];
 
-  dynamic removeDuplicate(List<FavoritesData?> listtt) async {
-    if (listtt.isEmpty) {
+  dynamic removeDuplicate(List<FavoritesData?> favList) async {
+    if (favList.isEmpty) {
       return;
     }
-    for (var i = 0; i < listtt.length; i++) {
-      for (var j = i + 1; j < listtt.length; j++) {
-        if (formatAddress(listtt[i]!.address.trim()) ==
-                formatAddress(listtt[j]!.address.trim()) &&
-            listtt[i]!.title.trim() == listtt[j]!.title.trim()) {
-          await dao.deleteTask(listtt[i]!);
+    for (var i = 0; i < favList.length; i++) {
+      for (var j = i + 1; j < favList.length; j++) {
+        if (
+          formatAddress(favList[i]!.address.trim()) ==
+                formatAddress(favList[j]!.address.trim()) &&
+            favList[i]!.title.trim() == favList[j]!.title.trim()
+            ) {
+          await dao.deleteTask(favList[i]!);
         }
       }
     }
-    return listtt;
+    return favList;
   }
 
   Future<dynamic> getdata(String pat) async {

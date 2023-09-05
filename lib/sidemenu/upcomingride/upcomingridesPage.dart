@@ -60,7 +60,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       userId = Profiledata().getusreid();
 
       dynamic res =
-          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(context,getUserTripHistory(userId, pagecount, _limit));
       if (res != null && res.statusCode != null && res.statusCode == 200) {
         //  print(jsonDecode(res.body)['schedule_trip_list']);
         setState(() {
@@ -98,7 +98,7 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
       });
       pagecount += 1;
       dynamic res =
-          await HTTP.get(getUserTripHistory(userId, pagecount, _limit));
+          await HTTP.get(context,getUserTripHistory(userId, pagecount, _limit));
 
       if (res.statusCode == 200) {
         _isLoadMoreRunning = false;
@@ -405,26 +405,21 @@ class _UpcomingRidesPageState extends State<UpcomingRidesPage> {
     });
 
     final response =
-        await ApiCollection.cancelSchedualeTrip(passengerTripMasterId);
+        await ApiCollection.cancelSchedualeTrip(passengerTripMasterId,context);
 
     if (response != null) {
       if (response.statusCode == 200) {
         _firstLoad();
-        if (jsonDecode(response.body)['msg'].toString() != 'null'&&
-            jsonDecode(response.body)['msg'].toString().isNotEmpty) {
-          showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        if (jsonDecode(response.body)['message'].toString() != 'null'&&
+            jsonDecode(response.body)['message'].toString().isNotEmpty) {
+          showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
         }
-
-        //Raghu VT , set state resetting is done inside firstload
-        // setState(() {
-        //   _isFirstLoadRunning = false;
-        // });
       } else {
         setState(() {
           _isFirstLoadRunning = false;
         });
-        if (jsonDecode(response.body)['msg'].toString() != 'null') {
-          showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
+        if (jsonDecode(response.body)['message'].toString() != 'null') {
+          showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
         }
       }
     }

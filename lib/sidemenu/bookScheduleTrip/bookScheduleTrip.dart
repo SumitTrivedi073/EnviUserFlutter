@@ -38,12 +38,13 @@ class BookScheduleTrip extends StatefulWidget {
 class BookScheduleTripState extends State<BookScheduleTrip> {
   LatLng? latlong = null;
   String? isoId;
-  bool isverify = false;
+  bool isverify = false,isLoading = false;
   vehiclePriceClassesModel? SelectedVehicle;
   late DateTime mindatime;
   late DateTime SelectedDate;
   String selectedTimetext = "";
   String selectedDatetext = "";
+  static BuildContext? dialogueContext;
 
   void getSelectvehicle(vehiclePriceClassesModel object) {
     SelectedVehicle = object;
@@ -80,7 +81,9 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => dismissDialogue(),
+        child:Scaffold(
         body: Stack(children: [
       MapDirectionWidget(
         fromAddress: widget.fromAddress,
@@ -210,6 +213,7 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
                                     context,
                                     DateFormat('d MMM, yyyy HH:mm')
                                         .format(SelectedDate)),
+
                           );
                         } else {
                           int hours =
@@ -262,10 +266,11 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
           ],
         ),
       ),
-    ]));
+    ])));
   }
 
   Widget _buildPopupDialog(BuildContext context, String schedualTime) {
+    dialogueContext = context;
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
@@ -557,7 +562,12 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
               ),
               child: Padding(
                   padding: EdgeInsets.all(10),
-                  child: robotoTextWidget(
+                  child: isLoading?Container(
+                    height: 16,
+                    width: 16,
+                    decoration: BoxDecoration(color: AppColor.white),
+                    child: CircularProgressIndicator(),
+                  ):robotoTextWidget(
                     textval: confirm,
                     colorval: AppColor.white,
                     sizeval: 14,
@@ -579,29 +589,38 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
   }
 
   Future<void> confirmBooking() async {
-    // <-- dd/MM 24H format
+
+    if(mounted){
+      setState(() {
+        isLoading = true;
+      });
+    }
     var outputFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
     var outputDate = outputFormat.format(SelectedDate);
-    print(outputDate);
     final response = await ApiCollection.AddnewSchedualeTrip(
         widget.fromAddress,
         widget.toAddress,
         outputDate,
         SelectedVehicle!.total_fare,
         SelectedVehicle!.distance,
-        SelectedVehicle!.sku_id);
+        SelectedVehicle!.sku_id,context);
 
-    if (response != null) {
-      if (response.statusCode == 200) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => const HomePage(
-                      title: "",
-                    )),
-            (Route<dynamic> route) => true);
+    if (response != null && response.statusCode == 200) {
+        if(mounted){
+          setState(() {
+            isLoading = false;
+          });
+        }
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => const HomePage(title: "",)),
+            (Route<dynamic> route) => false);
+      }else{
+        showSnackbar(context, (jsonDecode(response.body)['message'].toString()));
+        if(mounted){
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
-      showSnackbar(context, (jsonDecode(response.body)['msg'].toString()));
-    }
   }
 
   void _openDatePicker(BuildContext context) {
@@ -651,7 +670,6 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
         color: Colors.white,
       ),
       onSubmit: (index) {
-        print(index);
         SelectedDate = index;
 
         var outputFormat = DateFormat("HH:mm aa");
@@ -684,4 +702,14 @@ class BookScheduleTripState extends State<BookScheduleTrip> {
       distance = distanceInKm;
     });
   }
+
+  dismissDialogue() {
+    if(dialogueContext!=null) {
+      Navigator.of(dialogueContext!).pop();
+      dialogueContext = null;
+    }else{
+      Navigator.pop(context);
+    }
+  }
+
 }

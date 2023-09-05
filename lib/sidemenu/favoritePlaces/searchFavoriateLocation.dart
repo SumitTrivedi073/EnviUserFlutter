@@ -51,15 +51,12 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
   List<AutocompletePrediction> predictions = [];
   int searctType = 0;
 
-
-  
   @override
   void setState(fn) {
     if (mounted) {
       super.setState(fn);
     }
   }
-
 
   @override
   void initState() {
@@ -93,7 +90,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
     };
     searctType = 0;
     searchPlaceList = [];
-    dynamic res = await HTTP.post(searchPlace(), data);
+    dynamic res = await HTTP.post(context,searchPlace(), data);
     if (res != null && res.statusCode != null) {
       if (res.statusCode == 200) {
         if ((jsonDecode(res.body)['content'] as List).isNotEmpty) {
@@ -133,7 +130,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
     String request =
         '$baseURL?input=$input&key=$GoogleApiKey&sessiontoken=$_sessionToken';
     var url = Uri.parse(request);
-    dynamic response = await HTTP.get(url);
+    dynamic response = await HTTP.get(context,url);
     if (response != null && response != null) {
       if (response.statusCode == 200) {
         setState(() {
@@ -219,35 +216,36 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                                   lng: longitude,
                                 )));
                   },
-                  child: Card(
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ListTile(
-                        title: robotoTextWidget(
-                          textval: searchPlaceList[index].title,
-                          colorval: AppColor.black,
-                          sizeval: 14.0,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        subtitle: robotoTextWidget(
-                          textval: searchPlaceList[index].address,
-                          colorval: AppColor.black,
-                          sizeval: 12.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        leading: SvgPicture.asset(
-                          "assets/svg/to-location-img.svg",
-                          width: 20,
-                          height: 20,
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
+                    child: ListTile(
+                      dense: true,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
+                      title: robotoTextWidget(
+                        textval: searchPlaceList[index].title,
+                        colorval: AppColor.black,
+                        sizeval: 14.0,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      subtitle: robotoTextWidget(
+                        textval: searchPlaceList[index].address,
+                        colorval: AppColor.black,
+                        sizeval: 12.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      leading: SvgPicture.asset(
+                        "assets/svg/to-location-img.svg",
+                        width: 20,
+                        height: 20,
+                        color: AppColor.grey,
                       ),
                     ),
                   ),
                 );
               },
               itemCount:
-                  searchPlaceList.length < 10 ? searchPlaceList.length : 10,
+                  searchPlaceList.length,
               padding: const EdgeInsets.all(8),
             )),
           ],
@@ -265,7 +263,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
         ),
         elevation: 5,
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               GestureDetector(
@@ -273,7 +271,7 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                     print("Tapped a Container");
                   },
                   child: Container(
-                    height: 50,
+                    height: 45,
                     margin: const EdgeInsets.only(left: 10),
                     child: Row(
                       children: [
@@ -290,9 +288,9 @@ class _SearchFavoriateLocationState extends State<SearchFavoriateLocation> {
                           InkWell(
                             onTap: () {},
                             child: Container(
-                              padding: const EdgeInsets.only(right: 5),
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              // padding: const EdgeInsets.only(right: 5),
+                              // margin:
+                              //     const EdgeInsets.only(left: 10, right: 10),
                               child: FromTextWidget(),
                             ),
                           ),
