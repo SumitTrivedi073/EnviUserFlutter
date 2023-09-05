@@ -25,12 +25,12 @@ import '../theme/theme.dart';
 import '../utils/utility.dart';
 import '../web_service/APIDirectory.dart';
 
-class NavigationDrawer extends StatefulWidget {
+class NavigationDrawerWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _NavigationPageState();
 }
 
-class _NavigationPageState extends State<NavigationDrawer> {
+class _NavigationPageState extends State<NavigationDrawerWidget> {
   @override
   void setState(fn) {
     if (mounted) {

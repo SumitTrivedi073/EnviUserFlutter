@@ -1,4 +1,3 @@
-import 'package:envi/UiWidget/navigationdrawer.dart';
 import 'package:envi/appConfig/appConfig.dart';
 import 'package:envi/consumer/ScheduleListAlertConsumer.dart';
 import 'package:envi/theme/color.dart';
@@ -15,6 +14,7 @@ import '../../appConfig/Profiledata.dart';
 import '../../notificationService/local_notification_service.dart';
 import '../../provider/firestoreLiveTripDataNotifier.dart';
 import '../../uiwidget/mapPageWidgets/mappagescreen.dart';
+import '../../uiwidget/navigationdrawer.dart';
 import '../../web_service/Constant.dart';
 import '../onRide/onRideWidget.dart';
 import '../payment/payment_page.dart';
@@ -84,20 +84,29 @@ class _HomePageState extends State<HomePage> {
         }
       });
 
-      return Scaffold(
-        drawer: NavigationDrawer(),
-        body: Stack(alignment: Alignment.centerRight, children: <Widget>[
-          MyMap(),
-          Column(
-            children: [
-              AppBarWidget(),
-              CardBanner(
-                  title: 'Welcome ${name.toTitleCase()}',
-                  image: 'assets/images/welcome_card_dashboard.png'),
-              const ScheduleListAlertConsumer(),
-            ],
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Scaffold(
+                drawer: NavigationDrawerWidget(),
+                body: Stack(alignment: Alignment.centerRight, children: <Widget>[
+                  MyMap(),
+                  Column(
+                    children: [
+                      AppBarWidget(),
+                      CardBanner(
+                          title: 'Welcome ${name.toTitleCase()}',
+                          image: 'assets/images/welcome_card_dashboard.png'),
+                      const ScheduleListAlertConsumer(),
+                    ],
+                  ),
+                ]),
+              ),
+            ),
           ),
-        ]),
+        ],
       );
     });
   }

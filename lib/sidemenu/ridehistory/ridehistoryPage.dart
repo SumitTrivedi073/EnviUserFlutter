@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:convert' as convert;
-import 'dart:ffi';
-
 import 'package:envi/theme/color.dart';
 import 'package:envi/uiwidget/appbarInside.dart';
 import 'package:flutter/cupertino.dart';
